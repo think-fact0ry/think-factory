@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>활동 이야기 — 매주 올라오는 수업 현장 기록 | 생각공작소</title>
+<meta name="description" content="생각공작소 선생님들과 아이들의 수업 현장. 오감쑥쑥 활동사진과 이야기가 매주 올라옵니다.">
+<meta property="og:title" content="생각공작소 활동 이야기">
+<meta property="og:description" content="매주 올라오는 수업 현장 기록.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://think-factory.kr/activities.html">
+<link rel="canonical" href="https://think-factory.kr/activities.html">
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="inner">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="생각공작소 로고">생각공작소</a>
+    <a class="menu" href="index.html">홈</a>
+    <a class="menu" href="story.html">이야기</a>
+    <a class="menu" href="services.html">서비스</a>
+    <a class="menu on" href="activities.html">활동</a>
+    <a class="cta" href="contact.html">상담 신청</a>
+  </div>
+</nav>
+
+<header class="hero" style="padding-bottom:24px;">
+  <div class="inner">
+    <h1>활동 이야기</h1>
+    <p>매주 수업 현장의 기록이 올라옵니다. 말보다 기록이 정직합니다.</p>
+  </div>
+</header>
+
+<section class="sec" style="padding-top:12px;">
+  <div class="inner">
+    <div class="acts" id="actList">
+      <p style="color:var(--g500);">활동 이야기를 준비하고 있습니다. 그동안은 <a href="https://blog.naver.com/think5007" target="_blank" rel="noopener" style="color:var(--green); font-weight:600;">네이버 블로그</a>에서 보실 수 있어요.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// activities/index.json은 블로그 동기화 파이프라인이 생성·갱신한다 (블로그=원본, 여기는 거울)
+fetch('activities/index.json')
+  .then(r => { if (!r.ok) throw 0; return r.json(); })
+  .then(posts => {
+    if (!posts.length) return;
+    const list = document.getElementById('actList');
+    list.innerHTML = posts.map(p => `
+      <a class="act" href="activities/${p.slug}.html">
+        <div class="thumb">${p.thumb ? `<img src="${p.thumb}" alt="${p.title}" loading="lazy">` : ''}</div>
+        <div class="body"><div class="date">${p.date}</div><h3>${p.title}</h3></div>
+      </a>`).join('');
+  })
+  .catch(() => {}); // index.json 없으면 준비 중 문구 유지
+</script>
+
+<footer>
+  <div class="inner">
+    <div class="cols">
+      <div><h4>생각공작소 서구점</h4><div class="biz">사업자등록번호 197-99-01651</div></div>
+      <div><h4>생각공작소 미추홀점</h4><div class="biz">사업자등록번호 410-96-58003</div></div>
+      <div><h4>생각공작소 연수점</h4><div class="biz">사업자등록번호 758-99-01489</div></div>
+      <div><h4>행복마음상담센터</h4><div class="biz">사업자등록번호 599-95-02033</div></div>
+    </div>
+    <div class="biz" style="margin-bottom:18px;">대표 한유성 · 인천광역시</div>
+    <div class="legal">
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="https://blog.naver.com/think5007" target="_blank" rel="noopener">네이버 블로그</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

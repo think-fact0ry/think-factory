@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 활동 글 URL은 블로그 동기화 파이프라인이 자동 추가한다 -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://think-factory.kr/</loc></url>
+  <url><loc>https://think-factory.kr/story.html</loc></url>
+  <url><loc>https://think-factory.kr/services.html</loc></url>
+  <url><loc>https://think-factory.kr/activities.html</loc></url>
+  <url><loc>https://think-factory.kr/contact.html</loc></url>
+</urlset>
