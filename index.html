@@ -86,14 +86,14 @@
 
 <section class="sec tint full">
   <div class="inner statement">
-    <p class="s1 reveal">찾아오지 않아도 됩니다.</p>
+    <p class="s1 reveal">찾아오지 않으셔도 됩니다.</p>
     <p class="s2 reveal d1">선생님이 <b>갑니다</b>.</p>
     <p class="s3 reveal d2">아이가 가장 편한 공간에서, 가장 자연스러운 수업.</p>
     <p class="s4 reveal d3">재가방문 수업 · 인천 전 지역</p>
   </div>
 </section>
 
-<section class="sec full">
+<section class="sec full center">
   <div class="inner">
     <h2 class="reveal">같은 오감쑥쑥, 다른 40분</h2>
     <p class="sub reveal d1">표준 커리큘럼은 같습니다 — 주 1회 40분, 동화구연 2회·미술 1회·놀이지도 1회.<br>그 40분을 채우는 방식이 생각공작소는 다릅니다.</p>
@@ -130,11 +130,12 @@
     <div class="car reveal d2" id="recentActs">
       <a class="act" href="activities.html"><div class="thumb"></div><div class="body"><div class="date">곧 채워집니다</div><h3>아이들의 이야기가 이곳에 자동으로 올라옵니다</h3></div></a>
     </div>
-    <p class="more-wrap reveal d3"><a class="btn more" href="activities.html">아이들의 오늘, 전체 보기</a></p>
+    <div class="dots reveal d3" id="actDots"></div>
+    <p class="more-wrap reveal d3"><a class="btn more arrow" href="activities.html" aria-label="전체 보기" title="전체 보기"></a></p>
   </div>
 </section>
 
-<section class="sec full">
+<section class="sec full center">
   <div class="inner">
     <h2 class="reveal">우리가 하는 일</h2>
     <p class="sub reveal d1">아이부터 어른까지, 연령에 맞는 정부지원 바우처 서비스를 제공합니다.</p>
@@ -174,9 +175,10 @@
       <div class="loc-info">
         <div class="loc-name">생각공작소 미추홀본점</div>
         <div class="loc-addr">인천광역시 미추홀구 주안로 128, 우리들애 601호</div>
+        <div class="loc-label">주변 대중교통</div>
         <div class="loc-how">1호선 주안역 1번 출구에서 200m · 6층</div>
-        <div class="loc-tel-label">대표 전화</div>
-        <a class="loc-tel" href="tel:0322772007">032-277-2007</a>
+        <div class="loc-label tel">대표 전화</div>
+        <div class="loc-tel">032-277-2007</div>
       </div>
     </div>
   </div>
@@ -190,7 +192,12 @@
       <div><h4>생각공작소 연수지점</h4><div class="biz">사업자등록번호 758-99-01489</div></div>
       <div><h4>남동지점 (행복마음상담센터)</h4><div class="biz">사업자등록번호 599-95-02033</div></div>
     </div>
-    <div class="biz" style="margin-bottom:18px;">상호명 생각공작소 · 대표 한유성 · 인천광역시 미추홀구 주안로 128, 우리들애 601호 · 대표전화 032-277-2007</div>
+    <div class="info">
+      <span><b class="k">상호명</b>생각공작소</span>
+      <span><b class="k">대표</b>한유성</span>
+      <span><b class="k">주소</b>인천광역시 미추홀구 주안로 128, 우리들애 601호</span>
+      <span><b class="k">대표전화</b>032-277-2007</span>
+    </div>
     <div class="legal">
       <a href="privacy.html">개인정보처리방침</a>
       <a href="https://blog.naver.com/think5007" target="_blank" rel="noopener">네이버 블로그</a>
@@ -230,7 +237,7 @@
 // ── PC 풀페이지 스크롤 — 휠 1회 = 1섹션, 700ms 이징 (anuta 방식, JS 단일 애니메이션이라 렉 없음)
 //    섹션이 화면보다 길면 섹션 안에서 한 화면씩 이동(콘텐츠 도달 불가 방지) ──
 (function () {
-  var NAV = 60, animating = false, lastEnd = 0, prevDelta = 0, prevTime = 0;
+  var NAV = 60, animating = false, prevDelta = 0, prevTime = 0;
   var sections = [].slice.call(document.querySelectorAll('.fold, .sec.full'));
   function isFP() { return !window.matchMedia('(max-width: 760px), (pointer: coarse)').matches; } // 리사이즈 대응: 매번 평가
   function targets() {
@@ -244,7 +251,7 @@
     return best;
   }
   function animate(to) {
-    var from = window.pageYOffset, start = performance.now(), dur = 700;
+    var from = window.pageYOffset, start = performance.now(), dur = 600;
     animating = true;
     // html{scroll-behavior:smooth}가 프레임마다 네이티브 스무스를 또 걸지 않게 잠시 끔
     document.documentElement.style.scrollBehavior = 'auto';
@@ -253,7 +260,7 @@
       var e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // easeInOutCubic
       window.scrollTo(0, from + (to - from) * e);
       if (p < 1) requestAnimationFrame(step);
-      else { animating = false; lastEnd = performance.now(); document.documentElement.style.scrollBehavior = ''; }
+      else { animating = false; document.documentElement.style.scrollBehavior = ''; }
     })(performance.now());
   }
   function go(dir) {
@@ -275,11 +282,12 @@
     if (el.closest && el.closest('.map-live')) return;                // 활성화된 지도 → 지도가 휠을 가짐
     if (el.closest && el.closest('.car') && (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY))) return; // 캐러셀 가로 스크롤
     e.preventDefault();
-    if (animating || performance.now() - lastEnd < 300) return;       // 전환 중 무시
+    if (animating) return;                                             // 전환 중에만 무시 (별도 쿨다운 없음 — 반응성)
     var ad = Math.abs(e.deltaY), now = performance.now();
-    var rising = ad > Math.abs(prevDelta) + 1 || now - prevTime > 200; // 트랙패드 관성(감쇠 꼬리)은 새 입력으로 안 침
-    prevDelta = e.deltaY; prevTime = now;
-    if (!rising || ad < 8) return;
+    var gap = now - prevTime, rising = ad > Math.abs(prevDelta) + 1;
+    prevTime = now; prevDelta = e.deltaY;
+    if (ad < 8) return;
+    if (gap < 80 && !rising) return;                                   // 16ms 간격으로 감쇠하는 트랙패드 관성 꼬리만 무시
     go(e.deltaY > 0 ? 1 : -1);
   }, { passive: false });
   window.addEventListener('keydown', function (e) {
@@ -354,11 +362,37 @@
         date.className = 'date';
         date.textContent = p.date + (p.tag ? ' · ' + p.tag : '');
         var h3 = document.createElement('h3');
-        h3.textContent = p.title;
+        h3.textContent = p.t2 ? p.t1 + '\n' + p.t2 : p.title; // 두 줄 분리 제목 (sync-blog 휴리스틱)
         body.appendChild(date); body.appendChild(h3);
         a.appendChild(th); a.appendChild(body);
         car.appendChild(a);
       });
+      // 진행 점: 현재 위치 표시 (3장 보임 기준 위치 수만큼)
+      var dotsBox = document.getElementById('actDots');
+      function dotCount() {
+        var step = car.querySelector('.act');
+        if (!step) return 1;
+        var w = step.offsetWidth + 16;
+        var visible = Math.max(1, Math.round(car.clientWidth / w));
+        return Math.max(1, posts.length - visible + 1);
+      }
+      function renderDots() {
+        var n = dotCount(), step = car.querySelector('.act');
+        var w = step ? step.offsetWidth + 16 : 1;
+        var cur = Math.min(n - 1, Math.round(car.scrollLeft / w));
+        if (dotsBox.children.length !== n) {
+          dotsBox.innerHTML = '';
+          for (var k = 0; k < n; k++) dotsBox.appendChild(document.createElement('i'));
+        }
+        for (var j = 0; j < dotsBox.children.length; j++) dotsBox.children[j].className = (j === cur) ? 'on' : '';
+      }
+      renderDots();
+      var rafPending = false;
+      car.addEventListener('scroll', function () {
+        if (rafPending) return;
+        rafPending = true;
+        requestAnimationFrame(function () { rafPending = false; renderDots(); });
+      }, { passive: true });
       // 자동 흐름: 3.8초마다 카드 1장씩 좌측으로, 끝에선 처음으로. 호버·터치 중엔 정지
       var paused = false, touchTimer = null;
       car.addEventListener('mouseenter', function () { paused = true; });

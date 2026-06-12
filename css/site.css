@@ -73,6 +73,8 @@ img{ max-width:100%; display:block; }
 /* ── 섹션 공통 ── */
 .sec{ padding:64px 0; }
 .sec.tint{ background:var(--g50); }
+/* 메인 홀수 리듬: 차별점·우리가하는일은 중앙 헤드 (스테이트먼트와 호흡 맞춤) */
+.sec.center h2, .sec.center .sub, .sec.center .note-line{ text-align:center; }
 /* 메인 페이지 섹션은 한 화면씩 꽉 채움 */
 .sec.full{ min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); display:flex; align-items:center; }
 .sec.full .inner{ width:100%; }
@@ -116,17 +118,21 @@ img{ max-width:100%; display:block; }
 /* ── 오시는 길 — 지도 좌(inner 왼 라인 정렬) · 정보 우 ── */
 .loc{ display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:stretch; }
 @media (max-width:760px){ .loc{ grid-template-columns:1fr; gap:18px; } }
+.loc-info{ display:flex; flex-direction:column; }
 .loc-name{ font-size:19px; font-weight:800; letter-spacing:-.4px; margin-bottom:10px; }
-.loc-addr{ font-size:15px; color:var(--g700); line-height:1.7; margin-bottom:6px; }
-.loc-how{ font-size:14px; color:var(--g500); line-height:1.7; margin-bottom:26px; }
-.loc-tel-label{ font-size:13px; font-weight:700; color:var(--g500); margin-bottom:4px; }
-.loc-tel{ display:inline-block; font-size:28px; font-weight:800; letter-spacing:-.6px; color:var(--green); }
+.loc-addr{ font-size:15px; color:var(--g700); line-height:1.7; margin-bottom:22px; }
+.loc-label{ font-size:13px; font-weight:700; color:var(--g500); margin-bottom:4px; }
+.loc-label.tel{ margin-top:auto; }   /* 전화 블록을 바닥으로 → 지도 아랫라인과 정렬 */
+.loc-how{ font-size:15px; color:var(--g700); line-height:1.7; }
+.loc-tel{ font-size:30px; font-weight:800; letter-spacing:-.6px; color:var(--green); }
 .loc-map{ position:relative; background:var(--g100); border-radius:20px; min-height:400px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
 .loc-map .map-link{ font-size:15px; font-weight:700; color:var(--green); }
+/* 어두운 막 없이 — 초록 볼드 문구만 (지도 위 가독용 흰 글로우) */
 .map-guard{ position:absolute; inset:0; z-index:5; display:flex; align-items:center; justify-content:center;
-  background:rgba(25,31,40,0); color:#fff; font-size:14px; font-weight:600; cursor:pointer;
-  opacity:0; transition:opacity .2s, background .2s; }
-.loc-map:hover .map-guard{ opacity:1; background:rgba(25,31,40,.35); }
+  color:var(--green); font-size:15px; font-weight:800; cursor:pointer;
+  text-shadow:0 0 5px #fff, 0 0 14px #fff, 0 0 22px #fff;
+  opacity:0; transition:opacity .2s; }
+.loc-map:hover .map-guard{ opacity:1; }
 @media (max-width:760px){ .loc-map{ min-height:280px; } }
 
 /* ── 차별점 노트 ── */
@@ -139,12 +145,17 @@ img{ max-width:100%; display:block; }
 @media (max-width:980px){ .car .act{ flex-basis:calc((100% - 16px)/2); } }
 @media (max-width:520px){ .car .act{ flex-basis:86%; } }
 
-/* ── 전체 보기 버튼 (토스식 소프트 그린 필) ── */
-.more-wrap{ margin:30px 0 0; text-align:center; }
-.btn.more{ background:var(--green-bg); color:var(--green-dark); border-radius:99px; padding:15px 30px; font-size:15.5px; transition:transform .12s, background .15s; }
-.btn.more::after{ content:'→'; margin-left:8px; transition:transform .15s; display:inline-block; }
-.btn.more:hover{ background:#ddeee5; }
-.btn.more:hover::after{ transform:translateX(3px); }
+/* ── 캐러셀 진행 점 ── */
+.dots{ display:flex; gap:7px; justify-content:center; margin-top:20px; min-height:7px; }
+.dots i{ width:7px; height:7px; border-radius:99px; background:var(--g200); transition:background .2s; }
+.dots i.on{ background:var(--green); }
+
+/* ── 전체 보기 — 화살표 원형 버튼 (토스식 소프트 그린) ── */
+.more-wrap{ margin:18px 0 0; text-align:center; }
+.btn.more.arrow{ background:var(--green-bg); color:var(--green-dark); border-radius:99px; width:52px; height:52px; padding:0; display:inline-flex; align-items:center; justify-content:center; font-size:20px; transition:transform .12s, background .15s; }
+.btn.more.arrow::after{ content:'→'; transition:transform .15s; display:inline-block; }
+.btn.more.arrow:hover{ background:#ddeee5; }
+.btn.more.arrow:hover::after{ transform:translateX(3px); }
 
 /* ── 활동 그리드 ── */
 .acts{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
@@ -156,7 +167,7 @@ img{ max-width:100%; display:block; }
 .act .thumb img{ width:100%; height:100%; object-fit:cover; }
 .act .body{ padding:16px 18px 18px; }
 .act .date{ font-size:12px; color:var(--g400); margin-bottom:6px; }
-.act h3{ font-size:16px; font-weight:700; margin:0; letter-spacing:-.3px; line-height:1.5; }
+.act h3{ font-size:16px; font-weight:700; margin:0; letter-spacing:-.3px; line-height:1.5; white-space:pre-line; }
 
 /* ── 본문 페이지(이야기 등) ── */
 .prose{ max-width:680px; }
@@ -170,6 +181,8 @@ footer .cols{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margi
 @media (max-width:760px){ footer .cols{ grid-template-columns:repeat(2,1fr); } }
 footer h4{ font-size:14px; font-weight:700; margin:0 0 8px; }
 footer .biz{ font-size:12.5px; color:var(--g400); line-height:1.8; }
+footer .info{ display:flex; flex-wrap:wrap; gap:6px 28px; font-size:12.5px; color:var(--g500); margin-bottom:18px; }
+footer .info .k{ color:var(--g400); font-weight:600; margin-right:7px; }
 footer .legal{ font-size:13px; color:var(--g500); display:flex; gap:18px; flex-wrap:wrap; }
 footer .legal a:hover{ color:var(--g900); }
 

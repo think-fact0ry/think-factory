@@ -24,6 +24,25 @@ function cleanTitle(raw) {
   return { title: t.trim(), tag };
 }
 
+// 제목 두 줄 분리 — 후보 지점(문장부호 !?,… 또는 이모지 클러스터 + 공백) 중 중앙에 가장 가까운 곳에서 나눔.
+// 예: "찰칵! …찍어요 📸 | 날씨 좋은 날 인생네컷 만들기 🎞️" ('찰칵!'은 너무 짧아 제외, 📸 뒤가 중앙 최근접)
+function splitTitle(t) {
+  const re = /([!?,…]["'’”]?|\p{Extended_Pictographic}(?:[‍️]?\p{Extended_Pictographic}|[‍️])*)\s+/gu;
+  const cands = [];
+  let m;
+  while ((m = re.exec(t)) !== null) cands.push(m.index + m[1].length);
+  const mid = t.length / 2;
+  let best = -1, bestDist = Infinity;
+  for (const c of cands) {
+    const l1 = t.slice(0, c).trim(), l2 = t.slice(c).trim();
+    if (l1.length < 4 || l2.length < 4) continue;
+    const d = Math.abs(c - mid);
+    if (d < bestDist) { bestDist = d; best = c; }
+  }
+  if (best < 0) return { t1: t, t2: '' };
+  return { t1: t.slice(0, best).trim(), t2: t.slice(best).trim() };
+}
+
 function fmtDate(ms) {
   const d = new Date(ms);
   const p = (n) => String(n).padStart(2, '0');
@@ -58,6 +77,13 @@ let exclude = [];
 try { exclude = JSON.parse(await readFile(new URL('exclude.json', OUT_DIR), 'utf8')); } catch {}
 const excludeSet = new Set(exclude.map(String));
 
+// 이전 결과 로드 — 네이버 목록 API가 살아있는 글을 간헐적으로 빠뜨림(2026-06-12 실측: 67→57건, 누락 글 직접 조회는 200).
+// 거울 원칙 유지: API에서 안 보여도 30일까지는 유지, 그 뒤에도 안 보이면 삭제된 것으로 간주하고 제거.
+const KEEP_UNSEEN_DAYS = 30;
+let prevPosts = [];
+try { prevPosts = JSON.parse(await readFile(new URL('posts.json', OUT_DIR), 'utf8')).posts || []; } catch {}
+const prevByLogNo = new Map(prevPosts.map((p) => [String(p.logNo), p]));
+
 await mkdir(IMG_DIR, { recursive: true });
 const posts = [];
 let newThumbs = 0;
@@ -75,9 +101,12 @@ for (const it of all) {
     }
     if (await exists(dest)) thumb = `img/${logNo}.jpg`;
   }
+  const lines = splitTitle(title);
   posts.push({
     logNo,
     title,
+    t1: lines.t1,
+    t2: lines.t2,
     tag,
     category: it.categoryName || '',
     date: fmtDate(it.addDate),
@@ -85,8 +114,28 @@ for (const it of all) {
     excerpt: String(it.briefContents || '').replace(/\s+/g, ' ').slice(0, 110),
     thumb,
     url: `https://blog.naver.com/${BLOG_ID}/${logNo}`,
+    lastSeen: Date.now(),
   });
 }
+
+// API에 안 나온 기존 글 병합 (30일 유예)
+const seenNow = new Set(posts.map((p) => p.logNo));
+let retained = 0, expired = 0;
+for (const old of prevPosts) {
+  const logNo = String(old.logNo);
+  if (seenNow.has(logNo) || excludeSet.has(logNo)) continue;
+  const lastSeen = old.lastSeen || Date.now(); // 구버전 데이터엔 lastSeen 없음 → 지금부터 카운트
+  if (Date.now() - lastSeen < KEEP_UNSEEN_DAYS * 86400000) {
+    const lines = old.t1 ? { t1: old.t1, t2: old.t2 } : splitTitle(old.title); // 구버전 데이터 제목분리 백필
+    posts.push({ ...old, ...lines, lastSeen });
+    retained++;
+  } else {
+    expired++;
+  }
+}
+if (retained) console.log(`목록 API 누락이지만 유지: ${retained}건 (${KEEP_UNSEEN_DAYS}일 유예)`);
+if (expired) console.log(`장기 미목격 제거(삭제 간주): ${expired}건`);
+
 posts.sort((a, b) => b.ts - a.ts);
 
 await writeFile(new URL('posts.json', OUT_DIR), JSON.stringify({ generated: new Date().toISOString(), count: posts.length, posts }, null, 1), 'utf8');
