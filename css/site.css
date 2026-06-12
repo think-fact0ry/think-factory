@@ -6,7 +6,14 @@
   --maxw:1040px;
 }
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html{ scroll-behavior:smooth; }
+/* scroll-padding은 전 페이지 공통: 앵커 이동 시 sticky nav(60px)에 안 가리게 */
+html{ scroll-behavior:smooth; scroll-padding-top:60px; }
+/* 메인 페이지(html.snap)만: 스크롤 시 한 화면씩 끊어 이동 (CSS 스냅 = JS 스크롤재킹 없음 → 렉 0) */
+html.snap{ scroll-snap-type:y mandatory; }
+html.snap .fold, html.snap .sec.full{ scroll-snap-align:start; }
+html.snap footer{ scroll-snap-align:end; }
+/* 좁은 화면에선 섹션이 한 화면보다 길어질 수 있어 강제 스냅 해제(근접 스냅만) */
+@media (max-width:760px){ html.snap{ scroll-snap-type:y proximity; } }
 body{
   margin:0; font-family:'Pretendard',-apple-system,sans-serif;
   background:#fff; color:var(--g900);
@@ -18,9 +25,10 @@ img{ max-width:100%; display:block; }
 .inner{ max-width:var(--maxw); margin:0 auto; padding:0 20px; }
 
 /* ── 상단 내비 ── */
-.nav{ position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--g100); z-index:10; }
+/* border 대신 box-shadow: 높이에 안 잡혀서 calc(100svh - 60px)가 정확히 맞음 */
+.nav{ position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(12px); box-shadow:0 1px 0 var(--g100); z-index:10; }
 .nav .inner{ display:flex; align-items:center; height:60px; gap:28px; }
-.nav .brand{ display:flex; align-items:center; gap:9px; font-size:17px; font-weight:700; margin-right:auto; }
+.nav .brand{ display:flex; align-items:center; margin-right:auto; }
 .nav .brand img{ height:28px; }
 .nav a.menu{ font-size:15px; font-weight:600; color:var(--g700); padding:6px 2px; }
 .nav a.menu:hover{ color:var(--g900); }
@@ -28,6 +36,11 @@ img{ max-width:100%; display:block; }
 .nav a.cta{ font-size:14px; font-weight:700; color:#fff; background:var(--green); padding:9px 16px; border-radius:11px; transition:transform .08s; }
 .nav a.cta:active{ transform:scale(.97); background:var(--green-dark); }
 @media (max-width:760px){ .nav a.menu{ display:none; } }
+
+/* ── 첫 화면(fold): nav(60px) 제외한 한 화면을 hero+실시간 띠가 꽉 채움 ── */
+.fold{ display:flex; flex-direction:column; min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); }
+.fold .hero{ flex:1; display:flex; align-items:center; }
+.fold .hero .inner{ width:100%; }
 
 /* ── 히어로 ── */
 .hero{ padding:84px 0 72px; }
@@ -43,9 +56,24 @@ img{ max-width:100%; display:block; }
 .btn.fill:active{ background:var(--green-dark); }
 .btn.soft{ background:var(--g100); color:var(--g900); }
 
+/* ── 실시간 신청 띠 (fold 하단) ── */
+.live{ background:var(--g50); border-top:1px solid var(--g100); padding:20px 0; }
+.live .inner{ display:flex; align-items:center; gap:16px; }
+.live .badge{ display:flex; align-items:center; gap:7px; font-size:13px; font-weight:700; color:var(--green); white-space:nowrap; }
+.live .badge i{ width:7px; height:7px; border-radius:99px; background:var(--green); animation:pulse 1.6s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+.live .roll{ position:relative; flex:1; height:22px; overflow:hidden; }
+.live .item{ position:absolute; left:0; right:0; font-size:14px; color:var(--g700); line-height:22px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transform:translateY(22px); opacity:0; transition:transform .4s ease, opacity .4s ease; }
+.live .item b{ color:var(--g900); font-weight:700; margin-right:2px; }
+.live .item.on{ transform:translateY(0); opacity:1; }
+.live .item.out{ transform:translateY(-22px); opacity:0; }
+
 /* ── 섹션 공통 ── */
 .sec{ padding:64px 0; }
 .sec.tint{ background:var(--g50); }
+/* 메인 페이지 섹션은 한 화면씩 꽉 채움 */
+.sec.full{ min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); display:flex; align-items:center; }
+.sec.full .inner{ width:100%; }
 .sec h2{ font-size:28px; font-weight:800; letter-spacing:-.7px; margin:0 0 10px; }
 .sec .sub{ font-size:16px; color:var(--g500); margin:0 0 36px; line-height:1.7; }
 @media (max-width:760px){ .sec{ padding:48px 0; } .sec h2{ font-size:23px; } }
@@ -61,14 +89,47 @@ img{ max-width:100%; display:block; }
 .card p{ font-size:14px; color:var(--g500); line-height:1.7; margin:0; }
 .sec.tint .card{ border-color:transparent; box-shadow:0 1px 4px rgba(0,0,0,.05); }
 
-/* ── 특징(찾아가는 수업) 행 ── */
-.feature{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
-@media (max-width:760px){ .feature{ grid-template-columns:1fr; gap:24px; } }
-.feature h2{ font-size:28px; font-weight:800; letter-spacing:-.7px; margin:0 0 14px; line-height:1.4; }
-.feature p{ font-size:16px; color:var(--g700); line-height:1.85; margin:0 0 12px; }
-.feature .note{ font-size:14px; color:var(--g500); }
-.feature .ph{ background:var(--g100); border-radius:20px; aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; color:var(--g400); font-size:14px; overflow:hidden; }
-.feature .ph img{ width:100%; height:100%; object-fit:cover; }
+/* ── 스테이트먼트(선생님이 갑니다) — 대형 문장 + 순차 등장 ── */
+.statement{ text-align:center; }
+.statement p{ margin:0; }
+.statement .s1{ font-size:26px; font-weight:700; color:var(--g500); letter-spacing:-.6px; margin-bottom:12px; }
+.statement .s2{ font-size:56px; font-weight:800; color:var(--g900); letter-spacing:-1.6px; line-height:1.25; margin-bottom:30px; }
+.statement .s2 b{ color:var(--green); font-weight:800; }
+.statement .s3{ font-size:18px; color:var(--g700); line-height:1.7; margin-bottom:8px; }
+.statement .s4{ font-size:14px; color:var(--g500); }
+@media (max-width:760px){
+  .statement .s1{ font-size:19px; }
+  .statement .s2{ font-size:38px; }
+  .statement .s3{ font-size:16px; }
+}
+
+/* ── 스크롤 등장(reveal) — transform/opacity만 (합성 단계, 렉 없음) ── */
+.reveal{ opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.show{ opacity:1; transform:none; }
+.reveal.d1{ transition-delay:.12s; }
+.reveal.d2{ transition-delay:.24s; }
+.reveal.d3{ transition-delay:.36s; }
+@media (prefers-reduced-motion:reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+/* ── 오시는 길 ── */
+.loc{ display:grid; grid-template-columns:340px 1fr; gap:28px; align-items:stretch; }
+@media (max-width:760px){ .loc{ grid-template-columns:1fr; gap:18px; } }
+.loc-select{
+  width:100%; padding:16px 18px; font-size:16px; font-weight:700; font-family:inherit;
+  color:var(--g900); background:#fff; border:1px solid var(--g200); border-radius:14px;
+  appearance:none; -webkit-appearance:none; cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%238b95a1' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 18px center;
+}
+.loc-select:focus{ outline:none; border-color:var(--green); }
+.loc-meta{ margin-top:22px; }
+.loc-name{ font-size:18px; font-weight:800; letter-spacing:-.4px; margin-bottom:8px; }
+.loc-addr{ font-size:15px; color:var(--g700); line-height:1.7; margin-bottom:14px; }
+.loc-tel{ display:inline-block; font-size:15px; font-weight:700; color:var(--green); }
+.loc-map{ background:var(--g100); border-radius:20px; min-height:380px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.loc-map .loading{ color:var(--g400); font-size:14px; }
+.loc-map .map-link{ font-size:15px; font-weight:700; color:var(--green); }
+@media (max-width:760px){ .loc-map{ min-height:280px; } }
 
 /* ── 활동 그리드 ── */
 .acts{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
@@ -81,12 +142,6 @@ img{ max-width:100%; display:block; }
 .act .body{ padding:16px 18px 18px; }
 .act .date{ font-size:12px; color:var(--g400); margin-bottom:6px; }
 .act h3{ font-size:16px; font-weight:700; margin:0; letter-spacing:-.3px; line-height:1.5; }
-
-/* ── 신뢰 라인 ── */
-.trust{ display:flex; gap:36px; flex-wrap:wrap; justify-content:center; padding:30px 0; }
-.trust .t{ text-align:center; }
-.trust .t b{ display:block; font-size:22px; font-weight:800; color:var(--green); letter-spacing:-.5px; }
-.trust .t span{ font-size:13px; color:var(--g500); }
 
 /* ── 본문 페이지(이야기 등) ── */
 .prose{ max-width:680px; }
@@ -102,3 +157,12 @@ footer h4{ font-size:14px; font-weight:700; margin:0 0 8px; }
 footer .biz{ font-size:12.5px; color:var(--g400); line-height:1.8; }
 footer .legal{ font-size:13px; color:var(--g500); display:flex; gap:18px; flex-wrap:wrap; }
 footer .legal a:hover{ color:var(--g900); }
+
+/* ── 우하단 플로팅 SNS 버튼 ── */
+.fab{ position:fixed; right:20px; bottom:20px; display:flex; flex-direction:column; gap:10px; z-index:20; }
+/* 브랜드 원색 대신 사이트 팔레트(흰 바탕·그레이 아이콘·호버 그린)로 톤 통일 */
+.fab .f{ width:48px; height:48px; border-radius:99px; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--g500); border:1px solid var(--g200); box-shadow:0 2px 10px rgba(0,0,0,.07); transition:transform .12s, color .15s, border-color .15s; }
+.fab .f:hover{ transform:translateY(-2px); color:var(--green); border-color:var(--green); }
+.fab .f:active{ transform:scale(.94); }
+.fab .f svg{ width:22px; height:22px; }
+@media (max-width:760px){ .fab{ right:14px; bottom:14px; } .fab .f{ width:44px; height:44px; } }

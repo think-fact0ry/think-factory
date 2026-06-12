@@ -1,19 +1,24 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="snap">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>생각공작소 — 아이들의 꿈을 키우는 생각 놀이터 | 인천 아동발달 바우처</title>
-<meta name="description" content="인천 4개 구(서구·미추홀·연수·남동)에서 선생님이 아이의 공간으로 찾아갑니다. 오감쑥쑥·아동청소년심리지원 등 정부지원 바우처 제공기관 생각공작소.">
-<meta property="og:title" content="생각공작소 — 아이들의 꿈을 키우는 생각 놀이터">
-<meta property="og:description" content="인천 4개 구, 선생님이 아이의 공간으로 찾아가는 발달 서비스. 정부지원 바우처 제공기관.">
+<title>생각공작소 — 아이들의 꿈을 키우는 생각의 놀이터 | 인천 아동발달 바우처</title>
+<meta name="description" content="선생님이 아이의 공간으로 찾아갑니다. 재가방문 서비스는 인천 전 지역 진행. 오감쑥쑥·아동청소년심리지원 등 정부지원 바우처 제공기관 생각공작소.">
+<meta property="og:title" content="생각공작소 — 아이들의 꿈을 키우는 생각의 놀이터">
+<meta property="og:description" content="인천 전 지역, 선생님이 아이의 공간으로 찾아가는 발달 서비스. 정부지원 바우처 제공기관.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://think-factory.kr/">
 <meta property="og:image" content="https://think-factory.kr/assets/logo.png">
 <link rel="canonical" href="https://think-factory.kr/">
-<link rel="icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/android-icon-192x192.png">
+<link rel="apple-touch-icon" href="assets/android-icon-192x192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="css/site.css">
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -22,8 +27,15 @@
   "alternateName": "Think Factory",
   "url": "https://think-factory.kr",
   "logo": "https://think-factory.kr/assets/logo.png",
-  "description": "인천 4개 구에서 운영하는 아동발달 정부지원 바우처 제공기관. 방문형 영유아 발달 서비스 오감쑥쑥, 아동청소년심리지원 등.",
+  "description": "인천 전 지역에서 선생님이 찾아가는 아동발달 정부지원 바우처 제공기관. 방문형 영유아 발달 서비스 오감쑥쑥, 아동청소년심리지원 등. 센터 4곳(서구·미추홀·연수·남동) 운영.",
   "areaServed": "인천광역시",
+  "telephone": "032-277-2007",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "미추홀구 주안로 128, 우리들애 601호",
+    "addressLocality": "인천광역시",
+    "addressCountry": "KR"
+  },
   "foundingDate": "2025-03-01"
 }
 </script>
@@ -32,92 +44,117 @@
 
 <nav class="nav">
   <div class="inner">
-    <a class="brand" href="index.html"><img src="assets/logo.png" alt="생각공작소 로고">생각공작소</a>
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="생각공작소"></a>
     <a class="menu on" href="index.html">홈</a>
     <a class="menu" href="story.html">이야기</a>
     <a class="menu" href="services.html">서비스</a>
     <a class="menu" href="activities.html">활동</a>
+    <a class="menu" href="#location">오시는길</a>
     <a class="cta" href="contact.html">상담 신청</a>
   </div>
 </nav>
 
-<header class="hero">
-  <div class="inner">
-    <h1>아이들의 꿈을 키우는<br><b>생각 놀이터</b></h1>
-    <p>인천 4개 구에서, 선생님이 아이의 공간으로 직접 찾아갑니다.<br>
-    정부지원 바우처로 부담을 덜고, 아이의 첫 환경을 함께 만듭니다.</p>
-    <div class="btns">
-      <a class="btn fill" href="contact.html">상담 신청하기</a>
-      <a class="btn soft" href="activities.html">활동 둘러보기</a>
+<!-- 첫 화면(fold) = hero + 실시간 띠가 nav 아래 한 화면을 꽉 채움 -->
+<div class="fold">
+  <header class="hero">
+    <div class="inner">
+      <h1 class="reveal">아이들의 꿈을 키우는<br><b>생각의 놀이터</b></h1>
+      <p class="reveal d1">인천 전 지역, 선생님이 아이의 공간으로 직접 찾아갑니다.<br>
+      정부지원 바우처로 부담을 덜고, 아이의 첫 환경을 함께 만듭니다.</p>
+      <div class="btns reveal d2">
+        <a class="btn fill" href="contact.html">상담 신청하기</a>
+        <a class="btn soft" href="activities.html">활동 둘러보기</a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<div class="sec tint" style="padding:28px 0;">
-  <div class="inner trust">
-    <div class="t"><b>4개 센터</b><span>서구 · 미추홀 · 연수 · 남동</span></div>
-    <div class="t"><b>바우처 제공기관</b><span>정부지원 서비스</span></div>
-    <div class="t"><b>찾아가는 수업</b><span>아이의 공간에서 진행</span></div>
+  <div class="live">
+    <div class="inner">
+      <span class="badge"><i></i>실시간 신청 소식</span>
+      <div class="roll" id="liveRoll">
+        <div class="item on">선생님이 인천 곳곳으로 찾아가고 있어요</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<section class="sec">
+<section class="sec full">
   <div class="inner">
-    <h2>우리가 하는 일</h2>
-    <p class="sub">아이부터 어른까지, 연령에 맞는 정부지원 바우처 서비스를 제공합니다.</p>
-    <div class="cards">
+    <h2 class="reveal">이번 주 활동 이야기</h2>
+    <p class="sub reveal d1">매주 수업 현장의 기록이 올라옵니다.</p>
+    <div class="acts reveal d2" id="recentActs">
+      <a class="act" href="activities.html"><div class="thumb"></div><div class="body"><div class="date">곧 채워집니다</div><h3>활동 이야기가 이곳에 자동으로 올라옵니다</h3></div></a>
+    </div>
+    <p style="margin-top:24px;" class="reveal d3"><a class="btn soft" href="activities.html">전체 활동 보기</a></p>
+  </div>
+</section>
+
+<section class="sec tint full">
+  <div class="inner statement">
+    <p class="s1 reveal">센터에 오지 마세요.</p>
+    <p class="s2 reveal d1">선생님이 <b>갑니다</b>.</p>
+    <p class="s3 reveal d2">아이가 가장 편한 공간에서, 가장 자연스러운 수업.</p>
+    <p class="s4 reveal d3">재가방문 수업 · 인천 전 지역</p>
+  </div>
+</section>
+
+<section class="sec full">
+  <div class="inner">
+    <h2 class="reveal">우리가 하는 일</h2>
+    <p class="sub reveal d1">아이부터 어른까지, 연령에 맞는 정부지원 바우처 서비스를 제공합니다.</p>
+    <div class="cards reveal d2">
       <a class="card" href="services.html#ogam">
         <span class="age">5~7세</span>
-        <h3>오감쑥쑥</h3>
-        <p>선생님이 집으로 찾아가는 영유아 발달 서비스. 통합놀이 활동으로 창의력과 바른 인성을 키웁니다.</p>
+        <h3>오감쑥쑥 바우처</h3>
+        <p>선생님이 찾아가는 통합놀이 수업. 놀이 속에서 상상력과 창의력, 바른 인성이 자랍니다.</p>
       </a>
       <a class="card" href="services.html#acheong">
         <span class="age">18세 이하</span>
         <h3>아동청소년 심리지원</h3>
-        <p>아동·청소년의 마음 건강을 살피고 심리적 어려움을 함께 풀어갑니다.</p>
+        <p>마음의 어려움을 일찍 발견하고 함께 풀어, 아이가 단단하게 성장하도록 돕습니다.</p>
       </a>
       <a class="card" href="services.html#total">
-        <span class="age">성인</span>
+        <span class="age">전연령</span>
         <h3>정신건강 토탈케어</h3>
-        <p>정신건강 관리가 필요한 분의 일상 회복을 지원합니다.</p>
+        <p>정신건강의 어려움을 조기에 살펴, 일상 회복과 자립까지 함께합니다.</p>
       </a>
       <a class="card" href="services.html#adult">
         <span class="age">성인</span>
         <h3>성인 심리상담</h3>
-        <p>전문 상담사와 함께하는 성인 대상 심리상담 서비스입니다.</p>
+        <p>전문 상담사와 함께, 나와 가족의 마음을 돌봅니다.</p>
       </a>
     </div>
   </div>
 </section>
 
-<section class="sec tint">
-  <div class="inner feature">
-    <div>
-      <h2>센터에 오지 마세요.<br>선생님이 갑니다.</h2>
-      <p>아이에게 가장 편한 곳은 아이의 공간입니다. 생각공작소의 오감쑥쑥은 선생님이 직접 찾아가는 방문형 수업입니다. 낯선 환경에 적응하는 시간 없이, 아이가 가장 자연스러운 모습으로 수업을 만납니다.</p>
-      <p>이동도, 대기도 부모님 몫이 아닙니다.</p>
-      <p class="note">방문형 수업은 운영 난이도 때문에 많은 기관이 하지 않는 방식입니다. 생각공작소는 이 방식을 전문으로 합니다.</p>
-    </div>
-    <div class="ph"><span>활동 사진 들어갈 자리</span></div>
-  </div>
-</section>
-
-<section class="sec">
+<section class="sec tint full" id="location">
   <div class="inner">
-    <h2>이번 주 활동 이야기</h2>
-    <p class="sub">매주 수업 현장의 기록이 올라옵니다.</p>
-    <div class="acts" id="recentActs">
-      <a class="act" href="activities.html"><div class="thumb"></div><div class="body"><div class="date">곧 채워집니다</div><h3>활동 이야기가 이곳에 자동으로 올라옵니다</h3></div></a>
+    <h2 class="reveal">오시는 길</h2>
+    <p class="sub reveal d1">재가방문은 인천 전 지역으로, 센터 수업은 가까운 곳에서.</p>
+    <div class="loc reveal d2">
+      <div class="loc-info">
+        <select id="centerSelect" class="loc-select" aria-label="센터 선택">
+          <option value="0" selected>생각공작소 미추홀본점</option>
+          <option value="1">생각공작소 서구점</option>
+          <option value="2">생각공작소 연수점</option>
+          <option value="3">행복마음상담센터 (남동)</option>
+        </select>
+        <div class="loc-meta">
+          <div class="loc-name" id="locName"></div>
+          <div class="loc-addr" id="locAddr"></div>
+          <a class="loc-tel" id="locTel" href="#">전화 연결</a>
+        </div>
+      </div>
+      <div class="loc-map" id="locMap"><span class="loading">지도를 불러오는 중…</span></div>
     </div>
-    <p style="margin-top:24px;"><a class="btn soft" href="activities.html">전체 활동 보기</a></p>
   </div>
 </section>
 
 <footer>
   <div class="inner">
     <div class="cols">
+      <div><h4>생각공작소 미추홀본점</h4><div class="biz">사업자등록번호 410-96-58003</div></div>
       <div><h4>생각공작소 서구점</h4><div class="biz">사업자등록번호 197-99-01651</div></div>
-      <div><h4>생각공작소 미추홀점</h4><div class="biz">사업자등록번호 410-96-58003</div></div>
       <div><h4>생각공작소 연수점</h4><div class="biz">사업자등록번호 758-99-01489</div></div>
       <div><h4>행복마음상담센터</h4><div class="biz">사업자등록번호 599-95-02033</div></div>
     </div>
@@ -128,6 +165,149 @@
     </div>
   </div>
 </footer>
+
+<!-- 우하단 플로팅 SNS 버튼 -->
+<div class="fab">
+  <a class="f kakao" href="http://pf.kakao.com/_MnPkn" target="_blank" rel="noopener" aria-label="카카오톡 채널" title="카카오톡 채널">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.8 1.9 5.3 4.7 6.7L6 21.5c-.1.4.3.7.6.5l4.2-2.6c.4 0 .8.1 1.2.1 5.5 0 10-3.6 10-8.1S17.5 3 12 3z"/></svg>
+  </a>
+  <a class="f insta" href="https://www.instagram.com/think_fact0ry/" target="_blank" rel="noopener" aria-label="인스타그램" title="인스타그램">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+  </a>
+  <a class="f naver" href="https://blog.naver.com/think5007" target="_blank" rel="noopener" aria-label="네이버 블로그" title="네이버 블로그">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.3 12.7 7.4 0H0v24h7.7V11.3L16.6 24H24V0h-7.7v12.7z" transform="translate(2.5 2.5) scale(0.79)"/></svg>
+  </a>
+</div>
+
+<script>
+// 스크롤 등장 효과 — transform/opacity만 사용(GPU 합성, 렉 없음). IntersectionObserver 미지원 구형은 즉시 표시
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    for (var i = 0; i < els.length; i++) els[i].classList.add('show');
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) { en.target.classList.add('show'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.2 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+
+// 실시간 대기 띠 — 06 신청폼의 '대기 중' 신청을 마스킹해 롤링 (GAS action=recent)
+(function () {
+  var GAS = 'https://script.google.com/macros/s/AKfycbyDLm7VCcRNmPrK08waOFx3JHt9lvxP22coImDfK9xfWNheiS11My2xcJJrqrE6GVRPSw/exec';
+  var roll = document.getElementById('liveRoll');
+  fetch(GAS + '?action=recent')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var items = (data && data.items) || [];
+      if (!items.length) return; // 데이터 없으면 기본 문구 유지
+      var idx = 0;
+      function render(it) {
+        // 시트 유래 문자열(시군구·동·이름)은 신청폼 RPC로 누구나 쓸 수 있음 → innerHTML 금지, textContent로만 조립 (XSS)
+        var el = document.createElement('div');
+        el.className = 'item';
+        var b = document.createElement('b');
+        b.textContent = it.t;
+        el.appendChild(b);
+        var loc = [it.g, it.d].filter(Boolean).join(' ');
+        el.appendChild(document.createTextNode(' ' + (loc ? loc + ' ' : '') + it.n + ' 아동이 선생님을 기다리고 있어요'));
+        // 백그라운드 탭에서 rAF가 멈춰 제거가 밀릴 수 있음 → 마지막 1개만 남기고 동기 정리
+        var olds = roll.querySelectorAll('.item');
+        for (var k = 0; k < olds.length - 1; k++) olds[k].remove();
+        var old = olds.length ? olds[olds.length - 1] : null;
+        roll.appendChild(el);
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            el.classList.add('on');
+            if (old) { old.classList.add('out'); setTimeout(function () { old.remove(); }, 450); }
+          });
+        });
+      }
+      render(items[0]);
+      if (items.length > 1) {
+        setInterval(function () {
+          if (document.hidden) return; // 안 보이는 탭에서 노드 쌓지 않음
+          idx = (idx + 1) % items.length;
+          render(items[idx]);
+        }, 3200);
+      }
+    })
+    .catch(function (err) { console.warn('실시간 대기 띠 로드 실패(기본 문구 유지):', err); });
+})();
+
+// 오시는 길 — 센터 선택 시 정보·지도 전환 (카카오맵, 주소는 지오코딩으로 좌표 변환)
+(function () {
+  var CENTERS = [
+    { name: '생각공작소 미추홀본점', addr: '인천광역시 미추홀구 주안로 128, 우리들애 601호', tel: '032-277-2007' },
+    { name: '생각공작소 서구점', addr: '인천광역시 서구 봉오대로 270, 루원시티 2차 SK리더스뷰 201동 222호', tel: '032-277-2007' },
+    { name: '생각공작소 연수점', addr: '인천광역시 연수구 함박뫼로84번길 2, 2층', tel: '032-277-2007' },
+    { name: '행복마음상담센터 (남동)', addr: '인천광역시 남동구 소래로669번길 47, 302호', tel: '032-277-5007' }
+  ];
+  var sel = document.getElementById('centerSelect');
+  var nameEl = document.getElementById('locName'), addrEl = document.getElementById('locAddr'), telEl = document.getElementById('locTel');
+  var mapBox = document.getElementById('locMap');
+  var map = null, marker = null, geocoder = null;
+
+  function showInfo(c) {
+    nameEl.textContent = c.name;
+    addrEl.textContent = c.addr;
+    telEl.textContent = c.tel;
+    telEl.href = 'tel:' + c.tel.replace(/-/g, '');
+  }
+  function mapFallback(c) {
+    // SDK 로드 실패(도메인 미등록·오프라인)여도 주소·카카오맵 링크는 보이게 (조용한 실패 방지)
+    map = null; marker = null; // 지도 DOM을 지우므로 다음 성공 시 새로 생성하게
+    mapBox.innerHTML = '';
+    var a = document.createElement('a');
+    a.className = 'map-link';
+    a.target = '_blank'; a.rel = 'noopener';
+    a.href = 'https://map.kakao.com/link/search/' + encodeURIComponent(c.addr);
+    a.textContent = '카카오맵에서 위치 보기';
+    mapBox.appendChild(a);
+  }
+  function panTo(c) {
+    if (!geocoder) { mapFallback(c); return; }
+    // 동·호수가 붙으면 지오코딩이 실패할 수 있어(5-2-1 교훈) 도로명 부분만으로 검색
+    var base = c.addr.split(',')[0];
+    var want = sel.value; // 빠른 연속 선택 시 늦게 도착한 응답이 덮어쓰지 않게
+    geocoder.addressSearch(base, function (result, status) {
+      if (sel.value !== want) return;
+      if (status !== kakao.maps.services.Status.OK || !result.length) { mapFallback(c); return; }
+      var pos = new kakao.maps.LatLng(result[0].y, result[0].x);
+      if (!map) {
+        mapBox.innerHTML = '';
+        map = new kakao.maps.Map(mapBox, { center: pos, level: 4 });
+        marker = new kakao.maps.Marker({ map: map, position: pos });
+      } else {
+        map.relayout();
+        map.setCenter(pos);
+        marker.setPosition(pos);
+      }
+    });
+  }
+  function select(i) {
+    var c = CENTERS[i];
+    showInfo(c);
+    panTo(c);
+  }
+  sel.addEventListener('change', function () { select(Number(sel.value)); });
+  showInfo(CENTERS[0]);
+
+  var s = document.createElement('script');
+  s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=90fa3176ac77c6fc1ae5a165b9f0662c&libraries=services&autoload=false';
+  s.onload = function () {
+    kakao.maps.load(function () {
+      geocoder = new kakao.maps.services.Geocoder();
+      select(Number(sel.value));
+    });
+  };
+  s.onerror = function () { mapFallback(CENTERS[Number(sel.value)]); };
+  document.head.appendChild(s);
+})();
+</script>
 
 </body>
 </html>
