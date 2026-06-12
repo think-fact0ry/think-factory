@@ -395,6 +395,11 @@
   var s = document.createElement('script');
   s.src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=' + NAVER_MAP_CLIENT_ID + '&submodules=geocoder';
   s.onload = function () {
+    // 지오코더 서브모듈은 본체 로드 뒤 비동기로 붙음 → Service 생길 때까지 대기 (onJSContentLoaded가 공식 시점)
+    if (window.naver && naver.maps && naver.maps.Service) initMap();
+    else naver.maps.onJSContentLoaded = initMap;
+  };
+  function initMap() {
     naver.maps.Service.geocode({ query: ADDR }, function (status, res) {
       if (status !== naver.maps.Service.Status.OK || !res.v2.addresses.length) {
         console.warn('네이버 지오코딩 실패(폴백 링크 유지) — NCP 앱에 Geocoding API 체크됐는지 확인:', status, res);
