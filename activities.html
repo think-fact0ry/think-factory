@@ -48,19 +48,38 @@
 </section>
 
 <script>
-// activities/index.json은 블로그 동기화 파이프라인이 생성·갱신한다 (블로그=원본, 여기는 거울)
-fetch('activities/index.json')
-  .then(r => { if (!r.ok) throw 0; return r.json(); })
-  .then(posts => {
+// activities/posts.json은 tools/sync-blog.mjs가 생성·갱신 (블로그=원본, 여기는 거울)
+fetch('activities/posts.json')
+  .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+  .then(function (data) {
+    var posts = (data && data.posts) || [];
     if (!posts.length) return;
-    const list = document.getElementById('actList');
-    list.innerHTML = posts.map(p => `
-      <a class="act" href="activities/${p.slug}.html">
-        <div class="thumb">${p.thumb ? `<img src="${p.thumb}" alt="${p.title}" loading="lazy">` : ''}</div>
-        <div class="body"><div class="date">${p.date}</div><h3>${p.title}</h3></div>
-      </a>`).join('');
+    var list = document.getElementById('actList');
+    list.innerHTML = '';
+    posts.forEach(function (p) {
+      var a = document.createElement('a');
+      a.className = 'act';
+      a.href = p.url; a.target = '_blank'; a.rel = 'noopener';
+      var th = document.createElement('div');
+      th.className = 'thumb';
+      if (p.thumb) {
+        var img = document.createElement('img');
+        img.src = 'activities/' + p.thumb; img.alt = p.title; img.loading = 'lazy';
+        th.appendChild(img);
+      }
+      var body = document.createElement('div');
+      body.className = 'body';
+      var date = document.createElement('div');
+      date.className = 'date';
+      date.textContent = p.date + (p.tag ? ' · ' + p.tag : '');
+      var h3 = document.createElement('h3');
+      h3.textContent = p.title;
+      body.appendChild(date); body.appendChild(h3);
+      a.appendChild(th); a.appendChild(body);
+      list.appendChild(a);
+    });
   })
-  .catch(() => {}); // index.json 없으면 준비 중 문구 유지
+  .catch(function () {}); // posts.json 없으면 준비 중 문구 유지
 </script>
 
 <footer>

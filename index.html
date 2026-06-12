@@ -85,6 +85,40 @@
     <div class="acts reveal d2" id="recentActs">
       <a class="act" href="activities.html"><div class="thumb"></div><div class="body"><div class="date">곧 채워집니다</div><h3>활동 이야기가 이곳에 자동으로 올라옵니다</h3></div></a>
     </div>
+    <script>
+    // 최신 활동 3건 — activities/posts.json (tools/sync-blog.mjs 생성)
+    fetch('activities/posts.json')
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (data) {
+        var posts = ((data && data.posts) || []).slice(0, 3);
+        if (!posts.length) return;
+        var box = document.getElementById('recentActs');
+        box.innerHTML = '';
+        posts.forEach(function (p) {
+          var a = document.createElement('a');
+          a.className = 'act';
+          a.href = p.url; a.target = '_blank'; a.rel = 'noopener';
+          var th = document.createElement('div');
+          th.className = 'thumb';
+          if (p.thumb) {
+            var img = document.createElement('img');
+            img.src = 'activities/' + p.thumb; img.alt = p.title; img.loading = 'lazy';
+            th.appendChild(img);
+          }
+          var body = document.createElement('div');
+          body.className = 'body';
+          var date = document.createElement('div');
+          date.className = 'date';
+          date.textContent = p.date + (p.tag ? ' · ' + p.tag : '');
+          var h3 = document.createElement('h3');
+          h3.textContent = p.title;
+          body.appendChild(date); body.appendChild(h3);
+          a.appendChild(th); a.appendChild(body);
+          box.appendChild(a);
+        });
+      })
+      .catch(function () {});
+    </script>
     <p style="margin-top:24px;" class="reveal d3"><a class="btn soft" href="activities.html">전체 활동 보기</a></p>
   </div>
 </section>
