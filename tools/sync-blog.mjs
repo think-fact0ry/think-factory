@@ -19,6 +19,8 @@ function cleanTitle(raw) {
   const m = t.match(/^\[([^\]]{1,20})\]\s*/);            // 선두 [카테고리] → 뱃지로 분리
   if (m) { tag = m[1].trim(); t = t.slice(m[0].length); }
   t = t.replace(/\s*[ㅣ|∣｜I]\s*생각공작소\s*$/, '');      // 꼬리표 제거 (유성 OK 2026-06-11)
+  t = t.replace(/활동\s*사진/g, '');                        // '활동사진' 제거 (텍스트 다이어트, 2026-06-12)
+  t = t.replace(/\s{2,}/g, ' ');
   return { title: t.trim(), tag };
 }
 

@@ -6,14 +6,9 @@
   --maxw:1040px;
 }
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-/* scroll-padding은 전 페이지 공통: 앵커 이동 시 sticky nav(60px)에 안 가리게 */
+/* scroll-padding은 전 페이지 공통: 앵커 이동 시 sticky nav(60px)에 안 가리게.
+   풀페이지 전환은 CSS 스냅 대신 index의 JS(휠 1회=1섹션, 700ms 이징)가 담당 */
 html{ scroll-behavior:smooth; scroll-padding-top:60px; }
-/* 메인 페이지(html.snap)만: 스크롤 시 한 화면씩 끊어 이동 (CSS 스냅 = JS 스크롤재킹 없음 → 렉 0) */
-html.snap{ scroll-snap-type:y mandatory; }
-html.snap .fold, html.snap .sec.full{ scroll-snap-align:start; }
-html.snap footer{ scroll-snap-align:end; }
-/* 좁은 화면에선 섹션이 한 화면보다 길어질 수 있어 강제 스냅 해제(근접 스냅만) */
-@media (max-width:760px){ html.snap{ scroll-snap-type:y proximity; } }
 body{
   margin:0; font-family:'Pretendard',-apple-system,sans-serif;
   background:#fff; color:var(--g900);
@@ -56,17 +51,24 @@ img{ max-width:100%; display:block; }
 .btn.fill:active{ background:var(--green-dark); }
 .btn.soft{ background:var(--g100); color:var(--g900); }
 
-/* ── 실시간 신청 띠 (fold 하단) ── */
+/* ── 실시간 신청 띠 (fold 하단) — 우→좌 마키 ── */
 .live{ background:var(--g50); border-top:1px solid var(--g100); padding:20px 0; }
 .live .inner{ display:flex; align-items:center; gap:16px; }
 .live .badge{ display:flex; align-items:center; gap:7px; font-size:13px; font-weight:700; color:var(--green); white-space:nowrap; }
 .live .badge i{ width:7px; height:7px; border-radius:99px; background:var(--green); animation:pulse 1.6s ease-in-out infinite; }
 @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
-.live .roll{ position:relative; flex:1; height:22px; overflow:hidden; }
-.live .item{ position:absolute; left:0; right:0; font-size:14px; color:var(--g700); line-height:22px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transform:translateY(22px); opacity:0; transition:transform .4s ease, opacity .4s ease; }
-.live .item b{ color:var(--g900); font-weight:700; margin-right:2px; }
-.live .item.on{ transform:translateY(0); opacity:1; }
-.live .item.out{ transform:translateY(-22px); opacity:0; }
+/* 배지 끝 ~ inner 우측 라인(=nav 상담신청 버튼 우측 라인)까지가 흐름 영역 */
+.live .marquee{ flex:1; overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
+  mask-image:linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%); }
+.live .static-item{ font-size:14px; color:var(--g700); line-height:22px; white-space:nowrap; }
+.live .track{ display:inline-flex; white-space:nowrap; will-change:transform; animation:tickerFlow 45s linear infinite; }
+.live .track:hover{ animation-play-state:paused; }
+.live .half{ display:inline-flex; }
+.live .m-item{ font-size:14px; color:var(--g700); line-height:22px; white-space:nowrap; padding-right:48px; }
+.live .m-item b{ color:var(--g900); font-weight:700; margin-right:2px; }
+@keyframes tickerFlow{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+@media (prefers-reduced-motion:reduce){ .live .track{ animation:none; } }
 
 /* ── 섹션 공통 ── */
 .sec{ padding:64px 0; }
@@ -111,25 +113,38 @@ img{ max-width:100%; display:block; }
 .reveal.d3{ transition-delay:.36s; }
 @media (prefers-reduced-motion:reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
 
-/* ── 오시는 길 ── */
-.loc{ display:grid; grid-template-columns:340px 1fr; gap:28px; align-items:stretch; }
+/* ── 오시는 길 — 지도 좌(inner 왼 라인 정렬) · 정보 우 ── */
+.loc{ display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:stretch; }
 @media (max-width:760px){ .loc{ grid-template-columns:1fr; gap:18px; } }
-.loc-select{
-  width:100%; padding:16px 18px; font-size:16px; font-weight:700; font-family:inherit;
-  color:var(--g900); background:#fff; border:1px solid var(--g200); border-radius:14px;
-  appearance:none; -webkit-appearance:none; cursor:pointer;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%238b95a1' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat; background-position:right 18px center;
-}
-.loc-select:focus{ outline:none; border-color:var(--green); }
-.loc-meta{ margin-top:22px; }
-.loc-name{ font-size:18px; font-weight:800; letter-spacing:-.4px; margin-bottom:8px; }
-.loc-addr{ font-size:15px; color:var(--g700); line-height:1.7; margin-bottom:14px; }
-.loc-tel{ display:inline-block; font-size:15px; font-weight:700; color:var(--green); }
-.loc-map{ background:var(--g100); border-radius:20px; min-height:380px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-.loc-map .loading{ color:var(--g400); font-size:14px; }
+.loc-name{ font-size:19px; font-weight:800; letter-spacing:-.4px; margin-bottom:10px; }
+.loc-addr{ font-size:15px; color:var(--g700); line-height:1.7; margin-bottom:6px; }
+.loc-how{ font-size:14px; color:var(--g500); line-height:1.7; margin-bottom:26px; }
+.loc-tel-label{ font-size:13px; font-weight:700; color:var(--g500); margin-bottom:4px; }
+.loc-tel{ display:inline-block; font-size:28px; font-weight:800; letter-spacing:-.6px; color:var(--green); }
+.loc-map{ position:relative; background:var(--g100); border-radius:20px; min-height:400px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
 .loc-map .map-link{ font-size:15px; font-weight:700; color:var(--green); }
+.map-guard{ position:absolute; inset:0; z-index:5; display:flex; align-items:center; justify-content:center;
+  background:rgba(25,31,40,0); color:#fff; font-size:14px; font-weight:600; cursor:pointer;
+  opacity:0; transition:opacity .2s, background .2s; }
+.loc-map:hover .map-guard{ opacity:1; background:rgba(25,31,40,.35); }
 @media (max-width:760px){ .loc-map{ min-height:280px; } }
+
+/* ── 차별점 노트 ── */
+.note-line{ margin:26px 0 0; font-size:14px; color:var(--g500); line-height:1.7; }
+
+/* ── 활동 캐러셀(메인) — 우→좌 자동 흐름, 3장씩 ── */
+.car{ display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; }
+.car::-webkit-scrollbar{ display:none; }
+.car .act{ flex:0 0 calc((100% - 32px)/3); scroll-snap-align:start; }
+@media (max-width:980px){ .car .act{ flex-basis:calc((100% - 16px)/2); } }
+@media (max-width:520px){ .car .act{ flex-basis:86%; } }
+
+/* ── 전체 보기 버튼 (토스식 소프트 그린 필) ── */
+.more-wrap{ margin:30px 0 0; text-align:center; }
+.btn.more{ background:var(--green-bg); color:var(--green-dark); border-radius:99px; padding:15px 30px; font-size:15.5px; transition:transform .12s, background .15s; }
+.btn.more::after{ content:'→'; margin-left:8px; transition:transform .15s; display:inline-block; }
+.btn.more:hover{ background:#ddeee5; }
+.btn.more:hover::after{ transform:translateX(3px); }
 
 /* ── 활동 그리드 ── */
 .acts{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
