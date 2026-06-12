@@ -388,7 +388,7 @@
 
 // ── 오시는 길 — 네이버 지도 (NCP 키 입력 시 활성, 전까지는 링크 폴백) ──
 (function () {
-  var NAVER_MAP_CLIENT_ID = ''; // ← NCP 콘솔에서 Web Dynamic Map 키 발급 후 입력 (유성)
+  var NAVER_MAP_CLIENT_ID = 'lphmudcf0u'; // NCP Web Dynamic Map (도메인 제한 공개키)
   var ADDR = '인천광역시 미추홀구 주안로 128';
   var mapBox = document.getElementById('locMap');
   if (!NAVER_MAP_CLIENT_ID) return; // 폴백(네이버 지도 링크) 유지
@@ -396,7 +396,10 @@
   s.src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=' + NAVER_MAP_CLIENT_ID + '&submodules=geocoder';
   s.onload = function () {
     naver.maps.Service.geocode({ query: ADDR }, function (status, res) {
-      if (status !== naver.maps.Service.Status.OK || !res.v2.addresses.length) return; // 실패 시 폴백 유지
+      if (status !== naver.maps.Service.Status.OK || !res.v2.addresses.length) {
+        console.warn('네이버 지오코딩 실패(폴백 링크 유지) — NCP 앱에 Geocoding API 체크됐는지 확인:', status, res);
+        return; // 실패 시 폴백 유지
+      }
       var a = res.v2.addresses[0];
       var pos = new naver.maps.LatLng(Number(a.y), Number(a.x));
       mapBox.innerHTML = '';
