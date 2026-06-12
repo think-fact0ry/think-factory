@@ -88,7 +88,8 @@
   <div class="inner statement">
     <p class="s1 reveal">찾아오지 않으셔도 됩니다.</p>
     <p class="s2 reveal d1">선생님이 <b>갑니다</b>.</p>
-    <p class="s3 reveal d2">아이가 가장 편한 공간에서, 가장 자연스러운 수업.</p>
+    <p class="s3 reveal d2">아이에게 가장 편한 곳은 아이의 공간입니다.<br>낯선 환경에 적응하는 시간 없이, 아이가 가장 자연스러운 모습으로 수업을 만납니다.</p>
+    <p class="s3 reveal d2">이동도, 대기도 부모님 몫이 아닙니다.</p>
     <p class="s4 reveal d3">재가방문 수업 · 인천 전 지역</p>
   </div>
 </section>
@@ -131,7 +132,7 @@
       <a class="act" href="activities.html"><div class="thumb"></div><div class="body"><div class="date">곧 채워집니다</div><h3>아이들의 이야기가 이곳에 자동으로 올라옵니다</h3></div></a>
     </div>
     <div class="dots reveal d3" id="actDots"></div>
-    <p class="more-wrap reveal d3"><a class="btn more arrow" href="activities.html" aria-label="전체 보기" title="전체 보기"></a></p>
+    <p class="more-wrap reveal d3"><a class="btn more" href="activities.html">전체 보기</a></p>
   </div>
 </section>
 
@@ -193,10 +194,8 @@
       <div><h4>남동지점 (행복마음상담센터)</h4><div class="biz">사업자등록번호 599-95-02033</div></div>
     </div>
     <div class="info">
-      <span><b class="k">상호명</b>생각공작소</span>
-      <span><b class="k">대표</b>한유성</span>
-      <span><b class="k">주소</b>인천광역시 미추홀구 주안로 128, 우리들애 601호</span>
-      <span><b class="k">대표전화</b>032-277-2007</span>
+      <div class="row"><span><b class="k">상호명</b>생각공작소</span><span><b class="k">대표</b>한유성</span></div>
+      <div class="row"><span><b class="k">주소</b>인천광역시 미추홀구 주안로 128, 우리들애 601호</span><span><b class="k">대표전화</b>032-277-2007</span></div>
     </div>
     <div class="legal">
       <a href="privacy.html">개인정보처리방침</a>
@@ -216,9 +215,22 @@
   <a class="f naver" href="https://blog.naver.com/think5007" target="_blank" rel="noopener" aria-label="네이버 블로그" title="네이버 블로그">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.3 12.7 7.4 0H0v24h7.7V11.3L16.6 24H24V0h-7.7v12.7z" transform="translate(2.5 2.5) scale(0.79)"/></svg>
   </a>
+  <a class="f top" href="#" id="toTop" aria-label="맨 위로" title="맨 위로">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 14l7-7 7 7"/></svg>
+  </a>
 </div>
 
 <script>
+// ── 맨 위로 버튼 — 한 화면 이상 내려가면 표시 ──
+(function () {
+  var b = document.getElementById('toTop');
+  if (!b) return;
+  b.addEventListener('click', function (e) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  function toggle() { b.classList.toggle('show', window.pageYOffset > 300); }
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
+})();
+
 // ── 스크롤 등장 효과 — transform/opacity만 사용(GPU 합성, 렉 없음) ──
 (function () {
   var els = document.querySelectorAll('.reveal');
@@ -443,7 +455,11 @@
       var pos = new naver.maps.LatLng(Number(a.y), Number(a.x));
       mapBox.innerHTML = '';
       var map = new naver.maps.Map(mapBox, { center: pos, zoom: 16, scrollWheel: false });
-      new naver.maps.Marker({ map: map, position: pos });
+      // 브랜드 마커: 그린 칩 + 핀 점 (transform으로 점이 좌표 위에 오게)
+      new naver.maps.Marker({
+        map: map, position: pos,
+        icon: { content: '<div class="nv-pin"><span>생각공작소</span><i></i></div>', anchor: new naver.maps.Point(0, 0) }
+      });
       // 휠 가드: 클릭해야 지도 줌 활성, 벗어나면 다시 페이지 스크롤로
       var guard = document.createElement('div');
       guard.className = 'map-guard';
