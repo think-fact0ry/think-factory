@@ -4,7 +4,13 @@
   --g200:#e5e8eb; --g100:#f2f4f6; --g50:#f9fafb;
   --green:#3a8a5f; --green-dark:#2f6f4d; --green-bg:#e9f4ee; --red:#f04452;
   --maxw:1040px;
+  /* 그림자: 검정 대신 그린 틴트 · 2겹 (디자인 라운드 2) */
+  --sh1:0 1px 2px rgba(47,111,77,.05), 0 4px 14px rgba(47,111,77,.06);
+  --sh2:0 2px 8px rgba(47,111,77,.08), 0 12px 30px rgba(47,111,77,.12);
 }
+/* 반응형 전용 줄바꿈 헬퍼 */
+br.mo{ display:none; }
+@media (max-width:760px){ br.mo{ display:inline; } br.pc{ display:none; } }
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 /* scroll-padding은 전 페이지 공통: 앵커 이동 시 sticky nav(60px)에 안 가리게.
    풀페이지 전환은 CSS 스냅 대신 index의 JS(휠 1회=1섹션, 700ms 이징)가 담당 */
@@ -133,10 +139,12 @@ img{ max-width:100%; display:block; }
   text-shadow:0 0 5px #fff, 0 0 14px #fff, 0 0 22px #fff;
   opacity:0; transition:opacity .2s; }
 .loc-map:hover .map-guard{ opacity:1; }
-/* 브랜드 마커 (네이버 지도 HTML 아이콘) — 점이 좌표 위에 오도록 자체 보정 */
-.nv-pin{ transform:translate(-50%, -100%); display:flex; flex-direction:column; align-items:center; pointer-events:none; }
-.nv-pin span{ background:#fff; color:var(--green); font-family:'Pretendard',sans-serif; font-size:13px; font-weight:800; letter-spacing:-.3px; padding:6px 12px; border-radius:99px; box-shadow:0 2px 10px rgba(0,0,0,.18); white-space:nowrap; margin-bottom:6px; }
-.nv-pin i{ width:14px; height:14px; background:var(--green); border:3px solid #fff; border-radius:99px; box-shadow:0 2px 6px rgba(0,0,0,.3); }
+/* 브랜드 마커 — 물방울 핀 + 이모지 (텍스트 없음). 팁이 좌표 위에 오도록 보정 */
+.nv-pin{ transform:translate(-50%, -100%); pointer-events:none; }
+.nv-pin .drop{ width:40px; height:40px; background:#fff; border:2px solid var(--green);
+  border-radius:50% 50% 50% 0; transform:rotate(-45deg); box-shadow:0 3px 10px rgba(0,0,0,.25);
+  display:flex; align-items:center; justify-content:center; }
+.nv-pin .drop span{ transform:rotate(45deg); font-size:19px; line-height:1; }
 @media (max-width:760px){ .loc-map{ min-height:280px; } }
 
 /* ── 차별점 노트 ── */
@@ -190,6 +198,78 @@ footer .info .row{ display:flex; flex-wrap:wrap; gap:6px 28px; }
 footer .info .k{ color:var(--g400); font-weight:600; margin-right:7px; }
 footer .legal{ font-size:13px; color:var(--g500); display:flex; gap:18px; flex-wrap:wrap; }
 footer .legal a:hover{ color:var(--g900); }
+
+/* ═══ 디자인 라운드 2 (2026-06-15) ═══ */
+
+/* 섹션 eyebrow 라벨 (hd-hmns 인사이트) */
+.eyebrow{ font-size:13px; font-weight:700; color:var(--green); letter-spacing:.3px; margin:0 0 12px; }
+.sec.center .eyebrow{ text-align:center; }
+
+/* 카드 그림자 고급화 (그린 틴트 2겹) */
+.card{ box-shadow:var(--sh1); }
+.card:hover{ box-shadow:var(--sh2); }
+.sec.tint .card{ box-shadow:var(--sh1); }
+.sec.tint .card:hover{ box-shadow:var(--sh2); }
+
+/* 오감 차별점 — 2x2 이모지 박스 */
+.grid2{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; max-width:680px; margin:0 auto; }
+.grid2 .fbox{ background:#fff; border:1px solid var(--g200); border-radius:18px; padding:26px 20px; text-align:center;
+  box-shadow:var(--sh1); transition:border-color .15s, transform .15s, box-shadow .15s; }
+.grid2 .fbox:hover{ border-color:var(--green); transform:translateY(-3px); box-shadow:var(--sh2); }
+.grid2 .fbox .emo{ font-size:34px; line-height:1; margin-bottom:12px; }
+.grid2 .fbox h3{ font-size:16px; font-weight:700; margin:0 0 6px; letter-spacing:-.3px; }
+.grid2 .fbox p{ font-size:13.5px; color:var(--g500); line-height:1.6; margin:0; }
+@media (max-width:520px){ .grid2 .fbox{ padding:22px 14px; } .grid2 .fbox .emo{ font-size:30px; } }
+
+/* 비전 섹션 (대형 문장) */
+.vision{ text-align:center; max-width:760px; margin:0 auto; }
+.vision h2{ font-size:40px; font-weight:800; letter-spacing:-1.2px; line-height:1.3; margin:0 0 20px; }
+.vision p{ font-size:18px; color:var(--g700); line-height:1.85; margin:0; }
+@media (max-width:760px){ .vision h2{ font-size:30px; } .vision p{ font-size:16px; } }
+
+/* 인재채용 카드 */
+.recruit{ max-width:640px; margin:0 auto; }
+.recruit .rcard{ background:#fff; border:1px solid var(--g200); border-radius:20px; padding:30px 28px; box-shadow:var(--sh1); }
+.recruit ul{ list-style:none; padding:0; margin:0 0 24px; display:flex; flex-direction:column; gap:14px; }
+.recruit li{ font-size:16px; color:var(--g700); line-height:1.6; }
+.recruit li b{ color:var(--g900); font-weight:700; }
+.recruit li b::before{ content:'·'; color:var(--green); font-weight:800; margin-right:8px; }
+
+/* 모바일 햄버거 + 드로어 */
+.nav .hb{ display:none; margin-left:auto; width:40px; height:40px; border:none; background:none; cursor:pointer; flex-direction:column; justify-content:center; gap:5px; padding:0; }
+.nav .hb span{ display:block; width:22px; height:2px; background:var(--g700); border-radius:2px; margin:0 auto; }
+.drawer{ position:fixed; inset:0; z-index:30; visibility:hidden; }
+.drawer .dim{ position:absolute; inset:0; background:rgba(0,0,0,.32); opacity:0; transition:opacity .25s; }
+.drawer .panel{ position:absolute; top:0; right:0; height:100%; width:74%; max-width:300px; background:#fff;
+  transform:translateX(100%); transition:transform .28s ease; display:flex; flex-direction:column;
+  padding:22px 22px calc(22px + env(safe-area-inset-bottom)); box-shadow:-8px 0 30px rgba(0,0,0,.12); }
+.drawer.open{ visibility:visible; }
+.drawer.open .dim{ opacity:1; }
+.drawer.open .panel{ transform:none; }
+.drawer .dclose{ align-self:flex-end; width:40px; height:40px; border:none; background:none; font-size:28px; color:var(--g500); cursor:pointer; line-height:1; }
+.drawer a{ font-size:17px; font-weight:600; color:var(--g900); padding:15px 4px; border-bottom:1px solid var(--g100); }
+.drawer a.dcta{ margin-top:18px; background:var(--green); color:#fff; text-align:center; border-radius:12px; padding:15px; font-weight:700; border-bottom:none; }
+@media (max-width:760px){ .nav a.cta{ display:none; } .nav .hb{ display:flex; } }
+@media (min-width:761px){ .drawer{ display:none; } }   /* 데스크톱에선 드로어 자체 비표시 (리사이즈 안전망) */
+
+/* 활동 캐러셀 카드: 제목 2줄 클램프 + 고정 높이 (모바일 3줄 방지) */
+.car .act h3{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:48px; }
+
+/* 푸터: 줄 간격 통일 + legal 알약 버튼 */
+footer .info{ margin-bottom:8px; }
+footer .info .row{ gap:8px 28px; }
+footer .legal{ gap:10px; margin-top:8px; }
+footer .legal a{ background:var(--g100); color:var(--g700); padding:8px 16px; border-radius:99px; font-weight:600; transition:background .15s, color .15s; }
+footer .legal a:hover{ background:var(--g200); color:var(--g900); }
+
+/* 모바일 hero: 아래 왼쪽 (뒷배경/영상 여지) */
+@media (max-width:760px){ .fold .hero{ align-items:flex-end; } .fold .hero .inner{ padding-bottom:8px; } }
+
+/* 서비스 상세 — 오감 프로그램 리스트 */
+.prose ul.prog{ list-style:none; padding:0; margin:14px 0 0; display:flex; flex-direction:column; gap:12px; }
+.prose ul.prog li{ font-size:16px; color:var(--g700); line-height:1.7; padding-left:18px; position:relative; }
+.prose ul.prog li::before{ content:''; position:absolute; left:0; top:11px; width:7px; height:7px; border-radius:99px; background:var(--green); }
+.prose ul.prog li b{ color:var(--g900); font-weight:700; }
 
 /* ── 우하단 플로팅 SNS 버튼 ── */
 .fab{ position:fixed; right:20px; bottom:20px; display:flex; flex-direction:column; gap:10px; z-index:20; }
