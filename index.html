@@ -64,6 +64,11 @@
 <!-- 첫 화면(fold) = hero + 실시간 띠가 nav 아래 한 화면을 꽉 채움 -->
 <div class="fold">
   <header class="hero">
+    <div class="hero-bg">
+      <video id="hbvA" class="hbv" autoplay muted playsinline preload="auto" poster="assets/hero-poster.png"><source src="assets/hero.mp4" type="video/mp4"></video>
+      <video id="hbvB" class="hbv" muted playsinline preload="auto" poster="assets/hero-poster.png"><source src="assets/hero.mp4" type="video/mp4"></video>
+      <div class="hero-scrim"></div>
+    </div>
     <div class="inner">
       <h1 class="reveal">아이들의 꿈을 키우는<br><b>생각공작소</b></h1>
       <p class="reveal d1">인천 전 지역,<br class="mo"> 선생님이 아이들의 공간으로 직접 찾아갑니다.<br>
@@ -229,6 +234,34 @@
     if (e.target.hasAttribute('data-close') || e.target.closest('a')) close();
   });
   window.addEventListener('resize', function () { if (window.innerWidth > 760 && d.classList.contains('open')) close(); });
+})();
+
+// ── 히어로 배경 영상 — 2겹 크로스페이드 무한루프 (끝에서 부드러운 디졸브로 반복) ──
+(function () {
+  var a = document.getElementById('hbvA'), b = document.getElementById('hbvB');
+  if (!a || !b) return;
+  var FADE = 0.8; // CSS .hbv transition과 동일
+  var cur = a, nxt = b;
+  function play(v) { var r = v.play && v.play(); if (r && r.catch) r.catch(function () {}); } // muted+playsinline이면 통과, 막히면 poster 유지
+  play(a);
+  function tick() {
+    if (!cur.duration || isNaN(cur.duration)) return;
+    if (cur.duration - cur.currentTime <= FADE && nxt.paused) {
+      nxt.currentTime = 0; play(nxt);
+      nxt.style.opacity = 1; cur.style.opacity = 0;
+      var prev = cur; cur = nxt; nxt = prev;                                  // 역할 교대
+      setTimeout(function () { prev.pause(); prev.currentTime = 0; }, FADE * 1000 + 60);
+    }
+  }
+  a.addEventListener('timeupdate', tick);
+  b.addEventListener('timeupdate', tick);
+  // 안전망: 백그라운드 탭 throttle로 크로스페이드가 빗나가도 멈춘 프레임으로 얼지 않게
+  function onEnded(e) { if (e.target === cur) { cur.currentTime = 0; play(cur); } }
+  a.addEventListener('ended', onEnded);
+  b.addEventListener('ended', onEnded);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && cur.paused) play(cur);
+  });
 })();
 
 // ── 맨 위로 버튼 — 한 화면 이상 내려가면 표시 ──
