@@ -289,7 +289,7 @@ footer .legal a:hover{ color:var(--g900); }
 .fold .hero .inner{ position:relative; z-index:1; }
 .fold .hero h1{ color:#fff; text-shadow:0 1px 16px rgba(0,0,0,.3); }
 .fold .hero h1 b{ color:#5cc08a; }   /* 생각공작소 = 초록 (어두운 영상 위 가독 위해 밝은 브랜드그린) */
-.fold .hero p{ color:rgba(255,255,255,.78); text-shadow:0 1px 12px rgba(0,0,0,.32); }
+.fold .hero p{ color:rgba(255,255,255,.9); text-shadow:0 1px 12px rgba(0,0,0,.32); }
 .fold .hero .btn.soft{ background:rgba(255,255,255,.92); color:var(--g900); }
 @media (prefers-reduced-motion:reduce){ .hero-bg .hbv{ transition:none; } }
 
