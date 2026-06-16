@@ -311,6 +311,78 @@ footer .legal a:hover{ color:var(--g900); }
 .fab .f:active{ transform:scale(.94); }
 .fab .f svg{ width:22px; height:22px; }
 /* 맨 위로 — 한 화면 이상 내려가야 나타남 */
-.fab .top{ opacity:0; pointer-events:none; transform:translateY(6px); transition:opacity .25s, transform .25s, color .15s, border-color .15s; }
-.fab .top.show{ opacity:1; pointer-events:auto; transform:none; }
+/* 서브 페이지: 화살표 숨김 시 자리(구멍)도 비움 → 네이버블로그가 모서리로 내려옴.
+   화살표가 생기면 다른 버튼이 위로 밀림 */
+.fab .top{ display:none; }
+.fab .top.show{ display:flex; }
+/* 홈(.fab.home)만 기존 동작 유지: 자리 고정(페이드) — 히어로 영상 위 레이아웃 안정 */
+.fab.home .top{ display:flex; opacity:0; pointer-events:none; transform:translateY(6px); transition:opacity .25s, transform .25s, color .15s, border-color .15s; }
+.fab.home .top.show{ opacity:1; pointer-events:auto; transform:none; }
 @media (max-width:760px){ .fab{ right:14px; bottom:14px; } .fab .f{ width:44px; height:44px; } }
+
+/* ── 서비스 안내 — 탭 + 패널 ── */
+.svc-hero{ text-align:center; padding:64px 0 8px; }
+.svc-hero h1{ font-size:36px; font-weight:800; letter-spacing:-1px; margin:0 0 10px; }
+.svc-hero p{ font-size:16px; color:var(--g500); margin:0; line-height:1.7; }
+@media (max-width:760px){ .svc-hero{ padding:44px 0 8px; } .svc-hero h1{ font-size:28px; } }
+
+/* 탭(세그먼트) */
+.svc-tabs{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:26px 0 0; }
+.svc-tab{ font-family:inherit; font-size:15px; font-weight:700; letter-spacing:-.3px;
+  color:var(--g500); background:var(--g100); border:1px solid transparent; border-radius:99px;
+  padding:10px 18px; cursor:pointer; transition:color .15s, background .15s; }
+.svc-tab:hover{ color:var(--g900); }
+.svc-tab.on{ color:#fff; background:var(--green); }
+@media (max-width:760px){ .svc-tab{ font-size:14px; padding:9px 14px; } }
+
+/* 패널 — 선택된 것만 노출 */
+.svc-panel{ display:none; }
+.svc-panel.on{ display:block; }
+.svc-panel .inner{ max-width:760px; }
+.svc-chip{ display:inline-block; font-size:12px; font-weight:700; color:var(--green); background:var(--green-bg); padding:5px 12px; border-radius:99px; margin-bottom:14px; }
+.svc-panel h2{ font-size:28px; font-weight:800; letter-spacing:-.7px; margin:0 0 14px; }
+.svc-panel .lead{ font-size:18px; color:var(--g900); font-weight:600; line-height:1.8; margin:0 0 12px; }
+.svc-panel .desc{ font-size:16px; color:var(--g700); line-height:1.9; margin:0 0 28px; }
+@media (max-width:760px){ .svc-panel h2{ font-size:24px; } .svc-panel .lead{ font-size:16.5px; } .svc-panel .desc{ font-size:15.5px; } }
+
+/* 이미지 자리(추후 실제 사진 교체) — img2.png 참고: 텍스트 아래 3장 가로열 */
+.ph-gallery{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 0 32px; }
+.ph-img{ aspect-ratio:1/1; background:var(--g100); border:1px dashed var(--g200); border-radius:16px;
+  display:flex; align-items:center; justify-content:center; color:var(--g400); font-size:13px; font-weight:600;
+  text-align:center; line-height:1.7; }
+@media (max-width:520px){ .ph-gallery{ gap:8px; } .ph-img{ border-radius:12px; font-size:11px; } }
+
+/* 한눈에 보기 */
+.facts{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:0 0 28px; }
+@media (max-width:640px){ .facts{ grid-template-columns:repeat(2,1fr); } }
+.fact{ background:var(--g50); border-radius:16px; padding:18px 14px; text-align:center; }
+.fact .k{ display:block; font-size:12px; font-weight:700; color:var(--g500); margin-bottom:6px; }
+.fact .v{ display:block; font-size:18px; font-weight:800; color:var(--g900); letter-spacing:-.4px; }
+.fact .v small{ font-size:13px; font-weight:700; color:var(--g500); }
+
+/* 가격 */
+.price{ border:1px solid var(--g200); border-radius:20px; padding:22px; margin:0 0 4px; }
+.price .ptop{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.price .ptop .t{ font-size:15px; font-weight:700; color:var(--g700); }
+.price .ptop .t small{ display:block; font-size:12.5px; font-weight:600; color:var(--g500); margin-top:2px; }
+.price .ptop .a{ font-size:26px; font-weight:800; color:var(--green); letter-spacing:-.6px; }
+.price .ptop .a small{ font-size:14px; font-weight:700; color:var(--g500); }
+.price .pnote{ font-size:13.5px; color:var(--g500); line-height:1.7; margin:14px 0 16px; }
+.ptable{ width:100%; border-collapse:collapse; font-size:14px; }
+.ptable th, .ptable td{ padding:9px 8px; text-align:center; border-bottom:1px solid var(--g100); }
+.ptable th{ color:var(--g500); font-weight:700; font-size:12.5px; }
+.ptable td{ color:var(--g700); }
+.ptable td.own{ font-weight:800; color:var(--g900); }
+.ptable tr:last-child td{ border-bottom:none; }
+
+/* 차별점 카드 */
+.svc-sec-t{ font-size:20px; font-weight:800; letter-spacing:-.5px; margin:40px 0 16px; }
+.diff{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+@media (max-width:640px){ .diff{ grid-template-columns:1fr; } }
+.diff .d{ background:#fff; border:1px solid var(--g200); border-radius:18px; padding:20px; }
+.diff .d .e{ font-size:24px; margin-bottom:10px; line-height:1; }
+.diff .d h4{ font-size:16px; font-weight:800; margin:0 0 6px; letter-spacing:-.4px; }
+.diff .d p{ font-size:14px; color:var(--g700); line-height:1.7; margin:0; }
+
+/* 준비 중 안내(아청심·정신토탈·성인심리) */
+.svc-soon{ background:var(--g50); border-radius:18px; padding:28px 22px; text-align:center; color:var(--g500); font-size:15px; line-height:1.8; }
