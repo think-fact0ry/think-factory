@@ -377,7 +377,7 @@ footer .legal a:hover{ color:var(--g900); }
 @media (max-width:640px){ .facts{ grid-template-columns:repeat(2,1fr); } }
 .fact{ background:var(--g50); border-radius:16px; padding:18px 14px; text-align:center; }
 .fact .k{ display:block; font-size:12px; font-weight:700; color:var(--g500); margin-bottom:6px; }
-.fact .v{ display:block; font-size:18px; font-weight:800; color:var(--g900); letter-spacing:-.4px; }
+.fact .v{ display:block; font-size:18px; font-weight:800; color:var(--green); letter-spacing:-.4px; }
 .fact .v small{ font-size:13px; font-weight:700; color:var(--g500); }
 
 /* 가격 */
