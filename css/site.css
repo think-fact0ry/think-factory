@@ -458,15 +458,16 @@ footer .legal a:hover{ color:var(--g900); }
 .inner-wide{ max-width:1180px; width:100%; margin:0 auto; padding:0 20px; }
 .val-head{ text-align:center; font-size:28px; font-weight:800; letter-spacing:-.7px; margin:6px 0 0; }
 .val-acc{ display:flex; gap:8px; height:56vh; margin-top:26px; }
-.vp{ position:relative; flex:1 1 0; min-width:0; border-radius:18px; overflow:hidden; cursor:pointer; background:#9aa3ae; transition:flex-grow .5s ease; }
+.vp{ position:relative; flex:1 1 0; min-width:0; border-radius:18px; overflow:hidden; cursor:pointer; background:#9aa3ae; transition:flex-grow .6s cubic-bezier(.4,0,.2,1); }
 .vp:hover, .vp.on{ flex-grow:4.4; }              /* 기본 동일 폭, 마우스 올리면 펼침 */
 .vp .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.7); font-size:13px; font-weight:600; }
 .vp .grad{ position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.66), rgba(0,0,0,.05) 52%); }
 .vp .cap{ position:absolute; left:20px; right:20px; bottom:10px; z-index:2; color:#fff; }  /* 접힘 상태 숫자+제목 더 아래로 */
 .vp .num{ font-size:12px; font-weight:700; opacity:.85; letter-spacing:.05em; }
 .vp .vt{ font-size:20px; font-weight:800; letter-spacing:-.4px; margin-top:5px; white-space:nowrap; }
-.vp .vd{ font-size:14px; line-height:1.65; margin-top:10px; opacity:0; max-height:0; overflow:hidden; transition:opacity .4s ease, max-height .5s ease; }
-.vp:hover .vd, .vp.on .vd{ opacity:.95; max-height:280px; }
+/* 서브텍스트는 폭 전환이 거의 끝난 뒤(지연) 천천히 나타나 반동(렉처럼 보임) 최소화 */
+.vp .vd{ font-size:14px; line-height:1.65; margin-top:10px; opacity:0; max-height:0; overflow:hidden; transition:opacity .45s ease, max-height .45s ease; }
+.vp:hover .vd, .vp.on .vd{ opacity:.95; max-height:200px; transition:opacity .5s ease .32s, max-height .5s ease .26s; }
 @media (max-width:760px){
   .val-acc{ flex-direction:column; height:auto; gap:10px; }
   .vp{ flex:none; height:108px; }
