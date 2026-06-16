@@ -428,3 +428,18 @@ footer .legal a:hover{ color:var(--g900); }
 
 /* 준비 중 안내(아청심·정신토탈·성인심리) */
 .svc-soon{ background:var(--g50); border-radius:18px; padding:28px 22px; text-align:center; color:var(--g500); font-size:15px; line-height:1.8; }
+
+/* ── 이야기 페이지 ── */
+.story-lead{ font-size:20px; font-weight:600; color:var(--g700); line-height:1.75; max-width:640px; margin:14px 0 0; }
+.story-lead b{ color:var(--g900); font-weight:700; }
+.story-vision{ text-align:center; max-width:720px; margin:0 auto; }
+.story-vision h2{ font-size:40px; font-weight:800; letter-spacing:-1.3px; line-height:1.32; margin:8px 0 16px; }
+.story-vision .vsub{ font-size:17px; color:var(--g500); line-height:1.7; margin:0; }
+.ph-wide{ aspect-ratio:16/7; background:var(--g100); border:1px dashed var(--g200); border-radius:20px;
+  display:flex; align-items:center; justify-content:center; color:var(--g400); font-size:14px; font-weight:600; text-align:center; line-height:1.7; }
+@media (max-width:760px){
+  .story-lead{ font-size:17px; }
+  .story-vision h2{ font-size:29px; letter-spacing:-1px; }
+  .story-vision .vsub{ font-size:15px; }
+  .ph-wide{ aspect-ratio:16/10; }
+}
