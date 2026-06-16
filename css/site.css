@@ -429,7 +429,46 @@ footer .legal a:hover{ color:var(--g900); }
 /* 준비 중 안내(아청심·정신토탈·성인심리) */
 .svc-soon{ background:var(--g50); border-radius:18px; padding:28px 22px; text-align:center; color:var(--g500); font-size:15px; line-height:1.8; }
 
-/* ── 이야기 페이지 ── */
+/* ── 이야기(철학) 페이지 — 영상 히어로 + 미션/비전 오버레이 + 핵심가치 아코디언 ── */
+/* P1 히어로: 영상 위 텍스트 좌하단 */
+.st-hero{ position:relative; overflow:hidden; min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); display:flex; align-items:flex-end; }
+.st-hero .inner{ position:relative; z-index:1; width:100%; padding-bottom:60px; }
+.st-hero h1{ color:#fff; font-size:46px; font-weight:800; letter-spacing:-1.3px; line-height:1.22; margin:6px 0 16px; text-shadow:0 1px 16px rgba(0,0,0,.35); }
+.st-hero .st-lead{ color:rgba(255,255,255,.92); font-size:19px; line-height:1.7; max-width:600px; margin:0; text-shadow:0 1px 12px rgba(0,0,0,.45); }
+.eyebrow.light{ color:#9fe0bb; }
+@media (max-width:760px){ .st-hero h1{ font-size:30px; } .st-hero .st-lead{ font-size:16px; } .st-hero .inner{ padding-bottom:40px; } }
+
+/* P2 미션·비전: 사진 위 좌측, 회색 배경 없음 */
+.st-belief{ position:relative; overflow:hidden; color:#fff; }
+.st-belief .bg-img{ position:absolute; inset:0; background:#8a93a0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.75); font-weight:600; text-align:center; line-height:1.6; }
+.st-belief .b-scrim{ position:absolute; inset:0; background:linear-gradient(to right, rgba(0,0,0,.6), rgba(0,0,0,.2) 58%, rgba(0,0,0,0) 85%); }
+.st-belief .inner{ position:relative; z-index:1; }
+.st-belief h2{ font-size:40px; font-weight:800; letter-spacing:-1.1px; margin:6px 0 12px; text-shadow:0 1px 14px rgba(0,0,0,.4); }
+.st-belief .bsub{ font-size:18px; line-height:1.7; color:rgba(255,255,255,.92); max-width:520px; margin:0; text-shadow:0 1px 10px rgba(0,0,0,.35); }
+.st-belief .bvision{ font-size:18px; line-height:1.7; color:#fff; font-weight:600; max-width:540px; margin:6px 0 0; text-shadow:0 1px 10px rgba(0,0,0,.4); }
+@media (max-width:760px){ .st-belief h2{ font-size:28px; } .st-belief .bsub, .st-belief .bvision{ font-size:16px; } }
+
+/* P3 핵심가치 아코디언 (세로 사진 패널) */
+.inner-wide{ max-width:1180px; width:100%; margin:0 auto; padding:0 20px; }
+.val-head{ text-align:center; font-size:28px; font-weight:800; letter-spacing:-.7px; margin:6px 0 0; }
+.val-acc{ display:flex; gap:8px; height:56vh; margin-top:26px; }
+.vp{ position:relative; flex:1 1 0; min-width:0; border-radius:18px; overflow:hidden; cursor:pointer; background:#9aa3ae; transition:flex-grow .5s ease; }
+.vp.on{ flex-grow:4.4; }
+.vp .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.7); font-size:13px; font-weight:600; }
+.vp .grad{ position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.66), rgba(0,0,0,.05) 52%); }
+.vp .cap{ position:absolute; left:20px; right:20px; bottom:20px; z-index:2; color:#fff; }
+.vp .num{ font-size:12px; font-weight:700; opacity:.85; letter-spacing:.05em; }
+.vp .vt{ font-size:20px; font-weight:800; letter-spacing:-.4px; margin-top:5px; white-space:nowrap; }
+.vp .vd{ font-size:14px; line-height:1.65; margin-top:10px; opacity:0; max-height:0; overflow:hidden; transition:opacity .4s ease, max-height .5s ease; }
+.vp.on .vd{ opacity:.95; max-height:280px; }
+@media (max-width:760px){
+  .val-acc{ flex-direction:column; height:auto; gap:10px; }
+  .vp{ flex:none; height:108px; }
+  .vp.on{ height:auto; min-height:180px; }
+  .vp .vt{ white-space:normal; }
+}
+
+/* (구) 이야기 페이지 잔여 — 미사용 */
 .story-lead{ font-size:20px; font-weight:600; color:var(--g700); line-height:1.75; max-width:640px; margin:14px 0 0; }
 .story-lead b{ color:var(--g900); font-weight:700; }
 .story-vision{ text-align:center; max-width:720px; margin:0 auto; }
