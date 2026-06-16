@@ -427,6 +427,8 @@ footer .legal a:hover{ color:var(--g900); }
 /* 절차 안내: steps 박스 바로 아래 안내문 + 대표전화(버튼 대신 — nav에 이미 상담 CTA) */
 .steps-tel{ font-size:23px; font-weight:800; color:var(--green); text-align:center; letter-spacing:-.5px; margin:0; }
 .steps-tel span{ display:inline-block; font-size:13px; font-weight:600; color:var(--g500); letter-spacing:0; margin-left:6px; vertical-align:middle; }
+/* 가격 섹션 보조 안내(우리 센터 제공분 한 줄) */
+.svc-extra{ max-width:560px; margin:18px auto 0; font-size:14px; color:var(--g700); line-height:1.7; text-align:center; }
 
 /* 준비 중 안내(아청심·정신토탈·성인심리) */
 .svc-soon{ background:var(--g50); border-radius:18px; padding:28px 22px; text-align:center; color:var(--g500); font-size:15px; line-height:1.8; }
