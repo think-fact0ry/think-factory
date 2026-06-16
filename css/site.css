@@ -320,16 +320,26 @@ footer .legal a:hover{ color:var(--g900); }
 .fab.home .top.show{ opacity:1; pointer-events:auto; transform:none; }
 @media (max-width:760px){ .fab{ right:14px; bottom:14px; } .fab .f{ width:44px; height:44px; } }
 
-/* ── 서비스 안내 — 풀페이지 스냅 + 탭 ── */
-/* 스크롤 시 화면에 딱딱 잡히게(홈과 같은 결). 모바일은 forgiving(proximity) */
-html.snap-svc{ scroll-snap-type:y mandatory; }
-@media (max-width:760px){ html.snap-svc{ scroll-snap-type:y proximity; } }
-.sp{ scroll-snap-align:start; scroll-snap-stop:always; min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); padding:40px 0; }
+/* ── 서비스 안내 — 풀페이지(JS, 홈과 동일 600ms 이징) + 탭 ── */
+/* 한 화면씩 고정. 스크롤 제어는 JS가 전담(CSS 스냅 미사용 — 홈과 같은 결, 자유 흔들림 없음) */
+.sp{ position:relative; min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); padding:40px 0; }
 .sp1{ display:flex; align-items:center; }              /* 박스+오감 소개를 세로 중앙 */
 .sp-mid{ display:flex; align-items:center; }           /* 짧은 섹션 세로 중앙 */
+.sp.tint{ background:var(--g50); }                     /* 바우처 절차 페이지 배경 */
 .sp .inner{ width:100%; max-width:760px; }
-.sp.tint .inner{ max-width:680px; }
-@media (max-width:760px){ .sp{ padding:32px 0; } .sp1, .sp-mid{ align-items:flex-start; } }
+@media (max-width:760px){ .sp{ padding:32px 0 56px; } .sp1, .sp-mid{ align-items:flex-start; } }
+
+/* 페이지 공통 헤더(2·4페이지) */
+.sp-head{ font-size:26px; font-weight:800; letter-spacing:-.6px; margin:0 0 18px; }
+@media (max-width:760px){ .sp-head{ font-size:22px; } }
+
+/* 아래로 내려가는 힌트 — > 모양을 90° 돌려(아래 방향) 가로로 길게, 하단 중앙 */
+.sp-next{ position:absolute; left:50%; bottom:14px; transform:translateX(-50%); background:none; border:none;
+  cursor:pointer; padding:8px 18px; color:var(--g400); line-height:0; animation:nextBob 1.9s ease-in-out infinite; }
+.sp-next svg{ width:48px; height:14px; display:block; }
+.sp-next:hover{ color:var(--green); }
+@keyframes nextBob{ 0%,100%{ transform:translate(-50%,0); } 50%{ transform:translate(-50%,5px); } }
+@media (prefers-reduced-motion:reduce){ .sp-next{ animation:none; } }
 
 /* 서비스 안내 + 탭 = 한 박스로 묶어 아래 오감 소개와 분리 */
 .svc-hero-box{ text-align:center; background:var(--g50); border-radius:24px; padding:26px 22px; margin-bottom:34px; }
@@ -373,8 +383,8 @@ html.snap-svc{ scroll-snap-type:y mandatory; }
 /* 가격 */
 .price{ border:1px solid var(--g200); border-radius:20px; padding:22px; margin:0 0 4px; }
 .price .ptop{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; }
-.price .ptop .t{ font-size:15px; font-weight:700; color:var(--g700); }
-.price .ptop .t small{ display:block; font-size:12.5px; font-weight:600; color:var(--g500); margin-top:2px; }
+.price .ptop .t{ font-size:21px; font-weight:800; color:var(--g900); letter-spacing:-.5px; }
+.price .ptop .t small{ display:block; font-size:12.5px; font-weight:600; color:var(--g500); margin-top:3px; letter-spacing:0; }
 .price .ptop .a{ font-size:26px; font-weight:800; color:var(--green); letter-spacing:-.6px; }
 .price .ptop .a small{ font-size:14px; font-weight:700; color:var(--g500); }
 .price .pnote{ font-size:13.5px; color:var(--g500); line-height:1.7; margin:14px 0 16px; }
@@ -393,6 +403,19 @@ html.snap-svc{ scroll-snap-type:y mandatory; }
 .diff .d .e{ font-size:24px; margin-bottom:10px; line-height:1; }
 .diff .d h4{ font-size:16px; font-weight:800; margin:0 0 6px; letter-spacing:-.4px; }
 .diff .d p{ font-size:14px; color:var(--g700); line-height:1.7; margin:0; }
+
+/* 차별점 노트 — 박스 바로 아래 오른쪽에 붙임 */
+.note-right{ text-align:right; margin:12px 0 0; }
+
+/* 바우처 이용 절차 — 가로형 4박스 */
+.steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:0 0 18px; }
+@media (max-width:760px){ .steps{ grid-template-columns:repeat(2,1fr); } }
+.step{ background:#fff; border:1px solid var(--g200); border-radius:18px; padding:20px 18px; }
+.step .n{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:99px;
+  background:var(--green); color:#fff; font-size:14px; font-weight:800; margin-bottom:12px; }
+.step b{ display:block; font-size:16px; font-weight:800; letter-spacing:-.4px; margin-bottom:6px; }
+.step p{ font-size:13.5px; color:var(--g700); line-height:1.65; margin:0; }
+.steps-note{ font-size:13.5px; color:var(--g500); text-align:center; line-height:1.7; margin:0 0 14px; }
 
 /* 준비 중 안내(아청심·정신토탈·성인심리) */
 .svc-soon{ background:var(--g50); border-radius:18px; padding:28px 22px; text-align:center; color:var(--g500); font-size:15px; line-height:1.8; }
