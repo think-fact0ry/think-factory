@@ -468,6 +468,10 @@ footer .legal a:hover{ color:var(--g900); }
   .vp .vt{ white-space:normal; }
 }
 
+/* ── 06 신청폼 임베드 (contact) ── */
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.apply-frame{ display:block; width:100%; height:calc(100vh - 60px); height:calc(100svh - 60px); border:0; background:var(--g50); }
+
 /* (구) 이야기 페이지 잔여 — 미사용 */
 .story-lead{ font-size:20px; font-weight:600; color:var(--g700); line-height:1.75; max-width:640px; margin:14px 0 0; }
 .story-lead b{ color:var(--g900); font-weight:700; }
