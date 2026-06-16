@@ -40,22 +40,27 @@
     <div class="hero-scrim"></div>
   </div>
   <div class="inner">
-    <p class="eyebrow light">생각공작소의 철학</p>
     <h1>왜 이 일을 하는가</h1>
     <p class="st-lead">만 0~6세는 뇌가 가장 빠르게 자라는 시기예요. 이때 아이의 뇌는 '경험'으로 자라고, 그 경험은 대부분 '감각'으로 들어와요.</p>
   </div>
 </header>
 
-<!-- ── 페이지 2: 미션 · 비전 (사진 위 좌측) ── -->
-<section class="sec full st-belief">
-  <div class="bg-img">미션 사진<br>(준비 중)</div>
-  <div class="b-scrim"></div>
-  <div class="inner">
-    <p class="eyebrow light">미션</p>
-    <h2>오감쑥쑥, 생각쑥쑥</h2>
-    <p class="bsub">감각으로 경험하고, 그 경험으로 생각이 자라요.<br>아이의 발달을 바라보는 우리의 방식이에요.</p>
-    <p class="eyebrow light" style="margin-top:30px;">비전</p>
-    <p class="bvision">인천에서 아이 발달을 가장 잘 해내는 곳.<br>더 많은 아이의 첫 경험이, 좋은 기억이 되도록.</p>
+<!-- ── 페이지 2: 미션 · 비전 (중앙 원 + 좌우 라운드 카드) ── -->
+<section class="sec full st-mv">
+  <div class="inner-wide">
+    <div class="mv-row">
+      <div class="mv-card">
+        <p class="mv-label">미션</p>
+        <h3 class="mv-h">오감쑥쑥, 생각쑥쑥</h3>
+        <p class="mv-sub">감각으로 경험하고, 그 경험으로 생각이 자라요. 아이의 발달을 바라보는 우리의 방식이에요.</p>
+      </div>
+      <div class="mv-circle"><span>생각공작소</span></div>
+      <div class="mv-card">
+        <p class="mv-label">비전</p>
+        <h3 class="mv-h">모든 아이에게,<br>좋은 첫 경험</h3>
+        <p class="mv-sub">인천에서 아이 발달을 가장 잘 해내는 곳이 될게요.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -65,7 +70,7 @@
     <p class="eyebrow" style="text-align:center;">핵심가치</p>
     <h2 class="val-head">선생님의 진심이 아이에게 닿도록</h2>
     <div class="val-acc" id="valAcc">
-      <article class="vp on" tabindex="0">
+      <article class="vp" tabindex="0">
         <div class="ph">사진 (준비 중)</div><div class="grad"></div>
         <div class="cap"><div class="num">01</div><div class="vt">진심</div>
           <p class="vd">정해진 활동을 넘어, 아이의 표정 하나에 마음을 써요. 그 온기가 아이에게 그대로 닿아요.</p></div>
@@ -135,16 +140,14 @@
 </div>
 
 <script>
-// ── 핵심가치 아코디언 (클릭/포커스로 펼침) ──
+// ── 핵심가치 아코디언 — 데스크톱은 hover(CSS), 터치는 탭으로 펼침 ──
 (function () {
   var acc = document.getElementById('valAcc');
   if (!acc) return;
+  if (!window.matchMedia('(hover: none)').matches) return; // hover 가능 기기는 CSS:hover가 담당
   var panels = [].slice.call(acc.querySelectorAll('.vp'));
   function open(p) { panels.forEach(function (x) { x.classList.toggle('on', x === p); }); }
-  panels.forEach(function (p) {
-    p.addEventListener('click', function () { open(p); });
-    p.addEventListener('focus', function () { open(p); });
-  });
+  panels.forEach(function (p) { p.addEventListener('click', function () { open(p); }); });
 })();
 
 // ── 히어로 배경 영상 — 2겹 크로스페이드 무한루프 (홈과 동일) ──
