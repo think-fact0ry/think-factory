@@ -69,7 +69,6 @@ img{ max-width:100%; display:block; }
   mask-image:linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%); }
 .live .static-item{ font-size:14px; color:var(--g700); line-height:22px; white-space:nowrap; }
 .live .track{ display:inline-flex; white-space:nowrap; will-change:transform; animation:tickerFlow 45s linear infinite; }
-.live .track:hover{ animation-play-state:paused; }
 .live .half{ display:inline-flex; }
 .live .m-item{ font-size:14px; color:var(--g700); line-height:22px; white-space:nowrap; padding-right:48px; }
 .live .m-item b{ color:var(--g900); font-weight:700; margin-right:2px; }
@@ -458,7 +457,7 @@ footer .legal a:hover{ color:var(--g900); }
 .inner-wide{ max-width:1180px; width:100%; margin:0 auto; padding:0 20px; }
 .val-head{ text-align:center; font-size:28px; font-weight:800; letter-spacing:-.7px; margin:6px 0 0; }
 .val-acc{ display:flex; gap:8px; height:56vh; margin-top:26px; }
-.vp{ position:relative; flex:1 1 0; min-width:0; border-radius:18px; overflow:hidden; cursor:pointer; background:#9aa3ae; transition:flex-grow .6s cubic-bezier(.4,0,.2,1); }
+.vp{ position:relative; flex:1 1 0; min-width:0; border-radius:18px; overflow:hidden; cursor:pointer; background:#9aa3ae; transition:flex-grow .85s cubic-bezier(.4,0,.2,1); }
 .vp:hover, .vp.on{ flex-grow:4.4; }              /* 기본 동일 폭, 마우스 올리면 펼침 */
 .vp .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.7); font-size:13px; font-weight:600; }
 .vp .grad{ position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.66), rgba(0,0,0,.05) 52%); }
@@ -467,7 +466,7 @@ footer .legal a:hover{ color:var(--g900); }
 .vp .vt{ font-size:20px; font-weight:800; letter-spacing:-.4px; margin-top:5px; white-space:nowrap; }
 /* 서브텍스트는 폭 전환이 거의 끝난 뒤(지연) 천천히 나타나 반동(렉처럼 보임) 최소화 */
 .vp .vd{ font-size:14px; line-height:1.65; margin-top:10px; opacity:0; max-height:0; overflow:hidden; transition:opacity .45s ease, max-height .45s ease; }
-.vp:hover .vd, .vp.on .vd{ opacity:.95; max-height:200px; transition:opacity .5s ease .32s, max-height .5s ease .26s; }
+.vp:hover .vd, .vp.on .vd{ opacity:.95; max-height:200px; transition:opacity .6s ease .55s, max-height .6s ease .48s; }
 @media (max-width:760px){
   .val-acc{ flex-direction:column; height:auto; gap:10px; }
   .vp{ flex:none; height:108px; }
