@@ -443,10 +443,17 @@ footer .legal a:hover{ color:var(--g900); }
 @media (max-width:760px){ .st-hero h1{ font-size:30px; } .st-hero .st-lead{ font-size:16px; } .st-hero .inner{ padding-bottom:40px; } }
 
 /* P2 미션·비전: 중앙 원 + 좌(미션)·우(비전) 라운드 카드 (사진 없음) */
+.st-mv{ position:relative; overflow:hidden; }
+/* 마우스 따라 은은한 그린 글로우 (JS가 --mx/--my 갱신) */
+.st-mv::before{ content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(440px circle at var(--mx,50%) var(--my,42%), rgba(92,192,138,.16), transparent 62%);
+  transition:background .25s ease; }
+.st-mv .inner-wide{ position:relative; z-index:1; }
 .st-mv .mv-row{ display:flex; align-items:center; justify-content:center; }
 .mv-card{ flex:1 1 0; max-width:390px; background:var(--g50); border-radius:28px; padding:36px 28px; text-align:center; }
 .mv-circle{ flex:0 0 auto; width:220px; height:220px; margin:0 -28px; z-index:2;
-  border-radius:50%; background:var(--green); color:#fff; box-shadow:var(--sh2);
+  border-radius:50%; background:radial-gradient(circle at 34% 28%, #62c692, #2f7a52); color:#fff;
+  box-shadow:var(--sh2), 0 14px 44px rgba(58,138,95,.30);
   display:flex; align-items:center; justify-content:center; font-size:27px; font-weight:800; letter-spacing:-.5px; }
 .mv-label{ font-size:13px; font-weight:700; color:var(--green); margin:0 0 8px; }
 .mv-h{ font-size:20px; font-weight:800; letter-spacing:-.6px; line-height:1.3; margin:0 0 10px; white-space:nowrap; }
