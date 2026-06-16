@@ -410,7 +410,7 @@ footer .legal a:hover{ color:var(--g900); }
 .note-right{ text-align:right; margin:12px 0 0; }
 
 /* 바우처 이용 절차 — 가로형 박스 + 사이 화살표(순서) */
-.steps{ display:flex; align-items:stretch; gap:8px; margin:0 0 18px; }
+.steps{ display:flex; align-items:stretch; gap:8px; margin:0 0 12px; }
 .steps .step{ flex:1; }
 .step-arrow{ flex:0 0 auto; display:flex; align-items:center; color:var(--g400); }
 .step-arrow svg{ width:11px; height:18px; }
@@ -423,12 +423,10 @@ footer .legal a:hover{ color:var(--g900); }
   background:var(--green); color:#fff; font-size:14px; font-weight:800; margin-bottom:12px; }
 .step b{ display:block; font-size:16px; font-weight:800; letter-spacing:-.4px; margin-bottom:10px; }
 .step p{ font-size:13.5px; color:var(--g700); line-height:1.65; margin:0; }
-.steps-note{ font-size:13.5px; color:var(--g500); text-align:center; line-height:1.7; margin:0 0 14px; }
-/* 절차 푸터: 안내문(좌·1번 라인) + 상담버튼(우·4번 라인) 한 줄 — 역삼각형 위태감 제거 */
-.steps-foot{ display:flex; justify-content:space-between; align-items:center; gap:24px; margin-top:6px; }
-.steps-foot .steps-note{ text-align:left; margin:0; flex:1; }
-.steps-foot .sp-cta{ flex:0 0 auto; padding:11px 26px; }
-@media (max-width:760px){ .steps-foot{ flex-direction:column; align-items:stretch; gap:14px; } .steps-foot .steps-note{ text-align:center; } }
+.steps-note{ font-size:13.5px; color:var(--g500); text-align:center; line-height:1.7; margin:0 0 8px; }
+/* 절차 안내: steps 박스 바로 아래 안내문 + 대표전화(버튼 대신 — nav에 이미 상담 CTA) */
+.steps-tel{ font-size:23px; font-weight:800; color:var(--green); text-align:center; letter-spacing:-.5px; margin:0; }
+.steps-tel span{ display:inline-block; font-size:13px; font-weight:600; color:var(--g500); letter-spacing:0; margin-left:6px; vertical-align:middle; }
 
 /* 준비 중 안내(아청심·정신토탈·성인심리) */
 .svc-soon{ background:var(--g50); border-radius:18px; padding:28px 22px; text-align:center; color:var(--g500); font-size:15px; line-height:1.8; }
