@@ -421,10 +421,16 @@ footer .legal a:hover{ color:var(--g900); }
   background:var(--green); color:#fff; font-size:14px; font-weight:800; margin-bottom:12px; }
 .step b{ display:block; font-size:16px; font-weight:800; letter-spacing:-.4px; margin-bottom:10px; }
 .step p{ font-size:13.5px; color:var(--g700); line-height:1.65; margin:0; }
-.steps-note{ font-size:13.5px; color:var(--g500); text-align:center; line-height:1.7; margin:0 0 8px; }
-/* 절차 안내: steps 박스 바로 아래 안내문 + 대표전화(버튼 대신 — nav에 이미 상담 CTA) */
-.steps-tel{ font-size:23px; font-weight:800; color:var(--green); text-align:center; letter-spacing:-.5px; margin:0; }
-.steps-tel span{ display:inline-block; font-size:13px; font-weight:600; color:var(--g500); letter-spacing:0; margin-left:6px; vertical-align:middle; }
+/* 절차 안내(좌) + 대표전화(우)를 한 줄 양끝 정렬 — 양쪽 박스 라인에 붙음 */
+.steps-foot{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; }
+.steps-note{ font-size:13.5px; color:var(--g500); text-align:left; line-height:1.7; margin:0; }
+.steps-tel{ font-size:23px; font-weight:800; color:var(--green); text-align:right; letter-spacing:-.5px; margin:0; line-height:1.25; }
+.steps-tel span{ display:block; font-size:13px; font-weight:600; color:var(--g500); letter-spacing:0; margin-top:3px; }
+@media (max-width:760px){
+  .steps-foot{ flex-direction:column; align-items:center; gap:10px; }
+  .steps-note{ text-align:center; }
+  .steps-tel{ text-align:center; }
+}
 /* 가격 섹션 보조 안내(우리 센터 제공분 한 줄) */
 .svc-extra{ max-width:560px; margin:18px auto 0; font-size:14px; color:var(--g700); line-height:1.7; text-align:center; }
 
