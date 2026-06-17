@@ -369,10 +369,8 @@ footer .legal a:hover{ color:var(--g900); }
 
 /* 이미지 자리(추후 실제 사진 교체) — img2.png 참고: 텍스트 아래 3장 가로열 */
 .ph-gallery{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 0 32px; }
-.ph-img{ aspect-ratio:1/1; background:var(--g100); border:1px dashed var(--g200); border-radius:16px;
-  display:flex; align-items:center; justify-content:center; color:var(--g400); font-size:13px; font-weight:600;
-  text-align:center; line-height:1.7; }
-@media (max-width:520px){ .ph-gallery{ gap:8px; } .ph-img{ border-radius:12px; font-size:11px; } }
+.ph-img{ aspect-ratio:1/1; width:100%; object-fit:cover; background:var(--g100); border-radius:16px; display:block; }
+@media (max-width:520px){ .ph-gallery{ gap:8px; } .ph-img{ border-radius:12px; } }
 
 /* 한눈에 보기 */
 .facts{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:0 0 28px; }
