@@ -152,6 +152,7 @@
   var panels = [].slice.call(acc.querySelectorAll('.vp'));
   function open(p) { panels.forEach(function (x) { x.classList.toggle('on', x === p); }); }
   panels.forEach(function (p) { p.addEventListener('click', function () { open(p); }); });
+  if (panels[0]) open(panels[0]); // 모바일 기본: 01 펼침 (참고: 아누타)
 })();
 
 // ── 히어로 배경 영상 — 2겹 크로스페이드 무한루프 (홈과 동일) ──
