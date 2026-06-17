@@ -472,15 +472,18 @@ footer .legal a:hover{ color:var(--g900); }
 .vp .grad{ position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.66), rgba(0,0,0,.05) 52%); }
 .vp .cap{ position:absolute; left:20px; right:20px; bottom:10px; z-index:2; color:#fff; }  /* 접힘 상태 숫자+제목 더 아래로 */
 .vp .num{ font-size:12px; font-weight:700; opacity:.85; letter-spacing:.05em; }
-.vp .vt{ font-size:20px; font-weight:800; letter-spacing:-.4px; margin-top:5px; white-space:nowrap; }
+.vp .vt{ font-size:20px; font-weight:800; letter-spacing:-.4px; line-height:1.32; margin-top:6px; }
 /* 서브텍스트는 폭 전환이 거의 끝난 뒤(지연) 천천히 나타나 반동(렉처럼 보임) 최소화 */
 .vp .vd{ font-size:14px; line-height:1.65; margin-top:10px; opacity:0; max-height:0; overflow:hidden; transition:opacity .45s ease, max-height .45s ease; }
 .vp:hover .vd, .vp.on .vd{ opacity:.95; max-height:200px; transition:opacity .6s ease .50s, max-height .6s ease .43s; }
 @media (max-width:760px){
-  .val-acc{ flex-direction:column; height:auto; gap:10px; }
-  .vp{ flex:none; height:108px; }
-  .vp.on{ height:auto; min-height:180px; }
-  .vp .vt{ white-space:normal; }
+  /* 아누타식 풀블리드: 좌우 여백 0(inner 패딩 상쇄)·라운딩 0·카드끼리 딱 붙음·선언문만 */
+  .val-acc{ flex-direction:column; height:auto; gap:0; margin:26px -20px 0; }
+  .vp{ flex:none; height:30vh; min-height:200px; border-radius:0; }
+  .vp .cap{ left:24px; right:24px; bottom:22px; }
+  .vp .num{ font-size:13px; }
+  .vp .vt{ font-size:24px; line-height:1.32; margin-top:8px; }
+  .vp .vd{ display:none; }   /* 모바일은 선언문만(참고: 아누타) */
 }
 
 /* ── 06 신청폼 임베드 (contact) ── */
