@@ -422,7 +422,7 @@ footer .legal a:hover{ color:var(--g900); }
 .step b{ display:block; font-size:16px; font-weight:800; letter-spacing:-.4px; margin-bottom:10px; }
 .step p{ font-size:13.5px; color:var(--g700); line-height:1.65; margin:0; }
 /* 절차 안내(좌) + 대표전화(우)를 한 줄 양끝 정렬 — 양쪽 박스 라인에 붙음 */
-.steps-foot{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; }
+.steps-foot{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; }
 .steps-note{ font-size:13.5px; color:var(--g500); text-align:left; line-height:1.7; margin:0; }
 .steps-tel{ font-size:23px; font-weight:800; color:var(--green); text-align:right; letter-spacing:-.5px; margin:0; line-height:1.25; }
 .steps-tel span{ display:block; font-size:13px; font-weight:600; color:var(--g500); letter-spacing:0; margin-top:3px; }
