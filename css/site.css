@@ -476,10 +476,16 @@ footer .legal a:hover{ color:var(--g900); }
 .vp .grad{ position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.66), rgba(0,0,0,.05) 52%); }
 .vp .cap{ position:absolute; left:20px; right:20px; bottom:10px; z-index:2; color:#fff; }  /* 접힘 상태 숫자+제목 더 아래로 */
 .vp .num{ font-size:12px; font-weight:700; opacity:.85; letter-spacing:.05em; }
-.vp .vt{ font-size:20px; font-weight:800; letter-spacing:-.4px; line-height:1.32; margin-top:6px; }
+.vp .vt{ font-size:20px; font-weight:800; letter-spacing:-.4px; line-height:1.32; margin-top:6px; transition:opacity .4s ease, transform .4s ease; }
 /* 서브텍스트는 폭 전환이 거의 끝난 뒤(지연) 천천히 나타나 반동(렉처럼 보임) 최소화 */
 .vp .vd{ font-size:14px; line-height:1.65; margin-top:10px; opacity:0; max-height:0; overflow:hidden; transition:opacity .45s ease, max-height .45s ease; }
 .vp:hover .vd, .vp.on .vd{ opacity:.95; max-height:200px; transition:opacity .6s ease .50s, max-height .6s ease .43s; }
+/* 요동 방지(PC hover): 한 카드를 가리키면 안 가리킨 카드가 좁아지며 제목이 2→3→4줄로 다시
+   줄바꿈되는데 그게 튀어 보인다. 재줄바꿈 대신 제목을 부드럽게 숨겨 번호만 남긴다.
+   평상시(그룹에 hover 없음)엔 4장 모두 제목 정상 표시. */
+@media (hover:hover){
+  .val-acc:hover .vp:not(:hover) .vt{ opacity:0; transform:translateY(4px); }
+}
 @media (max-width:760px){
   /* 아누타식 풀블리드(라운딩0·좌우여백0·딱붙음). 기본 전부 닫힘,
      탭하면 그 카드 자체의 높이가 커짐(height 애니메이션 — 사진 영역이 확장) */
