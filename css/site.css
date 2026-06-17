@@ -471,21 +471,21 @@ footer .legal a:hover{ color:var(--g900); }
 .val-head{ text-align:center; font-size:28px; font-weight:800; letter-spacing:-.7px; margin:6px 0 0; }
 .val-acc{ display:flex; gap:8px; height:56vh; margin-top:26px; }
 .vp{ position:relative; flex:1 1 0; min-width:0; border-radius:18px; overflow:hidden; cursor:pointer; background:#9aa3ae; transition:flex-grow .85s cubic-bezier(.4,0,.2,1); }
-.vp:hover, .vp.on{ flex-grow:3.4; }              /* 기본 동일 폭, 마우스 올리면 펼침(작아진 카드도 제목 안 잘리게 완만히) */
+.vp:hover, .vp.on{ flex-grow:3.2; }              /* 기본 동일 폭, 마우스 올리면 펼침(작아진 카드도 제목 2줄 안 잘리게 완만히) */
 .vp .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.7); font-size:13px; font-weight:600; }
 .vp .grad{ position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.66), rgba(0,0,0,.05) 52%); }
 .vp .cap{ position:absolute; left:20px; right:20px; bottom:10px; z-index:2; color:#fff; }
 .vp .num{ font-size:12px; font-weight:700; opacity:.85; letter-spacing:.05em; }
 /* 제목은 2줄 고정 높이: 좁아질 때 글자만 작아지고(줄수·박스높이 불변) → 위 번호가 안 밀린다 */
 .vp .vt{ font-size:20px; font-weight:800; letter-spacing:-.4px; line-height:1.32; margin-top:6px; height:53px; overflow:hidden; transition:font-size .85s cubic-bezier(.4,0,.2,1); }
-/* 설명칸은 항상 자리를 차지(고정 높이)한 채 opacity로만 나타남 → 펼쳐도 번호·제목이 안 움직임 */
-.vp .vd{ font-size:14px; line-height:1.65; margin-top:10px; height:46px; opacity:0; overflow:hidden; transition:opacity .55s ease .1s; }
-.vp:hover .vd, .vp.on .vd{ opacity:.95; }
+/* 기본은 닫혀(높이 0) 번호·제목이 카드 맨 아래. 호버 시 높이 0→46으로 열리며 번호·제목을 부드럽게 위로 밀어올림 */
+.vp .vd{ font-size:14px; line-height:1.65; margin-top:0; height:0; opacity:0; overflow:hidden; transition:height .55s cubic-bezier(.4,0,.2,1), margin-top .55s cubic-bezier(.4,0,.2,1), opacity .4s ease .12s; }
+.vp:hover .vd, .vp.on .vd{ height:46px; margin-top:10px; opacity:.95; }
 /* 요동 방지(PC hover): 좁아지는 카드는 제목을 다시 줄바꿈하지 말고, 폭에 맞춰 글자만 같이 작게.
    제목 줄 수가 안 변해 요동이 사라지고, 작아져도 제목은 그대로 다 보인다(2줄 유지).
    width 전환과 같은 시간·이징이라 글자축소가 폭과 함께 매끄럽게 따라간다. */
 @media (hover:hover){
-  .val-acc:hover .vp:not(:hover) .vt{ font-size:13px; }
+  .val-acc:hover .vp:not(:hover) .vt{ font-size:12px; }
 }
 @media (max-width:760px){
   /* 아누타식 풀블리드(라운딩0·좌우여백0·딱붙음). 기본 전부 닫힘,
@@ -493,13 +493,13 @@ footer .legal a:hover{ color:var(--g900); }
   .val-acc{ flex-direction:column; height:auto; gap:0; margin:26px -20px 0; }
   .vp{ flex:none; height:220px; border-radius:0; transition:height .5s cubic-bezier(.4,0,.2,1); }
   .vp.on{ height:440px; }
-  /* cap은 absolute 유지(left/right로 폭 확정 → 우측 잘림 없음), 하단 고정 */
-  .vp .cap{ left:24px; right:24px; bottom:26px; }
+  /* cap은 absolute 유지(left/right로 폭 확정 → 우측 잘림 없음). 번호·제목 살짝 아래로 */
+  .vp .cap{ left:24px; right:24px; bottom:16px; }
   .vp .num{ font-size:13px; }
-  /* 모바일은 카드 높이가 늘어나며 설명이 펼쳐짐 → 데스크톱의 고정높이/opacity 방식 리셋 */
+  /* 모바일은 카드 높이가 늘어나며 설명이 펼쳐짐 → 데스크톱의 고정높이 방식 리셋 */
   .vp .vt{ font-size:24px; line-height:1.32; margin-top:8px; height:auto; overflow:visible; }
   .vp .vd{ font-size:15px; height:auto; max-height:0; transition:opacity .45s ease, max-height .45s ease; }
-  .vp.on .vd{ opacity:.95; max-height:240px; transition:opacity .4s ease .12s, max-height .45s ease; }
+  .vp.on .vd{ opacity:.95; max-height:240px; height:auto; transition:opacity .4s ease .12s, max-height .45s ease; }
   /* 열린 카드 하단 그라데이션 짙게(글씨 가독) */
   .vp.on .grad{ background:linear-gradient(to top, rgba(0,0,0,.74), rgba(0,0,0,.08) 58%); }
 }
