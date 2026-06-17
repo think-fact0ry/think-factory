@@ -477,16 +477,19 @@ footer .legal a:hover{ color:var(--g900); }
 .vp .vd{ font-size:14px; line-height:1.65; margin-top:10px; opacity:0; max-height:0; overflow:hidden; transition:opacity .45s ease, max-height .45s ease; }
 .vp:hover .vd, .vp.on .vd{ opacity:.95; max-height:200px; transition:opacity .6s ease .50s, max-height .6s ease .43s; }
 @media (max-width:760px){
-  /* 아누타식 풀블리드: 좌우 여백 0(inner 패딩 상쇄)·라운딩 0·카드끼리 딱 붙음.
-     기본은 선언문만, 탭하면 그 자리에서 서브가 펼쳐짐(JS가 .on 토글) */
+  /* 아누타식 풀블리드(라운딩0·좌우여백0·딱붙음). 기본 전부 닫힘,
+     탭하면 그 카드 자체의 높이가 커짐(height 애니메이션 — 사진 영역이 확장) */
   .val-acc{ flex-direction:column; height:auto; gap:0; margin:26px -20px 0; }
-  .vp{ flex:none; min-height:30vh; border-radius:0;
-       display:flex; flex-direction:column; justify-content:flex-end; }
-  .vp .cap{ position:relative; left:auto; right:auto; bottom:auto; width:100%; padding:0 26px 24px; }
+  .vp{ flex:none; height:220px; border-radius:0; transition:height .5s cubic-bezier(.4,0,.2,1); }
+  .vp.on{ height:440px; }
+  /* cap은 absolute 유지(left/right로 폭 확정 → 우측 잘림 없음), 하단 고정 */
+  .vp .cap{ left:24px; right:24px; bottom:26px; }
   .vp .num{ font-size:13px; }
   .vp .vt{ font-size:24px; line-height:1.32; margin-top:8px; }
   .vp .vd{ font-size:15px; }
-  .vp.on .vd{ opacity:.95; max-height:240px; transition:opacity .35s ease .06s, max-height .4s ease; }
+  .vp.on .vd{ opacity:.95; max-height:240px; transition:opacity .4s ease .12s, max-height .45s ease; }
+  /* 열린 카드 하단 그라데이션 짙게(글씨 가독) */
+  .vp.on .grad{ background:linear-gradient(to top, rgba(0,0,0,.74), rgba(0,0,0,.08) 58%); }
 }
 
 /* ── 06 신청폼 임베드 (contact) ── */

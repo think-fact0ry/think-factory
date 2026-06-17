@@ -150,9 +150,13 @@
   if (!acc) return;
   if (!window.matchMedia('(hover: none)').matches) return; // hover 가능 기기는 CSS:hover가 담당
   var panels = [].slice.call(acc.querySelectorAll('.vp'));
-  function open(p) { panels.forEach(function (x) { x.classList.toggle('on', x === p); }); }
+  // 탭 토글: 닫힌 카드 열면 다른 카드는 닫힘, 열린 카드 다시 누르면 닫힘. 기본은 전부 닫힘
+  function open(p) {
+    var was = p.classList.contains('on');
+    panels.forEach(function (x) { x.classList.remove('on'); });
+    if (!was) p.classList.add('on');
+  }
   panels.forEach(function (p) { p.addEventListener('click', function () { open(p); }); });
-  if (panels[0]) open(panels[0]); // 모바일 기본: 01 펼침 (참고: 아누타)
 })();
 
 // ── 히어로 배경 영상 — 2겹 크로스페이드 무한루프 (홈과 동일) ──
