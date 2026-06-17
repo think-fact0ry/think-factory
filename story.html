@@ -250,17 +250,6 @@
   window.addEventListener('scroll', toggle, { passive: true });
   toggle();
 })();
-
-// ── 미션·비전 중앙 원: 마우스 따라 은은한 그린 글로우 ──
-(function () {
-  var mv = document.querySelector('.st-mv');
-  if (!mv) return;
-  mv.addEventListener('mousemove', function (e) {
-    var r = mv.getBoundingClientRect();
-    mv.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-    mv.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
-  });
-})();
 </script>
 
 </body>
