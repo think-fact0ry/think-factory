@@ -109,6 +109,7 @@ async function buildPostPage(post) {
   const dir = new URL(`${post.logNo}/`, BODYIMG_DIR);
   await mkdir(dir, { recursive: true });
   let firstImg = null, imgIdx = 0;
+  const imgUrls = [];                                        // 이 글의 모든 본문 이미지 절대 URL(이미지 사이트맵용)
   for (const b of body.blocks) {
     if (b.kind !== 'images') continue;
     const items = [];
@@ -122,15 +123,19 @@ async function buildPostPage(post) {
       }
       const local = `img/${post.logNo}/${name}`;            // 페이지(posts/<logNo>.html) 기준 상대
       items.push({ local, ar: im.ar });
-      if (!firstImg) firstImg = `${SITE}/activities/posts/${local}`;
+      const absUrl = `${SITE}/activities/posts/${local}`;
+      imgUrls.push(absUrl);
+      if (!firstImg) firstImg = absUrl;
     }
     b.items = items;
-    b.alt = `${post.title} 활동 사진`;
+    // 구글 이미지 검색용 키워드 맥락(브랜드+지역+서비스, 전부 정확한 사실 — 스터핑 아님) + 제목
+    const ctx = ['생각공작소', '인천', post.tag].filter(Boolean).join(' ');
+    b.alt = `${ctx} ${post.title} 활동사진`;
   }
   const blocks = body.blocks.filter((b) => b.kind !== 'images' || (b.items && b.items.length));
   const desc = firstText(blocks) || post.excerpt;
   await writeFile(new URL(`${post.logNo}.html`, POSTS_DIR), renderPost(post, blocks, desc, firstImg), 'utf8');
-  return true;
+  return imgUrls;                                            // 성공=이미지 URL 배열(빈 배열도 truthy), 실패=false
 }
 
 FFMPEG = await detectFfmpeg();
@@ -228,8 +233,10 @@ posts.sort((a, b) => b.ts - a.ts);
 await mkdir(POSTS_DIR, { recursive: true });
 await mkdir(BODYIMG_DIR, { recursive: true });
 const builtSet = new Set();
+const postImages = new Map();                        // logNo → [이미지 절대 URL] (이미지 사이트맵용)
 for (const p of posts) {
-  if (await buildPostPage(p)) builtSet.add(p.logNo);
+  const imgs = await buildPostPage(p);
+  if (imgs) { builtSet.add(p.logNo); postImages.set(p.logNo, imgs); }
   await new Promise((r) => setTimeout(r, 200)); // 예의상 간격
 }
 // 목록 API 누락 + 본문 추출도 실패 = 확정 삭제 → 즉시 드롭(유예 무시). 그 외는 유지하고 page 플래그 부여.
@@ -243,14 +250,22 @@ console.log(`개별 글 페이지: ${builtSet.size}/${posts.length}건` + (ghost
 await writeFile(new URL('posts.json', OUT_DIR), JSON.stringify({ generated: new Date().toISOString(), count: finalPosts.length, posts: finalPosts }, null, 1), 'utf8');
 console.log(`posts.json: ${finalPosts.length}건 (제외 ${excludeSet.size}건, 새 썸네일 ${newThumbs}장)`);
 
-// ── sitemap.xml — 고정 5페이지 + 실제 빌드된 활동 글만 ──
+// ── sitemap.xml — 고정 5페이지 + 활동 글(+이미지 사이트맵: 구글 이미지 검색 색인용) ──
+const xmlEsc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const staticUrls = ['/', '/story.html', '/services.html', '/activities.html', '/contact.html'];
+let imgCount = 0;
 const smUrls = [
   ...staticUrls.map((u) => `  <url><loc>${SITE}${u}</loc></url>`),
-  ...finalPosts.filter((p) => p.page).map((p) => `  <url><loc>${SITE}/activities/posts/${p.logNo}.html</loc><lastmod>${p.date.replace(/\./g, '-')}</lastmod></url>`),
+  ...finalPosts.filter((p) => p.page).map((p) => {
+    const imgs = (postImages.get(p.logNo) || []);
+    imgCount += imgs.length;
+    const ctx = ['생각공작소', '인천', p.tag].filter(Boolean).join(' ');
+    const imgXml = imgs.map((u) => `    <image:image><image:loc>${xmlEsc(u)}</image:loc><image:title>${xmlEsc(ctx + ' ' + p.title)}</image:title></image:image>`).join('\n');
+    return `  <url><loc>${SITE}/activities/posts/${p.logNo}.html</loc><lastmod>${p.date.replace(/\./g, '-')}</lastmod>${imgXml ? '\n' + imgXml + '\n  ' : ''}</url>`;
+  }),
 ];
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<!-- 활동 글 URL은 tools/sync-blog.mjs가 자동 생성 -->\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${smUrls.join('\n')}\n</urlset>\n`;
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<!-- 활동 글·이미지 URL은 tools/sync-blog.mjs가 자동 생성 -->\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n${smUrls.join('\n')}\n</urlset>\n`;
 await writeFile(new URL('../sitemap.xml', OUT_DIR), sitemap, 'utf8');
-console.log(`sitemap.xml: ${smUrls.length}개 URL`);
+console.log(`sitemap.xml: ${smUrls.length}개 URL + 이미지 ${imgCount}장`);
 
 } // end 전체 동기화

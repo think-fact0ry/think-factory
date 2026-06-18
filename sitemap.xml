@@ -1,67 +1,643 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 활동 글 URL은 tools/sync-blog.mjs가 자동 생성 -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!-- 활동 글·이미지 URL은 tools/sync-blog.mjs가 자동 생성 -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url><loc>https://think-factory.kr/</loc></url>
   <url><loc>https://think-factory.kr/story.html</loc></url>
   <url><loc>https://think-factory.kr/services.html</loc></url>
   <url><loc>https://think-factory.kr/activities.html</loc></url>
   <url><loc>https://think-factory.kr/contact.html</loc></url>
-  <url><loc>https://think-factory.kr/activities/posts/224319218161.html</loc><lastmod>2026-06-17</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224311932764.html</loc><lastmod>2026-06-10</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224301924453.html</loc><lastmod>2026-05-31</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224291425765.html</loc><lastmod>2026-05-20</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224281609987.html</loc><lastmod>2026-05-11</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224273673537.html</loc><lastmod>2026-05-03</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224255518739.html</loc><lastmod>2026-04-20</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224253086364.html</loc><lastmod>2026-04-15</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224245355017.html</loc><lastmod>2026-04-08</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224234768585.html</loc><lastmod>2026-03-30</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224224578140.html</loc><lastmod>2026-03-23</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224224471616.html</loc><lastmod>2026-03-21</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224201106163.html</loc><lastmod>2026-03-03</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224179144746.html</loc><lastmod>2026-02-10</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224171858923.html</loc><lastmod>2026-02-04</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224157138158.html</loc><lastmod>2026-01-23</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224143178437.html</loc><lastmod>2026-01-16</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224143149603.html</loc><lastmod>2026-01-12</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224125729262.html</loc><lastmod>2025-12-28</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224115949094.html</loc><lastmod>2025-12-22</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224111739957.html</loc><lastmod>2025-12-16</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224087221800.html</loc><lastmod>2025-11-25</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224057574575.html</loc><lastmod>2025-10-29</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224049011095.html</loc><lastmod>2025-10-21</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224019541704.html</loc><lastmod>2025-09-30</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224319218161.html</loc><lastmod>2026-06-17</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/db68da5092ff.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/f8799fbe8e9b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/6b46a121c134.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/34bde049c324.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/9812861cd195.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/8d20a0a0b246.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/9d4bf5c50141.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/5b565d335c3f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/2841519691be.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/507aa785a331.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/021cb6172c78.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/f6064e49b53e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/a380e2d4cf69.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/ca5d3dffeba5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/d8575a85adc3.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/fa8b501a98ab.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/0d798d4e7229.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/8994ca8b816d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/05a78f80e740.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/ab6b149fe212.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/69d4f6d8b591.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/df82864d7a02.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/0f09841d18af.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/09a9dea63eff.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224319218161/0f8faa8caaf8.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 도시락을 열었더니 작은 햄버거가 가득? 햄버거 김밥 만들기 🍔🍙</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224311932764.html</loc><lastmod>2026-06-10</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/e5e3953cd2fd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/672510d83fd7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/7fb9412f5390.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/e887069b7456.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/cc402422fd04.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/828ab61d5fb4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/c86f7e5feabd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/11098969e60d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/5d065886dbee.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/2c5d8a955140.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/d30af00ad4ba.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/cb9e97c7a665.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/15c7ce54fe62.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/d853de6c9180.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/b96ac64a03c4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/ac22ceb872b1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/865a04037e9f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/15dc49329624.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/b23d3ba02780.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224311932764/bd2d1dde7776.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 찰칵! 내가 만든 카메라로 추억을 찍어요 📸 날씨 좋은 날 인생네컷 만들기 🎞️</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224301924453.html</loc><lastmod>2026-05-31</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/cbcac8fed7ac.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/b30d09412ea3.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/7a352fb50798.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/50ac0a8dee7d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/9d124541da33.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/d0256ebca5ac.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/a6f889a55e85.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/9b101e8f62b1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/85a676e54960.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/2f4e5fe83a55.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/93f63df7cac3.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/ce2e133e13cd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/4c874e0a8a02.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/ba8af152be60.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/ffe3773b3d3d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/35ca31ac0dab.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/d04ff200f000.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/0c53cfc41a99.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/457a23993242.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224301924453/9fe90f562e5f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 좋은 꿈만 꾸길! 우리 가족 드림캐쳐 만들기 🌙🪶</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224291425765.html</loc><lastmod>2026-05-20</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/a3d23543b331.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/af5ec937c463.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/bb7c888a2069.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/b4f0dc0be2a0.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/52d496583b5f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/37e5b446fbe4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/395fea312b0d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/99f1c64853da.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/f47a1e6bf1cf.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/1dd8e31d2cc9.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/185b657f7819.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/c09c0b479d71.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/d4f904983ea7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/fbbcb96099cb.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/854d5fe15b30.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/d1aacb1b5cdb.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/c5ad52e4265a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/107140c6e9c6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/31de69b733c5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224291425765/2f6667720247.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내가 만든 달콤한 아이스크림 가게! 미니 아이스크림 만들기 🍦✨</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224281609987.html</loc><lastmod>2026-05-11</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/1d9095dd131e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/0b4a044b3a21.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/8366b6ebfe32.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/56f40f93d75a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/7bb5e938ca53.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/62f197e46394.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/2c0c98bb652b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/09b55b3580d4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/9355a3ae681a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/4dc5a6bef519.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/be20c59dbffc.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/0ff2e2325387.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/44b174b599cd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/96daba22dd49.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/165a6d101ee4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/d62ec56549b1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/27adf7b2ec8f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224281609987/1dad7fd0646c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 엄마 아빠, 사랑해요 💐 어버이날 포토프레임 만들기👨‍👩‍👧‍👦</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224273673537.html</loc><lastmod>2026-05-03</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/d9027f8a69cf.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/ffe88d775a5a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/a3bc572f81f7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/1e11f16cb9aa.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/116106567a34.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/96c8e7638742.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/1bfc8293ae8a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/2a5f2f77dcc2.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/f63f69410e62.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/777b9366be7f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/2d643f43ee3b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/9042707b4a9e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/769c9ff58e6c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/5c1fe981b97c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/110040494ac3.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/8e6721122893.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/6b2b0003e189.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/c05299d7a8c5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/0c58f6f8c8dd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/20f756f2082d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/918d73d6c621.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/c0ba4cf44549.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/500eb8764958.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/1b9e142894ac.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/4ae855392409.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/347546623e05.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224273673537/bb5eddc40dd5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 먹을 수 있는 텃밭이 생겼어요! 달콤한 텃밭 케이크 만들기 🌱🍰</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224255518739.html</loc><lastmod>2026-04-20</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/a07b4094b391.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/fc29521bf425.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/45b0a4357d8e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/5c8cebdb8f77.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/e73fbc60edb6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/f49ff3edeff4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/9ae34d628be4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/9732283d350e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/30d641b7e855.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/ef17c5a9a884.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/f1911a024a8f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/f764b8d5e2d6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/a6207952359e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/b79c96ad3a36.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/e1525a3d87e2.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224255518739/bbc40ecbf9a3.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 땅 속을 상상해봤어? 아이들이 만든 개미 집 🐜🌱</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224253086364.html</loc><lastmod>2026-04-15</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/75324f69fe6f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/5a619dd350a4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/f33bb18445fd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/5a260fcdf287.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/2245d502e01d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/f58af6d9df95.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/cb6064431db5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/b2d84eb90ef4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/5c4e6e55b40b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/89c8f76a3f9b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/8d948aefb69a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/c21f2c668b03.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224253086364/4eb607125a7c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 두근두근 당근밭 대소동! 퍼니버니 보드게임 🐰🥕</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224245355017.html</loc><lastmod>2026-04-08</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/36c40082f62c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/9db6f9cddc0c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/95a4c8305a8a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/6dfa070b7d61.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/9d3f2eaccb8b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/4442437ddf66.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/6c0e4d86e163.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/62b097bca6c8.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/79f1e1c234b5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/31e07cc48e25.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/d50da073f7ac.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/1a0d16e2462c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/4fbd58c136ff.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/9ce13d8c40c0.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/d9dea27cde70.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/17a14b2aa012.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/cf22b51babbc.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224245355017/66e7020b7758.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 빚은 세상에 하나뿐인 화분! 다육이 심기 🌵✨</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224234768585.html</loc><lastmod>2026-03-30</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/849580c86b16.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/741ca1bfaf57.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/106aaabcc447.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/60667874dcd1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/af9b70b52d04.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/0bacefd139c0.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/5e4d5a8590b8.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/cb6230620819.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/15caea032632.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/3b86dd45e3f4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/9cb05c532ebf.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/e05016d8e59c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/4a16638832ed.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/76931c4c42be.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/2e42fbcacf5e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224234768585/e45a00f86b07.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 내 손으로 만든 세상에 하나뿐인 가방! 나만의 가방 만들기 🎒✨</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224224578140.html</loc><lastmod>2026-03-23</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/5040366b8da6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/89465288405a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/1dd99a0c0ede.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/0a309667dc20.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/52505877fd20.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/e3b573c9cbc6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/934c1e9291b1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/105f5b077c06.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/2885a5449f89.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/86399a76e869.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/5d706d76db72.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/7d60be5293d2.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/15115a49fc44.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224578140/6290d3cf8836.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 삐약삐약 봄이 왔어요! 귀여운 병아리 샐러드 만들기 🐥🥚</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224224471616.html</loc><lastmod>2026-03-21</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/908d146334eb.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/f6d1d9b32b8c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/aaf3ac14e5af.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/871e4c3892bc.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/c28897ccfae2.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/27f61986aa0e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/6e46316886cf.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/77566fe97304.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/bdf3f8933d03.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/6e971d1b42b6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/6708a61304a5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/e0207e249c7a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/b22a3d267094.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224224471616/3a968a2a61a4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 나만의 패션쇼! 옷장 만들기와 관절 인형 꾸미기 👗✨</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224201106163.html</loc><lastmod>2026-03-03</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/683ee85b8a62.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/cb9ba4949580.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/b412d0416696.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/aed6f6762b39.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/14aa3bfda776.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/586b5d2bbb9e.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/3d70875437a6.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/3df18e02db42.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/ce85388b861e.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224201106163/88bc5f13ec2b.jpg</image:loc><image:title>생각공작소 인천 2026 인천 오감쑥쑥 바우처 신청 날짜 총정리 | 남동구·미추홀구·서구·연수구·부평구·동구 외</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224179144746.html</loc><lastmod>2026-02-10</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/bb24bac523dc.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/2fc122ac4f9c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/7cec65187203.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/825efb6119f9.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/16383d624649.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/9f4452de84cd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/ee62e96a8e52.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/78195a2440a2.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/90abd71cb7c6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/a220f94227a5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/55a5b6707c0f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/c7a4770921a1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/32d976e967db.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/7c2f8c2bac80.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/a3dbe5d4c77c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/408ad3a28ada.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224179144746/cef9fb0a81e5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 아이에게 '오감'이 중요한 이유 - 통합놀이와 발달</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224171858923.html</loc><lastmod>2026-02-04</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/16e7d4bbe4b3.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/a1e946c8a1a7.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/e1fff1ae1bb8.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/ffabc2cc0df3.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/b1de88910b3b.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/8848d2e92d60.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/2abd47e8fc4c.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/7a0ed50aa2f5.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/fc9a2a801026.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/614fbfda27c1.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/58bd86b22b65.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/06a5e2f7a0f5.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224171858923/1e5aefba86ca.jpg</image:loc><image:title>생각공작소 인천 2026 오감쑥쑥 바우처 완벽 가이드 | 신청부터 업체 선택까지 한 번에 정리</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224157138158.html</loc><lastmod>2026-01-23</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/8211a81253ed.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/98349b3ff5c7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/a13f4832d98c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/34dc404bbd86.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/38ceb2e9280f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/1e6b359925a7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/368990d6897e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/0847139d347b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/c6970904d5aa.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/1dc3226d5438.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/32375756e66d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/a1babd717f5f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/a541bd513913.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/4f280bb8e471.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/2cfd85315164.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224157138158/8df985938fd7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 숲의 달콤한 선물, '달콤 촉촉 솔방울 케이크' 만들기 🌲❄️</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224143178437.html</loc><lastmod>2026-01-16</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143178437/7011d8f7681e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "저 산타할아버지에요!" 아이들이 직접 만든 산타 되어보기 🎅</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143178437/e41db03b754b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "저 산타할아버지에요!" 아이들이 직접 만든 산타 되어보기 🎅</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143178437/ce1eba0fabe6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "저 산타할아버지에요!" 아이들이 직접 만든 산타 되어보기 🎅</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143178437/b1d5534c801d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "저 산타할아버지에요!" 아이들이 직접 만든 산타 되어보기 🎅</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143178437/e7011a265f54.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "저 산타할아버지에요!" 아이들이 직접 만든 산타 되어보기 🎅</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143178437/b663d7ea833c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "저 산타할아버지에요!" 아이들이 직접 만든 산타 되어보기 🎅</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143178437/398d0ef6a451.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "저 산타할아버지에요!" 아이들이 직접 만든 산타 되어보기 🎅</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143178437/383e774633da.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "저 산타할아버지에요!" 아이들이 직접 만든 산타 되어보기 🎅</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224143149603.html</loc><lastmod>2026-01-12</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/6098ee807e4f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/879cf7efa20b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/7b68f222df77.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/a9abb86b208d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/c442d56b8e7a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/e48bfeac91eb.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/9fba77fc3131.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/88dca0806f88.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/74cc945b99ba.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/92535eca0519.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/8d687ea41a23.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/94ffdaa4a677.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/ad0cec2647d6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224143149603/23d4b13dcdd6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 1월 겨울, 아이들 손끝에서 탄생한 나만의 겨울옷 꾸미기 ❄️</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224125729262.html</loc><lastmod>2025-12-28</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224125729262/48d087475cfd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만들었어요!" 아이들 눈빛이 반짝인 크리스마스 트리 만들기2 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224125729262/6e810b352848.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만들었어요!" 아이들 눈빛이 반짝인 크리스마스 트리 만들기2 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224125729262/b0494d3ec4f4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만들었어요!" 아이들 눈빛이 반짝인 크리스마스 트리 만들기2 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224125729262/43249a25b8d4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만들었어요!" 아이들 눈빛이 반짝인 크리스마스 트리 만들기2 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224125729262/ae75114193c3.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만들었어요!" 아이들 눈빛이 반짝인 크리스마스 트리 만들기2 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224125729262/29f841030fe3.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만들었어요!" 아이들 눈빛이 반짝인 크리스마스 트리 만들기2 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224125729262/d9afdfdec4f7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만들었어요!" 아이들 눈빛이 반짝인 크리스마스 트리 만들기2 ✨</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224115949094.html</loc><lastmod>2025-12-22</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/f25a804bceee.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/22f25f804c84.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/0d0d9a2e8829.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/f261d55358ce.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/5240589d1e10.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/a593d407aca9.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/63a678ee978e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/20cbfdffd7f9.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/2e243ca1872f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/3976b005ff80.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/facfd295626f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224115949094/af3c7de7ffb9.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 달콤한 크리스마스! 아이들이 직접 만든 먹는 아이스크림 콘 트리1🎄</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224111739957.html</loc><lastmod>2025-12-16</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/5529668ab861.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/ed77bac847bc.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/c78846646cc4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/c9b74a6687f5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/ba189fbc2abb.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/c11caaee1662.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/cf20d5291a2d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/2684bc050efa.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/1954100a8cb5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/e7e62779cf7b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224111739957/d934ecdecf56.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 12월 아이들 손끝에서 빛나는 크리스마스, 나만의 가랜드 만들기 ✨</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224087221800.html</loc><lastmod>2025-11-25</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224087221800/d8479eaf91f1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만든 다람쥐예요! 멋지죠?" 🐿️ 아이 눈빛 반짝인 1:1 오감 요리 클래스</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224087221800/0e49a63f4072.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만든 다람쥐예요! 멋지죠?" 🐿️ 아이 눈빛 반짝인 1:1 오감 요리 클래스</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224087221800/17f8e831da52.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만든 다람쥐예요! 멋지죠?" 🐿️ 아이 눈빛 반짝인 1:1 오감 요리 클래스</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224087221800/2b1908521ebe.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만든 다람쥐예요! 멋지죠?" 🐿️ 아이 눈빛 반짝인 1:1 오감 요리 클래스</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224087221800/67b48d93abc2.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만든 다람쥐예요! 멋지죠?" 🐿️ 아이 눈빛 반짝인 1:1 오감 요리 클래스</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224087221800/53f458235b1b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만든 다람쥐예요! 멋지죠?" 🐿️ 아이 눈빛 반짝인 1:1 오감 요리 클래스</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224087221800/a9fb7b31df5f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만든 다람쥐예요! 멋지죠?" 🐿️ 아이 눈빛 반짝인 1:1 오감 요리 클래스</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224087221800/15d0304529b7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 만든 다람쥐예요! 멋지죠?" 🐿️ 아이 눈빛 반짝인 1:1 오감 요리 클래스</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224057574575.html</loc><lastmod>2025-10-29</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/131ec23cba0a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/2f396fe6177b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/47d13ae4e6a5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/48f99e13d363.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/a2fb84ae013b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/2acce459b72a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/ea761c2cad79.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/e00846906685.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/3e6f21487aa8.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/b72cf3fd0de4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/6b52589a29fb.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224057574575/4aed42b0f244.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 동화 속 달토끼가 현실로!🐰 아이들의 첫 인절미 만들기</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224049011095.html</loc><lastmod>2025-10-21</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224049011095/95433b43be09.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가을밤 보름달✨🌕을 담은 아이들의 특별한 작품 이야기 '달 밝은 밤'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224049011095/527010043080.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가을밤 보름달✨🌕을 담은 아이들의 특별한 작품 이야기 '달 밝은 밤'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224049011095/548cfa4b16ef.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가을밤 보름달✨🌕을 담은 아이들의 특별한 작품 이야기 '달 밝은 밤'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224049011095/c3e2871461fc.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가을밤 보름달✨🌕을 담은 아이들의 특별한 작품 이야기 '달 밝은 밤'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224049011095/103986cc632e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가을밤 보름달✨🌕을 담은 아이들의 특별한 작품 이야기 '달 밝은 밤'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224049011095/556b0c5aad9d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가을밤 보름달✨🌕을 담은 아이들의 특별한 작품 이야기 '달 밝은 밤'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224049011095/628033ff4605.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가을밤 보름달✨🌕을 담은 아이들의 특별한 작품 이야기 '달 밝은 밤'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224049011095/ebaf9b4d3341.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가을밤 보름달✨🌕을 담은 아이들의 특별한 작품 이야기 '달 밝은 밤'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224049011095/5b0440656277.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가을밤 보름달✨🌕을 담은 아이들의 특별한 작품 이야기 '달 밝은 밤'</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224019541704.html</loc><lastmod>2025-09-30</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224019541704/c6f40406bd49.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "고구마 고슴도치 패밀리 총출동!" 😋 스스로 만들어 더 맛있었던 아이들의 오감만족 요리 수업! ②</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224019541704/6cdb9390bd84.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "고구마 고슴도치 패밀리 총출동!" 😋 스스로 만들어 더 맛있었던 아이들의 오감만족 요리 수업! ②</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224019541704/14ed76dc42d7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "고구마 고슴도치 패밀리 총출동!" 😋 스스로 만들어 더 맛있었던 아이들의 오감만족 요리 수업! ②</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224019541704/1cec126868b7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "고구마 고슴도치 패밀리 총출동!" 😋 스스로 만들어 더 맛있었던 아이들의 오감만족 요리 수업! ②</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224019541704/49269a4cfc27.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "고구마 고슴도치 패밀리 총출동!" 😋 스스로 만들어 더 맛있었던 아이들의 오감만족 요리 수업! ②</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224019541704/a9307a9f8270.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "고구마 고슴도치 패밀리 총출동!" 😋 스스로 만들어 더 맛있었던 아이들의 오감만족 요리 수업! ②</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224019541704/a69f4457e0c5.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "고구마 고슴도치 패밀리 총출동!" 😋 스스로 만들어 더 맛있었던 아이들의 오감만족 요리 수업! ②</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224019541704/457be27f625c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "고구마 고슴도치 패밀리 총출동!" 😋 스스로 만들어 더 맛있었던 아이들의 오감만족 요리 수업! ②</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224019541704/f1f30df09f90.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "고구마 고슴도치 패밀리 총출동!" 😋 스스로 만들어 더 맛있었던 아이들의 오감만족 요리 수업! ②</image:title></image:image>
+  </url>
   <url><loc>https://think-factory.kr/activities/posts/224019542557.html</loc><lastmod>2025-09-26</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224015380449.html</loc><lastmod>2025-09-20</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224008099241.html</loc><lastmod>2025-09-15</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/224005629855.html</loc><lastmod>2025-09-12</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223998490424.html</loc><lastmod>2025-09-07</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223991251907.html</loc><lastmod>2025-09-01</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223857372887.html</loc><lastmod>2025-09-01</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223984461289.html</loc><lastmod>2025-08-26</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223921583359.html</loc><lastmod>2025-07-07</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224015380449.html</loc><lastmod>2025-09-20</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/b96e661d621f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/f92fabf090b4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/0f0bf62606ab.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/0966fda2a27c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/96e4a6d59daa.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/a4ae96658eb0.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/ac74af6d3d76.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/2e2df6ff512e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/c23ecc058506.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/25dd9af6d282.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224015380449/747f211ca731.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 때로는 건강한 좌절도? 🤔 승리보다 값진 경험, 키키리키 보드게임으로 완성!</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224008099241.html</loc><lastmod>2025-09-15</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224008099241/cc8b4a32dc11.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 시원한 이글루 게임으로 집중력 UP! 🧊 "조심조심~ 와르르!" 웃음 터지는 특별한 시간</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224008099241/f638b271dbf6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 시원한 이글루 게임으로 집중력 UP! 🧊 "조심조심~ 와르르!" 웃음 터지는 특별한 시간</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224008099241/717bbff70979.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 시원한 이글루 게임으로 집중력 UP! 🧊 "조심조심~ 와르르!" 웃음 터지는 특별한 시간</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224008099241/1dfab9e7381b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 시원한 이글루 게임으로 집중력 UP! 🧊 "조심조심~ 와르르!" 웃음 터지는 특별한 시간</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224008099241/99ba37974427.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 시원한 이글루 게임으로 집중력 UP! 🧊 "조심조심~ 와르르!" 웃음 터지는 특별한 시간</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224008099241/fe6cddc6668b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 시원한 이글루 게임으로 집중력 UP! 🧊 "조심조심~ 와르르!" 웃음 터지는 특별한 시간</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224008099241/4dc9a10e2bac.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 시원한 이글루 게임으로 집중력 UP! 🧊 "조심조심~ 와르르!" 웃음 터지는 특별한 시간</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224008099241/7dde754f9133.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 시원한 이글루 게임으로 집중력 UP! 🧊 "조심조심~ 와르르!" 웃음 터지는 특별한 시간</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224008099241/c804ea8547b6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 시원한 이글루 게임으로 집중력 UP! 🧊 "조심조심~ 와르르!" 웃음 터지는 특별한 시간</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/224005629855.html</loc><lastmod>2025-09-12</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/224005629855/1cc067223a7b.jpg</image:loc><image:title>생각공작소 인천 2025년 오감쑥쑥 바우처 지원금액 총정리! 월 2만원대로 시작하는 우리 아이 창의력 수업</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223998490424.html</loc><lastmod>2025-09-07</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223998490424/2fe8b4bd7a37.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 했어요!" 💖 칭찬 한마디에 '세상 다 가진듯' 행복해진 꼬마 디자이너들!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223998490424/2ef6511b957a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 했어요!" 💖 칭찬 한마디에 '세상 다 가진듯' 행복해진 꼬마 디자이너들!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223998490424/56275aa420bf.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 했어요!" 💖 칭찬 한마디에 '세상 다 가진듯' 행복해진 꼬마 디자이너들!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223998490424/a224fb1b41fa.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 했어요!" 💖 칭찬 한마디에 '세상 다 가진듯' 행복해진 꼬마 디자이너들!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223998490424/116e11bc4561.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 했어요!" 💖 칭찬 한마디에 '세상 다 가진듯' 행복해진 꼬마 디자이너들!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223998490424/b4367237112e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "제가 했어요!" 💖 칭찬 한마디에 '세상 다 가진듯' 행복해진 꼬마 디자이너들!</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223991251907.html</loc><lastmod>2025-09-01</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223991251907/44651420ef19.jpg</image:loc><image:title>생각공작소 인천 2025 오감쑥쑥 서비스 모집기간 안내 (현재 미추홀구 신규, 연수구 대기자)</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223991251907/583b53d5489a.jpg</image:loc><image:title>생각공작소 인천 2025 오감쑥쑥 서비스 모집기간 안내 (현재 미추홀구 신규, 연수구 대기자)</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223991251907/16977199f9d3.jpg</image:loc><image:title>생각공작소 인천 2025 오감쑥쑥 서비스 모집기간 안내 (현재 미추홀구 신규, 연수구 대기자)</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223991251907/ee8aa94b78d4.jpg</image:loc><image:title>생각공작소 인천 2025 오감쑥쑥 서비스 모집기간 안내 (현재 미추홀구 신규, 연수구 대기자)</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223857372887.html</loc><lastmod>2025-09-01</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223857372887/e6b444c1b08d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 부모님들을 위한 가이드! 업체 선택 A to Z</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223857372887/71365344a2be.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 부모님들을 위한 가이드! 업체 선택 A to Z</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223857372887/6f2b65bbd79f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 부모님들을 위한 가이드! 업체 선택 A to Z</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223857372887/73904fd4c75c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 부모님들을 위한 가이드! 업체 선택 A to Z</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223857372887/91d19f663d08.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 부모님들을 위한 가이드! 업체 선택 A to Z</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223857372887/73a4ca3fb788.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 부모님들을 위한 가이드! 업체 선택 A to Z</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223857372887/946f74afea96.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 부모님들을 위한 가이드! 업체 선택 A to Z</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223857372887/c08a5e7987f6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 부모님들을 위한 가이드! 업체 선택 A to Z</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223857372887/b986de2c1714.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처, 부모님들을 위한 가이드! 업체 선택 A to Z</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223984461289.html</loc><lastmod>2025-08-26</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223984461289/507ddb4c23e7.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 필수템! 세상에 단 하나뿐인✨ 아이들표 커스텀 슬리퍼 만들기 💖</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223984461289/17acf35e9bfd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 필수템! 세상에 단 하나뿐인✨ 아이들표 커스텀 슬리퍼 만들기 💖</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223984461289/14a6368c3433.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 필수템! 세상에 단 하나뿐인✨ 아이들표 커스텀 슬리퍼 만들기 💖</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223984461289/572af923f0a0.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 필수템! 세상에 단 하나뿐인✨ 아이들표 커스텀 슬리퍼 만들기 💖</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223984461289/331830262340.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 필수템! 세상에 단 하나뿐인✨ 아이들표 커스텀 슬리퍼 만들기 💖</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223984461289/fc3e1d0c411c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 필수템! 세상에 단 하나뿐인✨ 아이들표 커스텀 슬리퍼 만들기 💖</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223984461289/87f0d48dded6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 필수템! 세상에 단 하나뿐인✨ 아이들표 커스텀 슬리퍼 만들기 💖</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223984461289/b4bd0618b95a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 필수템! 세상에 단 하나뿐인✨ 아이들표 커스텀 슬리퍼 만들기 💖</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223984461289/83fecbcfc523.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 필수템! 세상에 단 하나뿐인✨ 아이들표 커스텀 슬리퍼 만들기 💖</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223921583359.html</loc><lastmod>2025-07-07</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223921583359/808448f75db1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 상상 속 수영장 만들기! 아이들의 신나는 물놀이 대모험💦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223921583359/e3bac777a57e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 상상 속 수영장 만들기! 아이들의 신나는 물놀이 대모험💦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223921583359/d8233350266a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 상상 속 수영장 만들기! 아이들의 신나는 물놀이 대모험💦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223921583359/fab0d4e0602d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 상상 속 수영장 만들기! 아이들의 신나는 물놀이 대모험💦</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223921583359/eda72fd1baf2.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 상상 속 수영장 만들기! 아이들의 신나는 물놀이 대모험💦</image:title></image:image>
+  </url>
   <url><loc>https://think-factory.kr/activities/posts/223923971739.html</loc><lastmod>2025-07-06</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223923343922.html</loc><lastmod>2025-07-06</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223916070707.html</loc><lastmod>2025-07-01</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223908476147.html</loc><lastmod>2025-06-23</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223886061377.html</loc><lastmod>2025-06-06</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223886032114.html</loc><lastmod>2025-06-02</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223856942889.html</loc><lastmod>2025-05-06</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223840068383.html</loc><lastmod>2025-04-20</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223831073494.html</loc><lastmod>2025-04-12</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223818379206.html</loc><lastmod>2025-04-04</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223818249983.html</loc><lastmod>2025-04-02</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223813179184.html</loc><lastmod>2025-03-31</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223813131250.html</loc><lastmod>2025-03-30</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223812317068.html</loc><lastmod>2025-03-29</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223810744993.html</loc><lastmod>2025-03-28</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223810701696.html</loc><lastmod>2025-03-27</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223811186954.html</loc><lastmod>2025-03-27</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223809868863.html</loc><lastmod>2025-03-26</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223795967501.html</loc><lastmod>2025-03-14</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223923343922.html</loc><lastmod>2025-07-06</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223923343922/f1de9764e592.jpg</image:loc><image:title>생각공작소 인천 인천시 정부지원 바우처 2025 미추홀구 정신건강토탈케어 서비스 신청안내</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223916070707.html</loc><lastmod>2025-07-01</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223916070707/73dc4031c2a1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "엄마, 제가 만들었어요!" 🤩 아이표 또띠아 피자 만들기!🍕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223916070707/c0ae803d2d7c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "엄마, 제가 만들었어요!" 🤩 아이표 또띠아 피자 만들기!🍕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223916070707/89d428ceec1e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "엄마, 제가 만들었어요!" 🤩 아이표 또띠아 피자 만들기!🍕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223916070707/4746db21a36b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "엄마, 제가 만들었어요!" 🤩 아이표 또띠아 피자 만들기!🍕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223916070707/ad7ce6bc2cbe.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "엄마, 제가 만들었어요!" 🤩 아이표 또띠아 피자 만들기!🍕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223916070707/ed99b1af0d1e.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "엄마, 제가 만들었어요!" 🤩 아이표 또띠아 피자 만들기!🍕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223916070707/234bfcabd2bf.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "엄마, 제가 만들었어요!" 🤩 아이표 또띠아 피자 만들기!🍕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223916070707/514b79fe76ba.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "엄마, 제가 만들었어요!" 🤩 아이표 또띠아 피자 만들기!🍕</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223916070707/6858471af98d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 "엄마, 제가 만들었어요!" 🤩 아이표 또띠아 피자 만들기!🍕</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223908476147.html</loc><lastmod>2025-06-23</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223908476147/0a3a816426e3.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 우리 동네 한 바퀴: 아이들과 함께한 소중한 동네 탐험 이야기 🌳🏘️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223908476147/038cb576128b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 우리 동네 한 바퀴: 아이들과 함께한 소중한 동네 탐험 이야기 🌳🏘️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223908476147/57263b80edfa.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 우리 동네 한 바퀴: 아이들과 함께한 소중한 동네 탐험 이야기 🌳🏘️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223908476147/6077031f77e1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 우리 동네 한 바퀴: 아이들과 함께한 소중한 동네 탐험 이야기 🌳🏘️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223908476147/db2f37c6feb1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 우리 동네 한 바퀴: 아이들과 함께한 소중한 동네 탐험 이야기 🌳🏘️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223908476147/140708a64e43.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 우리 동네 한 바퀴: 아이들과 함께한 소중한 동네 탐험 이야기 🌳🏘️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223908476147/02df68ac82e1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 우리 동네 한 바퀴: 아이들과 함께한 소중한 동네 탐험 이야기 🌳🏘️</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223886061377.html</loc><lastmod>2025-06-06</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886061377/9f3e0bba1428.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 서비스 엄마, 드세요! 🥰 사랑 듬뿍 롤샌드위치 꽃다발 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886061377/17094f5757c0.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 서비스 엄마, 드세요! 🥰 사랑 듬뿍 롤샌드위치 꽃다발 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886061377/62fc404bd38d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 서비스 엄마, 드세요! 🥰 사랑 듬뿍 롤샌드위치 꽃다발 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886061377/21eb7abfd6b9.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 서비스 엄마, 드세요! 🥰 사랑 듬뿍 롤샌드위치 꽃다발 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886061377/38521c6ce49d.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 서비스 엄마, 드세요! 🥰 사랑 듬뿍 롤샌드위치 꽃다발 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886061377/cfd53930da86.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 서비스 엄마, 드세요! 🥰 사랑 듬뿍 롤샌드위치 꽃다발 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886061377/1fc3841d3224.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 서비스 엄마, 드세요! 🥰 사랑 듬뿍 롤샌드위치 꽃다발 만들기</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223886032114.html</loc><lastmod>2025-06-02</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886032114/321f3265d087.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 캠핑 떠나요! 아이들과 함께 신나는 캠핑카 꾸미기🎨🏕️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886032114/f11aec4a1a4b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 캠핑 떠나요! 아이들과 함께 신나는 캠핑카 꾸미기🎨🏕️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886032114/a816c9ea12d4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 캠핑 떠나요! 아이들과 함께 신나는 캠핑카 꾸미기🎨🏕️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886032114/91b464cf3740.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 캠핑 떠나요! 아이들과 함께 신나는 캠핑카 꾸미기🎨🏕️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886032114/ec97cc317434.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 캠핑 떠나요! 아이들과 함께 신나는 캠핑카 꾸미기🎨🏕️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886032114/b3f80df1226b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 캠핑 떠나요! 아이들과 함께 신나는 캠핑카 꾸미기🎨🏕️</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223886032114/3eeaf6e3b890.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 여름 캠핑 떠나요! 아이들과 함께 신나는 캠핑카 꾸미기🎨🏕️</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223856942889.html</loc><lastmod>2025-05-06</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223856942889/4f1818a78849.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 알록달록 아이들의 작은 손에서 완성된 아름다운 '봄 정원 꾸미기'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223856942889/98a0d74402d0.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 알록달록 아이들의 작은 손에서 완성된 아름다운 '봄 정원 꾸미기'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223856942889/64e4a20c811a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 알록달록 아이들의 작은 손에서 완성된 아름다운 '봄 정원 꾸미기'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223856942889/c888ad7d8b3a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 알록달록 아이들의 작은 손에서 완성된 아름다운 '봄 정원 꾸미기'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223856942889/f671fbdeee10.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 알록달록 아이들의 작은 손에서 완성된 아름다운 '봄 정원 꾸미기'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223856942889/442d563d9434.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 알록달록 아이들의 작은 손에서 완성된 아름다운 '봄 정원 꾸미기'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223856942889/cb89a5901e73.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 알록달록 아이들의 작은 손에서 완성된 아름다운 '봄 정원 꾸미기'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223856942889/16260cdaf451.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 알록달록 아이들의 작은 손에서 완성된 아름다운 '봄 정원 꾸미기'</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223856942889/07413cec00f4.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 알록달록 아이들의 작은 손에서 완성된 아름다운 '봄 정원 꾸미기'</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223840068383.html</loc><lastmod>2025-04-20</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223840068383/2fbea62ca509.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 오감쑥쑥! 아이 손에서 피어나는 마법, 나만의 봄 정원 만들기!🌸</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223840068383/03ecf44fab41.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 오감쑥쑥! 아이 손에서 피어나는 마법, 나만의 봄 정원 만들기!🌸</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223840068383/2892fe2820af.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 오감쑥쑥! 아이 손에서 피어나는 마법, 나만의 봄 정원 만들기!🌸</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223840068383/e857ac7aa4ee.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 오감쑥쑥! 아이 손에서 피어나는 마법, 나만의 봄 정원 만들기!🌸</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223840068383/42a7e4709f37.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 오감쑥쑥! 아이 손에서 피어나는 마법, 나만의 봄 정원 만들기!🌸</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223840068383/5909fe63a435.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 오감쑥쑥! 아이 손에서 피어나는 마법, 나만의 봄 정원 만들기!🌸</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223831073494.html</loc><lastmod>2025-04-12</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223831073494/dbecb0a23191.jpg</image:loc><image:title>생각공작소 인천 아동청소년심리지원 서비스 우리 아이, 친구 관계 괜찮을까? "나와 친구들" 프로그램으로 고민 해결!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223831073494/83e25ccb10ac.jpg</image:loc><image:title>생각공작소 인천 아동청소년심리지원 서비스 우리 아이, 친구 관계 괜찮을까? "나와 친구들" 프로그램으로 고민 해결!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223831073494/615fc1ef99cd.jpg</image:loc><image:title>생각공작소 인천 아동청소년심리지원 서비스 우리 아이, 친구 관계 괜찮을까? "나와 친구들" 프로그램으로 고민 해결!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223831073494/5fa1b5c2383a.jpg</image:loc><image:title>생각공작소 인천 아동청소년심리지원 서비스 우리 아이, 친구 관계 괜찮을까? "나와 친구들" 프로그램으로 고민 해결!</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223818379206.html</loc><lastmod>2025-04-04</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818379206/b6b67c85a954.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 간식 포차 오픈🍢 아이들의 손으로 만든 꿀맛 간식 대잔치!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818379206/ec387022e3cb.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 간식 포차 오픈🍢 아이들의 손으로 만든 꿀맛 간식 대잔치!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818379206/91b93df496c1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 간식 포차 오픈🍢 아이들의 손으로 만든 꿀맛 간식 대잔치!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818379206/a46a9e43a9a0.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 간식 포차 오픈🍢 아이들의 손으로 만든 꿀맛 간식 대잔치!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818379206/e781c2c6ae7b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 간식 포차 오픈🍢 아이들의 손으로 만든 꿀맛 간식 대잔치!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818379206/3281c8702cb9.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 간식 포차 오픈🍢 아이들의 손으로 만든 꿀맛 간식 대잔치!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818379206/b11a600b7eb1.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 간식 포차 오픈🍢 아이들의 손으로 만든 꿀맛 간식 대잔치!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818379206/64298f5acedd.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 겨울 간식 포차 오픈🍢 아이들의 손으로 만든 꿀맛 간식 대잔치!</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223818249983.html</loc><lastmod>2025-04-02</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818249983/a013c423d148.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 창의력 폭발! 오감쑥쑥 수업🖌️= 나를 소개합니다 + 과일 초콜릿 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818249983/29503f45793a.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 창의력 폭발! 오감쑥쑥 수업🖌️= 나를 소개합니다 + 과일 초콜릿 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818249983/0bd587439ce9.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 창의력 폭발! 오감쑥쑥 수업🖌️= 나를 소개합니다 + 과일 초콜릿 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818249983/3c71a2cb9d43.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 창의력 폭발! 오감쑥쑥 수업🖌️= 나를 소개합니다 + 과일 초콜릿 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818249983/ae2054818c62.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 창의력 폭발! 오감쑥쑥 수업🖌️= 나를 소개합니다 + 과일 초콜릿 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818249983/ab9a0f66b39f.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 창의력 폭발! 오감쑥쑥 수업🖌️= 나를 소개합니다 + 과일 초콜릿 만들기</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223818249983/69f772e93d65.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 창의력 폭발! 오감쑥쑥 수업🖌️= 나를 소개합니다 + 과일 초콜릿 만들기</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223813179184.html</loc><lastmod>2025-03-31</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223813179184/884f1a9618d9.jpg</image:loc><image:title>생각공작소 인천 우리 아이, 스마트폰 중독? 부모가 알아야 할 필수 가이드!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223813179184/b0e3f57cfae5.jpg</image:loc><image:title>생각공작소 인천 우리 아이, 스마트폰 중독? 부모가 알아야 할 필수 가이드!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223813179184/e130d9679978.jpg</image:loc><image:title>생각공작소 인천 우리 아이, 스마트폰 중독? 부모가 알아야 할 필수 가이드!</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223813131250.html</loc><lastmod>2025-03-30</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223813131250/96e8a237503a.jpg</image:loc><image:title>생각공작소 인천 번아웃 탈출! 직장인들을 위한 스트레스 해소 팁</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223813131250/d0142d923044.jpg</image:loc><image:title>생각공작소 인천 번아웃 탈출! 직장인들을 위한 스트레스 해소 팁</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223812317068.html</loc><lastmod>2025-03-29</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223812317068/1cbac57e34e9.jpg</image:loc><image:title>생각공작소 인천 화병을 이기는 법, 스트레스 관리의 모든 것!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223812317068/09dbe5b843f3.jpg</image:loc><image:title>생각공작소 인천 화병을 이기는 법, 스트레스 관리의 모든 것!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223812317068/709bb4be4ca0.jpg</image:loc><image:title>생각공작소 인천 화병을 이기는 법, 스트레스 관리의 모든 것!</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223810744993.html</loc><lastmod>2025-03-28</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223810744993/faba0f78ff82.jpg</image:loc><image:title>생각공작소 인천 행복한 부부 관계를 위한 필수 팁 공개, 갈등을 피하는 5가지 비법!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223810744993/4f648342fa7a.jpg</image:loc><image:title>생각공작소 인천 행복한 부부 관계를 위한 필수 팁 공개, 갈등을 피하는 5가지 비법!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223810744993/8c2f43e40603.jpg</image:loc><image:title>생각공작소 인천 행복한 부부 관계를 위한 필수 팁 공개, 갈등을 피하는 5가지 비법!</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223810701696.html</loc><lastmod>2025-03-27</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223810701696/3d1064ccec9f.jpg</image:loc><image:title>생각공작소 인천 공황장애, 당신도 겪고 있을지도 모른다. 증상과 극복법 총정리</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223810701696/fbb3dfefb6e2.jpg</image:loc><image:title>생각공작소 인천 공황장애, 당신도 겪고 있을지도 모른다. 증상과 극복법 총정리</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223811186954.html</loc><lastmod>2025-03-27</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223811186954/89e7b2c84a0c.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 상상력이 가득한 동화 미술 수업, 아이들의 창의력을 찾아서!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223811186954/a10da83cbd2b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 상상력이 가득한 동화 미술 수업, 아이들의 창의력을 찾아서!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223811186954/8798e6fa0979.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 상상력이 가득한 동화 미술 수업, 아이들의 창의력을 찾아서!</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223811186954/9b664c9b60fa.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 상상력이 가득한 동화 미술 수업, 아이들의 창의력을 찾아서!</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223809868863.html</loc><lastmod>2025-03-26</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223809868863/f460db797e7d.jpg</image:loc><image:title>생각공작소 인천 주부 우울증, 어떻게 극복할 수 있을까? 실질적인 팁 공개</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223809868863/4d136edbe712.jpg</image:loc><image:title>생각공작소 인천 주부 우울증, 어떻게 극복할 수 있을까? 실질적인 팁 공개</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223795967501.html</loc><lastmod>2025-03-14</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223795967501/fa24125de84e.jpg</image:loc><image:title>생각공작소 인천 인천시 정부지원 바우처 오감쑥쑥 서비스 신청기간</image:title></image:image>
+  </url>
   <url><loc>https://think-factory.kr/activities/posts/223388622042.html</loc><lastmod>2024-03-19</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223115069234.html</loc><lastmod>2023-05-30</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223114977853.html</loc><lastmod>2023-05-29</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223096849101.html</loc><lastmod>2023-05-09</lastmod></url>
-  <url><loc>https://think-factory.kr/activities/posts/223096816457.html</loc><lastmod>2023-05-08</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223115069234.html</loc><lastmod>2023-05-30</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223115069234/684443d028d4.jpg</image:loc><image:title>생각공작소 인천 유아기 오감 발달이 학습 능력에 미치는 놀라운 영향</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223115069234/58fe6d3a38da.jpg</image:loc><image:title>생각공작소 인천 유아기 오감 발달이 학습 능력에 미치는 놀라운 영향</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223115069234/a2f140086b98.jpg</image:loc><image:title>생각공작소 인천 유아기 오감 발달이 학습 능력에 미치는 놀라운 영향</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223114977853.html</loc><lastmod>2023-05-29</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223114977853/273fc817d428.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가족은 꼬옥 안아주는 거야</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223114977853/19a07ade0175.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가족은 꼬옥 안아주는 거야</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223114977853/dfdecc875139.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가족은 꼬옥 안아주는 거야</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223114977853/94fa8ab714e3.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 가족은 꼬옥 안아주는 거야</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223096849101.html</loc><lastmod>2023-05-09</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223096849101/f3eacf2bfa7e.jpg</image:loc><image:title>생각공작소 인천 아기 손과 뇌의 발달</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223096849101/78a432271f60.jpg</image:loc><image:title>생각공작소 인천 아기 손과 뇌의 발달</image:title></image:image>
+  </url>
+  <url><loc>https://think-factory.kr/activities/posts/223096816457.html</loc><lastmod>2023-05-08</lastmod>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223096816457/bb580406bae6.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 봄이 왔어요</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223096816457/d65517c7f54b.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 봄이 왔어요</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223096816457/b46615ed8876.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 봄이 왔어요</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223096816457/513f3dcad9ef.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 봄이 왔어요</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223096816457/6c00640acd68.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 봄이 왔어요</image:title></image:image>
+    <image:image><image:loc>https://think-factory.kr/activities/posts/img/223096816457/961c3e913e84.jpg</image:loc><image:title>생각공작소 인천 오감쑥쑥 바우처 봄이 왔어요</image:title></image:image>
+  </url>
 </urlset>
