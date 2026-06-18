@@ -72,10 +72,11 @@ function splitTitle(t) {
   return { t1: t.slice(0, best).trim(), t2: t.slice(best).trim() };
 }
 
+// KST(UTC+9) 고정 — 머신 로컬 타임존에 의존하면 CI(UTC)와 로컬(KST)이 자정 근처 글에서 하루 어긋남(churn+오표기).
 function fmtDate(ms) {
-  const d = new Date(ms);
+  const d = new Date(ms + 9 * 3600 * 1000);
   const p = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}.${p(d.getMonth() + 1)}.${p(d.getDate())}`;
+  return `${d.getUTCFullYear()}.${p(d.getUTCMonth() + 1)}.${p(d.getUTCDate())}`;
 }
 
 async function fetchPage(page) {
