@@ -169,11 +169,9 @@ try { exclude = JSON.parse(await readFile(new URL('exclude.json', OUT_DIR), 'utf
 const excludeSet = new Set(exclude.map(String));
 
 // 이전 결과 로드 — 네이버 목록 API가 살아있는 글을 간헐적으로 빠뜨림(2026-06-12 실측: 67→57건, 누락 글 직접 조회는 200).
-// 거울 원칙 유지: API에서 안 보여도 30일까지는 유지, 그 뒤에도 안 보이면 삭제된 것으로 간주하고 제거.
-const KEEP_UNSEEN_DAYS = 30;
+// 누락분은 본문 빌드 성공 여부로 생존 판정(아래 병합).
 let prevPosts = [];
 try { prevPosts = JSON.parse(await readFile(new URL('posts.json', OUT_DIR), 'utf8')).posts || []; } catch {}
-const prevByLogNo = new Map(prevPosts.map((p) => [String(p.logNo), p]));
 
 await mkdir(IMG_DIR, { recursive: true });
 const posts = [];
@@ -205,27 +203,21 @@ for (const it of all) {
     excerpt: String(it.briefContents || '').replace(/\s+/g, ' ').slice(0, 110),
     thumb,
     url: `https://blog.naver.com/${BLOG_ID}/${logNo}`,
-    lastSeen: Date.now(),
   });
 }
 
-// API에 안 나온 기존 글 병합 (30일 유예)
+// 목록 API에 안 나온 기존 글 병합 — 시간 유예 대신 '본문 빌드 성공=생존' 신호로 판정(아래).
+// 목록 API가 살아있는 글을 간헐적으로 빠뜨려도 직접 PostView가 되면 유지, 삭제된 글은 빌드 실패로 드롭.
 const seenNow = new Set(posts.map((p) => p.logNo));
-let retained = 0, expired = 0;
+let retained = 0;
 for (const old of prevPosts) {
   const logNo = String(old.logNo);
   if (seenNow.has(logNo) || excludeSet.has(logNo)) continue;
-  const lastSeen = old.lastSeen || Date.now(); // 구버전 데이터엔 lastSeen 없음 → 지금부터 카운트
-  if (Date.now() - lastSeen < KEEP_UNSEEN_DAYS * 86400000) {
-    const lines = old.t1 ? { t1: old.t1, t2: old.t2 } : splitTitle(old.title); // 구버전 데이터 제목분리 백필
-    posts.push({ ...old, ...lines, lastSeen, _retained: true }); // 목록 API 누락분 — 본문 추출도 실패하면 확정 삭제로 간주(아래)
-    retained++;
-  } else {
-    expired++;
-  }
+  const lines = old.t1 ? { t1: old.t1, t2: old.t2 } : splitTitle(old.title); // 구버전 데이터 제목분리 백필
+  posts.push({ ...old, ...lines, _retained: true }); // 빌드 성공하면 유지, 실패하면 확정 삭제로 드롭
+  retained++;
 }
-if (retained) console.log(`목록 API 누락이지만 유지: ${retained}건 (${KEEP_UNSEEN_DAYS}일 유예)`);
-if (expired) console.log(`장기 미목격 제거(삭제 간주): ${expired}건`);
+if (retained) console.log(`목록 API 누락분 ${retained}건 — 본문 빌드로 생존 판정`);
 
 posts.sort((a, b) => b.ts - a.ts);
 
@@ -240,14 +232,15 @@ for (const p of posts) {
   await new Promise((r) => setTimeout(r, 200)); // 예의상 간격
 }
 // 목록 API 누락 + 본문 추출도 실패 = 확정 삭제 → 즉시 드롭(유예 무시). 그 외는 유지하고 page 플래그 부여.
-// 빌드 성공 = 글이 살아있다는 신호 → lastSeen 갱신(목록 API가 살아있는 글을 오래 빠뜨려도 30일 유예에 안 걸려 사라지지 않게).
+// 목록 API 누락 + 본문 빌드 실패 = 확정 삭제 → 드롭. 그 외는 유지하고 page 플래그 부여.
+// (posts.json은 타임스탬프 없이 결정론적 — 실제 블로그 변화 있을 때만 바뀜 → 자동 동기화 시 무의미 커밋 방지)
 let ghostDropped = 0;
 const finalPosts = posts
   .filter((p) => { if (p._retained && !builtSet.has(p.logNo)) { ghostDropped++; return false; } return true; })
-  .map(({ _retained, ...p }) => ({ ...p, lastSeen: builtSet.has(p.logNo) ? Date.now() : p.lastSeen, page: builtSet.has(p.logNo) }));
+  .map(({ _retained, ...p }) => ({ ...p, page: builtSet.has(p.logNo) }));
 console.log(`개별 글 페이지: ${builtSet.size}/${posts.length}건` + (ghostDropped ? ` · 삭제확정 드롭 ${ghostDropped}건` : ''));
 
-await writeFile(new URL('posts.json', OUT_DIR), JSON.stringify({ generated: new Date().toISOString(), count: finalPosts.length, posts: finalPosts }, null, 1), 'utf8');
+await writeFile(new URL('posts.json', OUT_DIR), JSON.stringify({ count: finalPosts.length, posts: finalPosts }, null, 1), 'utf8');
 console.log(`posts.json: ${finalPosts.length}건 (제외 ${excludeSet.size}건, 새 썸네일 ${newThumbs}장)`);
 
 // ── sitemap.xml — 고정 5페이지 + 활동 글(+이미지 사이트맵: 구글 이미지 검색 색인용) ──

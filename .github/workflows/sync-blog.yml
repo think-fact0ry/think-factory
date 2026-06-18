@@ -1,0 +1,44 @@
+name: 블로그 자동 동기화
+
+# 네이버 블로그(think5007) 새 글을 매일 받아 활동 글 페이지·이미지·sitemap을 갱신하고,
+# 변경이 있을 때만 커밋·푸시 → GitHub Pages가 자동 재배포. (유성이 node 직접 안 돌려도 됨)
+on:
+  schedule:
+    - cron: '0 22 * * *'      # 매일 07:00 KST (UTC 22:00). GitHub 부하로 수~수십 분 지연 가능
+  workflow_dispatch:           # 수동 실행 버튼(Actions 탭)
+
+permissions:
+  contents: write              # 커밋·푸시용(기본 GITHUB_TOKEN)
+
+concurrency:
+  group: sync-blog             # 동시 실행 방지
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: ffmpeg 설치 (본문 이미지 재압축용 — 없으면 원본 유지하나 용량 큼)
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: 블로그 동기화
+        run: node tools/sync-blog.mjs
+
+      - name: 변경분만 커밋·푸시
+        run: |
+          git config user.name "think-factory-bot"
+          git config user.email "noreply@think-factory.kr"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "chore: 블로그 자동 동기화 ($(date -u +%Y-%m-%d))"
+            git push
+            echo "✅ 새 변경 푸시됨"
+          else
+            echo "변경 없음 — 커밋 생략"
+          fi
