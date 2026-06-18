@@ -101,7 +101,7 @@ async function downloadBodyImg(src, destFile) {
 }
 const srcHash = (s) => createHash('sha1').update(s).digest('hex').slice(0, 12);
 
-// 한 글: 본문 추출 → 이미지 로컬화 → 페이지 렌더·저장. 반환 = 성공 여부.
+// 한 글: 본문 추출 → 이미지 로컬화(그룹=여러 장 전부) → 페이지 렌더·저장. 반환 = 성공 여부.
 async function buildPostPage(post) {
   let body;
   try { body = await extractPostBody(post.logNo); }
@@ -110,21 +110,29 @@ async function buildPostPage(post) {
   await mkdir(dir, { recursive: true });
   let firstImg = null, imgIdx = 0;
   for (const b of body.blocks) {
-    if (b.kind !== 'image') continue;
-    imgIdx++;
-    const name = `${srcHash(b.src)}.jpg`;
-    const destFile = new URL(name, dir);
-    if (!(await exists(destFile))) {
-      try { await downloadBodyImg(b.src, destFile); await recompress(fileURLToPath(destFile)); }
-      catch (e) { console.warn(`  이미지 실패 ${post.logNo} #${imgIdx}: ${e.message}`); b.skip = true; continue; }
+    if (b.kind !== 'images') continue;
+    const locals = [];
+    for (const src of b.srcs) {
+      imgIdx++;
+      const name = `${srcHash(src)}.jpg`;
+      const destFile = new URL(name, dir);
+      if (!(await exists(destFile))) {
+        try { await downloadBodyImg(src, destFile); await recompress(fileURLToPath(destFile)); }
+        catch (e) { console.warn(`  이미지 실패 ${post.logNo} #${imgIdx}: ${e.message}`); continue; }
+      }
+      const local = `img/${post.logNo}/${name}`;            // 페이지(posts/<logNo>.html) 기준 상대
+      locals.push(local);
+      if (!firstImg) firstImg = `${SITE}/activities/posts/${local}`;
     }
-    b.local = `img/${post.logNo}/${name}`;                 // 페이지(posts/<logNo>.html) 기준 상대
-    b.alt = `${post.title} 활동 사진 ${imgIdx}`;
-    if (!firstImg) firstImg = `${SITE}/activities/posts/${b.local}`;
+    b.locals = locals;
+    b.alt = `${post.title} 활동 사진`;
   }
-  const blocks = body.blocks.filter((b) => !(b.kind === 'image' && (b.skip || !b.local)));
+  const blocks = body.blocks.filter((b) => b.kind !== 'images' || (b.locals && b.locals.length));
   const desc = firstText(blocks) || post.excerpt;
-  await writeFile(new URL(`${post.logNo}.html`, POSTS_DIR), renderPost(post, blocks, desc, firstImg), 'utf8');
+  // 해시태그 문단 → keywords 메타(네이버 검색 보조; 구글은 keywords 무시하나 무해)
+  const tagLine = blocks.flatMap((b) => (b.paras || []).map((p) => p.text)).find((t) => /^#\S/.test(t || '')) || '';
+  const keywords = tagLine ? [...tagLine.matchAll(/#(\S+)/g)].map((m) => m[1]).slice(0, 20).join(', ') : '';
+  await writeFile(new URL(`${post.logNo}.html`, POSTS_DIR), renderPost(post, blocks, desc, firstImg, keywords), 'utf8');
   return true;
 }
 

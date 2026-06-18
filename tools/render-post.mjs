@@ -13,17 +13,33 @@ function jsonLd(obj) {
   return JSON.stringify(obj).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
 }
 
-// 본문 블록 → 기사 HTML (순서 보존)
+// 문단 → <p> (정렬·해시태그 클래스 적용). p.html은 extract에서 이미 안전 이스케이프됨.
+// align은 enum 화이트리스트로 재검증(방어심층 — 속성 주입 차단, extract 신뢰에 의존 안 함).
+const ALIGN_OK = new Set(['center', 'right', 'justify']);
+function renderPara(p) {
+  const isTag = /^#\S/.test(p.text || '');
+  const cls = isTag ? ' class="tags"' : '';
+  const align = !isTag && ALIGN_OK.has(p.align) ? ` style="text-align:${p.align}"` : '';
+  return `<p${cls}${align}>${p.html}</p>`;
+}
+
+// 본문 블록 → 기사 HTML (순서 보존). 이미지 그룹=가로 strip, 단일=풀폭.
 function renderBlocks(blocks) {
   const out = [];
   for (const b of blocks) {
     if (b.kind === 'text') {
-      for (const p of b.paras) {
-        if (/^#\S/.test(p)) out.push(`<p class="tags">${esc(p)}</p>`);   // 해시태그 줄
-        else out.push(`<p>${esc(p).replace(/\n/g, '<br>')}</p>`);
+      for (const p of b.paras) out.push(renderPara(p));
+    } else if (b.kind === 'quote') {
+      out.push(`<blockquote>${b.paras.map(renderPara).join('')}</blockquote>`);
+    } else if (b.kind === 'images') {
+      const locals = b.locals || [];
+      if (!locals.length) continue;
+      if (b.layout === 'strip' && locals.length > 1) {
+        const imgs = locals.map((l, i) => `<img src="${esc(l)}" alt="${esc(b.alt ? b.alt + ' ' + (i + 1) : '')}" loading="lazy">`).join('');
+        out.push(`<figure class="strip strip-${locals.length}">${imgs}</figure>`);
+      } else {
+        out.push(`<figure><img src="${esc(locals[0])}" alt="${esc(b.alt || '')}" loading="lazy"></figure>`);
       }
-    } else if (b.kind === 'image') {
-      out.push(`<figure><img src="${esc(b.local)}" alt="${esc(b.alt || '')}" loading="lazy"></figure>`);
     } else if (b.kind === 'hr') {
       out.push('<hr>');
     }
@@ -31,8 +47,8 @@ function renderBlocks(blocks) {
   return out.join('\n');
 }
 
-// post = {logNo,title,date,tag,url}, blocks = 로컬경로(local) 박힌 블록, desc = SEO 설명, ogImage = 절대 URL(첫 이미지)
-export function renderPost(post, blocks, desc, ogImage) {
+// post = {logNo,title,date,tag,url}, blocks = 로컬경로(locals) 박힌 블록, desc = SEO 설명, ogImage = 절대 URL(첫 이미지), keywords = 해시태그 문자열
+export function renderPost(post, blocks, desc, ogImage, keywords = '') {
   const pageUrl = `${SITE}/activities/posts/${post.logNo}.html`;
   const title = post.title;
   const isoDate = (post.date || '').replace(/\./g, '-');                  // 2026.06.10 → 2026-06-10 (date 누락 방어)
@@ -55,6 +71,7 @@ export function renderPost(post, blocks, desc, ogImage) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)} | 생각공작소</title>
 <meta name="description" content="${esc(desc)}">
+<meta name="author" content="생각공작소">${keywords ? `\n<meta name="keywords" content="${esc(keywords)}">` : ''}
 <link rel="canonical" href="${pageUrl}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="${esc(title)}">
