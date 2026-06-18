@@ -1,9 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 활동 글 URL은 블로그 동기화 파이프라인이 자동 추가한다 -->
+<!-- 활동 글 URL은 tools/sync-blog.mjs가 자동 생성 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://think-factory.kr/</loc></url>
   <url><loc>https://think-factory.kr/story.html</loc></url>
   <url><loc>https://think-factory.kr/services.html</loc></url>
   <url><loc>https://think-factory.kr/activities.html</loc></url>
   <url><loc>https://think-factory.kr/contact.html</loc></url>
+  <url><loc>https://think-factory.kr/activities/posts/224319218161.html</loc><lastmod>2026-06-17</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224311932764.html</loc><lastmod>2026-06-10</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224301924453.html</loc><lastmod>2026-05-31</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224291425765.html</loc><lastmod>2026-05-20</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224281609987.html</loc><lastmod>2026-05-11</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224273673537.html</loc><lastmod>2026-05-03</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224255518739.html</loc><lastmod>2026-04-20</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224253086364.html</loc><lastmod>2026-04-15</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224245355017.html</loc><lastmod>2026-04-08</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224234768585.html</loc><lastmod>2026-03-30</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224224578140.html</loc><lastmod>2026-03-23</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224224471616.html</loc><lastmod>2026-03-21</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224201106163.html</loc><lastmod>2026-03-03</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224179144746.html</loc><lastmod>2026-02-10</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224171858923.html</loc><lastmod>2026-02-04</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224157138158.html</loc><lastmod>2026-01-23</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224143178437.html</loc><lastmod>2026-01-16</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224143149603.html</loc><lastmod>2026-01-12</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224125729262.html</loc><lastmod>2025-12-28</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224115949094.html</loc><lastmod>2025-12-22</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224111739957.html</loc><lastmod>2025-12-16</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224087221800.html</loc><lastmod>2025-11-25</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224057574575.html</loc><lastmod>2025-10-29</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224049011095.html</loc><lastmod>2025-10-21</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224019541704.html</loc><lastmod>2025-09-30</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224019542557.html</loc><lastmod>2025-09-26</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224015380449.html</loc><lastmod>2025-09-20</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224008099241.html</loc><lastmod>2025-09-15</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/224005629855.html</loc><lastmod>2025-09-12</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223998490424.html</loc><lastmod>2025-09-07</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223991251907.html</loc><lastmod>2025-09-01</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223857372887.html</loc><lastmod>2025-09-01</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223984461289.html</loc><lastmod>2025-08-26</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223921583359.html</loc><lastmod>2025-07-07</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223923971739.html</loc><lastmod>2025-07-06</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223923343922.html</loc><lastmod>2025-07-06</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223916070707.html</loc><lastmod>2025-07-01</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223908476147.html</loc><lastmod>2025-06-23</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223886061377.html</loc><lastmod>2025-06-06</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223886032114.html</loc><lastmod>2025-06-02</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223856942889.html</loc><lastmod>2025-05-06</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223840068383.html</loc><lastmod>2025-04-20</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223831073494.html</loc><lastmod>2025-04-12</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223818379206.html</loc><lastmod>2025-04-04</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223818249983.html</loc><lastmod>2025-04-02</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223813179184.html</loc><lastmod>2025-03-31</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223813131250.html</loc><lastmod>2025-03-30</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223812317068.html</loc><lastmod>2025-03-29</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223810744993.html</loc><lastmod>2025-03-28</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223810701696.html</loc><lastmod>2025-03-27</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223811186954.html</loc><lastmod>2025-03-27</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223809868863.html</loc><lastmod>2025-03-26</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223795967501.html</loc><lastmod>2025-03-14</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223388622042.html</loc><lastmod>2024-03-19</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223115069234.html</loc><lastmod>2023-05-30</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223114977853.html</loc><lastmod>2023-05-29</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223096849101.html</loc><lastmod>2023-05-09</lastmod></url>
+  <url><loc>https://think-factory.kr/activities/posts/223096816457.html</loc><lastmod>2023-05-08</lastmod></url>
 </urlset>

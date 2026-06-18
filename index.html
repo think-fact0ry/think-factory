@@ -410,7 +410,8 @@
       posts.forEach(function (p) {
         var a = document.createElement('a');
         a.className = 'act';
-        a.href = p.url; a.target = '_blank'; a.rel = 'noopener';
+        if (p.page === false) { a.href = p.url; a.target = '_blank'; a.rel = 'noopener'; } // 본문 추출 실패분만 네이버 폴백
+        else a.href = 'activities/posts/' + p.logNo + '.html';                            // 내부 글 페이지(블로그 미러, 구글 색인)
         var th = document.createElement('div');
         th.className = 'thumb';
         if (p.thumb) {
