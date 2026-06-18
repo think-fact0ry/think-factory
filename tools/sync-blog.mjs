@@ -129,10 +129,7 @@ async function buildPostPage(post) {
   }
   const blocks = body.blocks.filter((b) => b.kind !== 'images' || (b.locals && b.locals.length));
   const desc = firstText(blocks) || post.excerpt;
-  // 해시태그 문단 → keywords 메타(네이버 검색 보조; 구글은 keywords 무시하나 무해)
-  const tagLine = blocks.flatMap((b) => (b.paras || []).map((p) => p.text)).find((t) => /^#\S/.test(t || '')) || '';
-  const keywords = tagLine ? [...tagLine.matchAll(/#(\S+)/g)].map((m) => m[1]).slice(0, 20).join(', ') : '';
-  await writeFile(new URL(`${post.logNo}.html`, POSTS_DIR), renderPost(post, blocks, desc, firstImg, keywords), 'utf8');
+  await writeFile(new URL(`${post.logNo}.html`, POSTS_DIR), renderPost(post, blocks, desc, firstImg), 'utf8');
   return true;
 }
 

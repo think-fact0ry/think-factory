@@ -47,8 +47,8 @@ function renderBlocks(blocks) {
   return out.join('\n');
 }
 
-// post = {logNo,title,date,tag,url}, blocks = 로컬경로(locals) 박힌 블록, desc = SEO 설명, ogImage = 절대 URL(첫 이미지), keywords = 해시태그 문자열
-export function renderPost(post, blocks, desc, ogImage, keywords = '') {
+// post = {logNo,title,date,tag,url}, blocks = 로컬경로(locals) 박힌 블록, desc = SEO 설명, ogImage = 절대 URL(첫 이미지)
+export function renderPost(post, blocks, desc, ogImage) {
   const pageUrl = `${SITE}/activities/posts/${post.logNo}.html`;
   const title = post.title;
   const isoDate = (post.date || '').replace(/\./g, '-');                  // 2026.06.10 → 2026-06-10 (date 누락 방어)
@@ -71,7 +71,7 @@ export function renderPost(post, blocks, desc, ogImage, keywords = '') {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)} | 생각공작소</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="author" content="생각공작소">${keywords ? `\n<meta name="keywords" content="${esc(keywords)}">` : ''}
+<meta name="author" content="생각공작소">
 <link rel="canonical" href="${pageUrl}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="${esc(title)}">
