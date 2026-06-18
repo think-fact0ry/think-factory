@@ -535,7 +535,11 @@ footer .legal a:hover{ color:var(--g900); }
 .post-body strong{ font-weight:700; }
 .post-body u{ text-decoration:underline; }
 .post-body p.tags{ font-size:13px; color:var(--g500); line-height:1.7; margin-top:20px; word-break:break-all; }
-.post-body figure{ margin:3em 0; }                            /* 사진 ↔ 글 간격(사진끼리 간격 아님 — 그건 strip gap) */
+/* 간격 규칙: 글↔사진 = 3em, 사진↔사진(연속 이미지 블록) = 딱 붙게(5px). 인접 형제로 분기 */
+.post-body figure{ margin:0; }
+.post-body p + figure, .post-body blockquote + figure, .post-body hr + figure,
+.post-body figure + p, .post-body figure + blockquote, .post-body figure + hr{ margin-top:3em; }
+.post-body figure + figure{ margin-top:5px; }                 /* 사진 다음 사진 = 딱 붙게(strip gap과 동일) */
 .post-body figure img{ width:100%; border-radius:12px; background:var(--g100); }
 /* 이미지 그룹(네이버 콜라주) = 높이 맞춘 가로 한 줄(justified). 각 img flex∝종횡비(인라인). 반응형=flex가 자동 축소 */
 .post-body figure.strip{ display:flex; gap:5px; align-items:flex-start; }
