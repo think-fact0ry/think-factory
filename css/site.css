@@ -529,18 +529,18 @@ footer .legal a:hover{ color:var(--g900); }
 .post .back{ display:inline-block; font-size:14px; font-weight:600; color:var(--green); margin-bottom:18px; }
 .post .date{ font-size:14px; color:var(--g500); font-weight:600; margin-bottom:8px; }
 .post h1{ font-size:30px; font-weight:800; letter-spacing:-.8px; line-height:1.35; color:var(--g900); margin:0 0 24px; word-break:keep-all; }
-.post-body{ font-size:16px; line-height:1.65; color:var(--g900); }
-.post-body p{ margin:0 0 10px; word-break:keep-all; }
-.post-body p:last-child{ margin-bottom:0; }
+.post-body{ font-size:16px; line-height:1.5; color:var(--g900); }
+.post-body p{ margin:0; word-break:keep-all; }                /* 줄 사이 타이트 — 간격은 빈 줄(.sp)이 담당 */
+.post-body p.sp{ height:.85em; }                              /* 유성이 의도적으로 띄운 빈 줄 */
 .post-body strong{ font-weight:700; }
 .post-body u{ text-decoration:underline; }
-.post-body p.tags{ font-size:13px; color:var(--g500); line-height:1.7; margin-top:24px; word-break:break-all; }
-.post-body figure{ margin:18px 0; }
+.post-body p.tags{ font-size:13px; color:var(--g500); line-height:1.7; margin-top:20px; word-break:break-all; }
+.post-body figure{ margin:14px 0; }
 .post-body figure img{ width:100%; border-radius:12px; background:var(--g100); }
-/* 이미지 그룹(네이버 콜라주) = 가로 한 줄 */
-.post-body figure.strip{ display:flex; gap:6px; align-items:flex-start; }
-.post-body figure.strip img{ flex:1; min-width:0; }
-.post-body blockquote{ margin:18px 0; padding:4px 0 4px 18px; border-left:3px solid var(--green); color:var(--g700); }
+/* 이미지 그룹(네이버 콜라주) = 높이 맞춘 가로 한 줄(justified). 각 img flex∝종횡비(인라인). 반응형=flex가 자동 축소 */
+.post-body figure.strip{ display:flex; gap:5px; align-items:flex-start; }
+.post-body figure.strip img{ width:100%; height:auto; min-width:0; border-radius:10px; }
+.post-body blockquote{ margin:16px 0; padding:4px 0 4px 18px; border-left:3px solid var(--green); color:var(--g700); }
 .post-body blockquote p{ margin:0; }
 .post-body hr{ border:none; border-top:1px solid var(--g200); margin:26px 0; }
 .post-foot{ margin-top:40px; padding-top:24px; border-top:1px solid var(--g200); display:flex; flex-direction:column; gap:14px; }

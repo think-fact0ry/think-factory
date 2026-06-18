@@ -85,31 +85,45 @@ function parseParagraph(openAttrs, inner) {
   return { align, html: out, text: plainText(inner) };
 }
 
-// se-text / se-quotation 컴포넌트 → 문단 배열
+// se-text / se-quotation 컴포넌트 → 문단 배열. 빈 문단(유성이 의도적으로 띄운 줄)은 보존하되
+// 블록 앞뒤 군더더기는 트림, 연속 빈 줄은 1개로 합침(간격은 CSS spacer로).
 function parseParas(seg) {
-  const paras = [];
   const re = /<p class="se-text-paragraph([^>]*)>([\s\S]*?)<\/p>/g;
   let m;
-  while ((m = re.exec(seg)) !== null) {
-    const p = parseParagraph(m[1], m[2]);
-    if (p.text !== '') paras.push(p);   // 빈 문단(네이버 간격용 빈 줄) 버림 — 간격은 CSS로
+  const raw = [];
+  while ((m = re.exec(seg)) !== null) raw.push(parseParagraph(m[1], m[2]));
+  const paras = [];
+  for (const p of raw) {
+    if (p.text === '') {
+      if (!paras.length || paras[paras.length - 1].text === '') continue; // 선두·연속 빈 줄 합침
+      paras.push({ align: '', html: '', text: '', empty: true });
+    } else paras.push(p);
   }
+  while (paras.length && paras[paras.length - 1].text === '') paras.pop();   // 말미 빈 줄 제거
   return paras;
 }
 
-// se-image / se-imageStrip 컴포넌트 → 원본 src 배열(type 꼬리 제거, 중복 제거)
-function imageSrcs(seg) {
-  const srcs = [];
+// se-image / se-imageStrip 컴포넌트 → 이미지 항목 배열 {src, ar(종횡비 w/h)} (type 꼬리 제거, src 중복 제거)
+function imageItems(seg) {
+  const items = [];
   let m;
   const re = /data-linkdata='([^']+)'/g;
   while ((m = re.exec(seg)) !== null) {
-    try { const s = JSON.parse(m[1]).src; if (s) srcs.push(s.replace(/\?type=[^"&']*$/, '')); } catch {}
+    try {
+      const d = JSON.parse(m[1]);
+      if (!d.src) continue;
+      const w = parseInt(d.originalWidth, 10), h = parseInt(d.originalHeight, 10);
+      let ar = w > 0 && h > 0 ? w / h : 1;
+      ar = Math.max(0.3, Math.min(4, ar));                 // 극단 비율 클램프(레이아웃 방어)
+      items.push({ src: d.src.replace(/\?type=[^"&']*$/, ''), ar: +ar.toFixed(3) });
+    } catch {}
   }
-  if (!srcs.length) {
+  if (!items.length) {
     const re2 = /data-lazy-src="([^"]+)"/g;
-    while ((m = re2.exec(seg)) !== null) srcs.push(m[1].replace(/\?type=[^"&']*$/, ''));
+    while ((m = re2.exec(seg)) !== null) items.push({ src: m[1].replace(/\?type=[^"&']*$/, ''), ar: 1 });
   }
-  return [...new Set(srcs)];
+  const seen = new Set();
+  return items.filter((it) => !seen.has(it.src) && seen.add(it.src));
 }
 
 // 첫 se-main-container를 div 깊이 카운팅으로 정확히 잘라냄(중첩 div 안전)
@@ -145,11 +159,11 @@ function parseComponents(container) {
       const paras = parseParas(seg);
       if (paras.length) blocks.push({ kind: 'quote', paras });
     } else if (type === 'se-image') {
-      const srcs = imageSrcs(seg);
-      if (srcs.length) blocks.push({ kind: 'images', layout: 'single', srcs });
+      const imgs = imageItems(seg);
+      if (imgs.length) blocks.push({ kind: 'images', layout: 'single', imgs });
     } else if (type === 'se-imageStrip' || type === 'se-imageGroup') {
-      const srcs = imageSrcs(seg);
-      if (srcs.length) blocks.push({ kind: 'images', layout: srcs.length > 1 ? 'strip' : 'single', srcs });
+      const imgs = imageItems(seg);
+      if (imgs.length) blocks.push({ kind: 'images', layout: imgs.length > 1 ? 'strip' : 'single', imgs });
     } else if (type === 'se-horizontalLine') {
       blocks.push({ kind: 'hr' });
     }
@@ -184,7 +198,7 @@ export async function extractPostBody(logNo) {
   const container = sliceMainContainer(html);
   if (!container) throw new Error(`se-main-container 없음 (${logNo})`);
   const blocks = parseComponents(container);
-  const images = blocks.filter((b) => b.kind === 'images').reduce((n, b) => n + b.srcs.length, 0);
+  const images = blocks.filter((b) => b.kind === 'images').reduce((n, b) => n + b.imgs.length, 0);
   const textParas = blocks.filter((b) => b.kind === 'text' || b.kind === 'quote').reduce((n, b) => n + b.paras.length, 0);
   return { blocks, images, textParas };
 }
@@ -196,7 +210,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     console.log(`logNo ${logNo}: 블록 ${blocks.length}개 (텍스트문단 ${textParas}, 이미지 ${images})\n`);
     blocks.forEach((b, i) => {
       if (b.kind === 'text' || b.kind === 'quote') console.log(`[${i}] ${b.kind.toUpperCase()}(${b.paras.length}) ${b.paras[0].align || '좌'}: ${b.paras[0].text.slice(0, 50)}`);
-      else if (b.kind === 'images') console.log(`[${i}] IMG(${b.layout} x${b.srcs.length})`);
+      else if (b.kind === 'images') console.log(`[${i}] IMG(${b.layout} x${b.imgs.length}) ar=${b.imgs.map((x) => x.ar).join(',')}`);
       else console.log(`[${i}] ${b.kind.toUpperCase()}`);
     });
   }).catch((e) => { console.error('ERR', e.message); process.exit(1); });

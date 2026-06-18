@@ -13,17 +13,24 @@ function jsonLd(obj) {
   return JSON.stringify(obj).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
 }
 
-// 문단 → <p> (정렬·해시태그 클래스 적용). p.html은 extract에서 이미 안전 이스케이프됨.
+// 문단 → <p> (정렬·해시태그·빈줄 적용). p.html은 extract에서 이미 안전 이스케이프됨.
 // align은 enum 화이트리스트로 재검증(방어심층 — 속성 주입 차단, extract 신뢰에 의존 안 함).
 const ALIGN_OK = new Set(['center', 'right', 'justify']);
 function renderPara(p) {
+  if (p.empty) return '<p class="sp"></p>';                 // 유성이 의도적으로 띄운 빈 줄
   const isTag = /^#\S/.test(p.text || '');
   const cls = isTag ? ' class="tags"' : '';
   const align = !isTag && ALIGN_OK.has(p.align) ? ` style="text-align:${p.align}"` : '';
   return `<p${cls}${align}>${p.html}</p>`;
 }
 
-// 본문 블록 → 기사 HTML (순서 보존). 이미지 그룹=가로 strip, 단일=풀폭.
+// 종횡비 → 안전한 flex 값(숫자만, 클램프)
+function arFlex(ar) {
+  const n = Number(ar);
+  return Number.isFinite(n) && n > 0 ? Math.max(0.3, Math.min(4, n)).toFixed(3) : '1';
+}
+
+// 본문 블록 → 기사 HTML (순서 보존). 이미지 그룹=높이 맞춘 가로 strip(flex∝종횡비), 단일=풀폭.
 function renderBlocks(blocks) {
   const out = [];
   for (const b of blocks) {
@@ -32,13 +39,13 @@ function renderBlocks(blocks) {
     } else if (b.kind === 'quote') {
       out.push(`<blockquote>${b.paras.map(renderPara).join('')}</blockquote>`);
     } else if (b.kind === 'images') {
-      const locals = b.locals || [];
-      if (!locals.length) continue;
-      if (b.layout === 'strip' && locals.length > 1) {
-        const imgs = locals.map((l, i) => `<img src="${esc(l)}" alt="${esc(b.alt ? b.alt + ' ' + (i + 1) : '')}" loading="lazy">`).join('');
-        out.push(`<figure class="strip strip-${locals.length}">${imgs}</figure>`);
+      const items = b.items || [];
+      if (!items.length) continue;
+      if (b.layout === 'strip' && items.length > 1) {
+        const imgs = items.map((it, i) => `<img src="${esc(it.local)}" alt="${esc(b.alt ? b.alt + ' ' + (i + 1) : '')}" loading="lazy" style="flex:${arFlex(it.ar)}">`).join('');
+        out.push(`<figure class="strip">${imgs}</figure>`);
       } else {
-        out.push(`<figure><img src="${esc(locals[0])}" alt="${esc(b.alt || '')}" loading="lazy"></figure>`);
+        out.push(`<figure><img src="${esc(items[0].local)}" alt="${esc(b.alt || '')}" loading="lazy"></figure>`);
       }
     } else if (b.kind === 'hr') {
       out.push('<hr>');

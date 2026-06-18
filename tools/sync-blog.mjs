@@ -111,23 +111,23 @@ async function buildPostPage(post) {
   let firstImg = null, imgIdx = 0;
   for (const b of body.blocks) {
     if (b.kind !== 'images') continue;
-    const locals = [];
-    for (const src of b.srcs) {
+    const items = [];
+    for (const im of b.imgs) {
       imgIdx++;
-      const name = `${srcHash(src)}.jpg`;
+      const name = `${srcHash(im.src)}.jpg`;
       const destFile = new URL(name, dir);
       if (!(await exists(destFile))) {
-        try { await downloadBodyImg(src, destFile); await recompress(fileURLToPath(destFile)); }
+        try { await downloadBodyImg(im.src, destFile); await recompress(fileURLToPath(destFile)); }
         catch (e) { console.warn(`  이미지 실패 ${post.logNo} #${imgIdx}: ${e.message}`); continue; }
       }
       const local = `img/${post.logNo}/${name}`;            // 페이지(posts/<logNo>.html) 기준 상대
-      locals.push(local);
+      items.push({ local, ar: im.ar });
       if (!firstImg) firstImg = `${SITE}/activities/posts/${local}`;
     }
-    b.locals = locals;
+    b.items = items;
     b.alt = `${post.title} 활동 사진`;
   }
-  const blocks = body.blocks.filter((b) => b.kind !== 'images' || (b.locals && b.locals.length));
+  const blocks = body.blocks.filter((b) => b.kind !== 'images' || (b.items && b.items.length));
   const desc = firstText(blocks) || post.excerpt;
   await writeFile(new URL(`${post.logNo}.html`, POSTS_DIR), renderPost(post, blocks, desc, firstImg), 'utf8');
   return true;
