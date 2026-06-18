@@ -180,7 +180,9 @@ let newThumbs = 0;
 for (const it of all) {
   const logNo = String(it.logNo);
   if (excludeSet.has(logNo)) continue;
-  if (it.notOpen || it.postBlocked) continue;        // 비공개·차단 글 제외
+  // 완전공개 글만 — 비공개·차단·이웃공개·서로이웃공개·전체공개아님 전부 제외(방어심층: 네이버 API가
+  // 지금은 익명에 완전공개만 주지만, 정책 변경 대비해 명시적으로 거른다). 프라이버시 누출 방지.
+  if (it.notOpen || it.postBlocked || it.buddyOpen || it.bothBuddyOpen || it.allOpenPost === false || it.outSideAllow === false) continue;
   const { title, tag } = cleanTitle(it.titleWithInspectMessage);
   let thumb = null;
   if (it.thumbnailUrl) {
