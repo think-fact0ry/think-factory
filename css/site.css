@@ -528,14 +528,14 @@ footer .legal a:hover{ color:var(--g900); }
 .post .inner{ max-width:740px; }
 .post .back{ display:inline-block; font-size:14px; font-weight:600; color:var(--green); margin-bottom:18px; }
 .post .date{ font-size:14px; color:var(--g500); font-weight:600; margin-bottom:8px; }
-.post h1{ font-size:30px; font-weight:800; letter-spacing:-.8px; line-height:1.35; color:var(--g900); margin:0 0 24px; word-break:keep-all; }
+.post h1{ font-size:30px; font-weight:800; letter-spacing:-.8px; line-height:1.35; color:var(--g900); margin:0 0 3em; word-break:keep-all; }
 .post-body{ font-size:16px; line-height:1.5; color:var(--g900); }
 .post-body p{ margin:0; word-break:keep-all; }                /* 줄 사이 타이트 — 간격은 빈 줄(.brk)이 담당 */
 .post-body p.brk{ height:3em; }                               /* 유성이 의도적으로 띄운 빈 줄(.sp는 섹션 클래스라 brk 사용) */
 .post-body strong{ font-weight:700; }
 .post-body u{ text-decoration:underline; }
 .post-body p.tags{ font-size:13px; color:var(--g500); line-height:1.7; margin-top:20px; word-break:break-all; }
-.post-body figure{ margin:1.5em 0; }                          /* 사진 ↔ 글 간격(사진끼리 간격 아님 — 그건 strip gap) */
+.post-body figure{ margin:3em 0; }                            /* 사진 ↔ 글 간격(사진끼리 간격 아님 — 그건 strip gap) */
 .post-body figure img{ width:100%; border-radius:12px; background:var(--g100); }
 /* 이미지 그룹(네이버 콜라주) = 높이 맞춘 가로 한 줄(justified). 각 img flex∝종횡비(인라인). 반응형=flex가 자동 축소 */
 .post-body figure.strip{ display:flex; gap:5px; align-items:flex-start; }
