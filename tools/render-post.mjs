@@ -17,7 +17,7 @@ function jsonLd(obj) {
 // align은 enum 화이트리스트로 재검증(방어심층 — 속성 주입 차단, extract 신뢰에 의존 안 함).
 const ALIGN_OK = new Set(['center', 'right', 'justify']);
 function renderPara(p) {
-  if (p.empty) return '<p class="sp"></p>';                 // 유성이 의도적으로 띄운 빈 줄
+  if (p.empty) return '<p class="brk"></p>';                // 유성이 의도적으로 띄운 빈 줄(.sp는 풀페이지 섹션 클래스와 충돌→brk)
   const isTag = /^#\S/.test(p.text || '');
   const cls = isTag ? ' class="tags"' : '';
   const align = !isTag && ALIGN_OK.has(p.align) ? ` style="text-align:${p.align}"` : '';
