@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>모니터링 설문 — 생각공작소</title>
+<meta name="robots" content="noindex">
+<!-- 모니터링 설문. think-factory.kr/monitoring → 14_모니터링설문 GAS 웹앱을 *우리 도메인에서 iframe 임베드*.
+     리다이렉트(=주소가 script.google.com으로 바뀌고 구글 배너 노출) 대신 임베드라 주소·배너 깨끗.
+     14 doGet이 XFrameOptionsMode.ALLOWALL이라 프레임 허용됨(contact.html이 06을 같은 방식으로 임베드).
+     이동 대상이 바뀌면 아래 EXEC 한 줄만 교체. (옛 /m 리다이렉트는 레거시 — 새 발송은 /monitoring 사용) -->
+<style>
+  html, body { height: 100%; margin: 0; background: #f7f5f1; }
+  iframe { border: 0; width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+<iframe id="survey" title="모니터링 설문" allow="clipboard-write"></iframe>
+<script>
+  var EXEC = "https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec";
+  // 쿼리스트링 붙어 오면 그대로 전달(향후 확장 대비)
+  document.getElementById('survey').src = EXEC + (location.search || "");
+</script>
+</body>
+</html>
