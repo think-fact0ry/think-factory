@@ -5,13 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="google-site-verification" content="AziAKW0vH1SjyVqowP3DrONK7wHqBOCJ01ucC7CYyv8" />
 <title>생각공작소 — 아이들의 꿈을 키우는 생각의 놀이터 | 인천 아동발달 바우처</title>
-<meta name="description" content="선생님이 아이의 공간으로 찾아갑니다. 재가방문은 인천 전 지역, 센터는 미추홀 본점에서. 오감쑥쑥·아동청소년심리지원 등 정부지원 바우처 제공기관 생각공작소.">
+<meta name="description" content="인천 전 지역, 선생님이 아이의 공간으로 직접 찾아가요. 정부지원 바우처로 부담을 덜고, 처음 만나는 세상이 따뜻하길 바라요.">
 <meta property="og:title" content="생각공작소 — 아이들의 꿈을 키우는 생각의 놀이터">
-<meta property="og:description" content="인천 전 지역, 선생님이 아이의 공간으로 찾아가는 발달 서비스. 정부지원 바우처 제공기관.">
+<meta property="og:description" content="인천 전 지역, 선생님이 아이의 공간으로 직접 찾아가요. 정부지원 바우처로 부담을 덜고, 처음 만나는 세상이 따뜻하길 바라요.">
+<meta property="og:site_name" content="생각공작소">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://think-factory.kr/">
 <meta property="og:image" content="https://think-factory.kr/assets/logo.png">
 <link rel="canonical" href="https://think-factory.kr/">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -44,6 +47,15 @@
     "http://pf.kakao.com/_MnPkn"
   ],
   "foundingDate": "2025-03-01"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "생각공작소",
+  "alternateName": "Think Factory",
+  "url": "https://think-factory.kr/"
 }
 </script>
 </head>
@@ -135,7 +147,7 @@
     <h2 class="reveal d1">아이들의 오늘</h2>
     <p class="sub reveal d2">아이들이 보낸 시간을 그대로 담았어요.</p>
     <div class="car reveal d2" id="recentActs">
-      <a class="act" href="activities.html"><div class="thumb"></div><div class="body"><div class="date">곧 채워집니다</div><h3>아이들의 이야기가 이곳에 자동으로 올라옵니다</h3></div></a>
+      <a class="act" href="activities.html"><div class="thumb"></div><div class="body"><h3>아이들의 이야기가 이곳에 자동으로 올라옵니다</h3></div></a>
     </div>
     <div class="dots reveal d3" id="actDots"></div>
     <p class="more-wrap reveal d3"><a class="btn more" href="activities.html">전체 보기</a></p>
@@ -422,12 +434,9 @@
         }
         var body = document.createElement('div');
         body.className = 'body';
-        var date = document.createElement('div');
-        date.className = 'date';
-        date.textContent = p.date + (p.tag ? ' · ' + p.tag : '');
         var h3 = document.createElement('h3');
         h3.textContent = p.t2 ? p.t1 + '\n' + p.t2 : p.title; // 두 줄 분리 제목 (sync-blog 휴리스틱)
-        body.appendChild(date); body.appendChild(h3);
+        body.appendChild(h3);   // 날짜 미표시 — 구글 SERP가 홈 날짜로 집어가던 문제 차단
         a.appendChild(th); a.appendChild(body);
         car.appendChild(a);
       });
