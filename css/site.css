@@ -236,16 +236,22 @@ footer .legal a:hover{ color:var(--g900); }
 .nav .hb{ display:none; margin-left:auto; width:40px; height:40px; border:none; background:none; cursor:pointer; flex-direction:column; justify-content:center; gap:5px; padding:0; }
 .nav .hb span{ display:block; width:22px; height:2px; background:var(--g700); border-radius:2px; margin:0 auto; }
 .drawer{ position:fixed; inset:0; z-index:30; visibility:hidden; }
-.drawer .dim{ position:absolute; inset:0; background:rgba(0,0,0,.32); opacity:0; transition:opacity .25s; }
-.drawer .panel{ position:absolute; top:0; right:0; height:100%; width:74%; max-width:300px; background:#fff;
-  transform:translateX(100%); transition:transform .28s ease; display:flex; flex-direction:column;
-  padding:22px 22px calc(22px + env(safe-area-inset-bottom)); box-shadow:-8px 0 30px rgba(0,0,0,.12); }
+.drawer .dim{ position:absolute; inset:0; background:rgba(0,0,0,.4); opacity:0; transition:opacity .28s; }
+.drawer .panel{ position:absolute; top:0; right:0; height:100%; width:84%; max-width:340px; background:#fff;
+  transform:translateX(100%); transition:transform .32s cubic-bezier(.2,.8,.3,1); display:flex; flex-direction:column;
+  padding:14px 28px calc(28px + env(safe-area-inset-bottom)); box-shadow:-10px 0 40px rgba(25,31,40,.16); }
 .drawer.open{ visibility:visible; }
 .drawer.open .dim{ opacity:1; }
 .drawer.open .panel{ transform:none; }
-.drawer .dclose{ align-self:flex-end; width:40px; height:40px; border:none; background:none; font-size:28px; color:var(--g500); cursor:pointer; line-height:1; }
-.drawer a{ font-size:17px; font-weight:600; color:var(--g900); padding:15px 4px; border-bottom:1px solid var(--g100); }
-.drawer a.dcta{ margin-top:18px; background:var(--green); color:#fff; text-align:center; border-radius:12px; padding:15px; font-weight:700; border-bottom:none; }
+.drawer .dclose{ align-self:flex-end; width:44px; height:44px; border:none; background:none; font-size:30px; color:var(--g400); cursor:pointer; line-height:1; margin:0 -8px 4px 0; }
+/* 큰 타이포 메뉴 — 빈 흰색을 큰 글자·여백으로 채움 */
+.drawer a{ font-size:24px; font-weight:700; letter-spacing:-.6px; color:var(--g900); padding:17px 2px; border-bottom:1px solid var(--g100); transition:color .15s; }
+.drawer a:first-of-type{ border-top:1px solid var(--g100); }
+.drawer a:active{ color:var(--green); }
+/* 상담 신청 = 하단 고정 그린 버튼 + 그 아래 연락처(메뉴를 아래까지 채움) */
+.drawer a.dcta{ margin-top:auto; background:var(--green); color:#fff; text-align:center; border-radius:14px; padding:17px; font-size:17px; font-weight:700; letter-spacing:-.3px; border:none; }
+.drawer a.dcta:active{ background:var(--green-dark); }
+.drawer .panel::after{ content:'032-277-2007\A 평일 11:00~18:00'; white-space:pre-line; text-align:center; margin-top:16px; font-size:13px; color:var(--g400); line-height:1.7; }
 @media (max-width:760px){ .nav a.cta{ display:none; } .nav .hb{ display:flex; } }
 @media (min-width:761px){ .drawer{ display:none; } }   /* 데스크톱에선 드로어 자체 비표시 (리사이즈 안전망) */
 
