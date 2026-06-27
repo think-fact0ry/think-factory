@@ -246,6 +246,36 @@
   <button class="sp-next" aria-label="다음으로"><svg viewBox="0 0 48 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3 L24 11 L46 3"/></svg></button>
 </section>
 
+<!-- ── 공통 강점 — 오감 외 서비스(아청심·정신·성인) ── -->
+<section class="sp sp-mid svc-common-sec" style="display:none">
+  <div class="inner">
+    <h2 class="sp-head">생각공작소는 이렇게 해요</h2>
+    <div class="diff">
+      <div class="d">
+        <div class="e">🧠</div>
+        <h4>임상심리사가 함께해요</h4>
+        <p>심리상담센터를 직접 운영해요. 검사부터 상담까지 자격 있는 임상심리사 선생님이 맡아요.</p>
+      </div>
+      <div class="d">
+        <div class="e">📊</div>
+        <h4>검사로 변화를 확인해요</h4>
+        <p>시작과 끝에 심리검사를 해서 무엇이 어떻게 달라졌는지 눈으로 확인해요.</p>
+      </div>
+      <div class="d">
+        <div class="e">🔍</div>
+        <h4>결과보다 과정을 봐요</h4>
+        <p>'오늘 잘했어요'로 끝내지 않아요. 어떤 표현과 감정, 집중의 순간이 있었는지 함께 봐요.</p>
+      </div>
+      <div class="d">
+        <div class="e">📝</div>
+        <h4>말보다 기록으로</h4>
+        <p>매 회기를 기록으로 남겨 정직하게 보여드려요.</p>
+      </div>
+    </div>
+  </div>
+  <button class="sp-next" aria-label="다음으로"><svg viewBox="0 0 48 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3 L24 11 L46 3"/></svg></button>
+</section>
+
 <!-- ── 페이지 4: 바우처 이용 절차 ── -->
 <section class="sp sp-mid tint">
   <div class="inner">
@@ -326,6 +356,8 @@ var svcShow;
     ['ogam', 'acheong', 'total', 'adult'].forEach(function (k) {
       document.querySelectorAll('.svc-' + k + '-sec').forEach(function (s) { s.style.display = (k === key) ? '' : 'none'; });
     });
+    // 공통 강점 = 오감 외 탭(아청심·정신·성인)에서만 노출 (오감은 자기 차별점이 있음)
+    document.querySelectorAll('.svc-common-sec').forEach(function (s) { s.style.display = (key === 'ogam') ? 'none' : ''; });
     if (window.updateNextBtns) window.updateNextBtns();
     return true;
   }
