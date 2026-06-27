@@ -87,6 +87,9 @@
   </div>
 </div>
 
+<!-- 폼 안내 토스트(임베드 폼이 요청 시 화면 하단에 표시) -->
+<div class="form-toast" id="formToast"></div>
+
 <!-- 우하단 플로팅 SNS 버튼 -->
 <div class="fab">
   <a class="f kakao" href="http://pf.kakao.com/_MnPkn" target="_blank" rel="noopener" aria-label="카카오톡 채널" title="카카오톡 채널">
@@ -135,6 +138,8 @@
   function sendVH() { if (childWin) { try { childWin.postMessage({ tfParent: 1, vh: window.innerHeight - navOffset() }, '*'); } catch (e) {} } }
   // GAS 폼 출처만 허용 — 호스트네임 정확/접미 매칭(부분문자열 'google'은 google.attacker.com도 통과해 위험)
   function okGasOrigin(o) { try { var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); } catch (e) { return false; } }
+  // 폼 검증 알림 토스트(임베드 시 폼이 부모에 요청 — iframe 내부 fixed는 실제 화면 하단이 아님)
+  function showFormToast(msg, kind) { var t = document.getElementById('formToast'); if (!t) return; t.textContent = msg; t.className = 'form-toast show' + (kind === 'error' ? ' err' : ''); clearTimeout(t._ft); t._ft = setTimeout(function () { t.className = 'form-toast'; }, 2300); }
   window.addEventListener('message', function (e) {
     if (!okGasOrigin(e.origin)) return;               // 폼(googleusercontent/script.google) 출처만
     var d = e.data; if (!d || d.tfApply !== 1) return;
@@ -144,8 +149,19 @@
     else if (d.type === 'height' && d.height) { f.style.height = d.height + 'px'; }
     else if (d.type === 'theme') { document.body.classList.toggle('form-dark', !!d.dark); }
     else if (d.type === 'scrolltop') { var t = f.getBoundingClientRect().top + window.pageYOffset - navOffset(); window.scrollTo({ top: Math.max(0, t), behavior: 'auto' }); }
+    else if (d.type === 'toast') { showFormToast(d.msg, d.kind); }
+    else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
   });
   window.addEventListener('resize', sendVH);
+})();
+
+// ── 리모콘(카톡·인스타·블로그)은 자주 묻는 질문 영역이 보일 때만 등장(모바일) ──
+(function () {
+  var faq = document.querySelector('.sec.tint');
+  if (!faq || !window.IntersectionObserver) return;
+  new IntersectionObserver(function (entries) {
+    document.body.classList.toggle('faq-visible', entries[0].isIntersecting);
+  }, { threshold: 0 }).observe(faq);
 })();
 
 // ── FAQ: 모바일에서는 한 번에 하나만 열림(다른 질문 열면 기존 것 닫힘) ──
