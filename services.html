@@ -267,9 +267,9 @@
     <div class="steps">
       <div class="step"><span class="n">1</span><b>신청·접수</b><p>거주지 행정복지센터에 직접 방문해 신청해요.</p></div>
       <span class="step-arrow"><svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1 L7 7 L1 13"/></svg></span>
-      <div class="step"><span class="n">2</span><b>발급·수령</b><p>자격 확인 후 국민행복카드가 발급돼요.<br class="mo">결정통지서는 문자·우편으로 받아요.</p></div>
+      <div class="step"><span class="n">2</span><b>발급·수령</b><p>자격 확인 후 국민행복카드가 발급돼요. <br class="mo">결정통지서는 문자·우편으로 받아요.</p></div>
       <span class="step-arrow"><svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1 L7 7 L1 13"/></svg></span>
-      <div class="step"><span class="n">3</span><b>센터 선택</b><p>제공기관으로 생각공작소를 선택해요.<br class="mo">통지서 전에 연락 주셔도 좋아요.</p></div>
+      <div class="step"><span class="n">3</span><b>센터 선택</b><p>제공기관으로 생각공작소를 선택해요. <br class="mo">통지서 전에 연락 주셔도 좋아요.</p></div>
       <span class="step-arrow"><svg viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1 L7 7 L1 13"/></svg></span>
       <div class="step"><span class="n">4</span><b>이용</b><p>정부지원금을 받아 바우처 서비스를 이용해요.</p></div>
     </div>
@@ -383,9 +383,8 @@ var svcShow;
     t.addEventListener('click', function () {
       if (window.svcShow) window.svcShow(t.dataset.svc);
       history.replaceState(null, '', '#' + t.dataset.svc);
-      // 새 서비스의 첫 콘텐츠 섹션(인트로 다음)으로 부드럽게 이동 → 콘텐츠 안에 머무름
-      var secs = [].slice.call(document.querySelectorAll('.sp.sp-mid')).filter(function (s) { return s.offsetParent !== null; });
-      if (secs[0]) window.scrollTo({ top: secs[0].getBoundingClientRect().top + window.pageYOffset - 60, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });   // 맨 위(첫 페이지)로 — 히어로 탭과 동일
+
     });
   });
   if ('IntersectionObserver' in window) {

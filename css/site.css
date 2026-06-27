@@ -327,10 +327,12 @@ footer .legal a:hover{ color:var(--g900); }
 .sp-mid{ display:flex; align-items:center; padding:28px 0 92px; }  /* 세로 중앙에서 살짝 위로(아래 여백↑) */
 .sp.tint{ background:var(--g50); }                     /* 바우처 절차 페이지 배경 */
 .sp .inner{ width:100%; max-width:var(--maxw-read); }   /* 760→900: 좌우 흰여백 과다 해소, 푸터·이야기와 폭 정합(2단 체계 본문 tier) */
-@media (max-width:760px){ .sp{ padding:32px 0 56px; } .sp1, .sp-mid{ align-items:flex-start; }
-  .sp-next{ display:none !important; }          /* 모바일=자유 스크롤 → 페이지 화살표 불필요 */
-  .sp.sp-money{ background:var(--g50); }         /* 의미형 구분 — 이용료(돈) 페이지를 옅은 회색으로(절차는 .tint로 별도 회색) */
-  .sp.tint{ min-height:0; padding-bottom:40px; } /* 마지막(절차)은 한 화면 강제 해제 — 푸터까지 빈 공간 제거 */
+@media (max-width:760px){ .sp{ padding:32px 0 56px; min-height:0; }   /* 모바일=자유 스크롤 → 섹션을 한 화면 강제(100vh) 안 함, content 높이로(바닥 흰 여백 제거) */
+  .sp1, .sp-mid{ align-items:flex-start; }
+  .sp-next{ display:none !important; }          /* 페이지 화살표 불필요 */
+  .sp.sp-money{ background:var(--g50); }         /* 돈(이용료) 페이지만 회색 */
+  .sp.tint{ background:#fff; padding-bottom:24px; } /* 절차는 흰색 — 회색(돈)과 분리(둘 다 회색이면 안 나뉨), 스텝 타임라인도 흰 배경에서 깔끔 */
+  footer{ margin-top:0; }                         /* 흰 여백(40px) 제거 — 절차(흰)와 푸터는 border-top 선 하나로 구분 */
 }
 
 /* 페이지 공통 헤더(2·4페이지) */
@@ -388,7 +390,7 @@ footer .legal a:hover{ color:var(--g900); }
 
 /* 한눈에 보기 */
 .facts{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:0 0 28px; }
-@media (max-width:640px){ .facts{ grid-template-columns:repeat(2,1fr); gap:9px; margin-top:20px; } }   /* 모바일: 이용료박스↔facts 간격↑(24px), 2x2 내부 간격↓(9px) */
+@media (max-width:640px){ .facts{ grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px; } .price{ margin-bottom:0; } }   /* 모바일: 이용료박스↔facts 간격 = 2x2 내부 간격(10px)로 동일 */
 .fact{ background:#fff; border:1px solid var(--g200); border-radius:16px; padding:18px 14px; text-align:center; }
 .fact .k{ display:block; font-size:12px; font-weight:700; color:var(--g500); margin-bottom:6px; }
 .fact .v{ display:block; font-size:18px; font-weight:800; color:var(--green); letter-spacing:-.4px; }
