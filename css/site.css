@@ -333,11 +333,12 @@ footer .legal a:hover{ color:var(--g900); }
 .sp-mid{ display:flex; align-items:center; padding:28px 0 92px; }  /* 세로 중앙에서 살짝 위로(아래 여백↑) */
 .sp.tint{ background:var(--g50); }                     /* 바우처 절차 페이지 배경 */
 .sp .inner{ width:100%; max-width:var(--maxw-read); }   /* 760→900: 좌우 흰여백 과다 해소, 푸터·이야기와 폭 정합(2단 체계 본문 tier) */
-@media (max-width:760px){ .sp{ padding:32px 0 32px; min-height:0; }   /* 모바일=자유 스크롤: 100vh 강제 안 함(content 높이) + 바닥 패딩 축소(이용료 회색 여백 과다 해소) */
+@media (max-width:760px){ .sp{ padding:36px 0 36px; min-height:0; }   /* 모바일 섹션 리듬 36(32→36, 더 넉넉) + 100vh 강제 해제 */
   .sp1, .sp-mid{ align-items:flex-start; }
+  .sp1{ padding-top:18px; }                      /* 첫 페이지(바우처 안내 박스)만 nav 아래 바짝 — 위 여백 과다 방지 */
   .sp-next{ display:none !important; }          /* 페이지 화살표 불필요 */
   .sp.sp-money{ background:var(--g50); }         /* 돈(이용료) 페이지만 회색 */
-  .sp.tint{ background:#fff; padding-bottom:24px; } /* 절차는 흰색 — 회색(돈)과 분리(둘 다 회색이면 안 나뉨), 스텝 타임라인도 흰 배경에서 깔끔 */
+  .sp.tint{ background:#fff; }                    /* 절차는 흰색(돈 회색과 분리), 아래 패딩은 .sp 36 그대로(위·아래 동일) */
   footer{ margin-top:0; }                         /* 흰 여백(40px) 제거 — 절차(흰)와 푸터는 border-top 선 하나로 구분 */
 }
 
@@ -381,7 +382,7 @@ footer .legal a:hover{ color:var(--g900); }
 .svc-stack{ display:grid; }
 .svc-stack > .svc-panel{ grid-area:1/1; display:block; visibility:hidden; opacity:0; transition:opacity .22s ease; pointer-events:none; }
 .svc-stack > .svc-panel.on{ visibility:visible; opacity:1; pointer-events:auto; }
-.svc-chip{ display:inline-block; font-size:12px; font-weight:700; color:var(--green); background:var(--green-bg); padding:5px 12px; border-radius:99px; margin-bottom:14px; }
+.svc-chip{ display:inline-block; font-size:12px; font-weight:700; color:var(--green); background:var(--green-bg); padding:5px 12px; border-radius:99px; margin-bottom:18px; }   /* 칩→제목 간격(14→18, 덜 빽빽하게) */
 .svc-panel h2{ font-size:28px; font-weight:800; letter-spacing:-.7px; margin:0 0 14px; }
 .svc-panel .lead{ font-size:18px; color:var(--g900); font-weight:600; line-height:1.8; margin:0 0 12px; }
 .svc-panel .desc{ font-size:16px; color:var(--g700); line-height:1.9; margin:0 0 28px; }
@@ -446,7 +447,7 @@ footer .legal a:hover{ color:var(--g900); }
   .diff-cf{ max-width:380px; margin:0 auto; align-self:auto; }
   .bn{ flex:none; }            /* 모바일은 등분 대신 자연 흐름(이미지 위 / 리스트 아래) */
   .bn .num{ font-size:26px; min-width:38px; }
-  .note-right{ margin-top:18px; }   /* '같이 봐요'↔'남는 시간도…' 사이 아주 살짝 더 */
+  .note-right{ margin-top:24px; }   /* '같이 봐요'↔'남는 시간도…' 간격(좁다 → 더 띄움) */
 }
 
 /* 차별점 노트 — 박스 바로 아래 오른쪽에 붙임 */
@@ -467,7 +468,7 @@ footer .legal a:hover{ color:var(--g900); }
 @media (max-width:760px){
   /* 전체를 흰 박스 하나로 감싸고, 안은 세로 타임라인(번호 점 + 연결선) — 개별 박스 X */
   .steps{ flex-direction:column; align-items:stretch; gap:0; margin:14px 0 8px;
-    background:#fff; border:1px solid var(--g200); border-radius:18px; padding:22px 20px; }
+    background:#fff; border:1px solid var(--g200); border-radius:18px; padding:30px 20px; }
   .step-arrow{ display:none; }
   .steps .step{ flex:none; display:grid; grid-template-columns:28px 1fr; column-gap:14px;
     background:none; border:none; border-radius:0; padding:0 0 26px; position:relative; }
