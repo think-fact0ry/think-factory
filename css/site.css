@@ -471,6 +471,7 @@ footer .legal a:hover{ color:var(--g900); }
 .vp{ position:relative; flex:1 1 0; min-width:0; border-radius:18px; overflow:hidden; cursor:pointer; background:#9aa3ae; transition:flex-grow .85s cubic-bezier(.4,0,.2,1); }
 .vp:hover, .vp.on{ flex-grow:3.2; }              /* 기본 동일 폭, 마우스 올리면 펼침(작아진 카드도 제목 2줄 안 잘리게 완만히) */
 .vp .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.7); font-size:13px; font-weight:600; }
+.vp .vph{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; } /* 핵심가치 사진(가로/세로 어느 쪽으로 잘려도 중앙 채움) */
 .vp .grad{ position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.66), rgba(0,0,0,.05) 52%); }
 .vp .cap{ position:absolute; left:20px; right:20px; bottom:10px; z-index:2; color:#fff; }
 .vp .num{ font-size:12px; font-weight:700; opacity:.85; letter-spacing:.05em; }
