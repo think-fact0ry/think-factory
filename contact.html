@@ -133,8 +133,10 @@
   var childWin = null;
   function navOffset() { return window.matchMedia('(max-width:760px)').matches ? 0 : 60; }
   function sendVH() { if (childWin) { try { childWin.postMessage({ tfParent: 1, vh: window.innerHeight - navOffset() }, '*'); } catch (e) {} } }
+  // GAS 폼 출처만 허용 — 호스트네임 정확/접미 매칭(부분문자열 'google'은 google.attacker.com도 통과해 위험)
+  function okGasOrigin(o) { try { var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); } catch (e) { return false; } }
   window.addEventListener('message', function (e) {
-    if (e.origin.indexOf('google') < 0) return;       // 폼은 google 도메인(googleusercontent)에서 옴
+    if (!okGasOrigin(e.origin)) return;               // 폼(googleusercontent/script.google) 출처만
     var d = e.data; if (!d || d.tfApply !== 1) return;
     childWin = e.source;
     document.body.classList.add('bridged');           // 브릿지 성립 표식(실패 시 nav/리모콘 기본 노출 폴백)
