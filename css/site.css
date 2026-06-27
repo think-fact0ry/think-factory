@@ -338,13 +338,17 @@ footer .legal a:hover{ color:var(--g900); }
   .sp1{ padding-top:18px; }                      /* 첫 페이지(바우처 안내 박스)만 nav 아래 바짝 — 위 여백 과다 방지 */
   .sp-next{ display:none !important; }          /* 페이지 화살표 불필요 */
   .sp.sp-money{ background:var(--g50); }         /* 돈(이용료) 페이지만 회색 */
-  .sp.tint{ background:#fff; }                    /* 절차는 흰색(돈 회색과 분리), 아래 패딩은 .sp 36 그대로(위·아래 동일) */
+  .sp.tint{ background:#fff; padding-top:56px; }  /* 절차는 흰색(돈 회색과 분리). 칩이 없어 헤딩이 바로 와 좁아 보이므로 위 패딩만 키워 균형(아래는 .sp 36) */
   footer{ margin-top:0; }                         /* 흰 여백(40px) 제거 — 절차(흰)와 푸터는 border-top 선 하나로 구분 */
 }
 
 /* 페이지 공통 헤더(2·4페이지) */
 .sp-head{ font-size:26px; font-weight:800; letter-spacing:-.6px; margin:0 0 18px; }
 @media (max-width:760px){ .sp-head{ font-size:22px; } }
+/* 모바일 전용 페이지 구분선 — 색으로 안 나뉘는 경계(intro↔차별점/강점)에. 양끝 페이드(=얇아 보임)·짧고 가운데 정렬 */
+.mdiv{ display:none; border:none; }
+@media (max-width:760px){ .mdiv{ display:block; height:2px; width:60%; max-width:220px; margin:0 auto 26px;
+  background:linear-gradient(to right, transparent 0%, var(--g200) 30%, var(--g200) 70%, transparent 100%); } }
 
 /* 아래로 내려가는 힌트 — > 모양을 90° 돌려(아래 방향) 가로로 길게, 하단 중앙 */
 .sp-next{ position:absolute; left:50%; bottom:14px; transform:translateX(-50%); background:none; border:none;
@@ -397,7 +401,7 @@ footer .legal a:hover{ color:var(--g900); }
 
 /* 한눈에 보기 */
 .facts{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:0 0 28px; }
-@media (max-width:640px){ .facts{ grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px; } .price{ margin-bottom:0; } }   /* 모바일: 이용료박스↔facts 간격 = 2x2 내부 간격(10px)로 동일 */
+@media (max-width:640px){ .facts{ grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px; margin-bottom:0; } .price{ margin-bottom:0; } }   /* 모바일: 이용료↔facts=10px 동일 + facts 바닥 마진 제거(섹션 패딩과 중복) */
 .fact{ background:#fff; border:1px solid var(--g200); border-radius:16px; padding:18px 14px; text-align:center; }
 .fact .k{ display:block; font-size:12px; font-weight:700; color:var(--g500); margin-bottom:6px; }
 .fact .v{ display:block; font-size:18px; font-weight:800; color:var(--green); letter-spacing:-.4px; }
