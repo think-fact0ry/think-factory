@@ -206,10 +206,14 @@
 (function () {
   var d = document.getElementById('drawer'), b = document.getElementById('hbBtn');
   if (d && b) {
-    var close = function () { d.classList.remove('open'); document.body.style.overflow = ''; };
-    b.addEventListener('click', function () { d.classList.add('open'); document.body.style.overflow = 'hidden'; });
-    d.addEventListener('click', function (e) { if (e.target.hasAttribute('data-close') || e.target.closest('a')) close(); });
-    window.addEventListener('resize', function () { if (window.innerWidth > 760 && d.classList.contains('open')) close(); });
+    var reset = function () { d.classList.remove('open'); document.body.style.overflow = ''; };
+    b.addEventListener('click', function () { d.classList.add('open'); document.body.style.overflow = 'hidden'; history.pushState({ drawer: 1 }, ''); });
+    d.addEventListener('click', function (e) {
+      if (e.target.closest('a')) { reset(); return; }
+      if (e.target.hasAttribute('data-close')) { reset(); if (history.state && history.state.drawer) history.back(); }
+    });
+    window.addEventListener('popstate', function () { if (d.classList.contains('open')) reset(); });
+    window.addEventListener('resize', function () { if (window.innerWidth > 760 && d.classList.contains('open')) reset(); });
   }
   var tb = document.getElementById('toTop');
   if (tb) {
