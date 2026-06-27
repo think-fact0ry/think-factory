@@ -6,7 +6,7 @@
 <title>상담 신청 | 생각공작소</title>
 <meta name="description" content="바우처가 없어도 신청할 수 있어요.">
 <meta property="og:title" content="생각공작소 바우처 신청">
-<meta property="og:description" content="아이 정보와 가능한 시간만 적으면 신청 완료. 자리가 생기는 대로 연락드려요.">
+<meta property="og:description" content="신청서 접수 → 선생님 스케줄 확인 → 자리가 생기는 대로 연락드려요.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://think-factory.kr/contact.html">
 <meta property="og:image" content="https://think-factory.kr/assets/og-image.jpg">
@@ -46,14 +46,14 @@
     <h2 style="margin-bottom:8px;">자주 묻는 질문</h2>
     <p class="sub" style="margin-bottom:24px;">바우처가 처음이어도 괜찮아요.</p>
     <div class="faq">
-      <details><summary>바우처가 처음인데 어떻게 신청하나요?</summary><p>거주지 행정복지센터에 방문해서 신청하시면 돼요. 신분증만 챙겨 가시면, 신청서·동의서 같은 서류는 센터에서 안내해드려요. 정해진 예산 안에서 선정돼서, 일찍 신청하실수록 유리해요.</p></details>
+      <details><summary>바우처가 처음인데 어떻게 신청하나요?</summary><p>거주지 행정복지센터에 방문해서 신청하시면 돼요. 신분증만 챙겨 가시면, 신청서·동의서 같은 서류는 센터에서 안내해드려요.</p></details>
       <details><summary>추천서가 필요하다는데, 어떻게 하나요?</summary><p>아동청소년 심리지원과 성인심리상담은 신청할 때 의사 소견서나 추천서가 필요해요. 추천서가 없으시면, 저희 임상심리사 선생님이 아이나 본인을 만나 평가한 뒤 작성해드릴 수 있어요. 성인심리상담은 심리검사 결과도 함께 필요한데, 그 검사도 저희가 진행해드려요.</p></details>
-      <details><summary>몇 세부터 이용할 수 있나요?</summary><p>오감쑥쑥은 만 4~6세, 아동청소년 심리지원은 18세 이하예요.</p></details>
-      <details><summary>본인부담금은 얼마인가요?</summary><p>오감쑥쑥은 소득 등급에 따라 월 2만 6천 원부터예요. 등급은 바우처를 신청하실 때 소득 기준으로 정해져요.</p></details>
-      <details><summary>바우처 없이도 받을 수 있나요?</summary><p>네. 오감쑥쑥은 바우처 없이도 월 13만 원에 이용하실 수 있어요.</p></details>
+      <details><summary>몇 세부터 이용할 수 있나요?</summary><p>오감쑥쑥 바우처 서비스는 만 4~6세, 아동청소년 심리지원 서비스는 18세 이하예요.</p></details>
+      <details><summary>본인부담금은 얼마인가요?</summary><p>오감쑥쑥 서비스는 소득 등급에 따라 달라져요. 등급은 바우처를 신청하실 때 소득 기준으로 정해져요.</p></details>
+      <details><summary>바우처 없이도 받을 수 있나요?</summary><p>오감쑥쑥은 바우처 없이도 월 13만 원에 이용하실 수 있어요.</p></details>
       <details><summary>선생님이 집으로 오는 건가요?</summary><p>네. 아이가 가장 편안한 자기 공간에서 1:1로 진행해요. 부모님이 이동하거나 대기하실 필요가 없어요.</p></details>
       <details><summary>어느 지역까지 찾아오나요?</summary><p>재가방문은 인천 전 지역으로, 선생님이 아이의 가정으로 직접 찾아가요.</p></details>
-      <details><summary>형제도 같이 받을 수 있나요?</summary><p>네. 형제가 둘 다 만 4~6세면 함께 받으실 수 있어요. 둘이 함께하면 60분으로 진행하고, 아이마다 각각 바우처를 신청하시면 돼요.</p></details>
+      <details><summary>형제도 같이 받을 수 있나요?</summary><p>둘이 함께하면 60분으로 진행하고, 아이마다 각각 바우처를 신청하시면 돼요.</p></details>
       <details><summary>체험해볼 수 있나요?</summary><p>따로 체험은 진행하고 있지 않아요. 첫 회기는 선생님과 친해지고, 부모님이 사전 검사를 하는 시간이에요. 혹시 잘 맞지 않으면 중간에 멈추실 수 있고, 그동안 받은 회기의 본인부담금만 내시면 돼요.</p></details>
     </div>
   </div>
@@ -123,6 +123,20 @@
   function toggle() { b.classList.toggle('show', window.pageYOffset > 300); }
   window.addEventListener('scroll', toggle, { passive: true });
   toggle();
+})();
+
+// ── FAQ: 모바일에서는 한 번에 하나만 열림(다른 질문 열면 기존 것 닫힘) ──
+(function () {
+  var items = document.querySelectorAll('.faq details');
+  if (!items.length) return;
+  var mq = window.matchMedia('(max-width:760px)');
+  items.forEach(function (d) {
+    d.addEventListener('toggle', function () {
+      if (d.open && mq.matches) {
+        items.forEach(function (o) { if (o !== d) o.open = false; });
+      }
+    });
+  });
 })();
 </script>
 
