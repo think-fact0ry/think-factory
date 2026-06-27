@@ -359,6 +359,7 @@ var svcShow;
     // 공통 강점 = 오감 외 탭(아청심·정신·성인)에서만 노출 (오감은 자기 차별점이 있음)
     document.querySelectorAll('.svc-common-sec').forEach(function (s) { s.style.display = (key === 'ogam') ? 'none' : ''; });
     if (window.updateNextBtns) window.updateNextBtns();
+    if (window.applyAltBg) window.applyAltBg();   // 탭 바뀌면 보이는 섹션이 달라지므로 짝수 회색 재계산
     return true;
   }
   svcShow = show;
@@ -369,6 +370,17 @@ var svcShow;
   });
   var h = (location.hash || '').replace('#', '');
   if (h) show(h);
+})();
+
+// ── 모바일 페이지 구분: 보이는 .sp 섹션 중 짝수(2·4…)에 옅은 회색 부여 (display:none이 섞여 nth-of-type 불가 → JS) ──
+(function () {
+  function apply() {
+    var secs = [].slice.call(document.querySelectorAll('.sp')).filter(function (s) { return s.offsetParent !== null; });
+    secs.forEach(function (s, i) { s.classList.toggle('sp-grey', i % 2 === 1); }); // 0-based 홀수 = 화면상 짝수 페이지
+  }
+  window.applyAltBg = apply;
+  apply();
+  window.addEventListener('resize', apply);
 })();
 
 // ── PC 풀페이지 스크롤 — 휠 1회 = 1섹션, 600ms 이징 (홈과 동일) ──
