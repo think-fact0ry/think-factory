@@ -354,9 +354,10 @@ footer .legal a:hover{ color:var(--g900); }
 .svc-tab.on{ color:#fff; background:var(--green); }
 @media (max-width:760px){ .svc-tab{ font-size:14px; padding:9px 14px; } }
 
-/* 패널 — 선택된 것만 노출 */
-.svc-panel{ display:none; }
-.svc-panel.on{ display:block; }
+/* 패널 — 탭 전환 시 박스가 위아래로 안 움직이게 4개를 같은 그리드 셀에 겹쳐 쌓아 컨테이너 높이를 가장 큰 패널로 고정 */
+.svc-stack{ display:grid; }
+.svc-stack > .svc-panel{ grid-area:1/1; display:block; visibility:hidden; opacity:0; transition:opacity .22s ease; pointer-events:none; }
+.svc-stack > .svc-panel.on{ visibility:visible; opacity:1; pointer-events:auto; }
 .svc-chip{ display:inline-block; font-size:12px; font-weight:700; color:var(--green); background:var(--green-bg); padding:5px 12px; border-radius:99px; margin-bottom:14px; }
 .svc-panel h2{ font-size:28px; font-weight:800; letter-spacing:-.7px; margin:0 0 14px; }
 .svc-panel .lead{ font-size:18px; color:var(--g900); font-weight:600; line-height:1.8; margin:0 0 12px; }
@@ -366,7 +367,8 @@ footer .legal a:hover{ color:var(--g900); }
 /* 이미지 자리(추후 실제 사진 교체) — img2.png 참고: 텍스트 아래 3장 가로열 */
 .ph-gallery{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 0 32px; }
 .ph-img{ aspect-ratio:1/1; width:100%; object-fit:cover; background:var(--g100); border-radius:16px; display:block; }
-@media (max-width:520px){ .ph-gallery{ gap:8px; } .ph-img{ border-radius:12px; } }
+.ph-ph{ aspect-ratio:1/1; width:100%; background:var(--g100); border-radius:16px; } /* 이미지 넣기 전 회색 placeholder */
+@media (max-width:520px){ .ph-gallery{ gap:8px; } .ph-img,.ph-ph{ border-radius:12px; } }
 
 /* 한눈에 보기 */
 .facts{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:0 0 28px; }
