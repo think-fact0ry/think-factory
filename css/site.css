@@ -288,7 +288,7 @@ footer .legal a:hover{ color:var(--g900); }
 .fold .hero .inner{ position:relative; z-index:1; }
 .fold .hero h1{ color:var(--ink-on-dark); text-shadow:0 1px 16px rgba(0,0,0,.3); }
 .fold .hero h1 b{ color:#5cc08a; }   /* 생각공작소 = 초록 (어두운 영상 위 가독 위해 밝은 브랜드그린) */
-.fold .hero p{ color:rgba(255,255,255,.9); text-shadow:0 1px 12px rgba(0,0,0,.32); }
+.fold .hero p{ color:rgba(249,251,250,.9); text-shadow:0 1px 12px rgba(0,0,0,.32); }
 .fold .hero .btn.soft{ background:rgba(255,255,255,.92); color:var(--g900); }
 @media (prefers-reduced-motion:reduce){ .hero-bg .hbv{ transition:none; } }
 
@@ -441,7 +441,7 @@ footer .legal a:hover{ color:var(--g900); }
 .st-hero{ position:relative; overflow:hidden; min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); display:flex; align-items:flex-end; }
 .st-hero .inner{ position:relative; z-index:1; width:100%; max-width:none; margin:0; padding-bottom:60px; padding-left:clamp(20px, 4vw, 64px); }
 .st-hero h1{ color:var(--ink-on-dark); font-size:46px; font-weight:800; letter-spacing:-1.3px; line-height:1.22; margin:6px 0 16px; text-shadow:0 1px 16px rgba(0,0,0,.35); }
-.st-hero .st-lead{ color:rgba(255,255,255,.92); font-size:19px; line-height:1.7; max-width:600px; margin:0; text-shadow:0 1px 12px rgba(0,0,0,.45); }
+.st-hero .st-lead{ color:rgba(249,251,250,.92); font-size:19px; line-height:1.7; max-width:600px; margin:0; text-shadow:0 1px 12px rgba(0,0,0,.45); }
 .eyebrow.light{ color:#9fe0bb; }
 @media (max-width:760px){ .st-hero h1{ font-size:30px; } .st-hero .st-lead{ font-size:16px; } .st-hero .inner{ padding-bottom:40px; } }
 
