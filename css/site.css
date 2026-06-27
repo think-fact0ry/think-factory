@@ -447,7 +447,7 @@ footer .legal a:hover{ color:var(--g900); }
 .bn .tx h4{ font-size:18px; font-weight:800; letter-spacing:-.4px; margin:2px 0 10px; }
 .bn .tx p{ font-size:14.5px; color:var(--g700); line-height:1.68; margin:0; }
 @media (max-width:760px){
-  .diff2{ grid-template-columns:1fr; gap:28px; align-items:start; }
+  .diff2{ grid-template-columns:1fr; gap:24px; align-items:start; }
   .diff-cf{ max-width:380px; margin:0 auto; align-self:auto; }
   .bn{ flex:none; padding:16px 0 14px; }   /* 등분 대신 자연 흐름 + 위16/아래14로 시각 중앙 보정 */
   .bn .num{ font-size:26px; min-width:38px; }
