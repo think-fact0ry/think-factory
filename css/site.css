@@ -327,7 +327,7 @@ footer .legal a:hover{ color:var(--g900); }
 .sp-mid{ display:flex; align-items:center; padding:28px 0 92px; }  /* 세로 중앙에서 살짝 위로(아래 여백↑) */
 .sp.tint{ background:var(--g50); }                     /* 바우처 절차 페이지 배경 */
 .sp .inner{ width:100%; max-width:var(--maxw-read); }   /* 760→900: 좌우 흰여백 과다 해소, 푸터·이야기와 폭 정합(2단 체계 본문 tier) */
-@media (max-width:760px){ .sp{ padding:32px 0 56px; min-height:0; }   /* 모바일=자유 스크롤 → 섹션을 한 화면 강제(100vh) 안 함, content 높이로(바닥 흰 여백 제거) */
+@media (max-width:760px){ .sp{ padding:32px 0 32px; min-height:0; }   /* 모바일=자유 스크롤: 100vh 강제 안 함(content 높이) + 바닥 패딩 축소(이용료 회색 여백 과다 해소) */
   .sp1, .sp-mid{ align-items:flex-start; }
   .sp-next{ display:none !important; }          /* 페이지 화살표 불필요 */
   .sp.sp-money{ background:var(--g50); }         /* 돈(이용료) 페이지만 회색 */
@@ -440,6 +440,7 @@ footer .legal a:hover{ color:var(--g900); }
   .diff-cf{ max-width:380px; margin:0 auto; align-self:auto; }
   .bn{ flex:none; }            /* 모바일은 등분 대신 자연 흐름(이미지 위 / 리스트 아래) */
   .bn .num{ font-size:26px; min-width:38px; }
+  .note-right{ margin-top:18px; }   /* '같이 봐요'↔'남는 시간도…' 사이 아주 살짝 더 */
 }
 
 /* 차별점 노트 — 박스 바로 아래 오른쪽에 붙임 */
@@ -458,15 +459,10 @@ footer .legal a:hover{ color:var(--g900); }
 .step-arrow{ flex:0 0 auto; display:flex; align-items:center; color:var(--g400); }
 .step-arrow svg{ width:11px; height:18px; }
 @media (max-width:760px){
-  /* 세로 타임라인 — 번호 점 + 세로 연결선, 위→아래로 읽힘(2x2 순서꼬임·화살표 불필요, 한 화면에 컴팩트하게) */
-  .steps{ flex-direction:column; align-items:stretch; gap:0; margin:14px 0 8px; }   /* 제목↔첫 스텝 간격↑ */
+  /* 세로 스택 — 각 스텝을 흰 박스로(데스크톱 박스 스타일 재사용, 화살표 대신 번호로 순서) */
+  .steps{ flex-direction:column; align-items:stretch; gap:10px; margin:14px 0 8px; }   /* 제목↔첫 스텝 간격↑ */
   .step-arrow{ display:none; }
-  .steps .step{ flex:none; display:grid; grid-template-columns:28px 1fr; column-gap:14px;
-    background:none; border:none; border-radius:0; padding:0 0 30px; position:relative; }
-  .step .n{ grid-column:1; grid-row:1 / span 2; margin-bottom:0; }
-  .step b, .step p{ grid-column:2; }
-  .step b{ margin:2px 0 8px; min-height:28px; display:flex; align-items:center; }
-  .steps .step:not(:last-child)::before{ content:''; position:absolute; left:13px; top:32px; bottom:0; width:2px; background:var(--g200); }
+  .steps .step{ flex:none; }
 }
 .step{ background:#fff; border:1px solid var(--g200); border-radius:18px; padding:20px 18px; }
 .step .n{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:99px;
