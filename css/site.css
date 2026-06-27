@@ -321,7 +321,7 @@ footer .legal a:hover{ color:var(--g900); }
 /* ── 서비스 안내 — 풀페이지(JS, 홈과 동일 600ms 이징) + 탭 ── */
 /* 한 화면씩 고정. 스크롤 제어는 JS가 전담(CSS 스냅 미사용 — 홈과 같은 결, 자유 흔들림 없음) */
 .sp{ position:relative; min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); padding:40px 0; }
-.sp1{ display:flex; align-items:center; padding:28px 0 92px; }  /* 세로 중앙에서 살짝 위로(아래 여백↑) — sp-mid와 통일, 화살표 무게로 처져 보이던 것 보정 */
+.sp1{ display:flex; align-items:center; padding:28px 0 56px; }  /* 세로 중앙에서 살짝 위로(아래 여백↑) — 화살표 무게 보정, 92는 과해 56으로 */
 .sp-mid{ display:flex; align-items:center; padding:28px 0 92px; }  /* 세로 중앙에서 살짝 위로(아래 여백↑) */
 .sp.tint{ background:var(--g50); }                     /* 바우처 절차 페이지 배경 */
 .sp .inner{ width:100%; max-width:760px; }
