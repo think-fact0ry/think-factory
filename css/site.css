@@ -347,7 +347,7 @@ footer .legal a:hover{ color:var(--g900); }
 @media (max-width:760px){ .sp-head{ font-size:22px; } }
 /* 모바일 전용 페이지 구분선 — 색으로 안 나뉘는 경계(intro↔차별점/강점)에. 양끝 페이드(=얇아 보임)·짧고 가운데 정렬 */
 .mdiv{ display:none; border:none; }
-@media (max-width:760px){ .mdiv{ display:block; height:2px; width:60%; max-width:220px; margin:0 auto 26px;
+@media (max-width:760px){ .mdiv{ display:block; height:2px; width:60%; max-width:220px; margin:0 auto;
   background:linear-gradient(to right, transparent 0%, var(--g200) 30%, var(--g200) 70%, transparent 100%); } }
 
 /* 아래로 내려가는 힌트 — > 모양을 90° 돌려(아래 방향) 가로로 길게, 하단 중앙 */
