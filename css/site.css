@@ -449,7 +449,7 @@ footer .legal a:hover{ color:var(--g900); }
 @media (max-width:760px){
   .diff2{ grid-template-columns:1fr; gap:28px; align-items:start; }
   .diff-cf{ max-width:380px; margin:0 auto; align-self:auto; }
-  .bn{ flex:none; }            /* 모바일은 등분 대신 자연 흐름(이미지 위 / 리스트 아래) */
+  .bn{ flex:none; padding:16px 0 14px; }   /* 등분 대신 자연 흐름 + 위16/아래14로 시각 중앙 보정 */
   .bn .num{ font-size:26px; min-width:38px; }
   .note-right{ margin-top:24px; }   /* '같이 봐요'↔'남는 시간도…' 간격(좁다 → 더 띄움) */
 }
