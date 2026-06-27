@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="css/site.css">
 </head>
-<body>
+<body class="apply-page">
 
 <nav class="nav">
   <div class="inner">
@@ -41,7 +41,7 @@
 <iframe class="apply-frame" title="오감쑥쑥 바우처 신청폼"
   src="https://script.google.com/macros/s/AKfycbyDLm7VCcRNmPrK08waOFx3JHt9lvxP22coImDfK9xfWNheiS11My2xcJJrqrE6GVRPSw/exec"></iframe>
 
-<section class="sec tint">
+<section class="sec tint faqsec">
   <div class="inner">
     <h2 style="margin-bottom:8px;">자주 묻는 질문</h2>
     <p class="sub" style="margin-bottom:24px;">바우처가 처음이어도 괜찮아요.</p>
@@ -158,7 +158,8 @@
 // ── 리모콘(카톡·인스타·블로그)은 자주 묻는 질문 영역이 보일 때만 등장(모바일) ──
 (function () {
   var faq = document.querySelector('.sec.tint');
-  if (!faq || !window.IntersectionObserver) return;
+  if (!faq) return;
+  if (!window.IntersectionObserver) { document.body.classList.add('faq-visible'); return; }  // 옵저버 없으면 nav/리모콘 항상 노출(폴백)
   new IntersectionObserver(function (entries) {
     document.body.classList.toggle('faq-visible', entries[0].isIntersecting);
   }, { threshold: 0 }).observe(faq);
