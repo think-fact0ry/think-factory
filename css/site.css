@@ -330,6 +330,7 @@ footer .legal a:hover{ color:var(--g900); }
 @media (max-width:760px){ .sp{ padding:32px 0 56px; } .sp1, .sp-mid{ align-items:flex-start; }
   .sp-next{ display:none !important; }          /* 모바일=자유 스크롤 → 페이지 화살표 불필요 */
   .sp.sp-money{ background:var(--g50); }         /* 의미형 구분 — 이용료(돈) 페이지를 옅은 회색으로(절차는 .tint로 별도 회색) */
+  .sp.tint{ min-height:0; padding-bottom:40px; } /* 마지막(절차)은 한 화면 강제 해제 — 푸터까지 빈 공간 제거 */
 }
 
 /* 페이지 공통 헤더(2·4페이지) */
@@ -378,7 +379,7 @@ footer .legal a:hover{ color:var(--g900); }
 
 /* 한눈에 보기 */
 .facts{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:0 0 28px; }
-@media (max-width:640px){ .facts{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:640px){ .facts{ grid-template-columns:repeat(2,1fr); gap:9px; margin-top:20px; } }   /* 모바일: 이용료박스↔facts 간격↑(24px), 2x2 내부 간격↓(9px) */
 .fact{ background:#fff; border:1px solid var(--g200); border-radius:16px; padding:18px 14px; text-align:center; }
 .fact .k{ display:block; font-size:12px; font-weight:700; color:var(--g500); margin-bottom:6px; }
 .fact .v{ display:block; font-size:18px; font-weight:800; color:var(--green); letter-spacing:-.4px; }
@@ -424,7 +425,7 @@ footer .legal a:hover{ color:var(--g900); }
 .bn .tx h4{ font-size:18px; font-weight:800; letter-spacing:-.4px; margin:2px 0 10px; }
 .bn .tx p{ font-size:14.5px; color:var(--g700); line-height:1.68; margin:0; }
 @media (max-width:760px){
-  .diff2{ grid-template-columns:1fr; gap:20px; align-items:start; }
+  .diff2{ grid-template-columns:1fr; gap:28px; align-items:start; }
   .diff-cf{ max-width:380px; margin:0 auto; align-self:auto; }
   .bn{ flex:none; }            /* 모바일은 등분 대신 자연 흐름(이미지 위 / 리스트 아래) */
   .bn .num{ font-size:26px; min-width:38px; }
@@ -440,13 +441,13 @@ footer .legal a:hover{ color:var(--g900); }
 .step-arrow svg{ width:11px; height:18px; }
 @media (max-width:760px){
   /* 세로 타임라인 — 번호 점 + 세로 연결선, 위→아래로 읽힘(2x2 순서꼬임·화살표 불필요, 한 화면에 컴팩트하게) */
-  .steps{ flex-direction:column; align-items:stretch; gap:0; margin-bottom:8px; }
+  .steps{ flex-direction:column; align-items:stretch; gap:0; margin:14px 0 8px; }   /* 제목↔첫 스텝 간격↑ */
   .step-arrow{ display:none; }
   .steps .step{ flex:none; display:grid; grid-template-columns:28px 1fr; column-gap:14px;
-    background:none; border:none; border-radius:0; padding:0 0 24px; position:relative; }
+    background:none; border:none; border-radius:0; padding:0 0 30px; position:relative; }
   .step .n{ grid-column:1; grid-row:1 / span 2; margin-bottom:0; }
   .step b, .step p{ grid-column:2; }
-  .step b{ margin:0 0 4px; min-height:28px; display:flex; align-items:center; }
+  .step b{ margin:2px 0 8px; min-height:28px; display:flex; align-items:center; }
   .steps .step:not(:last-child)::before{ content:''; position:absolute; left:13px; top:32px; bottom:0; width:2px; background:var(--g200); }
 }
 .step{ background:#fff; border:1px solid var(--g200); border-radius:18px; padding:20px 18px; }
