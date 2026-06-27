@@ -34,6 +34,16 @@
   </div>
 </nav>
 
+<!-- 스크롤 시 재등장하는 슬림 서비스탭 — 히어로 탭이 화면 밖으로 나가면 상단에 붙음(영구 2번째 내비 아님) -->
+<div class="svc-sticky" id="svcSticky" aria-hidden="true">
+  <div class="inner">
+    <button class="sst on" data-svc="ogam">오감쑥쑥</button>
+    <button class="sst" data-svc="acheong">아동청소년</button>
+    <button class="sst" data-svc="total">정신건강</button>
+    <button class="sst" data-svc="adult">성인심리</button>
+  </div>
+</div>
+
 <!-- ── 페이지 1: 서비스 안내(박스) + 오감 바우처 소개 ── -->
 <section class="sp sp1">
   <div class="inner">
@@ -147,6 +157,20 @@
   <button class="sp-next" aria-label="다음으로"><svg viewBox="0 0 48 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3 L24 11 L46 3"/></svg></button>
 </section>
 
+<!-- ── 공통 강점 — 오감 외 서비스(아청심·정신·성인): 돈보다 가치 먼저(번호 리스트, 이모지 폐기 §4) ── -->
+<section class="sp sp-mid svc-common-sec" style="display:none">
+  <div class="inner">
+    <h2 class="sp-head">생각공작소는 이렇게 해요</h2>
+    <div class="feats">
+      <div class="feat"><div class="fn">01</div><h4>임상심리사가 함께해요</h4><p>심리상담센터를 직접 운영해요. 검사부터 상담까지 자격 있는 임상심리사 선생님이 맡아요.</p></div>
+      <div class="feat"><div class="fn">02</div><h4>검사로 변화를 확인해요</h4><p>시작과 끝에 심리검사를 해서 무엇이 어떻게 달라졌는지 눈으로 확인해요.</p></div>
+      <div class="feat"><div class="fn">03</div><h4>결과보다 과정을 봐요</h4><p>'오늘 잘했어요'로 끝내지 않아요. 어떤 표현과 감정, 집중의 순간이 있었는지 함께 봐요.</p></div>
+      <div class="feat"><div class="fn">04</div><h4>말보다 기록으로</h4><p>매 회기를 기록으로 남겨 정직하게 보여드려요.</p></div>
+    </div>
+  </div>
+  <button class="sp-next" aria-label="다음으로"><svg viewBox="0 0 48 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3 L24 11 L46 3"/></svg></button>
+</section>
+
 <!-- ── 이용 안내 — 아동청소년 심리지원 (탭) ── -->
 <section class="sp sp-mid svc-acheong-sec sp-money" style="display:none">
   <div class="inner">
@@ -236,36 +260,6 @@
   <button class="sp-next" aria-label="다음으로"><svg viewBox="0 0 48 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3 L24 11 L46 3"/></svg></button>
 </section>
 
-<!-- ── 공통 강점 — 오감 외 서비스(아청심·정신·성인) ── -->
-<section class="sp sp-mid svc-common-sec" style="display:none">
-  <div class="inner">
-    <h2 class="sp-head">생각공작소는 이렇게 해요</h2>
-    <div class="diff">
-      <div class="d">
-        <div class="e">🧠</div>
-        <h4>임상심리사가 함께해요</h4>
-        <p>심리상담센터를 직접 운영해요. 검사부터 상담까지 자격 있는 임상심리사 선생님이 맡아요.</p>
-      </div>
-      <div class="d">
-        <div class="e">📊</div>
-        <h4>검사로 변화를 확인해요</h4>
-        <p>시작과 끝에 심리검사를 해서 무엇이 어떻게 달라졌는지 눈으로 확인해요.</p>
-      </div>
-      <div class="d">
-        <div class="e">🔍</div>
-        <h4>결과보다 과정을 봐요</h4>
-        <p>'오늘 잘했어요'로 끝내지 않아요. 어떤 표현과 감정, 집중의 순간이 있었는지 함께 봐요.</p>
-      </div>
-      <div class="d">
-        <div class="e">📝</div>
-        <h4>말보다 기록으로</h4>
-        <p>매 회기를 기록으로 남겨 정직하게 보여드려요.</p>
-      </div>
-    </div>
-  </div>
-  <button class="sp-next" aria-label="다음으로"><svg viewBox="0 0 48 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3 L24 11 L46 3"/></svg></button>
-</section>
-
 <!-- ── 페이지 4: 바우처 이용 절차 ── -->
 <section class="sp sp-mid tint">
   <div class="inner">
@@ -341,6 +335,7 @@ var svcShow;
     if (!target) return false;   // 매칭 안 되는 해시면 현재 화면 그대로 (빈 화면 방지)
     panels.forEach(function (p) { p.classList.toggle('on', p === target); });
     tabs.forEach(function (t) { t.classList.toggle('on', t.dataset.svc === key); });
+    document.querySelectorAll('.sst').forEach(function (t) { t.classList.toggle('on', t.dataset.svc === key); }); // sticky 서비스탭 동기화
     // 서비스별 이용안내(+오감 차별점) 섹션은 해당 탭일 때만 노출
     ['ogam', 'acheong', 'total', 'adult'].forEach(function (k) {
       document.querySelectorAll('.svc-' + k + '-sec').forEach(function (s) { s.style.display = (k === key) ? '' : 'none'; });
@@ -377,6 +372,27 @@ var svcShow;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || imgs.length < 2) return;
     setInterval(function () { imgs[i].classList.remove('on'); i = (i + 1) % imgs.length; imgs[i].classList.add('on'); }, 5000);
   }).catch(function () {});
+})();
+
+// ── 스크롤 시 슬림 서비스탭 재등장 — 히어로 탭이 화면 밖으로 나가면 상단 sticky ──
+(function () {
+  var bar = document.getElementById('svcSticky');
+  var hero = document.querySelector('.svc-hero-box');
+  if (!bar || !hero) return;
+  bar.querySelectorAll('.sst').forEach(function (t) {
+    t.addEventListener('click', function () {
+      if (window.svcShow) window.svcShow(t.dataset.svc);
+      history.replaceState(null, '', '#' + t.dataset.svc);
+      // 새 서비스의 첫 콘텐츠 섹션(인트로 다음)으로 부드럽게 이동 → 콘텐츠 안에 머무름
+      var secs = [].slice.call(document.querySelectorAll('.sp.sp-mid')).filter(function (s) { return s.offsetParent !== null; });
+      if (secs[0]) window.scrollTo({ top: secs[0].getBoundingClientRect().top + window.pageYOffset - 60, behavior: 'smooth' });
+    });
+  });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      bar.classList.toggle('show', !es[0].isIntersecting);   // 히어로 탭이 안 보이면 sticky 표시
+    }, { rootMargin: '-60px 0px 0px 0px', threshold: 0 }).observe(hero);
+  }
 })();
 
 // ── PC 풀페이지 스크롤 — 휠 1회 = 1섹션, 600ms 이징 (홈과 동일) ──
