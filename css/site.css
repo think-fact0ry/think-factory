@@ -5,6 +5,7 @@
   --green:#3a8a5f; --green-dark:#2f6f4d; --green-bg:#e9f4ee; --red:#f04452;
   --ink-on-dark:#F9FBFA; /* 어두운 배경 위 흰 텍스트 — 순백(#fff) 금지(헐레이션). 원칙 §시각 참조 */
   --maxw:1040px;
+  --maxw-read:900px; /* 2단 폭 체계 — 시각/갤러리=inner-wide(1180), 본문·표·텍스트=읽기 폭(900). 푸터도 본문폭에 맞춤 */
   /* 그림자: 검정 대신 그린 틴트 · 2겹 (디자인 라운드 2) */
   --sh1:0 1px 2px rgba(47,111,77,.05), 0 4px 14px rgba(47,111,77,.06);
   --sh2:0 2px 8px rgba(47,111,77,.08), 0 12px 30px rgba(47,111,77,.12);
@@ -325,7 +326,7 @@ footer .legal a:hover{ color:var(--g900); }
 .sp1{ display:flex; align-items:center; padding:28px 0 56px; }  /* 세로 중앙에서 살짝 위로(아래 여백↑) — 화살표 무게 보정, 92는 과해 56으로 */
 .sp-mid{ display:flex; align-items:center; padding:28px 0 92px; }  /* 세로 중앙에서 살짝 위로(아래 여백↑) */
 .sp.tint{ background:var(--g50); }                     /* 바우처 절차 페이지 배경 */
-.sp .inner{ width:100%; max-width:760px; }
+.sp .inner{ width:100%; max-width:var(--maxw-read); }   /* 760→900: 좌우 흰여백 과다 해소, 푸터·이야기와 폭 정합(2단 체계 본문 tier) */
 @media (max-width:760px){ .sp{ padding:32px 0 56px; } .sp1, .sp-mid{ align-items:flex-start; }
   .sp-next{ display:none !important; }          /* 모바일=자유 스크롤 → 페이지 화살표 불필요 */
   .sp.sp-grey{ background:var(--g50); }          /* 대신 짝수 페이지를 옅은 회색으로 구분(JS가 보이는 섹션 기준 교차 부여) */
@@ -471,6 +472,7 @@ footer .legal a:hover{ color:var(--g900); }
 
 /* P3 핵심가치 아코디언 (세로 사진 패널) */
 .inner-wide{ max-width:1180px; width:100%; margin:0 auto; padding:0 20px; }
+footer .inner{ max-width:var(--maxw-read); }   /* 2단 체계: 푸터는 본문폭(900)에 맞춤 — 콘텐츠보다 넓어 보이던 문제 해소 */
 .val-head{ text-align:center; font-size:28px; font-weight:800; letter-spacing:-.7px; margin:6px 0 0; }
 .val-acc{ display:flex; gap:8px; height:56vh; margin-top:26px; }
 .vp{ position:relative; flex:1 1 0; min-width:0; border-radius:18px; overflow:hidden; cursor:pointer; background:#9aa3ae; transition:flex-grow .85s cubic-bezier(.4,0,.2,1); }
