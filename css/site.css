@@ -459,10 +459,17 @@ footer .legal a:hover{ color:var(--g900); }
 .step-arrow{ flex:0 0 auto; display:flex; align-items:center; color:var(--g400); }
 .step-arrow svg{ width:11px; height:18px; }
 @media (max-width:760px){
-  /* 세로 스택 — 각 스텝을 흰 박스로(데스크톱 박스 스타일 재사용, 화살표 대신 번호로 순서) */
-  .steps{ flex-direction:column; align-items:stretch; gap:10px; margin:14px 0 8px; }   /* 제목↔첫 스텝 간격↑ */
+  /* 전체를 흰 박스 하나로 감싸고, 안은 세로 타임라인(번호 점 + 연결선) — 개별 박스 X */
+  .steps{ flex-direction:column; align-items:stretch; gap:0; margin:14px 0 8px;
+    background:#fff; border:1px solid var(--g200); border-radius:18px; padding:22px 20px; }
   .step-arrow{ display:none; }
-  .steps .step{ flex:none; }
+  .steps .step{ flex:none; display:grid; grid-template-columns:28px 1fr; column-gap:14px;
+    background:none; border:none; border-radius:0; padding:0 0 26px; position:relative; }
+  .steps .step:last-child{ padding-bottom:0; }
+  .step .n{ grid-column:1; grid-row:1 / span 2; margin-bottom:0; }
+  .step b, .step p{ grid-column:2; }
+  .step b{ margin:2px 0 6px; min-height:28px; display:flex; align-items:center; }
+  .steps .step:not(:last-child)::before{ content:''; position:absolute; left:13px; top:32px; bottom:0; width:2px; background:var(--g200); }
 }
 .step{ background:#fff; border:1px solid var(--g200); border-radius:18px; padding:20px 18px; }
 .step .n{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:99px;
