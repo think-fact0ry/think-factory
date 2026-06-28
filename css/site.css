@@ -445,7 +445,7 @@ footer .legal a:hover{ color:var(--g900); }
 .bn{ flex:1 1 0; display:grid; grid-template-columns:auto 1fr; column-gap:20px; padding:14px 0; border-top:1px solid var(--g200); align-items:start; align-content:center; }
 .bn:first-child{ border-top:none; padding-top:0; }
 .bn .num{ font-size:30px; font-weight:800; color:var(--green); line-height:1; letter-spacing:-1.5px; min-width:42px; }
-.bn .tx h4{ font-size:18px; font-weight:800; letter-spacing:-.4px; margin:2px 0 10px; }
+.bn .tx h3{ font-size:18px; font-weight:800; letter-spacing:-.4px; margin:2px 0 10px; }
 .bn .tx p{ font-size:14.5px; color:var(--g700); line-height:1.68; margin:0; }
 @media (max-width:760px){
   .diff2{ grid-template-columns:1fr; gap:24px; align-items:start; }
@@ -461,7 +461,7 @@ footer .legal a:hover{ color:var(--g900); }
 /* 공통강점(오감 외 서비스) — 번호 리스트 2열, 이모지 폐기(§4) */
 .feats{ display:grid; grid-template-columns:1fr 1fr; gap:30px 36px; }
 .feat .fn{ font-size:28px; font-weight:800; color:var(--green); line-height:1; letter-spacing:-1.2px; margin-bottom:12px; }
-.feat h4{ font-size:18px; font-weight:800; letter-spacing:-.4px; margin:0 0 8px; }
+.feat h3{ font-size:18px; font-weight:800; letter-spacing:-.4px; margin:0 0 8px; }
 .feat p{ font-size:14.5px; color:var(--g700); line-height:1.7; margin:0; }
 @media (max-width:640px){ .feats{ grid-template-columns:1fr; gap:24px; } }
 
