@@ -544,7 +544,7 @@
       // 브랜드 마커: 그린 칩 + 핀 점 (transform으로 점이 좌표 위에 오게)
       new naver.maps.Marker({
         map: map, position: pos,
-        icon: { content: '<div class="nv-pin"><i></i></div>', anchor: new naver.maps.Point(0, 0) }
+        icon: { content: '<div class="nv-pin"><svg width="24" height="32" viewBox="0 0 24 32"><path d="M12 0C5.37 0 0 5.37 0 12c0 7 6 12 12 20 6-8 12-13 12-20C24 5.37 18.63 0 12 0z" fill="#3a8a5f" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="12" r="5.5" fill="#fff"/></svg></div>', anchor: new naver.maps.Point(0, 0) }
       });
       // 휠 가드: 클릭해야 지도 줌 활성, 벗어나면 다시 페이지 스크롤로
       var guard = document.createElement('div');

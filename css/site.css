@@ -145,10 +145,8 @@ img{ max-width:100%; display:block; }
   opacity:0; transition:opacity .2s; }
 .loc-map:hover .map-guard{ opacity:1; }
 /* 브랜드 마커 — 작은 물방울 핀 (뾰족한 끝이 좌표를 가리키게 bottom 정렬) */
-.nv-pin{ transform:translate(-50%, calc(-100% - 5px)); pointer-events:none; }   /* 아래 뾰족한 끝이 좌표(센터 위치)에 오게 — 회전 다이아 돌출 ~5px 보정 */
-.nv-pin i{ display:block; width:24px; height:24px; background:var(--green); border:2px solid #fff; position:relative;
-  border-radius:50% 50% 50% 0; transform:rotate(-45deg); box-shadow:0 2px 5px rgba(0,0,0,.3); }   /* -45 = 뾰족한 끝이 아래로(45는 왼쪽=버그) */
-.nv-pin i::after{ content:''; position:absolute; top:50%; left:50%; width:9px; height:9px; border-radius:50%; background:#fff; transform:translate(-50%,-50%); }   /* 초록 물방울 안 흰 동그라미(유성 2026-06-29) */
+.nv-pin{ transform:translate(-50%, -100%); pointer-events:none; }   /* SVG 핀: 뾰족한 끝(아래 12,32=하단중앙)이 좌표(센터 위치)에 오게 */
+.nv-pin svg{ display:block; filter:drop-shadow(0 2px 3px rgba(0,0,0,.3)); }   /* 길쭉한 물방울(머리 둥글·아래 뾰족) + 큰 흰 동그라미. CSS 회전사각형은 늘리면 찌그러져 SVG 패스로 (유성 2026-06-29) */
 @media (max-width:760px){ .loc-map{ min-height:280px; } .loc-label.tel{ margin-top:24px; } } /* 모바일은 auto가 안 먹으니 고정 간격으로 띄움 */
 
 /* ── 차별점 노트 ── */
