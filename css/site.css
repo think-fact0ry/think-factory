@@ -91,7 +91,7 @@ img{ max-width:100%; display:block; }
 /* 메인 홀수 리듬: 차별점·우리가하는일은 중앙 헤드 (스테이트먼트와 호흡 맞춤) */
 .sec.center h2, .sec.center .sub, .sec.center .note-line{ text-align:center; }
 /* 메인 페이지 섹션은 한 화면씩 꽉 채움 */
-.sec.full{ min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); display:flex; align-items:center; }
+.sec.full{ min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); display:flex; align-items:center; padding-bottom:calc(64px + 30px); }   /* 아래패딩 +30(=nav 60px의 절반): 투명 nav라 콘텐츠가 화면중앙보다 30px 아래로 보임 → nav-중앙 기준 상단으로 15px 올림(§5 매직px 아닌 nav단위, 유성 2026-06-29) */
 .sec.full .inner{ width:100%; }
 .sec h2{ font-size:28px; font-weight:800; letter-spacing:-.7px; margin:0 0 10px; }
 .sec .sub{ font-size:16px; color:var(--g500); margin:0 0 36px; line-height:1.7; }
