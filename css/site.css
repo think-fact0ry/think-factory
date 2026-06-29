@@ -186,7 +186,17 @@ img{ max-width:100%; display:block; }
 .act .body{ padding:clamp(10px,2.6vw,18px) clamp(11px,2.8vw,18px) clamp(12px,2.8vw,18px); }
 .act .date{ font-size:clamp(10px,2.4vw,12px); color:var(--g400); margin-bottom:clamp(3px,1vw,6px); }
 .act h3{ font-size:clamp(12.5px,3.1vw,16px); font-weight:700; margin:0; letter-spacing:-.3px; line-height:1.45; white-space:pre-line; }
-.acts .act h3{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }   /* 활동 그리드: 제목 최대 3줄+말줄임 — 긴 제목에 카드 세로로 늘어남 방지(유성 2026-06-29) */
+/* 활동 페이지(.acts) = 인스타 피드형 — 여백0·풀블리드·이미지 위 제목 오버레이(유성 2026-06-29, 인스타 @think_fact0ry 참고) */
+.acts{ gap:2px; }
+.acts .act{ position:relative; aspect-ratio:1/1; border:none; border-radius:0; background:var(--g100); overflow:hidden; }
+.acts .act:hover{ transform:none; }   /* 피드형은 카드 들림 없음 */
+.acts .act .thumb{ position:absolute; inset:0; aspect-ratio:auto; }
+.acts .act .body{ position:absolute; inset:0; padding:9px 10px; display:flex; flex-direction:column; justify-content:flex-end;
+  background:linear-gradient(to bottom, rgba(0,0,0,.30) 0%, rgba(0,0,0,0) 24%, rgba(0,0,0,0) 48%, rgba(0,0,0,.66) 100%); }   /* 위 살짝·아래 진하게 어둡게(글씨 가독) */
+.acts .act .date{ display:none; }   /* 피드형은 제목만(인스타처럼) */
+.acts .act h3{ color:#fff; font-size:clamp(11px,3vw,14.5px); font-weight:700; line-height:1.32; letter-spacing:-.3px; margin:0;
+  text-shadow:0 1px 3px rgba(0,0,0,.45); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }   /* 흰 제목 2~3줄 */
+@media (max-width:520px){ .acts{ margin-left:-20px; margin-right:-20px; } }   /* 모바일 풀블리드(.inner 좌우 패딩 상쇄) */
 
 /* ── 본문 페이지(이야기 등) ── */
 .prose{ max-width:680px; }
