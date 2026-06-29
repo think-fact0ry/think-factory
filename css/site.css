@@ -157,7 +157,7 @@ img{ max-width:100%; display:block; }
 .note-line{ margin:26px 0 0; font-size:14px; color:var(--g500); line-height:1.7; }
 
 /* ── 활동 캐러셀(메인) — 우→좌 자동 흐름, 3장씩 ── */
-.car{ --car-gap:clamp(8px,2vw,16px); display:flex; gap:var(--car-gap); overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; }   /* 간격 반응형: 모바일 ~8px ~ 데스크톱 16px (고정 16은 모바일서 과함) */
+.car{ --car-gap:clamp(5px,1.4vw,11px); display:flex; gap:var(--car-gap); overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; }   /* 간격 반응형 축소(유성 2026-06-29: 좁혀 사진 키움) — 모바일 ~5 ~ 데스크톱 11 */
 .car::-webkit-scrollbar{ display:none; }
 .car .act{ flex:0 0 calc((100% - 2*var(--car-gap))/3); scroll-snap-align:start; }   /* 항상 3장 고정 — 간격 변수 연동(2칸) */
 
@@ -167,7 +167,7 @@ img{ max-width:100%; display:block; }
 .dots i.on{ background:var(--green); }
 
 /* ── 전체 보기 버튼 (토스식 소프트 그린 필) ── */
-.more-wrap{ margin:18px 0 0; text-align:center; }
+.more-wrap{ margin:36px 0 0; text-align:center; }   /* 점(dots)↔전체보기 간격 확대(유성 2026-06-29) */
 .btn.more{ background:var(--green-bg); color:var(--green-dark); border-radius:99px; padding:14px 28px; font-size:15px; transition:transform .12s, background .15s; }
 .btn.more::after{ content:'→'; margin-left:8px; transition:transform .15s; display:inline-block; }
 .btn.more:hover{ background:#ddeee5; }
