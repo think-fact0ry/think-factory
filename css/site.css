@@ -188,6 +188,8 @@ img{ max-width:100%; display:block; }
 .prose{ max-width:680px; }
 .prose h2{ font-size:24px; font-weight:800; letter-spacing:-.6px; margin:44px 0 14px; }
 .prose p{ font-size:16.5px; color:var(--g700); line-height:1.95; margin:0 0 16px; }
+.prose ul{ margin:0 0 16px; padding-left:20px; }
+.prose ul li{ font-size:16.5px; color:var(--g700); line-height:1.9; margin:0 0 6px; }
 .prose .lead{ font-size:19px; color:var(--g900); font-weight:600; line-height:1.85; }
 
 /* ── 푸터 ── */

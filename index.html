@@ -471,10 +471,8 @@
         rafPending = true;
         requestAnimationFrame(function () { rafPending = false; renderDots(); });
       }, { passive: true });
-      // 자동 흐름: 3.8초마다 카드 1장씩 좌측으로, 끝에선 처음으로. 호버·터치 중엔 정지
+      // 자동 흐름: 3.8초마다 카드 1장씩 좌측으로, 끝에선 처음으로. 터치 중엔 정지(호버는 계속 흐름 — 유성 2026-06-29)
       var paused = false, touchTimer = null;
-      car.addEventListener('mouseenter', function () { paused = true; });
-      car.addEventListener('mouseleave', function () { paused = false; });
       car.addEventListener('touchstart', function () {               // 터치 스크롤과 자동흐름이 싸우지 않게
         paused = true;
         clearTimeout(touchTimer);
