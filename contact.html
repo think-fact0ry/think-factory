@@ -41,7 +41,7 @@
 <iframe class="apply-frame" title="오감쑥쑥 바우처 신청폼"
   src="https://script.google.com/macros/s/AKfycbyDLm7VCcRNmPrK08waOFx3JHt9lvxP22coImDfK9xfWNheiS11My2xcJJrqrE6GVRPSw/exec"></iframe>
 
-<section class="sec tint faqsec">
+<section class="sec faqsec">
   <div class="inner">
     <h2 style="margin-bottom:8px;">자주 묻는 질문</h2>
     <p class="sub" style="margin-bottom:24px;">바우처가 처음이어도 괜찮아요.</p>
@@ -171,7 +171,7 @@
 
 // ── 리모콘(카톡·인스타·블로그)은 자주 묻는 질문 영역이 보일 때만 등장(모바일) ──
 (function () {
-  var faq = document.querySelector('.sec.tint');
+  var faq = document.querySelector('.faqsec');
   if (!faq) return;
   if (!window.IntersectionObserver) { document.body.classList.add('faq-visible'); return; }  // 옵저버 없으면 nav/리모콘 항상 노출(폴백)
   new IntersectionObserver(function (entries) {
@@ -179,16 +179,28 @@
   }, { threshold: 0, rootMargin: '0px 0px -60px 0px' }).observe(faq);   // FAQ가 60px 들어와야 켜짐(가장자리 깜빡임 방지)
 })();
 
-// ── FAQ: 모바일에서는 한 번에 하나만 열림(다른 질문 열면 기존 것 닫힘) ──
+// ── FAQ 아코디언: 하나 열면 나머지 닫힘(전 기기) + 부드럽게 펼침/접힘 ──
+// <details> 유지(시맨틱·무JS 폴백). summary 클릭을 가로채 height를 애니메이션(§4.1-8 '의도된 펼침' 예외).
 (function () {
-  var items = document.querySelectorAll('.faq details');
+  var items = [].slice.call(document.querySelectorAll('.faq details'));
   if (!items.length) return;
-  var mq = window.matchMedia('(max-width:760px)');
+  function expand(d) {
+    var p = d.querySelector('p'); d.open = true;
+    var h = p.scrollHeight; p.style.height = '0px'; p.getBoundingClientRect();   // 0에서 시작(reflow 강제)
+    p.style.height = h + 'px';
+    p.addEventListener('transitionend', function te() { p.style.height = 'auto'; p.removeEventListener('transitionend', te); });
+  }
+  function collapse(d) {
+    var p = d.querySelector('p');
+    p.style.height = p.scrollHeight + 'px'; p.getBoundingClientRect();
+    p.style.height = '0px';
+    p.addEventListener('transitionend', function te() { d.open = false; p.style.height = ''; p.removeEventListener('transitionend', te); });
+  }
   items.forEach(function (d) {
-    d.addEventListener('toggle', function () {
-      if (d.open && mq.matches) {
-        items.forEach(function (o) { if (o !== d) o.open = false; });
-      }
+    d.querySelector('summary').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (d.open) { collapse(d); }
+      else { items.forEach(function (o) { if (o !== d && o.open) collapse(o); }); expand(d); }   // 하나 열면 나머지 닫힘
     });
   });
 })();

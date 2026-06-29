@@ -319,9 +319,10 @@ footer .legal a:hover{ color:var(--g900); }
 .faq details{ border-bottom:1px solid var(--g100); }
 .faq summary{ list-style:none; cursor:pointer; padding:18px 2px; font-size:16px; font-weight:600; color:var(--g900); display:flex; justify-content:space-between; align-items:center; gap:16px; }
 .faq summary::-webkit-details-marker{ display:none; }
-.faq summary::after{ content:'+'; color:var(--g400); font-weight:400; font-size:22px; line-height:1; }
-.faq details[open] summary::after{ content:'−'; }
-.faq p{ margin:0; padding:0 2px 20px; font-size:15px; color:var(--g700); line-height:1.8; }
+.faq summary::after{ content:'+'; color:var(--g400); font-weight:400; font-size:22px; line-height:1; transition:transform .25s ease; }
+.faq details[open] summary::after{ transform:rotate(45deg); }   /* +가 45° 돌아 × 모양 — 부드럽게 */
+.faq p{ margin:0; padding:0 2px 20px; font-size:15px; color:var(--g700); line-height:1.8; overflow:hidden; }
+.faq details p{ transition:height .28s ease; }   /* 펼침 애니메이션 — height는 JS가 제어(§4.1-8 의도된 펼침 예외) */
 
 /* 모바일 hero: 아래 왼쪽 (뒷배경/영상 여지) */
 @media (max-width:760px){ .fold .hero{ align-items:flex-end; } .fold .hero .inner{ padding-bottom:8px; } }
@@ -694,7 +695,8 @@ body.apply-page{ background:#f7f5f1; }   /* 폼 베이지와 같게 → FAQ(회�
   body.apply-page .apply-frame{ height:100vh; height:100svh; min-height:100svh; }
 }
 /* 상담폼 ↔ 자주 묻는 질문: 폼 끝과 너무 붙어 보여 흰 여백으로 페이지 구분 */
-.faqsec{ margin-top:40px; }
+.faqsec{ margin-top:40px; background:#fff; }   /* 회색(tint) 폐기 → 흰색 (유성 2026-06-29 '칙칙') */
+body.form-dark .faqsec{ background:#16171a; }
 
 /* 폼 검증 안내 토스트 (임베드 폼이 요청) — 화면 하단 고정, 태블릿 앱 패턴 */
 .form-toast{ position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(10px); max-width:calc(100% - 32px); background:#191f28; color:#F9FBFA; font-size:14px; font-weight:600; line-height:1.5; text-align:center; padding:12px 18px; border-radius:var(--r-sm); box-shadow:0 6px 24px rgba(0,0,0,.22); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:1000; }
