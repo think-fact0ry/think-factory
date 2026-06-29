@@ -46,6 +46,7 @@
     <div class="acts" id="actList">
       <p style="color:var(--g500);">활동 이야기를 준비하고 있습니다. 그동안은 <a href="https://blog.naver.com/think5007" target="_blank" rel="noopener" style="color:var(--green); font-weight:600;">네이버 블로그</a>에서 보실 수 있어요.</p>
     </div>
+    <div class="pager" id="pager"></div>
   </div>
 </section>
 
@@ -58,30 +59,34 @@ fetch('activities/posts.json')
     posts = posts.filter(function (p) { return (p.date || '') >= '2025.04.02' && /오감쑥쑥/.test(p.tag || ''); });  // 활동글만(오감 태그) — 안내·가이드 글 제외(피드='아이들의 오늘'=활동). + 너무 오래된 글 숨김
     if (!posts.length) return;
     var list = document.getElementById('actList');
-    list.innerHTML = '';
-    posts.forEach(function (p) {
+    var pager = document.getElementById('pager');
+    var PER = 12, pages = Math.ceil(posts.length / PER);   // 12개/페이지(4행×3열)
+    function card(p) {
       var a = document.createElement('a');
       a.className = 'act';
       if (p.page === false) { a.href = p.url; a.target = '_blank'; a.rel = 'noopener'; } // 본문 추출 실패분만 네이버 폴백
       else a.href = 'activities/posts/' + p.logNo + '.html';                            // 내부 글 페이지(블로그 미러, 구글 색인)
-      var th = document.createElement('div');
-      th.className = 'thumb';
-      if (p.thumb) {
-        var img = document.createElement('img');
-        img.src = 'activities/' + p.thumb; img.alt = p.title; img.loading = 'lazy';
-        th.appendChild(img);
-      }
-      var body = document.createElement('div');
-      body.className = 'body';
-      var date = document.createElement('div');
-      date.className = 'date';
-      date.textContent = p.date + (p.tag ? ' · ' + p.tag : '');
-      var h3 = document.createElement('h3');
-      h3.textContent = p.feedTitle || (p.t2 ? p.t1 + '\n' + p.t2 : p.title);   // AI 정제 피드 제목(2~3줄) 우선, 없으면 원제목 폴백
+      var th = document.createElement('div'); th.className = 'thumb';
+      if (p.thumb) { var img = document.createElement('img'); img.src = 'activities/' + p.thumb; img.alt = p.title; img.loading = 'lazy'; th.appendChild(img); }
+      var body = document.createElement('div'); body.className = 'body';
+      var date = document.createElement('div'); date.className = 'date'; date.textContent = p.date + (p.tag ? ' · ' + p.tag : '');
+      var h3 = document.createElement('h3'); h3.textContent = p.feedTitle || (p.t2 ? p.t1 + '\n' + p.t2 : p.title);   // AI 정제 제목 우선, 없으면 원제목 폴백
       body.appendChild(date); body.appendChild(h3);
       a.appendChild(th); a.appendChild(body);
-      list.appendChild(a);
-    });
+      return a;
+    }
+    function renderPage(n) {
+      list.innerHTML = '';
+      posts.slice((n - 1) * PER, n * PER).forEach(function (p) { list.appendChild(card(p)); });
+      pager.innerHTML = '';
+      if (pages > 1) for (var i = 1; i <= pages; i++) (function (i) {
+        var b = document.createElement('button'); b.textContent = i;
+        if (i === n) b.className = 'on';   // 현재 페이지 = 초록 볼드
+        b.onclick = function () { renderPage(i); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+        pager.appendChild(b);
+      })(i);
+    }
+    renderPage(1);
   })
   .catch(function () {}); // posts.json 없으면 준비 중 문구 유지
 </script>
