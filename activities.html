@@ -55,7 +55,7 @@ fetch('activities/posts.json')
   .then(function (r) { if (!r.ok) throw 0; return r.json(); })
   .then(function (data) {
     var posts = (data && data.posts) || [];
-    posts = posts.filter(function (p) { return (p.date || '') >= '2025.04.02'; });  // 너무 오래된 글(2025.03.31 이하: 스마트폰중독~봄이왔어요) 목록서 숨김
+    posts = posts.filter(function (p) { return (p.date || '') >= '2025.04.02' && /오감쑥쑥/.test(p.tag || ''); });  // 활동글만(오감 태그) — 안내·가이드 글 제외(피드='아이들의 오늘'=활동). + 너무 오래된 글 숨김
     if (!posts.length) return;
     var list = document.getElementById('actList');
     list.innerHTML = '';
@@ -77,7 +77,7 @@ fetch('activities/posts.json')
       date.className = 'date';
       date.textContent = p.date + (p.tag ? ' · ' + p.tag : '');
       var h3 = document.createElement('h3');
-      h3.textContent = p.t2 ? p.t1 + '\n' + p.t2 : p.title;
+      h3.textContent = p.feedTitle || (p.t2 ? p.t1 + '\n' + p.t2 : p.title);   // AI 정제 피드 제목(2~3줄) 우선, 없으면 원제목 폴백
       body.appendChild(date); body.appendChild(h3);
       a.appendChild(th); a.appendChild(body);
       list.appendChild(a);

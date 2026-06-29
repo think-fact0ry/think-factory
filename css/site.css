@@ -188,7 +188,7 @@ img{ max-width:100%; display:block; }
 .act h3{ font-size:clamp(12.5px,3.1vw,16px); font-weight:700; margin:0; letter-spacing:-.3px; line-height:1.45; white-space:pre-line; }
 /* 활동 페이지(.acts) = 인스타 피드형 — 여백0·풀블리드·이미지 위 제목 오버레이(유성 2026-06-29, 인스타 @think_fact0ry 참고) */
 .acts{ gap:2px; }
-.acts .act{ position:relative; aspect-ratio:1/1; border:none; border-radius:0; background:var(--g100); overflow:hidden; }
+.acts .act{ position:relative; aspect-ratio:4/5; border:none; border-radius:0; background:var(--g100); overflow:hidden; }   /* 인스타 피드 비율(세로 4:5) */
 .acts .act:hover{ transform:none; }   /* 피드형은 카드 들림 없음 */
 .acts .act .thumb{ position:absolute; inset:0; aspect-ratio:auto; }
 .acts .act .body{ position:absolute; inset:0; padding:9px 10px; display:flex; flex-direction:column; justify-content:flex-end;

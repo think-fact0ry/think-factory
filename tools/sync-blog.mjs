@@ -173,6 +173,7 @@ const excludeSet = new Set(exclude.map(String));
 // 누락분은 본문 빌드 성공 여부로 생존 판정(아래 병합).
 let prevPosts = [];
 try { prevPosts = JSON.parse(await readFile(new URL('posts.json', OUT_DIR), 'utf8')).posts || []; } catch {}
+const prevMap = new Map(prevPosts.map((p) => [String(p.logNo), p]));   // feedTitle(피드 오버레이 제목) 캐시 보존. 삭제/비공개 글은 finalPosts에 없으면 그대로 빠짐 → 지연 0
 
 await mkdir(IMG_DIR, { recursive: true });
 const posts = [];
@@ -206,6 +207,7 @@ for (const it of all) {
     excerpt: String(it.briefContents || '').replace(/\s+/g, ' ').slice(0, 110),
     thumb,
     url: `https://blog.naver.com/${BLOG_ID}/${logNo}`,
+    feedTitle: prevMap.get(logNo)?.feedTitle,   // 캐시 보존(새 글은 undefined→JSON서 생략, gen-feed-titles.mjs가 클로드로 채움)
   });
 }
 
