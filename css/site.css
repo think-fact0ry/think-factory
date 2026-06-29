@@ -321,13 +321,18 @@ footer .legal a:hover{ color:var(--g900); }
 
 /* 자주 묻는 질문 (상담 페이지) */
 .faq{ max-width:680px; }
-.faq details{ border-bottom:1px solid var(--g100); }
-.faq summary{ list-style:none; cursor:pointer; padding:18px 2px; font-size:16px; font-weight:600; color:var(--g900); display:flex; justify-content:space-between; align-items:center; gap:16px; }
-.faq summary::-webkit-details-marker{ display:none; }
-.faq summary::after{ content:'+'; color:var(--g400); font-weight:400; font-size:22px; line-height:1; transition:transform .25s ease; }
-.faq details[open] summary::after{ transform:rotate(45deg); }   /* +가 45° 돌아 × 모양 — 부드럽게 */
-.faq p{ margin:0; padding:0 2px 20px; font-size:15px; color:var(--g700); line-height:1.8; overflow:hidden; }
-.faq details p{ transition:height .28s ease; }   /* 펼침 애니메이션 — height는 JS가 제어(§4.1-8 의도된 펼침 예외) */
+.faq .qa{ border-bottom:1px solid var(--g100); }
+.faq .q{ width:100%; text-align:left; list-style:none; cursor:pointer; background:none; border:0; font-family:inherit; position:relative; padding:18px 36px 18px 2px; font-size:16px; font-weight:600; color:var(--g900); -webkit-tap-highlight-color:transparent; }
+/* +/− 마커: 가로막대 항상 + 세로막대는 열리면 사라져 − (부드럽게) */
+.faq .ic{ position:absolute; right:2px; top:50%; width:15px; height:15px; transform:translateY(-50%); pointer-events:none; }
+.faq .ic::before,.faq .ic::after{ content:''; position:absolute; left:0; right:0; top:50%; height:2px; margin-top:-1px; border-radius:2px; background:var(--g400); transition:transform .28s ease; }
+.faq .ic::after{ transform:rotate(90deg); }                      /* 세로 → + */
+.faq .qa.open .ic::after{ transform:rotate(90deg) scaleX(0); }   /* 열리면 세로 사라져 − 만 남음 */
+/* 답: grid 0fr↔1fr — 부드럽게, 닫힘·열림 동시 합성(§4.1-8 의도된 펼침 예외) */
+.faq .a{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .3s cubic-bezier(.4,0,.2,1); }
+.faq .qa.open .a{ grid-template-rows:1fr; }
+.faq .a-in{ overflow:hidden; min-height:0; }
+.faq .a-in p{ margin:0; padding:0 2px 20px; font-size:15px; color:var(--g700); line-height:1.8; }
 
 /* 모바일 hero: 아래 왼쪽 (뒷배경/영상 여지) */
 @media (max-width:760px){ .fold .hero{ align-items:flex-end; } .fold .hero .inner{ padding-bottom:8px; } }
@@ -379,7 +384,7 @@ footer .legal a:hover{ color:var(--g900); }
 /* 한 화면씩 고정. 스크롤 제어는 JS가 전담(CSS 스냅 미사용 — 홈과 같은 결, 자유 흔들림 없음) */
 .sp{ position:relative; min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); min-height:calc(100dvh - 60px); padding:40px 0; }   /* dvh=실제 현재 뷰포트(svh는 일부 모바일/태블릿 브라우저서 ~40px 작게 잡혀 다음 섹션이 약하게 비침) → 한 화면 꽉 채움 */
 .sp1{ display:flex; align-items:center; padding:28px 0 56px; }  /* 세로 중앙에서 살짝 위로(아래 여백↑) — 화살표 무게 보정, 92는 과해 56으로 */
-.sp-mid{ display:flex; align-items:center; padding:64px 0 40px; }  /* 위>아래 24px: 스티키 서비스탭(~52px 위 가림)과 아래 화살표(~28px) 사이 기준 중앙 — 하한=화살표 끝이지 섹션 맨밑 아님(유성 2026-06-29) */
+.sp-mid{ display:flex; align-items:center; padding:clamp(40px,6vh,56px) 0; }  /* 대칭(반응형 clamp). 상단기준=스티키 *중앙*(하단 아님, 유성 2026-06-29): 스티키/2(~26)≈화살표(~28)라 [스티키중앙,화살표] 중앙≈박스 중앙=대칭 → 콘텐츠 ~12px↑. §5 반응형 */
 .sp.tint{ background:var(--g50); }                     /* 바우처 절차 페이지 배경 */
 .sp .inner{ width:100%; max-width:var(--maxw-read); }   /* 760→900: 좌우 흰여백 과다 해소, 푸터·이야기와 폭 정합(2단 체계 본문 tier) */
 @media (max-width:600px){ .sp{ padding:36px 0 36px; min-height:0; }   /* 600: 폰만 흐름 레이아웃. 태블릿(~700)은 PC 섹션(dvh 채움) */
@@ -727,10 +732,10 @@ body.form-dark .apply-frame{ background:#101012; }
 body.form-dark .sec.tint{ background:#16171a; }
 body.form-dark .sec h2{ color:#F5F5F5; }
 body.form-dark .sec .sub{ color:#8c909c; }
-body.form-dark .faq summary{ color:#F5F5F5; }
-body.form-dark .faq summary::after{ color:#686c78; }
-body.form-dark .faq p{ color:#B3B7C2; }
-body.form-dark .faq details{ border-bottom-color:#26262b; }
+body.form-dark .faq .q{ color:#F5F5F5; }
+body.form-dark .faq .ic::before,body.form-dark .faq .ic::after{ background:#686c78; }
+body.form-dark .faq .a-in p{ color:#B3B7C2; }
+body.form-dark .faq .qa{ border-bottom-color:#26262b; }
 body.form-dark footer{ border-top-color:#26262b; }
 body.form-dark footer .info{ color:#B3B7C2; }
 body.form-dark footer .info .k{ color:#686c78; }
