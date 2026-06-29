@@ -17,6 +17,9 @@
   --r-sm:clamp(7px,1.8vw,10px);   /* 작은: 토스트·블로그 이미지·작은 버튼 */
   --r-md:clamp(10px,2.6vw,14px);  /* 카드·박스·버튼(대부분) */
   --r-lg:clamp(13px,3.2vw,20px);  /* 큰 박스·히어로·미션비전 */
+  /* 타입 스케일 — §4.4 (큰 제목 clamp 유동 / 본문 고정) */
+  --fs-display:clamp(28px,6vw,42px); --fs-h1:clamp(23px,3.4vw,30px); --fs-h2:clamp(20px,2.6vw,26px); --fs-h3:20px;
+  --fs-title:17px; --fs-body:15px; --fs-sm:13.5px; --fs-caption:12px;
 }
 /* 반응형 전용 줄바꿈 헬퍼 */
 br.mo{ display:none; }
