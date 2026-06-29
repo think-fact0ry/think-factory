@@ -192,15 +192,21 @@ img{ max-width:100%; display:block; }
 .act h3{ font-size:clamp(12.5px,3.1vw,16px); font-weight:700; margin:0; letter-spacing:-.3px; line-height:1.45; white-space:pre-line; }
 /* 활동 페이지(.acts) = 인스타 피드형 — 여백0·풀블리드·이미지 위 제목 오버레이(유성 2026-06-29, 인스타 @think_fact0ry 참고) */
 .acts{ gap:2px; }
-.acts .act{ position:relative; aspect-ratio:4/5; border:none; border-radius:0; background:var(--g100); overflow:hidden; }   /* 인스타 피드 비율(세로 4:5) */
+.acts .act{ position:relative; aspect-ratio:4/5; border:none; border-radius:0; background:var(--g100); overflow:hidden; container-type:inline-size; }   /* 4:5 + cqw(카드폭 기준) 폰트용 컨테이너 */
 .acts .act:hover{ transform:none; }   /* 피드형은 카드 들림 없음 */
 .acts .act .thumb{ position:absolute; inset:0; aspect-ratio:auto; }
-.acts .act .body{ position:absolute; inset:0; padding:9px 10px; display:flex; flex-direction:column; justify-content:flex-end;
+.acts .act .body{ position:absolute; inset:0; padding:clamp(7px,5cqw,16px) clamp(8px,5.5cqw,18px); display:flex; flex-direction:column; justify-content:flex-end;
   background:linear-gradient(to bottom, rgba(0,0,0,.30) 0%, rgba(0,0,0,0) 24%, rgba(0,0,0,0) 48%, rgba(0,0,0,.66) 100%); }   /* 위 살짝·아래 진하게 어둡게(글씨 가독) */
 .acts .act .date{ display:none; }   /* 피드형은 제목만(인스타처럼) */
-.acts .act h3{ color:#fff; font-size:clamp(11px,3vw,14.5px); font-weight:700; line-height:1.32; letter-spacing:-.3px; margin:0;
-  text-shadow:0 1px 3px rgba(0,0,0,.45); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }   /* 흰 제목 2~3줄 */
+.acts .act h3{ color:var(--ink-on-dark); font-size:clamp(12px,9cqw,28px); font-weight:700; line-height:1.3; letter-spacing:-.3px; margin:0;
+  text-shadow:0 1px 3px rgba(0,0,0,.45); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }   /* 폰트=카드폭 비례(cqw)라 PC서 이미지와 함께 커짐. §4 ink-on-dark(순백 X) */
+@container (min-width:210px){ .acts .act h3{ font-weight:600; } }   /* 큰 카드(PC·태블릿)는 웨이트도 살짝 가볍게 — 반응형 웨이트(유성) */
 @media (max-width:520px){ .acts{ margin-left:-20px; margin-right:-20px; } }   /* 모바일 풀블리드(.inner 좌우 패딩 상쇄) */
+/* 페이지 번호 — '아이들의 오늘' 12개/페이지(4×3) */
+.pager{ display:flex; justify-content:center; align-items:center; gap:5px; flex-wrap:wrap; margin-top:30px; }
+.pager button{ min-width:38px; height:38px; padding:0 10px; border:none; background:none; font-family:inherit; font-size:15px; font-weight:600; color:var(--g500); cursor:pointer; border-radius:var(--r-sm); transition:color .12s, background .12s; }
+.pager button:hover{ color:var(--g900); background:var(--g100); }
+.pager button.on{ color:var(--green); font-weight:800; }   /* 현재 페이지 = 초록 볼드(유성) */
 
 /* ── 본문 페이지(이야기 등) ── */
 .prose{ max-width:680px; }
@@ -615,7 +621,8 @@ footer .inner{ max-width:var(--maxw-read); }   /* 2단 체계: 푸터는 본문�
 
 /* ── 06 신청폼 임베드 (contact) ── */
 .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-.apply-frame{ display:block; width:100%; height:calc(100vh - 60px); height:calc(100svh - 60px); border:0; background:var(--g50); }
+.apply-frame{ display:block; width:100%; height:calc(100vh - 60px); height:calc(100svh - 60px); border:0; background:#f7f5f1; }
+body.apply-page{ background:#f7f5f1; }   /* 폼 베이지와 같게 → FAQ(회색 g50) 사이 흰 띠(.faqsec 40px 여백이 흰 body 노출) 제거 (유성 2026-06-29) */
 
 /* (구) 이야기 페이지 잔여 — 미사용 */
 .story-lead{ font-size:20px; font-weight:600; color:var(--g700); line-height:1.75; max-width:640px; margin:14px 0 0; }
