@@ -30,6 +30,11 @@ jobs:
       - name: 블로그 동기화
         run: node tools/sync-blog.mjs
 
+      - name: 피드 제목 생성 (새 글만, 클로드 API — secret 없으면 자동 건너뜀)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node tools/gen-feed-titles.mjs
+
       - name: 변경분만 커밋·푸시
         run: |
           git config user.name "think-factory-bot"
