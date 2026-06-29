@@ -102,12 +102,20 @@
   </div>
 </div>
 
-<section class="sec tint full">
+<style>
+/* '선생님이 갑니다' — 섹션 도착 시 줄별 잉크-인 리빌(풀페이지 스냅에 맞춤) + 타이포 강화. 스코프 #stmtSec (site.css 무관) */
+#stmtSec .s2{ font-size:60px; letter-spacing:-1.9px; line-height:1.18; }
+@media (max-width:760px){ #stmtSec .s2{ font-size:40px; letter-spacing:-1.2px; } }
+#stmtSec.js .rl{ display:inline-block; opacity:.16; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
+#stmtSec.js.lit .rl{ opacity:1; transform:none; }
+@media (prefers-reduced-motion:reduce){ #stmtSec.js .rl{ opacity:1; transform:none; transition:none; } }
+</style>
+<section class="sec tint full" id="stmtSec">
   <div class="inner statement">
-    <p class="s1 reveal">찾아오지 않으셔도 됩니다.</p>
-    <p class="s2 reveal d1">선생님이 <b>갑니다</b>.</p>
-    <p class="s3 reveal d2">아이에게 가장 편한 곳은 아이의 공간입니다.<br>낯선 환경에 적응하는 시간 없이,<br>아이가 가장 자연스러운 모습으로 선생님을 만납니다.</p>
-    <p class="s4 reveal d3" style="margin-top:30px;">재가방문 · 인천 전 지역</p>
+    <p class="s1"><span class="rl">찾아오지 않으셔도 됩니다.</span></p>
+    <p class="s2"><span class="rl">선생님이 <b>갑니다</b>.</span></p>
+    <p class="s3"><span class="rl">아이에게 가장 편한 곳은 아이의 공간입니다.</span><br><span class="rl">낯선 환경에 적응하는 시간 없이,</span><br><span class="rl">아이가 가장 자연스러운 모습으로 선생님을 만납니다.</span></p>
+    <p class="s4" style="margin-top:30px;"><span class="rl">재가방문 · 인천 전 지역</span></p>
   </div>
 </section>
 
@@ -312,6 +320,20 @@
     });
   }, { threshold: 0.2 });
   els.forEach(function (el) { io.observe(el); });
+})();
+
+// ── '선생님이 갑니다' — 섹션 도착 시 줄(.rl)별 잉크-인 (풀페이지 스냅에 맞춤) ──
+(function () {
+  var sec = document.getElementById('stmtSec');
+  if (!sec) return;
+  sec.classList.add('js'); // JS 있을 때만 faint 시작(JS 없으면 평문 그대로)
+  var rls = [].slice.call(sec.querySelectorAll('.rl'));
+  rls.forEach(function (l, i) { l.style.transitionDelay = (i * 0.11) + 's'; }); // 줄별 스태거
+  if (!('IntersectionObserver' in window)) { sec.classList.add('lit'); return; }
+  var io2 = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { sec.classList.add('lit'); io2.disconnect(); } });
+  }, { threshold: 0.35 });
+  io2.observe(sec);
 })();
 
 // ── PC 풀페이지 스크롤 — 휠 1회 = 1섹션, 700ms 이징 (anuta 방식, JS 단일 애니메이션이라 렉 없음)
