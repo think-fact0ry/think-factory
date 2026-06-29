@@ -143,8 +143,9 @@
   var childWin = null;
   // nav가 차지하는 실제 높이를 측정(하드코딩 60 폐기). 모바일은 nav가 숨김(흐름 밖)이라 0.
   function navOffset() { if (window.matchMedia('(max-width:760px)').matches) return 0; var n = document.querySelector('.nav'); return n ? n.offsetHeight : 60; }
-  // 진짜 보이는 높이 = visualViewport.height(브라우저 툴바 제외) − nav. innerHeight는 툴바까지 포함이라 폼 세로중앙이 아래로 쏠림(유성 ex28).
-  function vpH() { return (window.visualViewport ? window.visualViewport.height : window.innerHeight) - navOffset(); }
+  // 폼 세로중앙 = 전체 뷰포트 정중앙. nav(N)가 sticky로 위 N을 차지하고 iframe은 그 아래서 시작하므로,
+  // 센터 박스를 2N 줄이면 위(nav)·아래 여백이 N으로 대칭 = 정중앙. 높이는 visualViewport(툴바 제외, 모바일 ex28 보정). 모바일은 nav 숨김이라 N=0.
+  function vpH() { var vv = window.visualViewport ? window.visualViewport.height : window.innerHeight; return vv - 2 * navOffset(); }
   function sendVH() { if (childWin) { try { childWin.postMessage({ tfParent: 1, vh: vpH() }, '*'); } catch (e) {} } }
   // GAS 폼 출처만 허용 — 호스트네임 정확/접미 매칭(부분문자열 'google'은 google.attacker.com도 통과해 위험)
   function okGasOrigin(o) { try { var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); } catch (e) { return false; } }
