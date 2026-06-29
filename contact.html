@@ -141,8 +141,11 @@
   var f = document.querySelector('.apply-frame');
   if (!f) return;
   var childWin = null;
-  function navOffset() { return window.matchMedia('(max-width:760px)').matches ? 0 : 60; }
-  function sendVH() { if (childWin) { try { childWin.postMessage({ tfParent: 1, vh: window.innerHeight - navOffset() }, '*'); } catch (e) {} } }
+  // nav가 차지하는 실제 높이를 측정(하드코딩 60 폐기). 모바일은 nav가 숨김(흐름 밖)이라 0.
+  function navOffset() { if (window.matchMedia('(max-width:760px)').matches) return 0; var n = document.querySelector('.nav'); return n ? n.offsetHeight : 60; }
+  // 진짜 보이는 높이 = visualViewport.height(브라우저 툴바 제외) − nav. innerHeight는 툴바까지 포함이라 폼 세로중앙이 아래로 쏠림(유성 ex28).
+  function vpH() { return (window.visualViewport ? window.visualViewport.height : window.innerHeight) - navOffset(); }
+  function sendVH() { if (childWin) { try { childWin.postMessage({ tfParent: 1, vh: vpH() }, '*'); } catch (e) {} } }
   // GAS 폼 출처만 허용 — 호스트네임 정확/접미 매칭(부분문자열 'google'은 google.attacker.com도 통과해 위험)
   function okGasOrigin(o) { try { var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); } catch (e) { return false; } }
   // 폼 검증 알림 토스트(임베드 시 폼이 부모에 요청 — iframe 내부 fixed는 실제 화면 하단이 아님)
@@ -162,6 +165,7 @@
     else if (d.type === 'exithint') { showExitBox(); }
   });
   window.addEventListener('resize', sendVH);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', sendVH);   // 툴바 show/hide로 보이는 높이 바뀌면 재전송
 })();
 
 // ── 리모콘(카톡·인스타·블로그)은 자주 묻는 질문 영역이 보일 때만 등장(모바일) ──
