@@ -187,6 +187,7 @@ img{ max-width:100%; display:block; }
 .act .body{ padding:clamp(10px,2.6vw,18px) clamp(11px,2.8vw,18px) clamp(12px,2.8vw,18px); }
 .act .date{ font-size:clamp(10px,2.4vw,12px); color:var(--g400); margin-bottom:clamp(3px,1vw,6px); }
 .act h3{ font-size:clamp(12.5px,3.1vw,16px); font-weight:700; margin:0; letter-spacing:-.3px; line-height:1.45; white-space:pre-line; }
+.acts .act h3{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }   /* 활동 그리드: 제목 최대 3줄+말줄임 — 긴 제목에 카드 세로로 늘어남 방지(유성 2026-06-29) */
 
 /* ── 본문 페이지(이야기 등) ── */
 .prose{ max-width:680px; }
@@ -477,9 +478,9 @@ footer .legal a:hover{ color:var(--g900); }
 @media (pointer:coarse) and (min-width:601px){
   .sp{ min-height:0; padding:30px 0; }              /* 강제 전체화면 해제 + 상하 여백 축소 */
   .sp1, .sp-mid{ align-items:flex-start; }          /* 가운데 정렬(과여백) → 위 정렬 */
-  .sp1{ padding:24px 0 34px; }
-  .sp-mid{ padding:36px 0 36px; }                   /* 위아래 여백 살짝 더(유성: 너무 좁다) */
-  .sp.tint{ padding-top:52px; }                     /* 절차는 칩이 없어 헤딩이 위 회색경계에 붙음 → 위 패딩 더(모바일 tint와 같은 결) */
+  .sp1{ padding:32px 0 44px; }
+  .sp-mid{ padding:48px 0 48px; }                   /* 위아래 여백 더(유성 2026-06-29: 더 주자) */
+  .sp.tint{ padding-top:64px; }                     /* 절차는 칩이 없어 헤딩이 위 회색경계에 붙음 → 위 패딩 더(모바일 tint와 같은 결) */
   .sp-next{ display:none; }                         /* 풀페이지용 화살표 불필요 */
   .sp .inner{ padding:0 34px; }                     /* 좌우 여백 20→34 (가장자리 붙음 완화) */
   .diff-cf{ align-self:stretch; aspect-ratio:auto; } /* 사진을 글 열 높이에 맞춰 늘림 → 01~04가 사진 안에(PC처럼). 좁은 태블릿서 사진이 짧아 01이 위로 튀어나오던 것 해결 */
