@@ -1,8 +1,12 @@
 /* 생각공작소 홈페이지 — 디자인 토큰은 09 합격작(토스식 미니멀)과 동일 */
 :root{
-  --g900:#191f28; --g700:#4e5968; --g500:#8b95a1; --g400:#b0b8c1;
-  --g200:#e5e8eb; --g100:#f2f4f6; --g50:#f9fafb;
-  --green:#3a8a5f; --green-dark:#2f6f4d; --green-bg:#e9f4ee; --red:#f04452;
+  /* 회색 — 토스 TDS 그레이 풀스케일 (디자인원칙 §4.3 정본) */
+  --g900:#191f28; --g800:#333d4b; --g700:#4e5968; --g600:#6b7684; --g500:#8b95a1;
+  --g400:#b0b8c1; --g300:#d1d6db; --g200:#e5e8eb; --g100:#f2f4f6; --g50:#f9fafb;
+  /* 초록 — OKLCH 스케일(회색 명도+우리 채도, green600=브랜드 #3a8a5f 앵커) §4.3 */
+  --green50:#f4fdf7; --green100:#e0fcea; --green200:#c4f6d6; --green300:#a4e8bf; --green400:#7ecb9d;
+  --green500:#57a77a; --green600:#3a8a5f; --green700:#166841; --green800:#01492a; --green900:#002614;
+  --green:var(--green600); --green-dark:var(--green700); --green-bg:var(--green100); --red:#f04452; /* 별칭(기존 코드 호환) */
   --ink-on-dark:#F9FBFA; /* 어두운 배경 위 흰 텍스트 — 순백(#fff) 금지(헐레이션). 원칙 §시각 참조 */
   --maxw:1040px;
   --maxw-read:900px; /* 2단 폭 체계 — 시각/갤러리=inner-wide(1180), 본문·표·텍스트=읽기 폭(900). 푸터도 본문폭에 맞춤 */
