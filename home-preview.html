@@ -105,20 +105,26 @@
   </div>
 </div>
 
+<!-- [프리뷰 샘플] '선생님이 갑니다' — 토스 언어로: 가운데→왼쪽 정렬, 여백 크게, 큰 제목+짧은 구절(문구는 그대로) -->
 <style>
-/* '선생님이 갑니다' — 섹션 도착 시 줄별 잉크-인 리빌(풀페이지 스냅에 맞춤) + 타이포 강화. 스코프 #stmtSec (site.css 무관) */
-#stmtSec .s2{ font-size:60px; letter-spacing:-1.9px; line-height:1.18; }
-@media (max-width:760px){ #stmtSec .s2{ font-size:40px; letter-spacing:-1.2px; } }
+#stmtSec{ padding:120px 0; }                                  /* 토스식 넉넉한 여백 — 한 화면 한 가지 */
+#stmtSec .statement{ text-align:left; max-width:780px; }       /* 가운데 X → 왼쪽 */
+#stmtSec .ey{ font-size:14px; font-weight:700; color:var(--green); letter-spacing:.3px; margin:0 0 22px; }
+#stmtSec .s1{ font-size:20px; font-weight:700; color:var(--g500); letter-spacing:-.4px; margin:0 0 8px; }
+#stmtSec .s2{ font-size:clamp(40px,7vw,68px); font-weight:800; letter-spacing:-2px; line-height:1.12; margin:0 0 30px; color:var(--g900); }
+#stmtSec .s2 b{ color:var(--green); }
+#stmtSec .s3{ font-size:18px; color:var(--g700); line-height:1.75; margin:0; }
 #stmtSec.js .rl{ display:inline-block; opacity:.16; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
 #stmtSec.js.lit .rl{ opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce){ #stmtSec.js .rl{ opacity:1; transform:none; transition:none; } }
+@media(max-width:760px){ #stmtSec{ padding:80px 0; } #stmtSec .s2{ letter-spacing:-1.2px; } }
 </style>
 <section class="sec tint" id="stmtSec">
   <div class="inner statement">
+    <p class="ey"><span class="rl">재가방문 · 인천 전 지역</span></p>
     <p class="s1"><span class="rl">찾아오지 않으셔도 됩니다.</span></p>
     <p class="s2"><span class="rl">선생님이 <b>갑니다</b>.</span></p>
     <p class="s3"><span class="rl">아이에게 가장 편한 곳은 아이의 공간입니다.</span><br><span class="rl">낯선 환경에 적응하는 시간 없이,</span><br><span class="rl">아이가 가장 자연스러운 모습으로 선생님을 만납니다.</span></p>
-    <p class="s4" style="margin-top:30px;"><span class="rl">재가방문 · 인천 전 지역</span></p>
   </div>
 </section>
 
