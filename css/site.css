@@ -91,7 +91,7 @@ img{ max-width:100%; display:block; }
 
 /* ── 섹션 공통 ── */
 .sec{ padding:64px 0; }
-.sec.tint{ background:var(--g50); }
+.sec.tint{ background:var(--g100); }   /* g50은 흰색과 거의 구분 안 돼 리듬이 안 보임 → g100으로 또렷한 패널 교차 */
 /* 메인 홀수 리듬: 차별점·우리가하는일은 중앙 헤드 (스테이트먼트와 호흡 맞춤) */
 .sec.center h2, .sec.center .sub, .sec.center .note-line{ text-align:center; }
 /* 메인 페이지 섹션은 한 화면씩 꽉 채움 */
@@ -145,7 +145,7 @@ img{ max-width:100%; display:block; }
 .loc-label.tel{ margin-top:auto; }   /* 전화 블록을 바닥으로 → 지도 아랫라인과 정렬 */
 .loc-how{ font-size:15px; color:var(--g700); line-height:1.7; }
 .loc-tel{ font-size:30px; font-weight:800; letter-spacing:-.6px; color:var(--green); }
-.loc-map{ position:relative; background:var(--g100); border-radius:var(--r-lg); min-height:400px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.loc-map{ position:relative; background:var(--g100); border-radius:var(--r-lg); min-height:400px; overflow:hidden; display:flex; align-items:center; justify-content:center; border:1px solid var(--g200); box-shadow:var(--sh2); }   /* 흰 배경에서 지도가 주인공이 되게 또렷한 프레임 */
 .loc-map .map-link{ font-size:15px; font-weight:700; color:var(--green); }
 /* 어두운 막 없이 — 초록 볼드 문구만 (지도 위 가독용 흰 글로우) */
 .map-guard{ position:absolute; inset:0; z-index:5; display:flex; align-items:center; justify-content:center;
