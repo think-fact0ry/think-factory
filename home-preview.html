@@ -158,33 +158,27 @@
   </div>
 </section>
 
-<section class="sec full center">
+<!-- [프리뷰] 우리가 하는 일 — 큰 카드그리드 → 가벼운 펄 줄(부모가 이미 아는 정보라 축소 + 카드그리드 반복 제거, airy 대비) -->
+<style>
+#svcMini .svc-pills{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:30px; }
+#svcMini .svc-pills a{ display:inline-flex; align-items:baseline; gap:8px; padding:13px 22px; border:1px solid var(--g200); border-radius:99px; background:#fff; font-weight:700; color:var(--g900); transition:border-color .15s, color .15s, transform .12s; }
+#svcMini .svc-pills a .age{ font-size:12px; font-weight:600; color:var(--g500); }
+#svcMini .svc-pills a:hover{ border-color:var(--green); color:var(--green); transform:translateY(-2px); }
+#svcMini .svc-pills a:hover .age{ color:var(--green); }
+@media(max-width:520px){ #svcMini .svc-pills a{ width:100%; justify-content:center; } }
+</style>
+<section class="sec full center" id="svcMini">
   <div class="inner">
     <p class="eyebrow reveal">서비스</p>
     <h2 class="reveal d1">우리가 하는 일</h2>
-    <p class="sub reveal d2">아이부터 어른까지, 연령에 맞는 정부지원 바우처 서비스를 제공합니다.</p>
-    <div class="cards reveal d2">
-      <a class="card" href="services.html#ogam">
-        <span class="age">만 4~6세</span>
-        <h3>오감쑥쑥 바우처</h3>
-        <p>선생님이 찾아가는 통합놀이 <br class="mo">속에서 상상력과 창의력, 바른 인성이 자랍니다.</p>
-      </a>
-      <a class="card" href="services.html#acheong">
-        <span class="age">18세 이하</span>
-        <h3>아동청소년 심리지원</h3>
-        <p>마음의 어려움을 일찍 발견하고 함께 풀어, <br class="mo">아이가 단단하게 성장하도록 돕습니다.</p>
-      </a>
-      <a class="card" href="services.html#total">
-        <span class="age">전연령</span>
-        <h3>정신건강 토탈케어</h3>
-        <p>정신건강의 어려움을 조기에 살펴, <br class="mo">일상 회복과 자립까지 함께합니다.</p>
-      </a>
-      <a class="card" href="services.html#adult">
-        <span class="age">성인</span>
-        <h3>성인 심리상담</h3>
-        <p>전문 상담사와 함께, 나와 가족의 마음을 돌봅니다.</p>
-      </a>
+    <p class="sub reveal d2">아이부터 어른까지, 연령에 맞는 정부지원 바우처 서비스예요.</p>
+    <div class="svc-pills reveal d2">
+      <a href="services.html#ogam">오감쑥쑥 바우처 <span class="age">만 4~6세</span></a>
+      <a href="services.html#acheong">아동청소년 심리지원 <span class="age">18세 이하</span></a>
+      <a href="services.html#total">정신건강 토탈케어 <span class="age">전연령</span></a>
+      <a href="services.html#adult">성인 심리상담 <span class="age">성인</span></a>
     </div>
+    <p class="more-wrap reveal d3"><a class="btn more" href="services.html">바우처 자세히 보기</a></p>
   </div>
 </section>
 
