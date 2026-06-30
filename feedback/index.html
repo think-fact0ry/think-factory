@@ -8,7 +8,7 @@
 <style>
   html,body{margin:0; padding:0; height:100%; background:#f7f5f1; overflow:hidden;}
   /* GAS 웹앱을 iframe으로 감싸 회색 배너 제거(gas-iframe-embed-removes-banner). */
-  iframe{display:block; border:none; width:100%; height:100%;}
+  iframe{position:fixed; top:0; left:0; border:none; width:100%; height:100%;}
 </style>
 </head>
 <body>
@@ -18,12 +18,18 @@
   allow="clipboard-write"></iframe>
 <script>
   /* 임베드 뷰포트 브릿지(apply-form-embed-bridge):
-     iframe 안의 position:fixed footbar는 iframe 바닥을 기준 삼는데, 그게 실제 화면 하단(키보드 위)이 아니라
-     베이지 띠가 생김. 부모가 iframe 높이를 visualViewport.height(=키보드 위 영역)로 맞추면
-     iframe 바닥 = 키보드 위가 되어 footbar가 키보드에 딱 붙는다. (키보드 닫히면 전체 높이로 복귀.) */
+     iframe을 visualViewport(=실제 보이는 영역: 키보드·URL바·하단바 제외)에 정확히 맞춘다.
+     - 키보드 열림: iframe = 키보드 위 영역 → 폼의 fixed footbar(참여하기)가 키보드에 딱 붙음.
+     - 키보드 닫힘: iframe = 보이는 영역 → 폼 하단 인플로우 버튼(제출하기)이 브라우저 바에 안 잘림.
+     폼(iframe) 쪽엔 interactive-widget 없음(이중 축소 방지) — 폼은 iframe을 그대로 채우기만. */
   (function(){
     var vv = window.visualViewport, ifr = document.getElementById('ff');
-    function fit(){ ifr.style.height = (vv ? vv.height : window.innerHeight) + 'px'; }
+    function fit(){
+      var h = vv ? vv.height : window.innerHeight;
+      var t = vv ? vv.offsetTop : 0;
+      ifr.style.height = h + 'px';
+      ifr.style.transform = t ? 'translateY(' + t + 'px)' : 'none';
+    }
     if(vv){ vv.addEventListener('resize', fit); vv.addEventListener('scroll', fit); }
     window.addEventListener('resize', fit);
     window.addEventListener('orientationchange', function(){ setTimeout(fit, 80); });
