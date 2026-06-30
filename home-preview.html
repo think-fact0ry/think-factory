@@ -113,7 +113,7 @@
 #stmtSec.js.lit .rl{ opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce){ #stmtSec.js .rl{ opacity:1; transform:none; transition:none; } }
 </style>
-<section class="sec tint full" id="stmtSec">
+<section class="sec tint" id="stmtSec">
   <div class="inner statement">
     <p class="s1"><span class="rl">찾아오지 않으셔도 됩니다.</span></p>
     <p class="s2"><span class="rl">선생님이 <b>갑니다</b>.</span></p>
@@ -133,7 +133,7 @@
 #whyPre .tcard p{ font-size:15px; line-height:1.75; color:var(--g700); margin:0; word-break:keep-all; }
 @media(max-width:760px){ #whyPre .cards3{ grid-template-columns:1fr; gap:14px; } }
 </style>
-<section class="sec full center" id="whyPre">
+<section class="sec center" id="whyPre">
   <div class="inner">
     <p class="eyebrow reveal">부모님 후기</p>
     <h2 class="reveal d1">아이가 매주 기다리는 이유</h2>
@@ -158,44 +158,9 @@
   </div>
 </section>
 
-<!-- [프리뷰] 우리가 하는 일 — 큰 카드그리드 → 가벼운 펄 줄(부모가 이미 아는 정보라 축소 + 카드그리드 반복 제거, airy 대비) -->
-<style>
-#svcMini .svc-pills{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:30px; }
-#svcMini .svc-pills a{ display:inline-flex; align-items:baseline; gap:8px; padding:13px 22px; border:1px solid var(--g200); border-radius:99px; background:#fff; font-weight:700; color:var(--g900); transition:border-color .15s, color .15s, transform .12s; }
-#svcMini .svc-pills a .age{ font-size:12px; font-weight:600; color:var(--g500); }
-#svcMini .svc-pills a:hover{ border-color:var(--green); color:var(--green); transform:translateY(-2px); }
-#svcMini .svc-pills a:hover .age{ color:var(--green); }
-@media(max-width:520px){ #svcMini .svc-pills a{ width:100%; justify-content:center; } }
-</style>
-<section class="sec full center" id="svcMini">
-  <div class="inner">
-    <p class="eyebrow reveal">서비스</p>
-    <h2 class="reveal d1">우리가 하는 일</h2>
-    <p class="sub reveal d2">아이부터 어른까지, 연령에 맞는 정부지원 바우처 서비스예요.</p>
-    <div class="svc-pills reveal d2">
-      <a href="services.html#ogam">오감쑥쑥 바우처 <span class="age">만 4~6세</span></a>
-      <a href="services.html#acheong">아동청소년 심리지원 <span class="age">18세 이하</span></a>
-      <a href="services.html#total">정신건강 토탈케어 <span class="age">전연령</span></a>
-      <a href="services.html#adult">성인 심리상담 <span class="age">성인</span></a>
-    </div>
-    <p class="more-wrap reveal d3"><a class="btn more" href="services.html">바우처 자세히 보기</a></p>
-  </div>
-</section>
+<!-- 서비스 메뉴 섹션 제거 → nav '바우처' + 바우처 페이지가 담당 (IA: 부모가 이미 아는 것) -->
 
-<section class="sec tint full">
-  <div class="inner">
-    <p class="eyebrow reveal">활동 기록</p>
-    <h2 class="reveal d1">아이들의 오늘</h2>
-    <p class="sub reveal d2">아이들이 보낸 시간을 그대로 담았어요.</p>
-    <div class="car reveal d2" id="recentActs">
-      <a class="act" href="activities.html"><div class="thumb"></div><div class="body"><h3>아이들의 이야기가 이곳에 자동으로 올라옵니다</h3></div></a>
-    </div>
-    <div class="dots reveal d3" id="actDots"></div>
-    <p class="more-wrap reveal d3"><a class="btn more" href="activities.html">전체 보기</a></p>
-  </div>
-</section>
-
-<!-- [프리뷰] 다른 40분 — 라인아이콘 → 실제 활동사진 카드(이미지 갈증 해소 + '다양한 프로그램'=보여줄 수 있는 체계) -->
+<!-- [프리뷰] 매주 다르게, 아이에 맞게 — 실제 활동사진(프로그램 다양·맞춤=보여줄 수 있는 체계). 후기(텍스트) 다음 = 모양 대비 -->
 <style>
 #diff40 .pcards{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:34px; }
 #diff40 .pcard{ display:block; border-radius:var(--r-md); overflow:hidden; background:#fff; border:1px solid var(--g100); box-shadow:var(--sh1); text-align:left; transition:transform .15s, box-shadow .15s; }
@@ -208,7 +173,7 @@
 @media(max-width:900px){ #diff40 .pcards{ grid-template-columns:repeat(2,1fr); } }
 @media(max-width:520px){ #diff40 .pcards{ grid-template-columns:1fr; } }
 </style>
-<section class="sec full center" id="diff40">
+<section class="sec center" id="diff40">
   <div class="inner">
     <h2 class="reveal d1">같은 오감쑥쑥, 다른 40분</h2>
     <p class="sub reveal d2">표준은 같아요. 그 40분을 채우는 방식이 다릅니다.</p>
@@ -222,7 +187,20 @@
   </div>
 </section>
 
-<section class="sec full" id="location">
+<section class="sec tint">
+  <div class="inner">
+    <p class="eyebrow reveal">활동 기록</p>
+    <h2 class="reveal d1">아이들의 오늘</h2>
+    <p class="sub reveal d2">아이들이 보낸 시간을 그대로 담았어요.</p>
+    <div class="car reveal d2" id="recentActs">
+      <a class="act" href="activities.html"><div class="thumb"></div><div class="body"><h3>아이들의 이야기가 이곳에 자동으로 올라옵니다</h3></div></a>
+    </div>
+    <div class="dots reveal d3" id="actDots"></div>
+    <p class="more-wrap reveal d3"><a class="btn more" href="activities.html">전체 보기</a></p>
+  </div>
+</section>
+
+<section class="sec" id="location">
   <div class="inner">
     <p class="eyebrow reveal">센터 안내</p>
     <h2 class="reveal d1">오시는 길</h2>
@@ -240,6 +218,23 @@
         <div class="loc-tel">032-277-2007</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- [프리뷰] 마무리 — 신청 CTA 밴드(연그린, 스크롤 끝을 행동으로 닫음) -->
+<style>
+#ctaPre{ background:var(--green-bg); }
+#ctaPre .inner{ text-align:center; }
+#ctaPre h2{ font-size:26px; font-weight:800; letter-spacing:-.6px; margin:0 0 12px; color:var(--g900); }
+#ctaPre .sub{ margin:0 0 24px; color:var(--g700); }
+#ctaPre .ctel{ margin:16px 0 0; font-size:14px; color:var(--g700); }
+</style>
+<section class="sec center" id="ctaPre">
+  <div class="inner">
+    <h2 class="reveal d1">아이에게 맞는 선생님, 찾아드릴게요</h2>
+    <p class="sub reveal d2">상담을 신청하시면 일정에 맞는 선생님을 안내해 드려요.</p>
+    <p class="reveal d2"><a class="btn fill" href="contact.html">상담 신청하기</a></p>
+    <p class="ctel reveal d3">전화 문의 032-277-2007 · 평일 11:00~18:00</p>
   </div>
 </section>
 
@@ -387,7 +382,7 @@
 (function () {
   var NAV = 60, animating = false, prevDelta = 0, prevTime = 0;
   var sections = [].slice.call(document.querySelectorAll('.fold, .sec.full'));
-  function isFP() { return !window.matchMedia('(max-width: 760px), (pointer: coarse)').matches; } // 리사이즈 대응: 매번 평가
+  function isFP() { return false; } // [프리뷰] 풀페이지 스크롤 비활성화 → 자연 스크롤(섹션 높이 자유)
   function targets() {
     var t = sections.map(function (s) { return s.getBoundingClientRect().top + window.pageYOffset - NAV; });
     t.push(document.documentElement.scrollHeight - window.innerHeight); // 마지막 = 푸터까지
