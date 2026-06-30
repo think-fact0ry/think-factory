@@ -6,16 +6,47 @@
 <title>생각공작소 · 수업 피드백</title>
 <meta name="robots" content="noindex">
 <style>
-  /* iframe은 full-height로 둔다(키보드 뒤까지). 폼(iframe 내부)이 *자기 visualViewport*로 자기 높이를
-     키보드 위로 줄인다(§5.6-2). 부모는 사이징·interactive-widget을 건드리지 않음 — 그래야 폼 vv가 키보드를 본다. */
-  html,body{margin:0; padding:0; height:100%; background:#f7f5f1; overflow:hidden; overscroll-behavior:none;}
-  iframe{display:block; border:none; width:100%; height:100%;}
+  html,body{margin:0; padding:0; background:#f7f5f1;}
+  /* 06/contact 방식(검증됨): iframe이 내용 높이로 자람(폼이 height 보고) → *부모 페이지가* 스크롤.
+     iframe 내부엔 고정·잠금 없음. 키보드/스크롤은 부모가 처리(카톡 인앱·PC 둘 다 자연 동작). */
+  iframe{display:block; border:none; width:100%;}
+  /* 토스트·종료안내는 부모가 화면 하단에 띄움(iframe 내부 fixed는 실제 화면 하단이 아니므로) */
+  .form-toast{position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(10px); max-width:calc(100% - 32px); background:#191f28; color:#F9FBFA; font-size:14px; font-weight:600; line-height:1.5; text-align:center; padding:12px 18px; border-radius:12px; box-shadow:0 6px 24px rgba(0,0,0,.22); opacity:0; pointer-events:none; transition:opacity .2s,transform .2s; z-index:1000; white-space:pre-line;}
+  .form-toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .exithint{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(10px); display:flex; align-items:center; gap:10px; max-width:calc(100% - 32px); background:#191f28; color:#F9FBFA; font-size:14.5px; font-weight:600; padding:9px 20px 9px 9px; border-radius:99px; box-shadow:0 6px 24px rgba(0,0,0,.28); opacity:0; pointer-events:none; transition:opacity .2s,transform .2s; z-index:1001; white-space:nowrap;}
+  .exithint.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .exithint .ck{width:28px; height:28px; border-radius:50%; background:#3a8a5f; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .exithint .ck svg{width:15px; height:15px;}
 </style>
 </head>
 <body>
-<iframe
-  src="https://script.google.com/macros/s/AKfycbxzbwBUa6BB8N5GozHgCWGcd-JJp_tKCW1U7LgRFD0ZqjFOFVKettyYPGOL5mEakvIW/exec"
-  title="생각공작소 수업 피드백"
-  allow="clipboard-write"></iframe>
+<iframe id="ff" title="생각공작소 수업 피드백" allow="clipboard-write"
+  src="https://script.google.com/macros/s/AKfycbxzbwBUa6BB8N5GozHgCWGcd-JJp_tKCW1U7LgRFD0ZqjFOFVKettyYPGOL5mEakvIW/exec"></iframe>
+<div class="form-toast" id="formToast"></div>
+<div class="exithint" id="exitHint"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>한 번 더 뒤로 가면 나가요.</div>
+<script>
+  // 폼(iframe)↔부모 브릿지 (06 contact.html 그대로). GAS 이중 iframe이라 폼은 window.top으로 보내고, 부모는 e.source로 회신.
+  (function(){
+    var f=document.getElementById('ff'), childWin=null;
+    function vpH(){ return window.visualViewport ? window.visualViewport.height : window.innerHeight; }
+    function sendVH(){ if(childWin){ try{ childWin.postMessage({tfParent:1, vh:vpH()}, '*'); }catch(e){} } }
+    function okGas(o){ try{ var h=new URL(o).hostname; return h==='script.google.com' || h.endsWith('.googleusercontent.com'); }catch(e){ return false; } }
+    function toast(msg,kind){ var t=document.getElementById('formToast'); if(!t) return; t.textContent=msg; t.className='form-toast show'+(kind==='error'?' err':''); clearTimeout(t._t); t._t=setTimeout(function(){ t.className='form-toast'; },2400); }
+    function exitBox(){ var e=document.getElementById('exitHint'); if(!e) return; e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(function(){ e.classList.remove('show'); },2000); }
+    window.addEventListener('message', function(e){
+      if(!okGas(e.origin)) return;
+      var d=e.data; if(!d || d.tfApply!==1) return;
+      childWin=e.source;
+      if(d.type==='ready'){ sendVH(); }
+      else if(d.type==='height' && d.height){ f.style.height=d.height+'px'; }
+      else if(d.type==='scrolltop'){ window.scrollTo({top:0, behavior:'auto'}); }
+      else if(d.type==='toast'){ toast(d.msg, d.kind); }
+      else if(d.type==='scrollto' && typeof d.y==='number'){ var ty=f.getBoundingClientRect().top+window.pageYOffset+d.y-window.innerHeight*0.42; window.scrollTo({top:Math.max(0,ty), behavior:'smooth'}); }
+      else if(d.type==='exithint'){ exitBox(); }
+    });
+    window.addEventListener('resize', sendVH);
+    if(window.visualViewport) window.visualViewport.addEventListener('resize', sendVH);
+  })();
+</script>
 </body>
 </html>
