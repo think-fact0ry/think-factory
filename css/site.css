@@ -403,6 +403,9 @@ footer .legal a:hover{ color:var(--g900); }
 .mdiv{ display:none; border:none; }
 @media (max-width:600px), (pointer:coarse){ .mdiv{ display:block; height:2px; width:60%; max-width:220px; margin:0 auto;
   background:linear-gradient(to right, transparent 0%, var(--g200) 30%, var(--g200) 70%, transparent 100%); } }
+/* contact 임베드 폼(흰)↔FAQ(흰) 경계선 — .mdiv 결, 전 뷰포트(폼이 모든 화면서 흰배경이라) */
+.faq-div{ display:block; border:none; height:2px; width:60%; max-width:220px; margin:30px auto;
+  background:linear-gradient(to right, transparent 0%, var(--g200) 30%, var(--g200) 70%, transparent 100%); }
 
 /* 아래로 내려가는 힌트 — > 모양을 90° 돌려(아래 방향) 가로로 길게, 하단 중앙 */
 .sp-next{ position:absolute; left:50%; bottom:14px; transform:translateX(-50%); background:none; border:none;
