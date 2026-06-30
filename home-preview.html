@@ -105,26 +105,36 @@
   </div>
 </div>
 
-<!-- [프리뷰 샘플] '선생님이 갑니다' — 토스 언어로: 가운데→왼쪽 정렬, 여백 크게, 큰 제목+짧은 구절(문구는 그대로) -->
+<!-- [프리뷰 샘플] '선생님이 갑니다' — 비대칭(사진 좌 / 텍스트 우 / 배경 코디, ex32 WISE 결). 이미지는 플레이스홀더(얼굴 여부 유성 결정) -->
 <style>
-#stmtSec{ padding:120px 0; }                                  /* 토스식 넉넉한 여백 — 한 화면 한 가지 */
-#stmtSec .statement{ text-align:left; max-width:780px; }       /* 가운데 X → 왼쪽 */
-#stmtSec .ey{ font-size:14px; font-weight:700; color:var(--green); letter-spacing:.3px; margin:0 0 22px; }
-#stmtSec .s1{ font-size:20px; font-weight:700; color:var(--g500); letter-spacing:-.4px; margin:0 0 8px; }
-#stmtSec .s2{ font-size:clamp(40px,7vw,68px); font-weight:800; letter-spacing:-2px; line-height:1.12; margin:0 0 30px; color:var(--g900); }
+#stmtSec{ padding:0; background:var(--green50); }                 /* 배경=이미지 톤에 맞춤(임시 소프트그린) */
+#stmtSec > .inner{ max-width:none; padding:0; }
+#stmtSec .vsplit{ display:grid; grid-template-columns:1.05fr 1fr; min-height:74vh; align-items:center; }
+#stmtSec .vimg{ align-self:stretch; position:relative; overflow:hidden; background:var(--green100); }
+#stmtSec .vimg img{ width:100%; height:100%; object-fit:cover; display:block; }
+#stmtSec .vimg .ph-note{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; color:var(--green); font-weight:700; font-size:14px; line-height:1.6; padding:24px; }
+#stmtSec .vtext{ padding:64px clamp(28px,6vw,96px); text-align:left; }
+#stmtSec .ey{ font-size:14px; font-weight:700; color:var(--green); letter-spacing:.3px; margin:0 0 18px; }
+#stmtSec .s1{ font-size:19px; font-weight:700; color:var(--g500); margin:0 0 6px; }
+#stmtSec .s2{ font-size:clamp(38px,5vw,60px); font-weight:800; letter-spacing:-1.8px; line-height:1.14; margin:0 0 24px; color:var(--g900); }
 #stmtSec .s2 b{ color:var(--green); }
-#stmtSec .s3{ font-size:18px; color:var(--g700); line-height:1.75; margin:0; }
+#stmtSec .s3{ font-size:17px; color:var(--g700); line-height:1.75; margin:0; }
 #stmtSec.js .rl{ display:inline-block; opacity:.16; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
 #stmtSec.js.lit .rl{ opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce){ #stmtSec.js .rl{ opacity:1; transform:none; transition:none; } }
-@media(max-width:760px){ #stmtSec{ padding:80px 0; } #stmtSec .s2{ letter-spacing:-1.2px; } }
+@media(max-width:760px){ #stmtSec .vsplit{ grid-template-columns:1fr; min-height:0; } #stmtSec .vimg{ aspect-ratio:4/3; } #stmtSec .vtext{ padding:48px 24px; } #stmtSec .s2{ letter-spacing:-1.2px; } }
 </style>
-<section class="sec tint" id="stmtSec">
-  <div class="inner statement">
-    <p class="ey"><span class="rl">재가방문 · 인천 전 지역</span></p>
-    <p class="s1"><span class="rl">찾아오지 않으셔도 됩니다.</span></p>
-    <p class="s2"><span class="rl">선생님이 <b>갑니다</b>.</span></p>
-    <p class="s3"><span class="rl">아이에게 가장 편한 곳은 아이의 공간입니다.</span><br><span class="rl">낯선 환경에 적응하는 시간 없이,</span><br><span class="rl">아이가 가장 자연스러운 모습으로 선생님을 만납니다.</span></p>
+<section class="sec" id="stmtSec">
+  <div class="inner">
+    <div class="vsplit">
+      <div class="vimg"><div class="ph-note">선생님과 아이 이미지가<br>들어갈 자리 (예정)<br><span style="font-weight:500;color:var(--g500)">노페이스 권장 · 배경은 이 톤으로 코디</span></div></div>
+      <div class="vtext statement">
+        <p class="ey"><span class="rl">재가방문 · 인천 전 지역</span></p>
+        <p class="s1"><span class="rl">찾아오지 않으셔도 됩니다.</span></p>
+        <p class="s2"><span class="rl">선생님이 <b>갑니다</b>.</span></p>
+        <p class="s3"><span class="rl">아이에게 가장 편한 곳은 아이의 공간입니다.</span><br><span class="rl">낯선 환경에 적응하는 시간 없이,</span><br><span class="rl">아이가 가장 자연스러운 모습으로 선생님을 만납니다.</span></p>
+      </div>
+    </div>
   </div>
 </section>
 
