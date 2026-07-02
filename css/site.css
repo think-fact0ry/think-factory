@@ -1,25 +1,33 @@
 /* 생각공작소 홈페이지 — 디자인 토큰은 09 합격작(토스식 미니멀)과 동일 */
 :root{
-  /* 회색 — 토스 TDS 그레이 풀스케일 (디자인원칙 §4.3 정본) */
-  --g900:#191f28; --g800:#333d4b; --g700:#4e5968; --g600:#6b7684; --g500:#8b95a1;
-  --g400:#b0b8c1; --g300:#d1d6db; --g200:#e5e8eb; --g100:#f2f4f6; --g50:#f9fafb;
-  /* 초록 — OKLCH 스케일(회색 명도+우리 채도, green600=브랜드 #3a8a5f 앵커) §4.3 */
+/* TOKENS:START — docs/1 §3.1 정본, 토큰동기.js 주입. 직접 수정 X (md 고치고 `node 디자인프리뷰/토큰동기.js`) */
+  /* 회색 — §3.1 정본(토스 TDS 그레이, 중립). 필요한 칸만 골라 써도 되나 이름·값은 이대로 */
+  --g50:#f9fafb; --g100:#f2f4f6; --g200:#e5e8eb; --g300:#d1d6db;
+  --g400:#b0b8c1; --g500:#8b95a1; --g600:#6b7684; --g700:#4e5968;
+  --g800:#333d4b; --g900:#191f28;
+  /* 초록 — §3.1 OKLCH 스케일(회색 명도 사다리 + 우리 채도, green600=브랜드 #3a8a5f 앵커) */
   --green50:#f4fdf7; --green100:#e0fcea; --green200:#c4f6d6; --green300:#a4e8bf; --green400:#7ecb9d;
   --green500:#57a77a; --green600:#3a8a5f; --green700:#166841; --green800:#01492a; --green900:#002614;
-  --green:var(--green600); --green-dark:var(--green700); --green-bg:var(--green100); --red:#f04452; /* 별칭(기존 코드 호환) */
-  --ink-on-dark:#F9FBFA; /* 어두운 배경 위 흰 텍스트 — 순백(#fff) 금지(헐레이션). 원칙 §시각 참조 */
-  --maxw:1040px;
-  --maxw-read:900px; /* 2단 폭 체계 — 시각/갤러리=inner-wide(1180), 본문·표·텍스트=읽기 폭(900). 푸터도 본문폭에 맞춤 */
-  /* 그림자: 검정 대신 그린 틴트 · 2겹 (디자인 라운드 2) */
-  --sh1:0 1px 2px rgba(47,111,77,.05), 0 4px 14px rgba(47,111,77,.06);
-  --sh2:0 2px 8px rgba(47,111,77,.08), 0 12px 30px rgba(47,111,77,.12);
-  /* 라운드 토큰 — 반응형(모바일↓), 표준 원호. 알약(99px)·원(50%)·점은 제외(의도된 모양). (유성 2026-06-29: 애플 squircle 검토 → 표준 토큰·반응형 채택) */
-  --r-sm:clamp(7px,1.8vw,10px);   /* 작은: 토스트·블로그 이미지·작은 버튼 */
-  --r-md:clamp(10px,2.6vw,14px);  /* 카드·박스·버튼(대부분) */
-  --r-lg:clamp(13px,3.2vw,20px);  /* 큰 박스·히어로·미션비전 */
-  /* 타입 스케일 — §4.4 (큰 제목 clamp 유동 / 본문 고정) */
+  --green:var(--green600); --green-dark:var(--green700); --green-bg:var(--green100);  /* 별칭(기존 코드 호환) */
+  /* 시맨틱 */
+  --red:#f04452;           /* 에러·경고 상태(폼 오류·OTP 오류·알림) */
+  --ink-on-dark:#F9FBFA;   /* 어두운 배경 흰 글씨(§3.5 line125) */
+  /* 버튼·뱃지 시맨틱 (§4.14 버튼 체계 — 유성 2026-07-02, 토스 TDS 흡수) */
+  --dark:#525966;          /* dark variant(중립 짙은 회색 버튼/뱃지) + 흰 폰트 */
+  --danger:#D25357;        /* danger variant(파괴적 액션 버튼/뱃지) + 흰 폰트. ※--red(#f04452)와 구분: red=상태알림, danger=버튼 */
+  --danger-weak-bg:#fdecee; --danger-weak-fg:#c0392b;   /* danger weak(연빨강 채움+진한빨강 폰트) */
+  --p-disabled:#b7e0c8; --dark-disabled:#c8ccd0; --danger-disabled:#f2cdce;   /* disabled = variant 흐린 버전+흰폰트(회색 아님) */
+  /* 라운드 — §3.3 */
+  --r-sm:clamp(7px,1.8vw,10px); --r-md:clamp(10px,2.6vw,14px); --r-lg:clamp(13px,3.2vw,20px);
+  /* 타입 스케일 — §3.2 (큰 제목 clamp 유동 / 본문 고정) */
   --fs-display:clamp(28px,6vw,42px); --fs-h1:clamp(23px,3.4vw,30px); --fs-h2:clamp(20px,2.6vw,26px); --fs-h3:20px;
   --fs-title:17px; --fs-body:15px; --fs-sm:13.5px; --fs-caption:12px;
+  /* TOKENS:END */
+  /* ── 홈 전용 토큰(동기 대상 아님, 마커 밖) ── */
+  --maxw:1040px;
+  --maxw-read:900px; /* 2단 폭 체계 — 시각/갤러리=inner-wide(1180), 본문·표·텍스트=읽기 폭(900) */
+  --sh1:0 1px 2px rgba(47,111,77,.05), 0 4px 14px rgba(47,111,77,.06);   /* 그림자: 검정 대신 그린 틴트·2겹 */
+  --sh2:0 2px 8px rgba(47,111,77,.08), 0 12px 30px rgba(47,111,77,.12);
 }
 /* 반응형 전용 줄바꿈 헬퍼 */
 br.mo{ display:none; }
