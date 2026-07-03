@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>초기 모니터링 · 진보형 신원입력</title>
-<!-- 16_조기피드백 페이지1 진보형(§4.2-9 활성 맨 위) 실동작 프로토타입. 정본=prototype/, 서빙=think-factory/feedback/pre2/.
-     생년월일 8자리 치면 아래로·이름칸이 위에 등장. 형제 구분 방식은 상단 토글로 비교. ⚠️iOS 자동포커스 키패드=실기기 확인(§4.2-9). -->
+<title>초기 모니터링 · 형제 마감 비교</title>
+<!-- 16_조기피드백 페이지1 최종안(이름 위·생년월일 아래·밑줄·단일 무구분) 베이스. 형제 2명일 때 마감(번호 스타일·배경) 비교.
+     정본=prototype/, 서빙=think-factory/feedback/pre2/. 채택 시 Index 병합 후 삭제(생명주기). -->
 <style>
   :root{
     --g50:#f9fafb; --g100:#f2f4f6; --g200:#e5e8eb; --g300:#d1d6db; --g400:#b0b8c1; --g500:#8b95a1; --g700:#4e5968; --g900:#191f28;
@@ -20,175 +20,112 @@
   html{scrollbar-gutter:stable;}
   html,body{margin:0; background:var(--beige);}
   body{font-family:Pretendard,-apple-system,system-ui,'Apple SD Gothic Neo',sans-serif; color:var(--g900); line-height:1.5; word-break:keep-all; -webkit-text-size-adjust:100%;}
-  .page{max-width:460px; margin:0 auto; min-height:100%; display:flex; flex-direction:column; padding:14px 18px 26px;}
+  .page{max-width:460px; margin:0 auto; padding:22px 18px 60px;}
+  .page-intro{margin:0 0 20px; padding:0 2px;}
+  .page-intro h1{font-size:19px; font-weight:700; margin:0 0 5px;}
+  .page-intro p{font-size:13.5px; color:var(--g500); margin:0; line-height:1.6;}
 
-  /* 형제 구분 토글바 */
-  .toggle{margin:0 0 14px;}
-  .toggle .tl{font-size:var(--fs-caption); color:var(--g500); margin:0 0 7px;}
-  .chips{display:flex; flex-wrap:wrap; gap:7px;}
-  .stchip{font:inherit; font-size:12.5px; font-weight:600; padding:7px 12px; border-radius:999px; border:1px solid var(--g200); background:#fff; color:var(--g700); cursor:pointer;}
-  .stchip.on{border-color:var(--green200); background:var(--green-bg); color:var(--green); font-weight:700;}
+  .variant{margin:0 0 30px;}
+  .vlabel{font-size:13.5px; font-weight:700; color:var(--g900); margin:0 0 4px; padding:0 2px;}
+  .vnote{font-size:var(--fs-caption); color:var(--g500); margin:0 0 10px; padding:0 2px;}
 
-  .intro-card{background:#fff; border-radius:var(--r-lg); padding:24px 20px; box-shadow:0 2px 12px rgba(0,0,0,.05);}
+  .intro-card{background:#fff; border-radius:var(--r-lg); padding:22px 18px; box-shadow:0 2px 12px rgba(0,0,0,.05);}
   .brand-chip{display:inline-block; width:fit-content; font-size:var(--fs-caption); font-weight:700; color:var(--green); background:var(--green-bg); padding:5px 12px; border-radius:99px; margin-bottom:13px;}
   .head{font-size:var(--fs-h1); font-weight:700; letter-spacing:-.3px; margin:0 0 8px; line-height:1.4;}
   .head .em{font-weight:400;}
   .lead{font-size:14.5px; color:var(--g500); margin:0 0 18px; line-height:1.6;}
-  .spacer{flex:1; min-height:16px;}
 
   /* 밑줄형 입력(§4.1-2) */
-  .tfield{margin-bottom:15px;}
-  .tfield label{display:block; font-size:12.5px; font-weight:600; color:var(--g500); margin:0 0 5px; transition:color .15s;}
-  .tfield.focus label{color:var(--green);}
-  .tin-wrap{position:relative; border-bottom:2px solid var(--g200); transition:border-color .15s;}
-  .tfield.focus .tin-wrap{border-color:var(--green);}
+  .tfield{margin-bottom:15px;} .tfield:last-child{margin-bottom:4px;}
+  .tfield label{display:block; font-size:12.5px; font-weight:600; color:var(--g500); margin:0 0 5px;}
+  .tin-wrap{position:relative; border-bottom:2px solid var(--g200);}
   .tin-wrap input{width:100%; border:none; background:none; outline:none; font:inherit; font-size:18px; font-weight:600; color:var(--g900); padding:2px 34px 3px 0; caret-color:var(--green); letter-spacing:-.2px;}
   .tin-wrap input::placeholder{color:var(--g300); font-weight:500;}
-  .tin-wrap .clr{position:absolute; right:0; top:6px; width:15px; height:15px; border-radius:50%; background:var(--g300); border:none; display:none; align-items:center; justify-content:center; cursor:pointer; padding:0;}
-  .tfield.has-val .clr{display:flex;}
+  .tin-wrap .clr{position:absolute; right:0; top:6px; width:15px; height:15px; border-radius:50%; background:var(--g300); border:none; display:flex; align-items:center; justify-content:center; padding:0;}
   .tin-wrap .clr svg{width:7px; height:7px; color:#fff; display:block;}
 
-  /* 진보형: 이름칸이 위(order 0), 생년월일 아래(order 1). 이름은 생년월일 완료 후 등장 */
-  .pfields{display:flex; flex-direction:column;}
-  .f-name{order:0; display:none;}
-  .f-name.on{display:block; animation:reveal .28s cubic-bezier(.22,.7,.25,1);}
-  .f-birth{order:1;}
-  .f-birth .tfield, .f-name .tfield{margin-bottom:14px;}
-  @keyframes reveal{from{opacity:0; transform:translateY(-7px);} to{opacity:1; transform:none;}}
-
-  /* 아동 그룹 헤더(태그/번호/−) — 형제일 때만 */
+  /* 아동 헤더 = 번호 + − */
   .khead{display:flex; align-items:center; justify-content:space-between; margin:0 0 10px;}
-  .ktag{font-size:var(--fs-caption); font-weight:700; color:var(--green); letter-spacing:-.2px;}
-  .knum{width:24px; height:24px; border-radius:50%; background:var(--green700); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;}
-  .kdel{border:none; background:transparent; color:var(--g400); cursor:pointer; padding:5px; display:inline-flex; align-items:center;}
-  .kdel svg{width:18px; height:18px;}
+  .kn-c700{width:24px;height:24px;border-radius:50%;background:var(--green700);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+  .kn-c600{width:24px;height:24px;border-radius:50%;background:var(--green600);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+  .kn-text{color:var(--green);font-weight:800;font-size:15px;}
+  .kn-tag{display:flex;align-items:center;gap:8px;}
+  .kn-tag .kt{font-size:var(--fs-caption);font-weight:700;color:var(--green);}
+  .kdel{border:none;background:transparent;color:var(--g400);cursor:pointer;padding:5px;display:inline-flex;align-items:center;}
+  .kdel svg{width:18px;height:18px;}
 
-  /* 단일 아동 = 헤더·배경 없음(대다수 최적화). 형제(.multi)일 때만 구분 UI */
-  #kidList:not(.multi) .khead{display:none;}
-  .khead{display:none;}                        /* 기본 숨김 */
-  #kidList.multi .khead{display:flex;}          /* 형제일 때 노출 */
-  body.st-none #kidList.multi .khead{display:none;}   /* '없음' 스타일 = 여백만 */
-  /* 태그 vs 번호 전환 */
-  .knum{display:none;} body.st-num #kidList.multi .knum{display:inline-flex;} body.st-num #kidList.multi .ktag{display:none;}
-  /* 형제 배경(형제일 때만) */
-  #kidList.multi.bgpad .kid{border-radius:var(--r-md); padding:14px 15px 4px;}
-  body.st-shadow #kidList.multi .kid{background:#fff; box-shadow:0 2px 10px rgba(0,0,0,.07); border-radius:var(--r-md); padding:14px 15px 4px;}
-  body.st-g50 #kidList.multi .kid{background:var(--g50); border-radius:var(--r-md); padding:14px 15px 4px;}
-  body.st-accent #kidList.multi .kid{border-left:3px solid var(--green200); padding-left:13px;}
-  #kidList.multi .kid + .kid{margin-top:18px;}   /* 형제 간격 18px(유성) */
+  /* 형제 간격·배경 */
+  .kid + .kid{margin-top:18px;}
+  .b-shadow .kid{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.07);border-radius:var(--r-md);padding:14px 15px 4px;}
+  .b-g50 .kid{background:var(--g50);border-radius:var(--r-md);padding:14px 15px 4px;}
+  .b-accent .kid{border-left:3px solid var(--green200);padding-left:13px;}
 
-  .sib-link{display:block; width:100%; text-align:center; border:none; background:none;
-            color:var(--green); font:inherit; font-size:14px; font-weight:600; cursor:pointer; padding:13px 4px 2px; margin-top:6px; transition:transform .12s;}
-  .sib-link:active{transform:scale(.93);}
-  .sib-link[hidden]{display:none;}
+  /* 좌측 인덱스(번호 좌·입력 우, ex40) */
+  .lay-left .kid{position:relative;display:flex;gap:12px;}
+  .lay-left .khead{display:block;margin:0;}
+  .lay-left .kn-c700{margin-top:2px;}
+  .lay-left .ki-body{flex:1;min-width:0;}
+  .lay-left .kdel{position:absolute;top:-4px;right:-4px;}
 
-  .btn{width:100%; padding:15px; border:none; border-radius:12px; font:inherit; font-size:16px; font-weight:700; color:#fff; background:var(--green); cursor:pointer; transition:background .2s,transform .1s; margin-top:14px;}
-  .btn:active{background:var(--green-dark); transform:scale(.97);}
-  .btn[disabled]{background:var(--g200); color:var(--g500); cursor:default; transform:none;}
+  .sib-link{display:block;width:100%;text-align:center;border:none;background:none;color:var(--green);font:inherit;font-size:14px;font-weight:600;padding:13px 4px 2px;margin-top:8px;}
 </style>
 </head>
-<body class="st-tag">
+<body>
 <div class="page">
-  <div class="toggle">
-    <div class="tl">형제 구분 방식 (형제 추가하면 보여요)</div>
-    <div class="chips" id="stChips"></div>
+  <div class="page-intro">
+    <h1>형제일 때 마감 비교</h1>
+    <p>확정안(이름 위·생년월일 아래·밑줄·단일 무구분) 위에서 형제 2명일 때 번호·배경만 다르게. 번호만 알려주세요.</p>
   </div>
-
-  <div class="intro-card">
-    <span class="brand-chip">초기 모니터링</span>
-    <div class="head">3개월 동안<br>어떠셨어요? <span class="em">😊</span></div>
-    <p class="lead">더 좋은 수업을 위해, 잠깐 참여해주세요.</p>
-    <div id="kidList"></div>
-    <button class="sib-link" id="sibLink">＋ 함께 다니는 아이가 있어요</button>
-  </div>
-
-  <div class="spacer"></div>
-  <button class="btn" id="go" disabled>참여하기</button>
+  <div id="variants"></div>
 </div>
 
 <script>
-  var ORD=['첫째','둘째','셋째','넷째'];
-  var kids=[{birth:'', name:'', revealed:false}];
-  var CLRICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  var KIDS=[{name:'김서준',birth:'2021. 03. 15'},{name:'김서아',birth:'2023. 07. 22'}];
+  var CLR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
   var MINUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="12" x2="18" y2="12"/></svg>';
-  function $(id){return document.getElementById(id);}
   function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
-  function digits(s){return String(s||'').replace(/\D/g,'');}
-  function fmtBirth(v){var d=digits(v).slice(0,8);var o=d.slice(0,4);if(d.length>4)o+='. '+d.slice(4,6);if(d.length>6)o+='. '+d.slice(6,8);return o;}
-  function kidValid(k){return k.name.trim()&&digits(k.birth).length===8;}
 
-  // 형제 구분 스타일 토글
-  var STYLES=[['tag','태그'],['num','번호 원'],['shadow','그림자 박스'],['g50','회색면'],['accent','악센트 바'],['none','없음(여백)']];
-  var curStyle='tag';
-  function renderChips(){
-    $('stChips').innerHTML=STYLES.map(function(s){return '<button class="stchip'+(s[0]===curStyle?' on':'')+'" data-s="'+s[0]+'">'+s[1]+'</button>';}).join('');
-    Array.prototype.forEach.call($('stChips').querySelectorAll('.stchip'),function(b){
-      b.onclick=function(){ curStyle=b.dataset.s; document.body.className='st-'+curStyle; renderChips(); };
-    });
-  }
+  // num: c700|c600|text|tag / bg: ''|shadow|g50|accent / layout: stack|left
+  var VARIANTS=[
+    {label:'V1 · 번호 원(green700) · 배경 없음',  note:'현 Index 확정안',            num:'c700', bg:''},
+    {label:'V2 · 번호 원 + 그림자 박스',          note:'그림자로 아이 묶음',         num:'c700', bg:'shadow'},
+    {label:'V3 · 번호 원 + 회색면(g50)',          note:'면으로 아이 묶음',           num:'c700', bg:'g50'},
+    {label:'V4 · 번호 원 + 왼쪽 악센트 바',       note:'세로선 강조',                num:'c700', bg:'accent'},
+    {label:'V5 · 번호 원 + "첫째 아이" 텍스트',   note:'번호 옆에 순서 텍스트 병기',  num:'tag',  bg:''},
+    {label:'V6 · "1." 텍스트 번호(원 없이)',      note:'원 대신 초록 숫자',          num:'text', bg:''},
+    {label:'V7 · 번호 원(green600, 밝은)',        note:'V1보다 밝은 초록 번호',       num:'c600', bg:''},
+    {label:'V8 · 번호 좌측 인덱스(ex40)',         note:'번호 좌·입력 우',            num:'c700', bg:'', layout:'left'}
+  ];
 
-  function tin(id,label,type,inmode,ph,val){
-    return '<div class="tfield" id="tf-'+id+'"><label for="'+id+'">'+label+'</label><div class="tin-wrap">'
-      +'<input id="'+id+'" type="'+type+'" inputmode="'+inmode+'" placeholder="'+esc(ph)+'" readonly autocomplete="off" value="'+esc(val)+'">'
-      +'<button class="clr" type="button" tabindex="-1">'+CLRICON+'</button></div></div>';
+  function tin(label,ph,type,val){
+    return '<div class="tfield"><label>'+label+'</label><div class="tin-wrap">'
+      +'<input type="'+type+'" inputmode="'+(type==='tel'?'numeric':'text')+'" placeholder="'+esc(ph)+'" value="'+esc(val)+'" readonly>'
+      +'<button class="clr" type="button" tabindex="-1">'+CLR+'</button></div></div>';
   }
-  function kidHtml(k,i){
-    return '<div class="kid" data-i="'+i+'">'
-      +'<div class="khead"><span class="ktag">'+ORD[i]+' 아이</span><span class="knum">'+(i+1)+'</span>'
-      +'<button class="kdel" data-del="'+i+'" aria-label="지우기">'+MINUS+'</button></div>'
-      +'<div class="pfields">'
-      +'<div class="f-name'+(k.revealed?' on':'')+'">'+tin('nm'+i,'아동 이름','text','text','이름',k.name)+'</div>'
-      +'<div class="f-birth">'+tin('bt'+i,'생년월일','tel','numeric','2021. 03. 15',k.birth)+'</div>'
-      +'</div></div>';
+  function fields(k){ return tin('아동 이름','이름','text',k.name)+tin('생년월일','생년월일','tel',k.birth); }
+  function numEl(v,i){
+    if(v.num==='text') return '<span class="kn-text">'+(i+1)+'.</span>';
+    if(v.num==='c600') return '<span class="kn-c600">'+(i+1)+'</span>';
+    if(v.num==='tag')  return '<span class="kn-tag"><span class="kn-c700">'+(i+1)+'</span><span class="kt">'+['첫째','둘째','셋째','넷째'][i]+' 아이</span></span>';
+    return '<span class="kn-c700">'+(i+1)+'</span>';
   }
-  function render(){
-    var kl=$('kidList');
-    kl.innerHTML=kids.map(kidHtml).join('');
-    kl.classList.toggle('multi', kids.length>1);
-    $('sibLink').hidden = kids.length>=4;
-    bind();
-    updateGo();
+  function kidBlock(k,i,v){
+    var del='<button class="kdel" aria-label="지우기">'+MINUS+'</button>';
+    if(v.layout==='left'){
+      return '<div class="kid"><div class="khead">'+numEl(v,i)+'</div><div class="ki-body">'+fields(k)+'</div>'+del+'</div>';
+    }
+    return '<div class="kid"><div class="khead">'+numEl(v,i)+del+'</div>'+fields(k)+'</div>';
   }
-  function updateGo(){ $('go').disabled = !kids.some(kidValid); }
-
-  function setupTin(inp){
-    var tf=inp.parentNode.parentNode, clr=tf.querySelector('.clr');
-    function upd(){ tf.classList.toggle('has-val', inp.value.length>0); }
-    inp.addEventListener('focus',function(){ inp.removeAttribute('readonly'); tf.classList.add('focus'); });
-    inp.addEventListener('blur',function(){ tf.classList.remove('focus'); });
-    inp.addEventListener('input',upd);
-    clr.addEventListener('click',function(){ inp.value=''; inp.dispatchEvent(new Event('input')); inp.focus(); });
-    upd();
+  function variantHtml(v){
+    var kids=KIDS.map(function(k,i){return kidBlock(k,i,v);}).join('');
+    var wrapCls='intro-card'+(v.bg?(' b-'+v.bg):'')+(v.layout==='left'?' lay-left':'');
+    var inner='<div class="'+wrapCls+'"><span class="brand-chip">초기 모니터링</span>'
+      +'<div class="head">3개월 동안<br>어떠셨어요? <span class="em">😊</span></div>'
+      +'<p class="lead">더 좋은 수업을 위해, 잠깐 참여해주세요.</p>'+kids
+      +'<button class="sib-link">＋ 함께 다니는 아이가 있어요</button></div>';
+    return '<div class="variant"><div class="vlabel">'+v.label+'</div><div class="vnote">'+v.note+'</div>'+inner+'</div>';
   }
-  function bind(){
-    kids.forEach(function(k,i){
-      var bt=$('bt'+i), nm=$('nm'+i); if(!bt||!nm) return;
-      setupTin(bt); setupTin(nm);
-      bt.addEventListener('input',function(){
-        kids[i].birth=fmtBirth(bt.value); bt.value=kids[i].birth; updateGo();
-        // 생년월일 8자리 완료 → 이름칸 등장(위로) + 포커스(키패드 유지 시도, §4.2-9)
-        if(digits(bt.value).length===8 && !kids[i].revealed){
-          kids[i].revealed=true;
-          var wrap=bt.closest('.pfields').querySelector('.f-name');
-          wrap.classList.add('on');
-          setTimeout(function(){ nm.removeAttribute('readonly'); nm.focus(); },60);
-        }
-      });
-      nm.addEventListener('input',function(){ kids[i].name=nm.value; updateGo(); });
-    });
-    Array.prototype.forEach.call($('kidList').querySelectorAll('.kdel'),function(b){
-      b.onclick=function(){ var i=+b.dataset.del; kids.splice(i,1); if(!kids.length)kids.push({birth:'',name:'',revealed:false}); render(); };
-    });
-  }
-  $('sibLink').onclick=function(){
-    var last=kids[kids.length-1];
-    if(!kidValid(last)){ return; }   // 프로토타입: 마지막 아이 완성해야 추가(안내 생략)
-    kids.push({birth:'',name:'',revealed:false}); render();
-    var el=$('bt'+(kids.length-1)); if(el){ el.removeAttribute('readonly'); el.focus(); }
-  };
-
-  renderChips();
-  render();
+  document.getElementById('variants').innerHTML=VARIANTS.map(variantHtml).join('');
 </script>
 </body>
 </html>
