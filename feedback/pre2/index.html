@@ -128,10 +128,11 @@
     {label:'V10 · 그림자 박스 + 번호 인덱스',     note:'회색면 대신 그림자로 묶음 (유성)',    bg:'shadow',sep:'gap',  head:'none', layout:'index'},
     {label:'V11 · 전체 흰박스 + 아이별 그림자박스',note:'⚠️ §3.6-2 카드 중첩(그림자판, 유성)', bg:'shadow',sep:'gap',  head:'text', warn:true},
     {label:'V12 · 라벨↔값(밑줄 없음) + 초록선',   note:'인풋 선 없애고 초록선만 · 좌 라벨/우 입력 (유성)', bg:'', sep:'gap', head:'line', layout:'labelval', nl:true},
-    {label:'V13 · 그림자 박스 + 라벨↔값',        note:'그림자 묶음 + 좌라벨/우입력',        bg:'shadow',sep:'gap',  head:'text', layout:'labelval'},
+    {label:'V13 · 그림자 박스 + 라벨↔값 (이름 헤더)', note:'태그 대신 아이 이름 · 어차피 이름 입력 (유성)', bg:'shadow',sep:'gap', head:'name', layout:'labelval'},
     {label:'V14 · g50면 + 상단 초록 라인',        note:'회색면 + 위 초록선',                bg:'g50',   sep:'gap',  head:'text', topline:true},
     {label:'V15 · 번호 원 태그 + g50면',         note:'태그 대신 초록 채움 번호',           bg:'g50',   sep:'gap',  head:'num'},
-    {label:'V16 · 흰 박스 + 테두리 (Pre 원본)',   note:'⚠️ §3.6-2 카드 중첩 이탈 — 참고',   bg:'box',   sep:'gap',  head:'text', warn:true}
+    {label:'V16 · 흰 박스 + 테두리 (Pre 원본)',   note:'⚠️ §3.6-2 카드 중첩 이탈 — 참고',   bg:'box',   sep:'gap',  head:'text', warn:true},
+    {label:'V17 · 그림자 박스 + 라벨↔값 + 번호 원', note:'V13에 번호 ①② 헤더 (유성)',        bg:'shadow',sep:'gap',  head:'num', layout:'labelval'}
   ];
 
   function tfield(label, ph, type, val){
@@ -158,6 +159,8 @@
       header='<div class="kh-line'+(v.head==='dash'?' kh-dash':'')+'"><span class="kid-tag">'+ORD[i]+' 아이</span><span class="kline"></span>'+delBtn()+'</div>';
     } else if(v.head==='num'){
       header='<div class="kh"><span class="knum">'+(i+1)+'</span>'+delBtn()+'</div>';
+    } else if(v.head==='name'){
+      header='<div class="kh"><span class="kid-tag">'+esc(k.name)+'</span>'+delBtn()+'</div>';   // 태그 대신 아이 이름
     } else if(v.head!=='none'){
       header='<div class="kh"><span class="kid-tag">'+ORD[i]+' 아이</span>'+delBtn()+'</div>';
     }
