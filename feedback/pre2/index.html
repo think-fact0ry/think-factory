@@ -25,9 +25,13 @@
   .page-intro h1{font-size:19px; font-weight:700; margin:0 0 5px;}
   .page-intro p{font-size:13.5px; color:var(--g500); margin:0; line-height:1.6;}
 
-  .variant{margin:0 0 30px;}
-  .vlabel{font-size:13.5px; font-weight:700; color:var(--g900); margin:0 0 4px; padding:0 2px;}
-  .vnote{font-size:var(--fs-caption); color:var(--g500); margin:0 0 10px; padding:0 2px;}
+  /* 상단 탭(버튼으로 전환) */
+  .tabs{display:flex; flex-wrap:wrap; gap:7px; margin:0 0 16px;}
+  .tab{font:inherit; font-size:13px; font-weight:700; padding:7px 13px; border-radius:999px; border:1px solid var(--g200); background:#fff; color:var(--g700); cursor:pointer;}
+  .tab.on{border-color:var(--green200); background:var(--green-bg); color:var(--green);}
+  .variant{margin:0;}
+  .vlabel{font-size:14px; font-weight:700; color:var(--g900); margin:0 0 4px; padding:0 2px;}
+  .vnote{font-size:var(--fs-caption); color:var(--g500); margin:0 0 12px; padding:0 2px;}
 
   .intro-card{background:#fff; border-radius:var(--r-lg); padding:22px 18px; box-shadow:0 2px 12px rgba(0,0,0,.05);}
   .brand-chip{display:inline-block; width:fit-content; font-size:var(--fs-caption); font-weight:700; color:var(--green); background:var(--green-bg); padding:5px 12px; border-radius:99px; margin-bottom:13px;}
@@ -74,9 +78,10 @@
 <div class="page">
   <div class="page-intro">
     <h1>형제일 때 마감 비교</h1>
-    <p>확정안(이름 위·생년월일 아래·밑줄·단일 무구분) 위에서 형제 2명일 때 번호·배경만 다르게. 번호만 알려주세요.</p>
+    <p>확정안 위에서 형제 2명일 때 번호·배경만 다르게. 위 버튼으로 전환해 보세요.</p>
   </div>
-  <div id="variants"></div>
+  <div class="tabs" id="tabs"></div>
+  <div id="view"></div>
 </div>
 
 <script>
@@ -125,7 +130,15 @@
       +'<button class="sib-link">＋ 함께 다니는 아이가 있어요</button></div>';
     return '<div class="variant"><div class="vlabel">'+v.label+'</div><div class="vnote">'+v.note+'</div>'+inner+'</div>';
   }
-  document.getElementById('variants').innerHTML=VARIANTS.map(variantHtml).join('');
+  var tabs=document.getElementById('tabs'), view=document.getElementById('view');
+  tabs.innerHTML=VARIANTS.map(function(v,i){return '<button class="tab" data-i="'+i+'">V'+(i+1)+'</button>';}).join('');
+  function show(i){
+    view.innerHTML=variantHtml(VARIANTS[i]);
+    Array.prototype.forEach.call(tabs.children,function(b,j){ b.classList.toggle('on', j===i); });
+    window.scrollTo(0,0);
+  }
+  Array.prototype.forEach.call(tabs.children,function(b){ b.onclick=function(){ show(+b.dataset.i); }; });
+  show(0);
 </script>
 </body>
 </html>
