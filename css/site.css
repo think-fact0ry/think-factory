@@ -1,18 +1,19 @@
 /* 생각공작소 홈페이지 — 디자인 토큰은 09 합격작(토스식 미니멀)과 동일 */
 :root{
 /* TOKENS:START — docs/1 §3.1 정본, 토큰동기.js 주입. 직접 수정 X (md 고치고 `node 디자인프리뷰/토큰동기.js`) */
-  /* 회색 — §3.1 정본(토스 TDS 그레이, 중립). 필요한 칸만 골라 써도 되나 이름·값은 이대로 */
+
+  /* 회색 — §3.1 정본(중립 회색 스케일). 필요한 칸만 골라 써도 되나 이름·값은 이대로 */
   --g50:#f9fafb; --g100:#f2f4f6; --g200:#e5e8eb; --g300:#d1d6db;
   --g400:#b0b8c1; --g500:#8b95a1; --g600:#6b7684; --g700:#4e5968;
   --g800:#333d4b; --g900:#191f28;
   /* 초록 — §3.1 OKLCH 스케일(회색 명도 사다리 + 우리 채도, green600=브랜드 #3a8a5f 앵커) */
-  --green50:#f4fdf7; --green100:#e0fcea; --green200:#c4f6d6; --green300:#a4e8bf; --green400:#7ecb9d;
+  --green50:#f4fdf7; --green100:#dafee7; --green200:#baf9d2; --green300:#92edb7; --green400:#6ece98;
   --green500:#57a77a; --green600:#3a8a5f; --green700:#166841; --green800:#01492a; --green900:#002614;
   --green:var(--green600); --green-dark:var(--green700); --green-bg:var(--green100);  /* 별칭(기존 코드 호환) */
   /* 시맨틱 */
   --red:#f04452;           /* 에러·경고 상태(폼 오류·OTP 오류·알림) */
   --ink-on-dark:#F9FBFA;   /* 어두운 배경 흰 글씨(§3.5 line125) */
-  /* 버튼·뱃지 시맨틱 (§4.14 버튼 체계 — 유성 2026-07-02, 토스 TDS 흡수) */
+  /* 버튼·뱃지 시맨틱 (§4.14 버튼 체계 — 유성 2026-07-02) */
   --dark:#525966;          /* dark variant(중립 짙은 회색 버튼/뱃지) + 흰 폰트 */
   --danger:#D25357;        /* danger variant(파괴적 액션 버튼/뱃지) + 흰 폰트. ※--red(#f04452)와 구분: red=상태알림, danger=버튼 */
   --danger-weak-bg:#fdecee; --danger-weak-fg:#c0392b;   /* danger weak(연빨강 채움+진한빨강 폰트) */
