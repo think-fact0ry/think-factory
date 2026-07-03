@@ -2,20 +2,189 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<!-- 초기 모니터링 페이지1 아동구분 비교 샌드박스(?pre2=1). 7변형 나열(스크롤). feedback/pre와 동일 구조, src ?pre2=1. -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>생각공작소 · 아동 구분 비교</title>
 <meta name="robots" content="noindex">
+<title>초기 모니터링 · 아동 구분 비교</title>
+<!-- 16_조기피드백 페이지1 아동구분 비교 프로토타입(정적). 정본=여기(prototype/), 서빙 복사본=think-factory/feedback/pre2/.
+     밑줄형 입력(§4.1-2) 기본, 태그=초록 폰트. 채택 시 Index 병합 후 이 파일 삭제(생명주기, prototype/README). -->
 <style>
-  html{height:100%;}
-  body{margin:0; padding:0; height:100%; background:#f7f5f1; overflow:hidden;}
-  iframe{display:block; border:none; width:100%; height:100%;}
+  :root{
+    --g50:#f9fafb; --g100:#f2f4f6; --g200:#e5e8eb; --g300:#d1d6db; --g400:#b0b8c1; --g500:#8b95a1; --g700:#4e5968; --g900:#191f28;
+    --green50:#f4fdf7; --green100:#e0fcea; --green200:#c4f6d6; --green300:#a4e8bf; --green600:#3a8a5f; --green700:#166841;
+    --green:var(--green600); --green-dark:var(--green700); --green-bg:var(--green100);
+    --red:#f04452;
+    --r-sm:clamp(7px,1.8vw,10px); --r-md:clamp(10px,2.6vw,14px); --r-lg:clamp(13px,3.2vw,20px);
+    --fs-h1:clamp(23px,3.4vw,30px); --fs-title:17px; --fs-body:15px; --fs-sm:13.5px; --fs-caption:12px;
+    --beige:#f7f5f1;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{scrollbar-gutter:stable;}
+  html,body{margin:0; background:var(--beige);}
+  body{font-family:Pretendard,-apple-system,system-ui,'Apple SD Gothic Neo',sans-serif; color:var(--g900); line-height:1.5; word-break:keep-all; -webkit-text-size-adjust:100%;}
+  .page{max-width:460px; margin:0 auto; padding:22px 18px 60px;}
+  .page-intro{margin:0 0 20px; padding:0 2px;}
+  .page-intro h1{font-size:19px; font-weight:700; margin:0 0 5px;}
+  .page-intro p{font-size:var(--fs-sm); color:var(--g500); margin:0; line-height:1.6;}
+
+  .variant{margin:0 0 30px;}
+  .vlabel{font-size:var(--fs-sm); font-weight:700; color:var(--g900); margin:0 0 4px; padding:0 2px;}
+  .vnote{font-size:var(--fs-caption); color:var(--g500); margin:0 0 10px; padding:0 2px;}
+  .vnote.warn{color:var(--red);}
+
+  .intro-card{background:#fff; border-radius:var(--r-lg); padding:22px 18px; box-shadow:0 2px 12px rgba(0,0,0,.05);}
+  .brand-chip{display:inline-block; width:fit-content; font-size:var(--fs-caption); font-weight:700; color:var(--green); background:var(--green-bg); padding:5px 12px; border-radius:99px; margin-bottom:13px;}
+  .head{font-size:var(--fs-h1); font-weight:700; letter-spacing:-.3px; margin:0 0 8px; line-height:1.4;}
+  .head .em{font-weight:400;}
+  .lead{font-size:14.5px; color:var(--g500); margin:0 0 18px; line-height:1.6;}
+
+  /* 밑줄형 입력 (§4.1-2) */
+  .tfield{margin-bottom:15px;} .tfield:last-child{margin-bottom:4px;}
+  .tfield label{display:block; font-size:12.5px; font-weight:600; color:var(--g500); margin:0 0 5px; transition:color .15s;}
+  .tfield.focus label{color:var(--green);}
+  .tin-wrap{position:relative; border-bottom:2px solid var(--g200); transition:border-color .15s;}
+  .tfield.focus .tin-wrap{border-color:var(--green);}
+  .tin-wrap input{width:100%; border:none; background:none; outline:none; font:inherit; font-size:18px; font-weight:600; color:var(--g900); padding:2px 34px 3px 0; caret-color:var(--green); letter-spacing:-.2px;}
+  .tin-wrap input::placeholder{color:var(--g300); font-weight:500;}
+  .tin-wrap .clr{position:absolute; right:0; top:6px; width:15px; height:15px; border-radius:50%; background:var(--g300); border:none; display:none; align-items:center; justify-content:center; cursor:pointer; padding:0;}
+  .tfield.has-val .clr{display:flex;}
+  .tin-wrap .clr svg{width:7px; height:7px; color:#fff; display:block;}
+
+  /* 태그(초록 폰트) · 삭제(−) */
+  .kid-tag{font-size:var(--fs-caption); font-weight:700; color:var(--green); letter-spacing:-.2px;}
+  .kid-del{border:none; background:transparent; color:var(--g400); cursor:pointer; padding:5px; display:inline-flex; align-items:center; font:inherit;}
+  .kid-del svg{width:18px; height:18px;}
+  .kh{display:flex; align-items:center; justify-content:space-between; margin:0 0 10px;}
+  /* 태그 ─굵은 초록선─ − 헤더 (유성: 700 볼드로 굵게) */
+  .kh-line{display:flex; align-items:center; gap:10px; margin:0 0 10px;}
+  .kh-line .kid-tag{flex:none;}
+  .kh-line .kline{flex:1; height:0; border-top:2.5px solid var(--green600);}
+  .kh-line.kh-dash .kline{border-top:2.5px dashed var(--green600);}
+  /* 번호 원 = green700 채움·흰글자·테두리 없음 (유성) */
+  .knum{width:24px; height:24px; border-radius:50%; background:var(--green700); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex:none;}
+
+  /* 배경/구분 모드 */
+  .kid{padding:0;}
+  .kid + .kid{margin-top:14px;}
+  .k-g50{background:var(--g50); border-radius:var(--r-md); padding:14px 15px 6px;}
+  .k-accent{border-left:3px solid var(--green200); padding-left:13px;}
+  .k-box{background:#fff; border:1px solid var(--g200); border-radius:var(--r-md); padding:14px 15px 6px;}
+  .k-shadow{background:#fff; border-radius:var(--r-md); padding:14px 15px 6px; box-shadow:0 2px 10px rgba(0,0,0,.07);}
+  .k-shadow + .k-shadow{margin-top:12px;}
+  .k-topline{border-top:2.5px solid var(--green600); padding-top:13px;}
+  .sep-line + .sep-line{border-top:1px solid var(--g200); margin-top:16px; padding-top:16px;}
+
+  /* 번호 인덱스 레이아웃(좌 번호 / 우 입력) — 형제 간격 22px(유성) */
+  .ki{position:relative; display:flex; gap:12px;}
+  .ki + .ki{margin-top:22px;}
+  .ki > .knum{margin-top:2px;}
+  .ki .ki-body{flex:1; min-width:0;}
+  .ki .kid-del{position:absolute; top:-4px; right:-4px;}
+
+  /* 라벨↔값 인라인(§4.8) */
+  .lv .tfield{display:grid; grid-template-columns:74px 1fr; align-items:center; column-gap:10px; margin-bottom:13px;}
+  .lv .tfield:last-child{margin-bottom:2px;}
+  .lv .tfield label{margin:0;}
+  /* 라벨↔값 + 밑줄 제거(유성: 인풋 선 없애고 초록선만) */
+  .lv.nl .tin-wrap{border-bottom:none;}
+  .lv.nl .tin-wrap input{padding:2px 0 3px 0; font-size:16px;}
+  .lv.nl .clr{display:none !important;}
+
+  /* 개별 흰카드(바깥 카드 없음) */
+  .m-wc{background:transparent; box-shadow:none; padding:0; border-radius:0;}
+  .m-wc .wc-head{padding:2px 4px 14px;}
+
+  .sib-link{display:block; width:100%; text-align:center; border:none; background:none;
+            color:var(--green); font:inherit; font-size:14px; font-weight:600; cursor:pointer; padding:13px 4px 2px; margin-top:8px; transition:transform .12s;}
+  .sib-link:active{transform:scale(.93);}
 </style>
 </head>
 <body>
-<iframe
-  src="https://script.google.com/macros/s/AKfycbxzbwBUa6BB8N5GozHgCWGcd-JJp_tKCW1U7LgRFD0ZqjFOFVKettyYPGOL5mEakvIW/exec?pre2=1"
-  title="생각공작소 아동 구분 비교"
-  allow="clipboard-write"></iframe>
+<div class="page">
+  <div class="page-intro">
+    <h1>아동 구분 방식 비교 (v3)</h1>
+    <p>삭제=−, 번호원=초록 채움, 초록선 굵게. 형제 2명 기준 — 번호만 알려주세요.</p>
+  </div>
+  <div id="variants"></div>
+</div>
+
+<script>
+  var ORD=['첫째','둘째','셋째','넷째'];
+  var KIDS=[{birth:'2021. 03. 15', name:'김서준'},{birth:'2023. 07. 22', name:'김서아'}];
+  var CLRICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  var MINUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="12" x2="18" y2="12"/></svg>';
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+
+  // bg:''|g50|accent|box|shadow / sep:gap|line / head:text|line|dash|topline|num|none / layout:stack|labelval|index / nl:밑줄제거
+  var VARIANTS=[
+    {label:'V1 · 구분선만',                    note:'§3.6-2 최준수',                     bg:'',      sep:'line', head:'text'},
+    {label:'V2 · 선 없이 여백만',               note:'여백으로만',                        bg:'',      sep:'gap',  head:'text'},
+    {label:'V3 · 옅은 회색면 (g50)',            note:'면 구분 · 원칙 OK',                 bg:'g50',   sep:'gap',  head:'text'},
+    {label:'V4 · 왼쪽 초록 악센트 바',           note:'세로 강조 · 원칙 OK',               bg:'accent',sep:'gap',  head:'text'},
+    {label:'V5 · 태그 ─굵은 초록선─ −',          note:'헤더만 초록선(굵게) · 원칙 OK',      bg:'',      sep:'gap',  head:'line'},
+    {label:'V6 · 태그 ┈굵은 초록점선┈ −',        note:'V5 점선',                          bg:'',      sep:'gap',  head:'dash'},
+    {label:'V7 · 상단 굵은 초록 라인 + 태그',     note:'섹션 위 초록 border-top',           bg:'',      sep:'gap',  head:'text', topline:true},
+    {label:'V8 · 번호 인덱스(초록 채움 원)',      note:'ex40 번호리스트 · 형제간격 22 (유성)', bg:'',      sep:'gap',  head:'none', layout:'index'},
+    {label:'V9 · g50면 + 번호 인덱스',           note:'V8 + 회색면',                       bg:'g50',   sep:'gap',  head:'none', layout:'index'},
+    {label:'V10 · 그림자 박스 + 번호 인덱스',     note:'회색면 대신 그림자로 묶음 (유성)',    bg:'shadow',sep:'gap',  head:'none', layout:'index'},
+    {label:'V11 · 전체 흰박스 + 아이별 그림자박스',note:'⚠️ §3.6-2 카드 중첩(그림자판, 유성)', bg:'shadow',sep:'gap',  head:'text', warn:true},
+    {label:'V12 · 라벨↔값(밑줄 없음) + 초록선',   note:'인풋 선 없애고 초록선만 · 좌 라벨/우 입력 (유성)', bg:'', sep:'gap', head:'line', layout:'labelval', nl:true},
+    {label:'V13 · 그림자 박스 + 라벨↔값',        note:'그림자 묶음 + 좌라벨/우입력',        bg:'shadow',sep:'gap',  head:'text', layout:'labelval'},
+    {label:'V14 · g50면 + 상단 초록 라인',        note:'회색면 + 위 초록선',                bg:'g50',   sep:'gap',  head:'text', topline:true},
+    {label:'V15 · 번호 원 태그 + g50면',         note:'태그 대신 초록 채움 번호',           bg:'g50',   sep:'gap',  head:'num'},
+    {label:'V16 · 흰 박스 + 테두리 (Pre 원본)',   note:'⚠️ §3.6-2 카드 중첩 이탈 — 참고',   bg:'box',   sep:'gap',  head:'text', warn:true}
+  ];
+
+  function tfield(label, ph, type, val){
+    return '<div class="tfield has-val"><label>'+label+'</label><div class="tin-wrap">'
+      +'<input type="'+type+'" inputmode="'+(type==='tel'?'numeric':'text')+'" placeholder="'+esc(ph)+'" value="'+esc(val)+'" autocomplete="off">'
+      +'<button class="clr" type="button" tabindex="-1" aria-label="지우기">'+CLRICON+'</button></div></div>';
+  }
+  function fields(k, v){
+    var cls=(v.layout==='labelval')?('lv'+(v.nl?' nl':'')):'';
+    return '<div class="'+cls+'">'
+      +tfield('생년월일','생년월일','tel',k.birth)
+      +tfield('이용자(아동) 이름','이름','text',k.name)+'</div>';
+  }
+  function delBtn(){ return '<button class="kid-del" aria-label="지우기">'+MINUS+'</button>'; }
+
+  function kidBlock(k,i,v){
+    var cls='kid'+(v.bg?(' k-'+v.bg):'')+(v.sep==='line'?' sep-line':'')+(v.topline?' k-topline':'');
+    if(v.layout==='index'){
+      return '<div class="'+cls+' ki"><span class="knum">'+(i+1)+'</span>'
+        +'<div class="ki-body">'+fields(k,v)+'</div>'+delBtn()+'</div>';
+    }
+    var header='';
+    if(v.head==='line'||v.head==='dash'){
+      header='<div class="kh-line'+(v.head==='dash'?' kh-dash':'')+'"><span class="kid-tag">'+ORD[i]+' 아이</span><span class="kline"></span>'+delBtn()+'</div>';
+    } else if(v.head==='num'){
+      header='<div class="kh"><span class="knum">'+(i+1)+'</span>'+delBtn()+'</div>';
+    } else if(v.head!=='none'){
+      header='<div class="kh"><span class="kid-tag">'+ORD[i]+' 아이</span>'+delBtn()+'</div>';
+    }
+    return '<div class="'+cls+'">'+header+fields(k,v)+'</div>';
+  }
+
+  function variantHtml(v){
+    var kids=KIDS.map(function(k,i){return kidBlock(k,i,v);}).join('');
+    var head='<span class="brand-chip">초기 모니터링</span>'
+      +'<div class="head">3개월 동안<br>어떠셨어요? <span class="em">😊</span></div>'
+      +'<p class="lead">더 좋은 수업을 위해, 잠깐 참여해주세요.</p>';
+    var inner='<div class="intro-card">'+head+kids+'<button class="sib-link">＋ 함께 다니는 아이가 있어요</button></div>';
+    return '<div class="variant"><div class="vlabel">'+v.label+'</div>'
+      +'<div class="vnote'+(v.warn?' warn':'')+'">'+v.note+'</div>'+inner+'</div>';
+  }
+
+  document.getElementById('variants').innerHTML=VARIANTS.map(variantHtml).join('');
+
+  Array.prototype.forEach.call(document.querySelectorAll('.tfield'),function(tf){
+    var inp=tf.querySelector('input'), clr=tf.querySelector('.clr');
+    function upd(){ tf.classList.toggle('has-val', inp.value.length>0); }
+    inp.addEventListener('focus',function(){ tf.classList.add('focus'); });
+    inp.addEventListener('blur',function(){ tf.classList.remove('focus'); });
+    inp.addEventListener('input',upd);
+    clr.addEventListener('click',function(){ inp.value=''; upd(); inp.focus(); });
+    upd();
+  });
+</script>
 </body>
 </html>
