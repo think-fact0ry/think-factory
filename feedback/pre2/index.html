@@ -50,8 +50,7 @@
 
   /* 아동 헤더 = 번호 + − */
   .khead{display:flex; align-items:center; justify-content:space-between; margin:0 0 10px;}
-  .kn-c700{width:24px;height:24px;border-radius:50%;background:var(--green700);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
-  .kn-c600{width:24px;height:24px;border-radius:50%;background:var(--green600);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+  .kn-c700{width:24px;height:24px;border-radius:50%;background:var(--green600);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
   .kn-text{color:var(--green);font-weight:800;font-size:15px;}
   .kn-tag{display:flex;align-items:center;gap:8px;}
   .kn-tag .kt{font-size:var(--fs-caption);font-weight:700;color:var(--green);}
@@ -62,7 +61,7 @@
   .kid + .kid{margin-top:18px;}
   .b-shadow .kid{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.07);border-radius:var(--r-md);padding:14px 15px 4px;}
   .b-g50 .kid{background:var(--g50);border-radius:var(--r-md);padding:14px 15px 4px;}
-  .b-accent .kid{border-left:3px solid var(--green200);padding-left:13px;}
+  .b-accent .kid{border-left:3px solid var(--green600);padding-left:13px;}
 
   /* 좌측 인덱스(번호 좌·입력 우, ex40) */
   .lay-left .kid{position:relative;display:flex;gap:12px;}
@@ -98,8 +97,7 @@
     {label:'V4 · 번호 원 + 왼쪽 악센트 바',       note:'세로선 강조',                num:'c700', bg:'accent'},
     {label:'V5 · 번호 원 + "첫째 아이" 텍스트',   note:'번호 옆에 순서 텍스트 병기',  num:'tag',  bg:''},
     {label:'V6 · "1." 텍스트 번호(원 없이)',      note:'원 대신 초록 숫자',          num:'text', bg:''},
-    {label:'V7 · 번호 원(green600, 밝은)',        note:'V1보다 밝은 초록 번호',       num:'c600', bg:''},
-    {label:'V8 · 번호 좌측 인덱스(ex40)',         note:'번호 좌·입력 우',            num:'c700', bg:'', layout:'left'}
+    {label:'V7 · 번호 좌측 인덱스(ex40)',         note:'번호 좌·입력 우',            num:'c700', bg:'', layout:'left'}
   ];
 
   function tin(label,ph,type,val){
@@ -110,7 +108,6 @@
   function fields(k){ return tin('아동 이름','이름','text',k.name)+tin('생년월일','생년월일','tel',k.birth); }
   function numEl(v,i){
     if(v.num==='text') return '<span class="kn-text">'+(i+1)+'.</span>';
-    if(v.num==='c600') return '<span class="kn-c600">'+(i+1)+'</span>';
     if(v.num==='tag')  return '<span class="kn-tag"><span class="kn-c700">'+(i+1)+'</span><span class="kt">'+['첫째','둘째','셋째','넷째'][i]+' 아이</span></span>';
     return '<span class="kn-c700">'+(i+1)+'</span>';
   }
