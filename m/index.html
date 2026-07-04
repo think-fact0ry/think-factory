@@ -10,8 +10,13 @@
      이동 대상이 바뀌면 아래 EXEC 한 줄만 교체. -->
 <script>
   var EXEC = "https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec";
-  // 쿼리스트링이 붙어 오면 그대로 전달(향후 확장 대비)
-  location.replace(EXEC + (location.search || ""));
+  if (/KAKAOTALK/i.test(navigator.userAgent)) {
+    // 카톡 인앱 = 상하단 바가 설문을 가림 → 기본 브라우저로 탈출(§3.7, 유성 2026-07-04). 아래 meta refresh가 스킴 실패 시 폴백.
+    location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
+  } else {
+    // 쿼리스트링이 붙어 오면 그대로 전달(향후 확장 대비)
+    location.replace(EXEC + (location.search || ""));
+  }
 </script>
 <!-- JS 비활성 환경 폴백 -->
 <meta http-equiv="refresh" content="0;url=https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec">
