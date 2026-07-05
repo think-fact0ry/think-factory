@@ -69,6 +69,11 @@ img{ max-width:100%; display:block; }
 
 /* ── 히어로 ── */
 .hero{ padding:84px 0 72px; }
+/* 보조 페이지 머리(활동·약관) = 바짝. 인라인 style 금지 — 명시도가 미디어쿼리를 죽여 반응형이 고착됨(2026-07-05 L7 교훈) */
+.hero.compact{ padding:32px 0 20px; }
+.sec.tight-top{ padding-top:12px; }
+.inner-prose{ max-width:720px; }   /* 약관 칼럼(콘텐츠 680+패딩40) — 헤더·본문 같은 중앙 칼럼(유성 2026-07-05 L1) */
+.inner-prose.prose{ max-width:720px; }   /* .prose(680)가 같은 요소에 붙으면 나중 선언이 이겨 본문만 20px 밀림 — 조합 시 720 고정(헤더와 좌변 정렬) */
 .hero h1{ font-size:var(--fs-h1); font-weight:800; letter-spacing:-.8px; line-height:1.3; margin:0 0 18px; }   /* 페이지 헤더 = 적당히(§4.4 --fs-h1 clamp 23~30) */
 .fold .hero h1{ font-size:44px; letter-spacing:-1.2px; }   /* 랜딩(영상 히어로)만 크게 */
 .hero h1 b{ color:var(--green); font-weight:800; }
@@ -407,6 +412,12 @@ footer .legal a:hover{ color:var(--g900); }
   footer{ margin-top:0; }                         /* 흰 여백(40px) 제거 — 절차(흰)와 푸터는 border-top 선 하나로 구분 */
 }
 
+/* 절차 아래 신청 버튼 — 폰(≤600) 전용: PC·태블릿은 nav 상담신청이 상존하고, 폰만 CTA가 드로어에 숨어 여기가 유일 노출(유성 2026-07-05 L2) */
+.steps-cta{ display:none; }
+@media (max-width:600px){ .steps-cta{ display:block; text-align:center; background:var(--green); color:#fff;
+  border-radius:var(--r-md); padding:15px; font-size:16px; font-weight:700; letter-spacing:-.3px; margin:18px 0 4px; transition:transform .08s; }
+  .steps-cta:active{ transform:scale(.97); background:var(--green-dark); } }
+
 /* 페이지 공통 헤더(2·4페이지) */
 .sp-head{ font-size:26px; font-weight:800; letter-spacing:-.6px; margin:0 0 18px; }
 @media (max-width:600px){ .sp-head{ font-size:22px; } }
@@ -414,9 +425,10 @@ footer .legal a:hover{ color:var(--g900); }
 .mdiv{ display:none; border:none; }
 @media (max-width:600px), (pointer:coarse){ .mdiv{ display:block; height:2px; width:60%; max-width:220px; margin:0 auto;
   background:linear-gradient(to right, transparent 0%, var(--g200) 30%, var(--g200) 70%, transparent 100%); } }
-/* contact 임베드 폼(흰)↔FAQ(흰) 경계선 — .mdiv 결, 전 뷰포트(폼이 모든 화면서 흰배경이라) */
-.faq-div{ display:block; border:none; height:2px; width:60%; max-width:220px; margin:30px auto;
-  background:linear-gradient(to right, transparent 0%, var(--g200) 30%, var(--g200) 70%, transparent 100%); }
+/* contact 임베드 폼(흰)↔FAQ(흰) 경계선 — .mdiv와 조건 통일: 모바일/터치 전용, PC=여백(§4.7. 유성 2026-07-05 L8) */
+.faq-div{ display:none; border:none; }
+@media (max-width:600px), (pointer:coarse){ .faq-div{ display:block; height:2px; width:60%; max-width:220px; margin:30px auto;
+  background:linear-gradient(to right, transparent 0%, var(--g200) 30%, var(--g200) 70%, transparent 100%); } }
 
 /* 아래로 내려가는 힌트 — > 모양을 90° 돌려(아래 방향) 가로로 길게, 하단 중앙 */
 .sp-next{ position:absolute; left:50%; bottom:14px; transform:translateX(-50%); background:none; border:none;
@@ -616,7 +628,7 @@ footer .legal a:hover{ color:var(--g900); }
 
 /* P3 핵심가치 아코디언 (세로 사진 패널) */
 .inner-wide{ max-width:1180px; width:100%; margin:0 auto; padding:0 20px; }
-footer .inner{ max-width:var(--maxw-read); }   /* 2단 체계: 푸터는 본문폭(900)에 맞춤 — 콘텐츠보다 넓어 보이던 문제 해소 */
+/* 푸터 = 뼈대 폭(1040, 기본 .inner 그대로) — 옛 900 override 폐기(유성 2026-07-05 L1: nav와 좌우 라인 정렬) */
 .val-head{ text-align:center; font-size:28px; font-weight:800; letter-spacing:-.7px; margin:6px 0 0; }
 .val-acc{ display:flex; gap:8px; height:56vh; margin-top:26px; }
 .vp{ position:relative; flex:1 1 0; min-width:0; border-radius:var(--r-md); overflow:hidden; cursor:pointer; background:#9aa3ae; transition:flex-grow .85s cubic-bezier(.4,0,.2,1); }
