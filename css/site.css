@@ -483,7 +483,7 @@ footer .legal a:hover{ color:var(--g900); }
 .facts{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:0 0 28px; }
 @media (max-width:640px){ .facts{ grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px; margin-bottom:0; } .price{ margin-bottom:0; } }   /* 모바일: 이용료↔facts=10px 동일 + facts 바닥 마진 제거(섹션 패딩과 중복) */
 .fact{ background:#fff; border:1px solid var(--g200); border-radius:var(--r-md); padding:18px 14px; text-align:center; }
-.fact .k{ display:block; font-size:12px; font-weight:700; color:var(--g500); margin-bottom:6px; }
+.fact .k{ display:block; font-size:12px; font-weight:700; color:var(--g600); margin-bottom:6px; }   /* F11: 라벨 톤=푸터 g600 정렬(옛 g500, 2026-07-05) */
 .fact .v{ display:block; font-size:18px; font-weight:800; color:var(--green); letter-spacing:-.4px; }
 .fact .v small{ font-size:13px; font-weight:700; color:var(--g500); }
 
