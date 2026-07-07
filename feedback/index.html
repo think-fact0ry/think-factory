@@ -14,13 +14,10 @@
 </style>
 </head>
 <body>
-<iframe id="ff"
+<iframe
   src="https://script.google.com/macros/s/AKfycbxzbwBUa6BB8N5GozHgCWGcd-JJp_tKCW1U7LgRFD0ZqjFOFVKettyYPGOL5mEakvIW/exec"
   title="생각공작소 초기 모니터링"
   allow="clipboard-write"></iframe>
-<script>
-  // 쿼리 파라미터를 폼(GAS)으로 전달 — ?cta=1(리뷰 게이팅 테스트)·?preview=review 등. 없으면 기본 exec(일반 부모 발송 링크). 유성 2026-07-07.
-  if(location.search){ document.getElementById('ff').src='https://script.google.com/macros/s/AKfycbxzbwBUa6BB8N5GozHgCWGcd-JJp_tKCW1U7LgRFD0ZqjFOFVKettyYPGOL5mEakvIW/exec'+location.search; }
-</script>
+<!-- ⚠️ 파라미터 전달 안 함(하드코딩 /exec) — ?cta=1로 리뷰 CTA가 공개 링크서 우회노출되던 것 차단(유성 2026-07-07). 리뷰 테스트는 GAS 테스트배포 @44 직접 URL로. -->
 </body>
 </html>
