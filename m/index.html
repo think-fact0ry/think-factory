@@ -2,39 +2,29 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- /feedback(초기 모니터링)과 동일: interactive-widget=resizes-content를 top-level(부모)에 둬 키보드가 레이아웃을 줄임
+     → iframe(100%)이 따라 줄어 폼의 바닥 버튼이 키보드 위에 붙음. 폼은 iframe 안에서 자기 키보드 처리. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>모니터링 설문 — 생각공작소</title>
 <meta name="robots" content="noindex">
-<!-- 모니터링 설문 단축 경로. think-factory.kr/m → 14_모니터링설문 GAS 웹앱(exec)으로 즉시 이동.
-     배포 URL은 고정(재배포해도 안 바뀜)이라 이 리다이렉트만 유지하면 됨.
-     이동 대상이 바뀌면 아래 EXEC 한 줄만 교체. -->
+<!-- think-factory.kr/m → 14_모니터링설문 GAS 웹앱을 iframe 임베드(URL 유지, exec 노출 안 함 — /feedback과 통일, 유성 2026-07-08).
+     배포 URL은 고정(재배포해도 안 바뀜)이라 아래 iframe src 한 줄만 유지하면 됨. 이동 대상이 바뀌면 그 한 줄만 교체.
+     ⚠️ 카톡 인앱 = 상하단 바가 설문을 가림(§3.7) → 기본 브라우저로 탈출(유성 2026-07-04 유지). 탈출되면 기본 브라우저에서 이 페이지가 다시 열려 아래 iframe이 정상 렌더. -->
 <script>
-  var EXEC = "https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec";
   if (/KAKAOTALK/i.test(navigator.userAgent)) {
-    // 카톡 인앱 = 상하단 바가 설문을 가림 → 기본 브라우저로 탈출(§3.7, 유성 2026-07-04). 아래 meta refresh가 스킴 실패 시 폴백.
     location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
-  } else {
-    // 쿼리스트링이 붙어 오면 그대로 전달(향후 확장 대비)
-    location.replace(EXEC + (location.search || ""));
   }
 </script>
-<!-- JS 비활성 환경 폴백 -->
-<meta http-equiv="refresh" content="0;url=https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec">
 <style>
-  html,body{height:100%;margin:0}
-  body{font-family:"Pretendard",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-       background:#f7f5f1;color:#3a8a5f;display:flex;align-items:center;justify-content:center;
-       flex-direction:column;gap:14px;text-align:center;padding:24px}
-  .dot{width:34px;height:34px;border:3px solid #cfe6d8;border-top-color:#3a8a5f;border-radius:50%;
-       animation:spin .8s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  a{color:#3a8a5f}
-  p{color:#7a8a80;font-size:14px;margin:0}
+  html{height:100%;}
+  body{margin:0; padding:0; height:100%; background:#f7f5f1; overflow:hidden;}
+  iframe{display:block; border:none; width:100%; height:100%;}
 </style>
 </head>
 <body>
-  <div class="dot"></div>
-  <p>설문으로 이동 중이에요…</p>
-  <p style="font-size:13px">자동으로 안 넘어가면 <a href="https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec">여기를 눌러주세요</a>.</p>
+<iframe
+  src="https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec"
+  title="생각공작소 반기 모니터링 설문"
+  allow="clipboard-write"></iframe>
 </body>
 </html>
