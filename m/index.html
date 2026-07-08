@@ -2,29 +2,12 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<!-- /feedback(초기 모니터링)과 동일: interactive-widget=resizes-content를 top-level(부모)에 둬 키보드가 레이아웃을 줄임
-     → iframe(100%)이 따라 줄어 폼의 바닥 버튼이 키보드 위에 붙음. 폼은 iframe 안에서 자기 키보드 처리. -->
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>모니터링 설문 — 생각공작소</title>
 <meta name="robots" content="noindex">
-<!-- think-factory.kr/m → 14_모니터링설문 GAS 웹앱을 iframe 임베드(URL 유지, exec 노출 안 함 — /feedback과 통일, 유성 2026-07-08).
-     배포 URL은 고정(재배포해도 안 바뀜)이라 아래 iframe src 한 줄만 유지하면 됨. 이동 대상이 바뀌면 그 한 줄만 교체.
-     ⚠️ 카톡 인앱 = 상하단 바가 설문을 가림(§3.7) → 기본 브라우저로 탈출(유성 2026-07-04 유지). 탈출되면 기본 브라우저에서 이 페이지가 다시 열려 아래 iframe이 정상 렌더. -->
-<script>
-  if (/KAKAOTALK/i.test(navigator.userAgent)) {
-    location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
-  }
-</script>
-<style>
-  html{height:100%;}
-  body{margin:0; padding:0; height:100%; background:#f7f5f1; overflow:hidden;}
-  iframe{display:block; border:none; width:100%; height:100%;}
-</style>
+<!-- 레거시 경로. 실제 발송은 /monitoring 사용(07 모니터링발송.js MON_APP_URL). /monitoring이 14 GAS를 iframe 임베드하는 정본.
+     /m으로 온 옛 링크는 /monitoring으로 넘김(쿼리스트링 유지). 중복 페이지 방지(유성 2026-07-08). -->
+<script>location.replace('/monitoring' + (location.search || ''));</script>
+<meta http-equiv="refresh" content="0;url=/monitoring">
 </head>
-<body>
-<iframe
-  src="https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec"
-  title="생각공작소 반기 모니터링 설문"
-  allow="clipboard-write"></iframe>
-</body>
+<body></body>
 </html>
