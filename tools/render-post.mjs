@@ -95,19 +95,19 @@ export function renderPost(post, blocks, desc, ogImage) {
 
 <nav class="nav">
   <div class="inner">
-    <a class="brand" href="../../index.html"><img src="../../assets/logo.png" alt="생각공작소"></a>
-    <a class="menu" href="../../index.html">홈</a>
-    <a class="menu" href="../../story.html">이야기</a>
-    <a class="menu" href="../../services.html">바우처</a>
-    <a class="menu on" href="../../activities.html">활동</a>
-    <a class="cta" href="../../contact.html">상담 신청</a>
+    <a class="brand" href="/"><img src="../../assets/logo.png" alt="생각공작소"></a>
+    <a class="menu" href="/">홈</a>
+    <a class="menu" href="../../story">이야기</a>
+    <a class="menu" href="../../services">바우처</a>
+    <a class="menu on" href="../../activities">활동</a>
+    <a class="cta" href="../../contact">상담 신청</a>
     <button class="hb" id="hbBtn" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
 <article class="post">
   <div class="inner">
-    <a class="back" href="../../activities.html">← 활동 이야기</a>
+    <a class="back" href="../../activities">← 활동 이야기</a>
     <div class="date">${esc(post.date)}${post.tag ? ' · ' + esc(post.tag) : ''}</div>
     <h1>${esc(title)}</h1>
     <div class="post-body">
@@ -115,7 +115,7 @@ ${renderBlocks(blocks)}
     </div>
     <div class="post-foot">
       <a href="${esc(post.url)}" target="_blank" rel="noopener">네이버 블로그에서 원문 보기 →</a>
-      <a class="back" href="../../activities.html">← 다른 활동 이야기 보기</a>
+      <a class="back" href="../../activities">← 다른 활동 이야기 보기</a>
     </div>
   </div>
 </article>
@@ -123,7 +123,7 @@ ${renderBlocks(blocks)}
 <footer>
   <div class="inner">
     <div class="flinks">
-      <a href="../../privacy.html">개인정보 처리방침</a>
+      <a href="../../privacy">개인정보 처리방침</a>
       <a href="https://blog.naver.com/think5007" target="_blank" rel="noopener">교사지원</a>
     </div>
     <div class="info">
@@ -139,11 +139,11 @@ ${renderBlocks(blocks)}
   <div class="dim" data-close></div>
   <div class="panel">
     <button class="dclose" data-close aria-label="메뉴 닫기">×</button>
-    <a href="../../index.html">홈</a>
-    <a href="../../story.html">이야기</a>
-    <a href="../../services.html">바우처</a>
-    <a href="../../activities.html">활동</a>
-    <a class="dcta" href="../../contact.html">상담 신청</a>
+    <a href="/">홈</a>
+    <a href="../../story">이야기</a>
+    <a href="../../services">바우처</a>
+    <a href="../../activities">활동</a>
+    <a class="dcta" href="../../contact">상담 신청</a>
   </div>
 </div>
 

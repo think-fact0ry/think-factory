@@ -251,7 +251,8 @@ console.log(`posts.json: ${finalPosts.length}건 (제외 ${excludeSet.size}건, 
 // ── sitemap.xml — 고정 5페이지 + 활동 글(+이미지 사이트맵: 구글 이미지 검색 색인용) ──
 const xmlEsc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 // /receipt/ = 현금영수증 정기발급 신청(09 임베드). 홈페이지 내부 링크 없음(비이용자 입력 방지, 유성 2026-07-12) → 사이트맵이 유일한 색인 경로라 반드시 유지
-const staticUrls = ['/', '/story.html', '/services.html', '/activities.html', '/contact.html', '/receipt/'];
+// 정적 페이지 URL 정본 = 확장자 없는 형태(GitHub Pages가 .html로 매핑). 포스트 loc은 .html 유지 — 이미 색인된 자산이라 재색인 안 시킴
+const staticUrls = ['/', '/story', '/services', '/activities', '/contact', '/receipt/'];
 let imgCount = 0;
 const smUrls = [
   ...staticUrls.map((u) => `  <url><loc>${SITE}${u}</loc></url>`),
