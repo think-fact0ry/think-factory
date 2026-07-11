@@ -20,7 +20,9 @@
 <iframe
   src="https://script.google.com/macros/s/AKfycbxzbwBUa6BB8N5GozHgCWGcd-JJp_tKCW1U7LgRFD0ZqjFOFVKettyYPGOL5mEakvIW/exec"
   title="생각공작소 초기 모니터링"
-  allow="clipboard-write"></iframe>
+  allow="web-share; clipboard-write"></iframe>
 <!-- ⚠️ 파라미터 전달 안 함(하드코딩 /exec) — ?cta=1로 리뷰 CTA가 공개 링크서 우회노출되던 것 차단(유성 2026-07-07). 리뷰 테스트는 GAS 테스트배포 @44 직접 URL로. -->
+<!-- web-share: iOS 리뷰 영수증 저장이 공유시트(navigator.share)를 씀 — 크로스오리진 iframe은 이 위임 없으면 NotAllowedError.
+     GAS 자체 sandboxFrame은 web-share * 위임 확인됨(2026-07-11 curl 실측) → 우리 층만 열면 끝. -->
 </body>
 </html>

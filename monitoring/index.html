@@ -22,7 +22,9 @@
 </style>
 </head>
 <body>
-<iframe id="survey" title="모니터링 설문" allow="clipboard-write"></iframe>
+<!-- web-share: iOS 리뷰 영수증 저장이 공유시트(navigator.share)를 씀 — 크로스오리진 iframe은 이 위임 없으면 NotAllowedError.
+     GAS 자체 sandboxFrame은 web-share * 위임 확인됨(2026-07-11 curl 실측) → 우리 층만 열면 끝. -->
+<iframe id="survey" title="모니터링 설문" allow="web-share; clipboard-write"></iframe>
 <script>
   var EXEC = "https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec";
   // 쿼리스트링 붙어 오면 그대로 전달(향후 확장 대비)
