@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>현금영수증 정기발급 신청 — 생각공작소</title>
+<meta name="description" content="생각공작소 본인부담금 현금영수증 정기발급 신청. 한 번만 신청하면 매월 자동으로 발급돼요.">
+<link rel="canonical" href="https://think-factory.kr/receipt/">
+<meta property="og:title" content="생각공작소 현금영수증 정기발급 신청">
+<meta property="og:description" content="한 번만 신청하면 매월 자동으로 현금영수증이 발급됩니다.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://think-factory.kr/receipt/">
+<!-- og:image 의도적 없음 — 오감 신청폼 배너가 따라붙어 혼동(2026-06-12 유성). 카톡은 제목+설명 텍스트 카드로 표시됨 -->
+<!-- ⚠️ noindex 일부러 없음(유성 2026-07-12) — /monitoring·/feedback(설문)과 반대로 이 페이지는 색인이 목적:
+     "생각공작소 현금영수증" 브랜드 검색으로 기존 학부모가 찾아오는 경로. 단 홈페이지 nav·푸터엔 링크 미노출(비이용자 입력 방지). -->
+<script>
+// 카톡 인앱 브라우저 = 상하단 바가 폼(신청 버튼)을 가림 → 기본 브라우저로 자동 전환 (docs/1 §3.7, 유성 2026-07-04 ex49)
+(function(){
+  if (/KAKAOTALK/i.test(navigator.userAgent)) {
+    location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
+  }
+})();
+</script>
+<style>
+  html,body{margin:0;height:100%;background:#fff;}  /* 브랜드 초록 배경은 svh 아래 남는 띠로 노출됨(ex51) → 폼과 같은 흰색 */
+  /* 09 현금영수증신청 GAS 웹앱 임베드 — 배너 없는 브랜드 URL(iframe이라 주소가 script.google.com으로 안 바뀜).
+     09 doGet은 ALLOWALL. 깃헙 래퍼(think-fact0ry.github.io/saenggak/receipt)도 같은 exec를 그대로 서빙 — 이미 뿌려진 링크라 병존, canonical만 이쪽으로 통합. */
+  .cr-frame{display:block;width:100%;height:100vh;height:100svh;height:100dvh;border:0;background:#fff;}
+</style>
+</head>
+<body>
+<!-- 파라미터 전달 안 함(하드코딩 /exec) — 09 doGet()은 인자를 받지 않아 패스스루 실익 0이고 공개 URL 표면만 늘어남(/feedback과 같은 결) -->
+<iframe class="cr-frame" title="현금영수증 정기발급 신청"
+  src="https://script.google.com/macros/s/AKfycbx1AEW58RvLPMsSZKdkp-Ib_edmnkGrjFMyC4XPzL5gB42qTsQeTfy8umH5cCk-YaI1pg/exec"></iframe>
+</body>
+</html>
