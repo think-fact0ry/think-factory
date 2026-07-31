@@ -32,24 +32,10 @@
 <script>
   var EXEC = "https://script.google.com/macros/s/AKfycbwd5AcT6yq7wF3L5MeWnJTJ9tf3Ra9Yi8HO2ncEtGHCUDFFH-OR2lAz7_TGVG-JYvg5/exec";
 
-  /* 반납(벽 QR)만 구글 주소로 **넘겨준다** — 2026-07-31.
-     왜: localStorage 는 *최상위 사이트*별로 파티션된다(07-31 실측). 붙어 있는 라벨 494장은
-         script.google.com 으로 직접 열리는데, 벽 QR만 우리 도메인이라 **저장소가 갈려
-         반납할 때 이름을 다시 고르게 된다.** 라벨은 다시 못 뽑으므로(유성 확정) 이쪽을 맞춘다.
-     왜 인쇄물을 안 바꾸나: 벽 QR 4장은 이미 붙어 있다. 주소는 그대로 두고 여기서만 넘기면
-         유성 노동이 0이고, 되돌리기도 이 블록 삭제 한 번이다.
-     잃는 것이 없는 이유: ①회색 구글 배너는 **주 경로(옛 라벨)가 이미 겪는 것**이라 오히려 일치
-         ②카톡 탈출은 *벽에 붙은 종이*엔 무의미(폰 기본 카메라로 찍는다)
-         ③카메라 권한은 GAS sandboxFrame 이 `camera *` 를 위임하므로 안 잃는다(07-31 curl 실측).
-     ⚠️ 미검증 1건: **최상위가 script.google.com 인 상태에서 카메라를 켜는 첫 사례**다.
-         (옛 라벨 화면은 카메라를 안 쓴다) 안 열리면 이 블록만 지우면 원래대로 돌아온다.
-     ⛔ 반출·연속 스캔(?scan=1 등)은 넘기지 않는다 — 그쪽은 라벨 화면이 ?who= 로 이름을 실어
-        보내므로 이미 이어져 있고, 우리 도메인에 두어야 배너 없이 쓴다. */
-  if (/[?&]action=return(&|$)/.test(location.search)) {
-    location.replace(EXEC + location.search);
-  } else {
-    document.getElementById('app').src = EXEC + (location.search || "");
-  }
+  /* 쿼리는 그대로 GAS에 넘긴다. ⛔ 벽 QR(action=return)을 구글 주소로 redirect했다가 되돌림(2026-08-01 유성:
+     "gas script 주소로 이동되는데 X. think-fact~/q로 가야지" — 주소창에 구글 주소가 보이는 게 문제).
+     저장소 통일은 리다이렉트가 아니라 진입 통일(라벨=문) 쪽으로 푼다 — 결정=docs/6 백로그 §📦. */
+  document.getElementById("app").src = EXEC + (location.search || "");
 </script>
 </body>
 </html>
