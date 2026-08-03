@@ -5,7 +5,9 @@
 // 키: 환경변수 ANTHROPIC_API_KEY (로컬 .env 또는 GitHub Actions secret). 채팅/코드에 평문 금지.
 import { readFile, writeFile } from 'node:fs/promises';
 
-const MODEL = process.env.FEEDTITLE_MODEL || 'claude-sonnet-4-6';
+// ⚠️ 모델은 항상 최신 소넷으로 유지(유성 2026-08-03). 새 소넷이 나오면 전 레포 스윕해 같이 올린다
+//    — 이 파일은 2026-06-29 생성 당시 최신이던 sonnet-4-6이 박힌 뒤 갱신이 안 돼 홀로 낡아 있었다.
+const MODEL = process.env.FEEDTITLE_MODEL || 'claude-sonnet-5';
 const KEY = process.env.ANTHROPIC_API_KEY;
 const ALL = process.argv.includes('--all');
 const POSTS = new URL('../activities/posts.json', import.meta.url);
