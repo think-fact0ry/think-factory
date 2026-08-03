@@ -144,6 +144,8 @@ ${renderBlocks(blocks)}
     <a href="../../services">바우처</a>
     <a href="../../activities">활동</a>
     <a class="dcta" href="../../contact">상담 신청</a>
+    <p class="dtel">032-277-2007
+평일 11:00~18:00</p>
   </div>
 </div>
 

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script src="/js/kakao-escape.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>페이지를 찾지 못했어요 | 생각공작소</title>
+<meta name="robots" content="noindex">
+<!-- GitHub Pages가 임의 경로에서 이 파일을 서빙하므로 링크·자산은 전부 절대경로(/…)여야 함 -->
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/assets/android-icon-192x192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="/css/site.css">
+<style>
+/* 전면 오류 화면(§4.5 '못 찾음' 골격) — 제목 + 짧은 부제 + 주액션 하나. 문의 버튼은 넣지 않는다(유성 2026-07-03) */
+.err404{ min-height:calc(100vh - 60px); min-height:calc(100svh - 60px); display:flex; align-items:center; justify-content:center; text-align:center; padding:40px 20px 80px; }
+.err404 h1{ font-size:26px; font-weight:800; letter-spacing:-.7px; margin:0 0 10px; }
+.err404 p{ font-size:16px; color:var(--g600); line-height:1.7; margin:0 0 28px; }
+@media (max-width:760px){ .err404 h1{ font-size:23px; } .err404 p{ font-size:15px; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="inner">
+    <a class="brand" href="/"><img src="/assets/logo.png" alt="생각공작소"></a>
+    <a class="menu" href="/">홈</a>
+    <a class="menu" href="/story">이야기</a>
+    <a class="menu" href="/services">바우처</a>
+    <a class="menu" href="/activities">활동</a>
+    <a class="cta" href="/contact">상담 신청</a>
+    <button class="hb" id="hbBtn" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main class="err404">
+  <div class="inner">
+    <h1>페이지를 찾지 못했어요</h1>
+    <p>주소가 바뀌었거나, 잘못 입력됐어요.</p>
+    <a class="btn fill" href="/">홈으로</a>
+  </div>
+</main>
+
+<footer>
+  <div class="inner">
+    <div class="flinks">
+      <a href="/privacy">개인정보 처리방침</a>
+      <a href="https://blog.naver.com/think5007" target="_blank" rel="noopener">교사지원</a>
+    </div>
+    <div class="info">
+      <div class="row"><span><b class="k">상호명</b>생각공작소</span><span><b class="k">대표</b>한유성</span></div>
+      <div class="row"><span><b class="k">사업자등록번호</b>410-96-58003</span><span><b class="k">대표전화</b>032-277-2007</span></div>
+      <div class="row"><span><b class="k">주소</b>인천광역시 미추홀구 주안로 128, 우리들애 601호</span><span><b class="k">이메일</b>think5007@naver.com</span></div>
+      <div class="copy">© 2026 생각공작소</div>
+    </div>
+  </div>
+</footer>
+
+<div class="drawer" id="drawer">
+  <div class="dim" data-close></div>
+  <div class="panel">
+    <button class="dclose" data-close aria-label="메뉴 닫기">×</button>
+    <a href="/">홈</a>
+    <a href="/story">이야기</a>
+    <a href="/services">바우처</a>
+    <a href="/activities">활동</a>
+    <a class="dcta" href="/contact">상담 신청</a>
+    <p class="dtel">032-277-2007
+평일 11:00~18:00</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var d = document.getElementById('drawer'), b = document.getElementById('hbBtn');
+  if (!d || !b) return;
+  function reset() { d.classList.remove('open'); document.body.style.overflow = ''; }
+  b.addEventListener('click', function () { d.classList.add('open'); document.body.style.overflow = 'hidden'; history.pushState({ drawer: 1 }, ''); });
+  d.addEventListener('click', function (e) {
+    if (e.target.closest('a')) { reset(); return; }
+    if (e.target.hasAttribute('data-close')) { reset(); if (history.state && history.state.drawer) history.back(); }
+  });
+  window.addEventListener('popstate', function () { if (d.classList.contains('open')) reset(); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 600 && d.classList.contains('open')) reset(); });
+})();
+</script>
+
+</body>
+</html>

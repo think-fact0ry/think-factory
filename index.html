@@ -107,8 +107,7 @@
 
 <style>
 /* '선생님이 갑니다' — 섹션 도착 시 줄별 잉크-인 리빌(풀페이지 스냅에 맞춤) + 타이포 강화. 스코프 #stmtSec (site.css 무관) */
-#stmtSec .s2{ font-size:60px; letter-spacing:-1.9px; line-height:1.18; }
-@media (max-width:760px){ #stmtSec .s2{ font-size:40px; letter-spacing:-1.2px; } }
+/* .s2 크기·자간은 site.css가 정본(§3.2) — 옛 인라인 60px가 css 56px를 덮어 어느 쪽이 진짜인지 코드가 답을 못 주던 것 정리 */
 #stmtSec.js .rl{ display:inline-block; opacity:.16; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
 #stmtSec.js.lit .rl{ opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce){ #stmtSec.js .rl{ opacity:1; transform:none; transition:none; } }
@@ -170,10 +169,10 @@
     <h2 class="reveal d1">같은 오감쑥쑥, 다른 40분</h2>
     <p class="sub reveal d2">표준은 같아요. 그 40분을 채우는 방식이 다릅니다.</p>
     <div class="grid2 reveal d2">
-      <a class="fbox" href="services#ogam"><div class="emo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4 5v13c4-.5 6.5 0 8 1.5 1.5-1.5 4-2 8-1.5V5c-4-.5-6.5 0-8 1.5z"/><path d="M12 6.5v13"/></svg></div><h3>동화 그리고 미술</h3><p>읽은 이야기가 아이 손끝의 작품이 돼요</p></a>
-      <a class="fbox" href="services#ogam"><div class="emo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="9.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="9.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="14.5" r="1.2" fill="currentColor" stroke="none"/></svg></div><h3>창의미술 · 요리</h3><p>보고 만지고 맛보며 오감을 깨워요</p></a>
-      <a class="fbox" href="services#ogam"><div class="emo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="15" r="1.2" fill="currentColor" stroke="none"/></svg></div><h3>보드게임</h3><p>규칙과 차례를 놀이처럼 익혀요</p></a>
-      <a class="fbox" href="services#ogam"><div class="emo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.3-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.7-7 9-7 9z"/></svg></div><h3>심리센터 연계</h3><p>검사로 마음까지 함께 살펴요</p></a>
+      <a class="fbox" href="services#ogam"><div class="emo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4 5v13c4-.5 6.5 0 8 1.5 1.5-1.5 4-2 8-1.5V5c-4-.5-6.5 0-8 1.5z"/><path d="M12 6.5v13"/></svg></div><h3>동화구연 + 만들기</h3><p>읽은 이야기가 아이 손끝의 작품이 돼요</p></a>
+      <a class="fbox" href="services#ogam"><div class="emo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="9.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="9.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="14.5" r="1.2" fill="currentColor" stroke="none"/></svg></div><h3>오감 미술·요리</h3><p>보고 만지고 맛보며 오감을 깨워요</p></a>
+      <a class="fbox" href="services#ogam"><div class="emo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="15" r="1.2" fill="currentColor" stroke="none"/></svg></div><h3>매달 새로운 보드게임</h3><p>규칙과 차례를 놀이처럼 익혀요</p></a>
+      <a class="fbox" href="services#ogam"><div class="emo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.3-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.7-7 9-7 9z"/></svg></div><h3>심리상담센터 연계</h3><p>검사로 마음까지 함께 살펴요</p></a>
     </div>
     <p class="note-line reveal d3">일찍 끝나도 드로잉으로 40분을 꽉 채워요.</p>
   </div>
@@ -225,6 +224,8 @@
     <a href="services">바우처</a>
     <a href="activities">활동</a>
     <a class="dcta" href="contact">상담 신청</a>
+    <p class="dtel">032-277-2007
+평일 11:00~18:00</p>
   </div>
 </div>
 
@@ -259,7 +260,7 @@
     if (e.target.hasAttribute('data-close')) { reset(); if (history.state && history.state.drawer) history.back(); }
   });
   window.addEventListener('popstate', function () { if (d.classList.contains('open')) reset(); });
-  window.addEventListener('resize', function () { if (window.innerWidth > 760 && d.classList.contains('open')) reset(); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 600 && d.classList.contains('open')) reset(); });
 })();
 
 // ── 히어로 배경 영상 — 2겹 크로스페이드 무한루프 (끝에서 부드러운 디졸브로 반복) ──
@@ -470,18 +471,20 @@
         a.appendChild(th); a.appendChild(body);
         car.appendChild(a);
       });
+      // 카드 간격 = CSS --car-gap(clamp 5~11px). 매직 16px 금지(§3.7) — 실제 값을 읽는다
+      function carGap() { var cs = getComputedStyle(car); return parseFloat(cs.columnGap || cs.gap) || 0; }
       // 진행 점: 현재 위치 표시 (3장 보임 기준 위치 수만큼)
       var dotsBox = document.getElementById('actDots');
       function dotCount() {
         var step = car.querySelector('.act');
         if (!step) return 1;
-        var w = step.offsetWidth + 16;
+        var w = step.offsetWidth + carGap();
         var visible = Math.max(1, Math.round(car.clientWidth / w));
         return Math.max(1, posts.length - visible + 1);
       }
       function renderDots() {
         var n = dotCount(), step = car.querySelector('.act');
-        var w = step ? step.offsetWidth + 16 : 1;
+        var w = step ? step.offsetWidth + carGap() : 1;
         var cur = Math.min(n - 1, Math.round(car.scrollLeft / w));
         if (dotsBox.children.length !== n) {
           dotsBox.innerHTML = '';
@@ -510,7 +513,7 @@
         if (paused || document.hidden) return;
         var step = car.querySelector('.act');
         if (!step) return;
-        var w = step.offsetWidth + 16; // gap
+        var w = step.offsetWidth + carGap();
         var visible = Math.max(1, Math.round(car.clientWidth / w));  // 화면 폭에 따라 2~3장 보임
         var maxIdx = Math.max(0, posts.length - visible);
         var idx = Math.round(car.scrollLeft / w);                    // 사용자가 옮겨놨으면 거기서 이어감

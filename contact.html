@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>상담 신청 | 생각공작소</title>
 <meta name="description" content="바우처가 없어도 신청할 수 있어요.">
-<meta property="og:title" content="생각공작소 바우처 신청">
+<meta property="og:title" content="생각공작소 상담 신청">
 <meta property="og:description" content="신청서 접수 → 스케줄 확인 → 자리가 생기는 대로 연락드려요 :)">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://think-factory.kr/contact">
@@ -36,7 +36,7 @@
   </div>
 </nav>
 
-<h1 class="sr-only">오감쑥쑥 바우처 신청</h1>
+<h1 class="sr-only">생각공작소 상담 신청 — 오감쑥쑥 바우처</h1>
 <!-- 06 오감쑥쑥 신청폼 임베드 (GAS 웹앱, ALLOWALL — 배너 없는 브랜드 URL).
      GAS·saenggak 리다이렉트는 그대로라 기존 주소도 계속 작동 -->
 <iframe class="apply-frame" title="오감쑥쑥 바우처 신청폼"
@@ -88,6 +88,8 @@
     <a href="services">바우처</a>
     <a href="activities">활동</a>
     <a class="dcta" href="contact">상담 신청</a>
+    <p class="dtel">032-277-2007
+평일 11:00~18:00</p>
   </div>
 </div>
 
@@ -127,7 +129,7 @@
     if (e.target.hasAttribute('data-close')) { reset(); if (history.state && history.state.drawer) history.back(); }
   });
   window.addEventListener('popstate', function () { if (d.classList.contains('open')) reset(); });
-  window.addEventListener('resize', function () { if (window.innerWidth > 760 && d.classList.contains('open')) reset(); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 600 && d.classList.contains('open')) reset(); });
 })();
 
 (function () {

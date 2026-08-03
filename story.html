@@ -10,6 +10,7 @@
 <meta property="og:description" content="오감쑥쑥, 생각쑥쑥. 아이의 발달을 바라보는 우리의 방식.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://think-factory.kr/story">
+<meta property="og:image" content="https://think-factory.kr/assets/og-image.jpg">
 <link rel="canonical" href="https://think-factory.kr/story">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
@@ -127,6 +128,8 @@
     <a href="services">바우처</a>
     <a href="activities">활동</a>
     <a class="dcta" href="contact">상담 신청</a>
+    <p class="dtel">032-277-2007
+평일 11:00~18:00</p>
   </div>
 </div>
 
@@ -258,7 +261,7 @@
     if (e.target.hasAttribute('data-close')) { reset(); if (history.state && history.state.drawer) history.back(); }
   });
   window.addEventListener('popstate', function () { if (d.classList.contains('open')) reset(); });
-  window.addEventListener('resize', function () { if (window.innerWidth > 760 && d.classList.contains('open')) reset(); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 600 && d.classList.contains('open')) reset(); });
 })();
 
 (function () {
