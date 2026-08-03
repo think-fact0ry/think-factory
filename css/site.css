@@ -181,7 +181,8 @@ img{ max-width:100%; display:block; }
 /* ── 활동 캐러셀(메인) — 우→좌 자동 흐름, 3장씩 ── */
 .car{ --car-gap:clamp(5px,1.4vw,11px); display:flex; gap:var(--car-gap); overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; }   /* 간격 반응형 축소(유성 2026-06-29: 좁혀 사진 키움) — 모바일 ~5 ~ 데스크톱 11 */
 .car::-webkit-scrollbar{ display:none; }
-.car .act{ flex:0 0 calc((100% - 2*var(--car-gap))/3); scroll-snap-align:start; }   /* 항상 3장 고정 — 간격 변수 연동(2칸) */
+.car .act{ flex:0 0 calc((100% - 2*var(--car-gap))/3); scroll-snap-align:start; }   /* PC 3장 — 간격 변수 연동(2칸) */
+@media (max-width:600px){ .car .act{ flex:0 0 calc((100% - var(--car-gap))/2); } }   /* 폰은 2장 — 3장은 사진이 너무 작았음(유성 실기기 2026-08-03). 간격 1칸만 뺌 */
 
 /* ── 캐러셀 진행 점 ── */
 .dots{ display:flex; gap:7px; justify-content:center; margin-top:20px; min-height:7px; }
@@ -719,7 +720,7 @@ body.form-dark{ background:#101012; }
 body.form-dark .nav{ background:rgba(16,16,18,.92); box-shadow:0 1px 0 #26262b; }
 body.form-dark .nav a.menu{ color:#B3B7C2; }
 body.form-dark .nav a.menu:hover{ color:#F5F5F5; }
-body.form-dark .nav a.cta{ background:#5cc08a; color:#0f1a14; }
+body.form-dark .nav a.cta{ background:var(--green400); color:#0f1a14; }   /* 옛 #5cc08a(토큰 밖) → green400. 어두운 글자 대비 9.22, 다크 배경 위 면 9.83 (유성 2026-08-03 "다크모드도 수정") */
 body.form-dark .nav .hb span{ background:#B3B7C2; }
 body.form-dark .apply-frame{ background:#101012; }
 body.form-dark .sec.tint{ background:#16171a; }
@@ -739,5 +740,5 @@ body.form-dark .fab .f{ background:rgba(255,255,255,.10); border-color:rgba(255,
 body.form-dark .fab .f:hover{ background:rgba(255,255,255,.2); color:#fff; border-color:rgba(255,255,255,.5); }
 body.form-dark .drawer .panel{ background:#1a1b1f; }
 body.form-dark .drawer a{ color:#F5F5F5; border-bottom-color:#26262b; }
-body.form-dark .drawer a.dcta{ background:#5cc08a; color:#0f1a14; }
+body.form-dark .drawer a.dcta{ background:var(--green400); color:#0f1a14; }   /* 동일 — 히어로와 같은 rung으로 통일 */
 body.form-dark .drawer .dclose{ color:#8c909c; }
