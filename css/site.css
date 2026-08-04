@@ -27,6 +27,11 @@
   --fs-title:17px; --fs-body:15px; --fs-sm:13.5px; --fs-caption:12px;
   /* TOKENS:END */
   /* ── 홈 전용 토큰(동기 대상 아님, 마커 밖) ── */
+  /* 어두운 영상 위 브랜드 초록 — 유성 조절판 확정(2026-08-03, prototype/홈페이지_히어로_브랜드초록_프리뷰.html).
+     스케일 밖 값인 이유: green300(#a7e7c0)은 히어로 배경 최악 지점에서 2.95로 3:1 미달, 이 값이 3.00으로 턱걸이 통과.
+     둘은 RGB 차 (5,1,3)로 육안 구분이 안 되지만 통과선이 갈린다. 색을 다시 만질 땐 그 조절판에서 정하고 옮길 것.
+     ⛔ 흰 배경 글자로 재사용 금지(흰 위 1.39) — 이름 그대로 '어두운 면 위'에서만. */
+  --green-on-dark:#ace8c3;
   --maxw:1040px;
   --maxw-read:900px; /* 2단 폭 체계 — 시각/갤러리=inner-wide(1180), 본문·표·텍스트=읽기 폭(900) */
   --sh1:0 1px 2px rgba(47,111,77,.05), 0 4px 14px rgba(47,111,77,.06);   /* 그림자: 검정 대신 그린 틴트·2겹 */
@@ -353,9 +358,10 @@ footer .legal a:hover{ color:var(--g900); }
     linear-gradient(to top, rgba(0,0,0,.4), rgba(0,0,0,0) 55%); }
 .fold .hero .inner{ position:relative; z-index:1; }
 .fold .hero h1{ color:var(--ink-on-dark); text-shadow:0 1px 16px rgba(0,0,0,.3); }
-/* 생각공작소 = 어두운 영상 위 밝은 초록. 옛 #5cc08a(토큰 밖·평균 2.71/최악 2.18 = 3:1 미달) → green400(평균 3.15/최악 2.53, 유성 2026-08-03 픽).
-   ⚠️ 완전 통과는 green300(3.45)이나 유성이 화면으로 green400을 선택 — 밝은 프레임에선 여전히 기준 아래(§3.5 "배경이 고정 아니면 색만으로 못 푼다"). */
-.fold .hero h1 b{ color:var(--green400); }
+/* 생각공작소 = 어두운 영상 위 밝은 초록. 이력: #5cc08a(최악 2.18) → green400(2.53, 탁하다는 지적) → --green-on-dark(3.00 통과, 유성 조절판 확정 2026-08-03).
+   ⚠️ 3.00은 턱걸이 + 측정은 영상 '대기 화면' 기준이라 재생 중 더 밝은 프레임에선 밑돌 수 있다(§3.5 "배경이 고정 아니면 색만으로 못 푼다").
+   더 확실히 하려면 색이 아니라 글자 뒤 scrim을 얹는 쪽이 답 — 유성이 깔개 0%를 선택했으므로 지금은 색만. */
+.fold .hero h1 b{ color:var(--green-on-dark); }
 .fold .hero p{ color:rgba(249,251,250,.9); text-shadow:0 1px 12px rgba(0,0,0,.32); }
 .fold .hero .btn.soft{ background:rgba(255,255,255,.92); color:var(--g900); }
 @media (prefers-reduced-motion:reduce){ .hero-bg .hbv{ transition:none; } }
@@ -740,5 +746,5 @@ body.form-dark .fab .f{ background:rgba(255,255,255,.10); border-color:rgba(255,
 body.form-dark .fab .f:hover{ background:rgba(255,255,255,.2); color:#fff; border-color:rgba(255,255,255,.5); }
 body.form-dark .drawer .panel{ background:#1a1b1f; }
 body.form-dark .drawer a{ color:#F5F5F5; border-bottom-color:#26262b; }
-body.form-dark .drawer a.dcta{ background:var(--green400); color:#0f1a14; }   /* 동일 — 히어로와 같은 rung으로 통일 */
+body.form-dark .drawer a.dcta{ background:var(--green400); color:#0f1a14; }   /* 동일. ※히어로는 --green-on-dark로 갈라졌다(2026-08-03) — 여기는 *버튼 채움*(어두운 글자를 얹음)이고 히어로는 *글자*라 요구가 반대: 채움은 green400로 충분(9.22), 글자는 배경이 흔들려 더 밝아야 했다 */
 body.form-dark .drawer .dclose{ color:#8c909c; }
