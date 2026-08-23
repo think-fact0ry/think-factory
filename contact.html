@@ -172,7 +172,9 @@
   // 폼 세로중앙 = 전체 뷰포트 정중앙. nav(N)가 sticky로 위 N을 차지하고 iframe은 그 아래서 시작하므로,
   // 센터 박스를 2N 줄이면 위(nav)·아래 여백이 N으로 대칭 = 정중앙. 높이는 visualViewport(툴바 제외, 모바일 ex28 보정). 모바일은 nav 숨김이라 N=0.
   function vpH() { var vv = window.visualViewport ? window.visualViewport.height : window.innerHeight; return vv - 2 * navOffset(); }
-  function sendVH() { if (childWin) { try { childWin.postMessage({ tfParent: 1, vh: vpH() }, '*'); } catch (e) {} } }
+  // src=첫 진입 출처 버킷(analytics.js가 세션 1회 저장; 문자 vs 검색 vs 블로그 — 06 시트 X열 '유입버킷'). 범주값만, 원문 URL·ID 금지.
+  function srcBucket() { try { return sessionStorage.getItem('tf_src') || (window.tfSrcBucket ? window.tfSrcBucket() : ''); } catch (e) { return ''; } }
+  function sendVH() { if (childWin) { try { childWin.postMessage({ tfParent: 1, vh: vpH(), src: srcBucket() }, '*'); } catch (e) {} } }
   // GAS 폼 출처만 허용 — 호스트네임 정확/접미 매칭(부분문자열 'google'은 google.attacker.com도 통과해 위험)
   function okGasOrigin(o) { try { var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); } catch (e) { return false; } }
   // 폼 검증 알림 토스트(임베드 시 폼이 부모에 요청 — iframe 내부 fixed는 실제 화면 하단이 아님)

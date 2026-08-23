@@ -9,6 +9,28 @@
 //  ④ CLARITY_ID 비어 있으면 미로드 (유성이 clarity.microsoft.com 프로젝트 만든 뒤 ID만 채움).
 // 성능: 이 파일 <2KB·async, Clarity 태그도 async — 렌더 차단 0. 집계 대상 페이지=홈·이야기·바우처·활동·상담·활동 글 미러
 // (설문 /monitoring·/feedback, 영수증 /receipt, QR /q 는 이용자 개인 맥락이라 싣지 않음).
+// 첫 진입 출처 버킷(문자 vs 검색 vs 블로그 — 백로그 §🏠 #37): 세션당 1회 sessionStorage에만 저장(외부 전송 0),
+// /contact 가 신청폼(06)에 넘겨 시트 X열 '유입버킷'에 범주값으로 기록. 문자 템플릿 URL=/contact?utm_source=sms.
+window.tfSrcBucket = function () {
+  try {
+    var q = new URLSearchParams(location.search);
+    var u = String(q.get('utm_source') || q.get('s') || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 16);
+    if (u) return 'tag:' + u;
+    var r = document.referrer; if (!r) return 'direct';
+    var h = new URL(r).hostname;
+    if (h === location.hostname) return 'site';
+    if (/blog\.naver\.com$/.test(h)) return 'blog-naver';
+    if (/search\.naver\.com$/.test(h)) return 'search-naver';
+    if (/naver\.com$/.test(h)) return 'naver';
+    if (/google\./.test(h)) return 'search-google';
+    if (/daum\.net$|bing\.com$|yahoo\./.test(h)) return 'search-other';
+    if (/instagram\.com$|facebook\.com$|fb\.com$|threads\.net$/.test(h)) return 'sns';
+    if (/chatgpt\.com$|openai\.com$|perplexity\.ai$|gemini\.google\.com$|copilot\.microsoft\.com$/.test(h)) return 'ai';
+    return 'other';
+  } catch (e) { return 'other'; }
+};
+(function () { try { if (!sessionStorage.getItem('tf_src') || location.search.indexOf('utm_source=') >= 0) sessionStorage.setItem('tf_src', window.tfSrcBucket()); } catch (e) {} })();
+
 (function () {
   var CLARITY_ID = '';               // ← Clarity 프로젝트 ID (비면 수집 0)
   var KEY = 'tf_nocount';
