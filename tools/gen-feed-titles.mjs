@@ -47,7 +47,9 @@ async function genOne(title, excerpt) {
   const text = (j.content || []).map((c) => c.text || '').join('').trim();
   // 2~3줄만, 각 줄 군더더기 제거
   const lines = text.split('\n').map((l) => l.replace(/^["'\s]+|["'\s]+$/g, '')).filter(Boolean).slice(0, 3);
-  return lines.length >= 2 ? lines.join('\n') : null;
+  // 형식 미달이면 원문을 CI 로그에 — 2026-08-23: 물안경 글(224380806878)이 매일 '형식 미달'로 실패 중인데 로컬엔 키가 없어 재현 불가. 원인은 다음 CI 로그로 본다.
+  if (lines.length < 2) { console.warn(`  원문(stop=${j.stop_reason || '?'}): ${JSON.stringify(text).slice(0, 160)}`); return null; }
+  return lines.join('\n');
 }
 
 if (!KEY) { console.error('ANTHROPIC_API_KEY 없음 — 건너뜀(피드 제목 미생성, 원제목 폴백).'); process.exit(0); }
