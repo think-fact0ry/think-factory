@@ -102,6 +102,7 @@ export function renderPost(post, blocks, desc, ogImage) {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="../../css/site.css">
 <script type="application/ld+json">${jsonLd(ld)}</script>
+<script src="/js/analytics.js" async></script>
 </head>
 <body>
 
