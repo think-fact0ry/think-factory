@@ -466,7 +466,9 @@
         var body = document.createElement('div');
         body.className = 'body';
         var h3 = document.createElement('h3');
-        h3.textContent = p.feedTitle || (p.t2 ? p.t1 + '\n' + p.t2 : p.title); // AI 정제 피드 제목 우선, 없으면 휴리스틱 분리
+        // AI 정제 피드 제목 우선, 없으면 원제 2줄 — 줄 끝 이모지는 뗀다(이모지가 한 줄을 따로 차지해 3줄로 깨짐, 유성 2026-08-23. activities.html fallbackTitle과 동일 규칙)
+        var EMO_TAIL = /[\s‍️]*(?:\p{Extended_Pictographic}[‍️]*)+\s*$/u;
+        h3.textContent = p.feedTitle || [p.t1 || p.title, p.t2 || ''].map(function (l) { return l.replace(EMO_TAIL, '').trim(); }).filter(Boolean).join('\n');
         body.appendChild(h3);   // 날짜 미표시 — 구글 SERP가 홈 날짜로 집어가던 문제 차단
         a.appendChild(th); a.appendChild(body);
         car.appendChild(a);

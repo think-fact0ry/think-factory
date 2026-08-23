@@ -36,10 +36,18 @@
   </div>
 </nav>
 
+<!-- 활동사진/도안 세그 — 상단 바 상시(유성 픽 2026-08-23, 프리뷰 ② — 바우처 .svc-sticky 토큰 재사용, 나타남/숨김 없이 고정) -->
+<div class="act-segbar">
+  <div class="inner">
+    <button class="sst on" data-seg="activity">활동사진</button>
+    <button class="sst" data-seg="pattern">도안</button>
+  </div>
+</div>
+
 <header class="hero compact">
   <div class="inner">
     <h1>아이들의 오늘</h1>
-    <p>아이들이 보낸 시간을 그대로 담았어요.</p>
+    <p id="heroSub">아이들이 보낸 시간을 그대로 담았어요.</p>
   </div>
 </header>
 
@@ -54,15 +62,24 @@
 
 <script>
 // activities/posts.json은 tools/sync-blog.mjs가 생성·갱신 (블로그=원본, 여기는 거울)
+// 세그(2026-08-23): activity=활동사진 / pattern=도안 글(kind=sync-blog.mjs postKind). 딥링크 #doan → 도안 세그(블로그 📎·도안 글에서 바로 올 때).
+var SUB = { activity: '아이들이 보낸 시간을 그대로 담았어요.', pattern: '수업에서 만든 도안을 집에서도 만들 수 있게 나눠요.' };
+var seg = location.hash === '#doan' ? 'pattern' : 'activity';
+// 폴백 제목(AI 피드 제목이 없을 때)에서 줄 끝 이모지 제거 — 이모지가 한 줄을 따로 차지해 2줄이 3줄로 깨짐(유성 2026-08-23)
+var EMO_TAIL = /[\s‍️]*(?:\p{Extended_Pictographic}[‍️]*)+\s*$/u;
+function fallbackTitle(p) {
+  if (p.feedTitle) return p.feedTitle;
+  var l1 = (p.t1 || p.title).replace(EMO_TAIL, '').trim(), l2 = (p.t2 || '').replace(EMO_TAIL, '').trim();
+  return l2 ? l1 + '\n' + l2 : l1;
+}
 fetch('activities/posts.json')
   .then(function (r) { if (!r.ok) throw 0; return r.json(); })
   .then(function (data) {
-    var posts = (data && data.posts) || [];
-    posts = posts.filter(function (p) { return (p.date || '') >= '2025.04.02' && p.kind === 'activity'; });  // 활동글만(kind=sync-blog.mjs postKind — 도안·안내 글 제외, 피드='아이들의 오늘'=활동). + 너무 오래된 글 숨김
-    if (!posts.length) return;
+    var all = ((data && data.posts) || []).filter(function (p) { return (p.date || '') >= '2025.04.02'; });   // 너무 오래된 글 숨김
     var list = document.getElementById('actList');
     var pager = document.getElementById('pager');
-    var PER = 9, pages = Math.ceil(posts.length / PER);   // 9개/페이지(3행×3열, 유성 2026-06-29)
+    var PER = 9;   // 9개/페이지(3행×3열, 유성 2026-06-29)
+    var posts = [], pages = 1;
     function card(p) {
       var a = document.createElement('a');
       a.className = 'act';
@@ -72,15 +89,19 @@ fetch('activities/posts.json')
       if (p.thumb) { var img = document.createElement('img'); img.src = 'activities/' + p.thumb; img.alt = p.title; img.loading = 'lazy'; th.appendChild(img); }
       var body = document.createElement('div'); body.className = 'body';
       var date = document.createElement('div'); date.className = 'date'; date.textContent = p.date + (p.tag ? ' · ' + p.tag : '');
-      var h3 = document.createElement('h3'); h3.textContent = p.feedTitle || (p.t2 ? p.t1 + '\n' + p.t2 : p.title);   // AI 정제 제목 우선, 없으면 원제목 폴백
+      var h3 = document.createElement('h3'); h3.textContent = fallbackTitle(p);   // AI 정제 제목 우선, 없으면 원제목 2줄(도안 글은 항상 원제 2줄 — 유성 픽 2026-08-23)
       body.appendChild(date); body.appendChild(h3);
       a.appendChild(th); a.appendChild(body);
       return a;
     }
     function renderPage(n) {
       list.innerHTML = '';
-      posts.slice((n - 1) * PER, n * PER).forEach(function (p) { list.appendChild(card(p)); });
       pager.innerHTML = '';
+      if (!posts.length) {   // 도안 0건(첫 도안 글 전) — 활동사진은 항상 있음
+        list.innerHTML = '<p class="acts-empty">도안을 준비하고 있어요. 먼저 올라온 활동은 <a href="#" data-seg="activity">활동사진</a>에서 볼 수 있어요.</p>';
+        return;
+      }
+      posts.slice((n - 1) * PER, n * PER).forEach(function (p) { list.appendChild(card(p)); });
       if (pages > 1) for (var i = 1; i <= pages; i++) (function (i) {
         var b = document.createElement('button'); b.textContent = i;
         if (i === n) b.className = 'on';   // 현재 페이지 = 초록 볼드
@@ -88,7 +109,22 @@ fetch('activities/posts.json')
         pager.appendChild(b);
       })(i);
     }
-    renderPage(1);
+    function showSeg(s) {
+      seg = s;
+      posts = all.filter(function (p) { return p.kind === seg; });
+      pages = Math.ceil(posts.length / PER) || 1;
+      document.getElementById('heroSub').textContent = SUB[seg];
+      document.querySelectorAll('.act-segbar [data-seg]').forEach(function (b) { b.classList.toggle('on', b.dataset.seg === seg); });
+      history.replaceState(null, '', seg === 'pattern' ? '#doan' : location.pathname + location.search);
+      renderPage(1);
+    }
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-seg]');
+      if (!b) return;
+      e.preventDefault();
+      if (b.dataset.seg !== seg) { showSeg(b.dataset.seg); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    });
+    showSeg(seg);
   })
   .catch(function () {}); // posts.json 없으면 준비 중 문구 유지
 </script>
