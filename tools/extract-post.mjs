@@ -126,6 +126,21 @@ function imageItems(seg) {
   return items.filter((it) => !seen.has(it.src) && seen.add(it.src));
 }
 
+// se-file(첨부파일) 컴포넌트 → {name, ext, link} (2026-08-23 실물 마크업: se-file-name + se-file-extension +
+//   a.se-file-save-button[href=https://download.blog.naver.com/open/…]). 도안 글의 PDF가 1차 대상.
+//   링크는 download.blog.naver.com만 허용(XSS·피싱 방어 — 그 외 호스트는 첨부 아님으로 버림). 확장자는 문자·숫자만.
+function fileItem(seg) {
+  const nm = seg.match(/class="se-file-name">([^<]*)</);
+  const em = seg.match(/class="se-file-extension">([^<]*)</);
+  const lm = seg.match(/class="se-file-save-button[^"]*"[^>]*\bhref="([^"]+)"/) || seg.match(/href="([^"]+)"[^>]*class="se-file-save-button/);
+  if (!nm || !lm) return null;
+  const link = decodeEntities(lm[1]);
+  if (!/^https:\/\/download\.blog\.naver\.com\//.test(link)) return null;
+  const ext = em ? decodeEntities(em[1]).trim().toLowerCase() : '';
+  if (ext && !/^\.[a-z0-9]{1,8}$/.test(ext)) return null;
+  return { name: decodeEntities(nm[1]).replace(ZW, '').trim(), ext, link };
+}
+
 // 첫 se-main-container를 div 깊이 카운팅으로 정확히 잘라냄(중첩 div 안전)
 function sliceMainContainer(html) {
   const anchor = html.indexOf('class="se-main-container"');
@@ -166,6 +181,9 @@ function parseComponents(container) {
       if (imgs.length) blocks.push({ kind: 'images', layout: imgs.length > 1 ? 'strip' : 'single', imgs });
     } else if (type === 'se-horizontalLine') {
       blocks.push({ kind: 'hr' });
+    } else if (type === 'se-file') {
+      const f = fileItem(seg);
+      if (f) blocks.push({ kind: 'file', ...f });
     }
     // se-documentTitle(제목)·se-sticker(이모티콘)·se-oglink(링크카드)·se-placesMap(지도)는 미러 대상 아님
   }
@@ -211,6 +229,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     blocks.forEach((b, i) => {
       if (b.kind === 'text' || b.kind === 'quote') console.log(`[${i}] ${b.kind.toUpperCase()}(${b.paras.length}) ${b.paras[0].align || '좌'}: ${b.paras[0].text.slice(0, 50)}`);
       else if (b.kind === 'images') console.log(`[${i}] IMG(${b.layout} x${b.imgs.length}) ar=${b.imgs.map((x) => x.ar).join(',')}`);
+      else if (b.kind === 'file') console.log(`[${i}] FILE ${b.name}${b.ext} → ${b.link.slice(0, 60)}…`);
       else console.log(`[${i}] ${b.kind.toUpperCase()}`);
     });
   }).catch((e) => { console.error('ERR', e.message); process.exit(1); });

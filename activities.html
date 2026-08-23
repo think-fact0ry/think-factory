@@ -58,7 +58,7 @@ fetch('activities/posts.json')
   .then(function (r) { if (!r.ok) throw 0; return r.json(); })
   .then(function (data) {
     var posts = (data && data.posts) || [];
-    posts = posts.filter(function (p) { return (p.date || '') >= '2025.04.02' && /오감쑥쑥/.test(p.tag || ''); });  // 활동글만(오감 태그) — 안내·가이드 글 제외(피드='아이들의 오늘'=활동). + 너무 오래된 글 숨김
+    posts = posts.filter(function (p) { return (p.date || '') >= '2025.04.02' && p.kind === 'activity'; });  // 활동글만(kind=sync-blog.mjs postKind — 도안·안내 글 제외, 피드='아이들의 오늘'=활동). + 너무 오래된 글 숨김
     if (!posts.length) return;
     var list = document.getElementById('actList');
     var pager = document.getElementById('pager');

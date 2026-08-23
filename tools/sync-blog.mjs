@@ -39,18 +39,36 @@ const OUT_DIR = new URL('../activities/', import.meta.url);
 const IMG_DIR = new URL('../activities/img/', import.meta.url);
 const POSTS_DIR = new URL('../activities/posts/', import.meta.url);     // 개별 글 HTML
 const BODYIMG_DIR = new URL('../activities/posts/img/', import.meta.url); // 본문 이미지
+const FILES_DIR = new URL('../activities/posts/files/', import.meta.url);  // 첨부파일(도안 PDF 등, 2026-08-23)
 const SITE = 'https://think-factory.kr';
 const HEADERS = { Referer: `https://m.blog.naver.com/${BLOG_ID}`, 'User-Agent': 'Mozilla/5.0 (think-factory.kr sync)' };
 
+// 제목 → {title, tag}. tag(서비스 라벨)는 두 형식 중 하나에서 온다:
+//   구형(~2026-08-17): 머리 `[오감쑥쑥 바우처] …`
+//   신형(콘텐츠지침 v3.3~, 2026-08-18): 꼬리 `… ㅣ오감쑥쑥 바우처 ㅣ생각공작소` / 도안 글 `… ㅣ오감쑥쑥 도안 나눔 ㅣ생각공작소`
+// ⚠️ 지침(docs/2_레퍼런스_클로드프로젝트_콘텐츠지침.md) 제목 꼬리 형식과 결합 — 형식이 바뀌면 여기도(0-9).
+//   2026-08-23 실사고: 신형 꼬리를 안 읽어 08-19 글이 피드·활동 목록에서 빠졌음(tag 빈 값).
+const SEP = '[ㅣ|∣｜]';
+const TAIL_TAG = new RegExp(`\\s*${SEP}\\s*((?:오감쑥쑥|아동청소년|아청심|정신건강|정신토탈|성인심리)[^ㅣ|∣｜]{0,14}?)\\s*$`);
 function cleanTitle(raw) {
   let t = String(raw || '').trim();
   let tag = '';
   const m = t.match(/^\[([^\]]{1,20})\]\s*/);            // 선두 [카테고리] → 뱃지로 분리
   if (m) { tag = m[1].trim(); t = t.slice(m[0].length); }
-  t = t.replace(/\s*[ㅣ|∣｜I]\s*생각공작소\s*$/, '');      // 꼬리표 제거 (유성 OK 2026-06-11)
-  t = t.replace(/활동\s*사진/g, '');                        // '활동사진' 제거 (텍스트 다이어트, 2026-06-12)
+  t = t.replace(new RegExp(`\\s*${SEP}\\s*생각공작소\\s*$`), '');   // 꼬리표 제거 (유성 OK 2026-06-11)
+  t = t.replace(/활동\s*사진/g, '');                        // '활동사진' 제거 (텍스트 다이어트, 2026-06-12 — 꼬리 라벨 뒤에도 붙어 오므로 라벨 추출 전에)
+  const tm = !tag && t.match(TAIL_TAG);                     // 신형 꼬리 라벨(서비스명으로 시작하는 짧은 꼬리만 — 가이드 글의 `| 신청부터…` 같은 긴 꼬리는 제목 일부)
+  if (tm) { tag = tm[1].trim(); t = t.slice(0, tm.index); }
   t = t.replace(/\s{2,}/g, ' ');
   return { title: t.trim(), tag };
+}
+// 글 종류 — 피드·목록·피드제목 생성의 단일 분기 키(index.html·activities.html·gen-feed-titles.mjs가 소비).
+//   activity = 오감 활동 후기(홈 피드·활동 목록 '활동사진') / pattern = 도안 나눔 글(활동 목록 '도안' 세그만) / guide = 안내·가이드(피드 제외, 페이지·사이트맵만)
+//   도안 판정은 제목 꼬리(`오감쑥쑥 도안 나눔`)·블로그 카테고리명(`도안`, 유성 2026-08-23 하위 분리) 둘 중 하나면 — 한쪽이 빠져도 잡힘.
+function postKind(tag, category) {
+  if (/도안/.test(tag) || /도안/.test(category || '')) return 'pattern';
+  if (/오감쑥쑥/.test(tag)) return 'activity';
+  return 'guide';
 }
 
 // 제목 두 줄 분리 — 후보 지점(문장부호 !?,… 또는 이모지 클러스터 + 공백) 중 중앙에 가장 가까운 곳에서 나눔.
@@ -101,6 +119,14 @@ async function downloadBodyImg(src, destFile) {
   await pipeline(Readable.fromWeb(res.body), createWriteStream(destFile));
 }
 const srcHash = (s) => createHash('sha1').update(s).digest('hex').slice(0, 12);
+// 첨부파일: download.blog.naver.com/open/… — 익명·Referer 없이 200(2026-08-23 실측). 상한 30MB(도안 PDF는 수 MB).
+async function downloadFile(link, destFile) {
+  const res = await fetch(link, { headers: HEADERS });
+  if (!res.ok) throw new Error(`file HTTP ${res.status}`);
+  const len = Number(res.headers.get('content-length') || 0);
+  if (len > 30 * 1024 * 1024) throw new Error(`file too large ${len}`);
+  await pipeline(Readable.fromWeb(res.body), createWriteStream(destFile));
+}
 
 // 한 글: 본문 추출 → 이미지 로컬화(그룹=여러 장 전부) → 페이지 렌더·저장. 반환 = 성공 여부.
 async function buildPostPage(post) {
@@ -131,9 +157,24 @@ async function buildPostPage(post) {
     b.items = items;
     // 구글 이미지 검색용 키워드 맥락(브랜드+지역+서비스, 전부 정확한 사실 — 스터핑 아님) + 제목
     const ctx = ['생각공작소', '인천', post.tag].filter(Boolean).join(' ');
-    b.alt = `${ctx} ${post.title} 활동사진`;
+    b.alt = `${ctx} ${post.title} ${post.kind === 'pattern' ? '도안' : '활동사진'}`;
   }
-  const blocks = body.blocks.filter((b) => b.kind !== 'images' || (b.items && b.items.length));
+  // 첨부파일(도안 PDF 등) — 네이버 다운로드 URL은 익명 200(2026-08-23 실측)이지만 kr이 유일 소스가 되도록 로컬 복사.
+  // 파일명은 사람이 읽는 원래 이름(구글 다운로드 UX·파일명 SEO) — 같은 글에 같은 이름이면 스킵, 재업로드로 이름이 바뀌면 새 파일.
+  for (const b of body.blocks) {
+    if (b.kind !== 'file') continue;
+    const fdir = new URL(`${post.logNo}/`, FILES_DIR);
+    await mkdir(fdir, { recursive: true });
+    const safeName = (b.name + b.ext).replace(/[\\/:*?"<>|#%]/g, '').replace(/\s+/g, '_').slice(0, 80) || `file${b.ext}`;
+    const destFile = new URL(encodeURIComponent(safeName), fdir);
+    if (!(await exists(destFile))) {
+      try { await downloadFile(b.link, destFile); }
+      catch (e) { try { unlinkSync(fileURLToPath(destFile)); } catch {} console.warn(`  첨부 실패 ${post.logNo} ${safeName}: ${e.message}`); continue; }   // 반쪽 파일이 남으면 다음 실행이 "있음"으로 스킵하므로 지움
+    }
+    b.local = `files/${post.logNo}/${safeName}`;           // 페이지 기준 상대(렌더러가 URL 인코딩)
+    b.bytes = statSync(fileURLToPath(destFile)).size;
+  }
+  const blocks = body.blocks.filter((b) => (b.kind !== 'images' || (b.items && b.items.length)) && (b.kind !== 'file' || b.local));
   const desc = firstText(blocks) || post.excerpt;
   await writeFile(new URL(`${post.logNo}.html`, POSTS_DIR), renderPost(post, blocks, desc, firstImg), 'utf8');
   return imgUrls;                                            // 성공=이미지 URL 배열(빈 배열도 truthy), 실패=false
@@ -201,6 +242,7 @@ for (const it of all) {
     t1: lines.t1,
     t2: lines.t2,
     tag,
+    kind: postKind(tag, it.categoryName),
     category: it.categoryName || '',
     date: fmtDate(it.addDate),
     ts: it.addDate,
@@ -219,7 +261,7 @@ for (const old of prevPosts) {
   const logNo = String(old.logNo);
   if (seenNow.has(logNo) || excludeSet.has(logNo)) continue;
   const lines = old.t1 ? { t1: old.t1, t2: old.t2 } : splitTitle(old.title); // 구버전 데이터 제목분리 백필
-  posts.push({ ...old, ...lines, _retained: true }); // 빌드 성공하면 유지, 실패하면 확정 삭제로 드롭
+  posts.push({ ...old, ...lines, kind: old.kind || postKind(old.tag || '', old.category), _retained: true }); // 빌드 성공하면 유지, 실패하면 확정 삭제로 드롭
   retained++;
 }
 if (retained) console.log(`목록 API 누락분 ${retained}건 — 본문 빌드로 생존 판정`);

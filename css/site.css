@@ -683,6 +683,18 @@ body.apply-page{ background:#fff; }   /* 흰색 — FAQ가 흰색 되며 옛 베
 .post-body blockquote{ margin:16px 0; padding:4px 0 4px 18px; border-left:3px solid var(--green); color:var(--g700); }
 .post-body blockquote p{ margin:0; }
 .post-body hr{ border:none; border-top:1px solid var(--g200); margin:26px 0; }
+/* 첨부파일(도안 PDF) 다운로드 행 — 블로그 첨부 컴포넌트의 거울(render-post.mjs file 블록, 2026-08-23).
+   페이지의 1차 액션이라 §4.14 fill-primary(green700 채움+흰 글자 — 흰 14~15px 글자는 green700이 4.5 통과선). 위아래 간격은 figure와 동일 3em */
+.post-body a.file{ display:flex; align-items:center; gap:12px; margin:3em 0; padding:14px 16px; background:var(--green-dark); color:#fff; border-radius:var(--r-md); text-decoration:none; transition:transform .08s, background .15s; }
+.post-body a.file:active{ transform:scale(.97); background:var(--green800); }   /* 누름 = .btn과 동일(§5.3 fill) */
+.post-body a.file .fi{ flex:0 0 auto; width:26px; height:26px; }
+.post-body a.file .fi svg{ width:100%; height:100%; }
+.post-body a.file .fn{ flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.post-body a.file .fn b{ font-size:15px; font-weight:700; line-height:1.35; word-break:break-all; }
+.post-body a.file .fn small{ font-size:12px; font-weight:500; opacity:.82; }
+.post-body a.file .fd{ flex:0 0 auto; font-size:13px; font-weight:700; padding:7px 12px; border-radius:99px; background:rgba(255,255,255,.16); }
+.post-body p + a.file, .post-body figure + a.file{ margin-top:3em; }
+.post-body a.file + p, .post-body a.file + figure{ margin-top:3em; }
 .post-foot{ margin-top:60px; padding-top:24px; border-top:1px solid var(--g200); display:flex; flex-direction:row-reverse; justify-content:space-between; align-items:center; gap:14px; }   /* 한 행: 다른활동(좌)·네이버원문(우). HTML순서 네이버→다른활동이라 row-reverse */
 .post-foot a{ font-size:15px; font-weight:600; color:var(--green-dark); }
 .post-foot .back{ margin-bottom:0; }   /* 하단 back은 상단 back의 margin-bottom:18px 상속 제거 — 원문보기 a와 모바일 정렬 맞춤 */

@@ -49,10 +49,22 @@ function renderBlocks(blocks) {
       }
     } else if (b.kind === 'hr') {
       out.push('<hr>');
+    } else if (b.kind === 'file' && b.local) {
+      // 첨부파일(도안 PDF) — kr 로컬 복사본을 download 링크로. 경로는 세그먼트별 인코딩(한글 파일명), 표시는 원래 이름.
+      const href = b.local.split('/').map(encodeURIComponent).join('/');
+      const label = `${b.name}${b.ext}`;
+      const meta = [b.ext.replace('.', '').toUpperCase(), fmtBytes(b.bytes)].filter(Boolean).join(' · ');
+      out.push(`<a class="file" href="${esc(href)}" download="${esc(label)}"><span class="fi" aria-hidden="true">${FILE_ICON}</span><span class="fn"><b>${esc(label)}</b><small>${esc(meta)}</small></span><span class="fd">다운로드</span></a>`);
     }
   }
   return out.join('\n');
 }
+function fmtBytes(n) {
+  if (!n) return '';
+  return n >= 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)}MB` : `${Math.max(1, Math.round(n / 1024))}KB`;
+}
+// 문서 아이콘(선형, currentColor — §3.5 모노톤 아이콘)
+const FILE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 12v6"/><path d="M9.5 15.5 12 18l2.5-2.5"/></svg>';
 
 // post = {logNo,title,date,tag,url}, blocks = 로컬경로(locals) 박힌 블록, desc = SEO 설명, ogImage = 절대 URL(첫 이미지)
 export function renderPost(post, blocks, desc, ogImage) {

@@ -52,7 +52,7 @@ async function genOne(title, excerpt) {
 
 if (!KEY) { console.error('ANTHROPIC_API_KEY 없음 — 건너뜀(피드 제목 미생성, 원제목 폴백).'); process.exit(0); }
 const data = JSON.parse(await readFile(POSTS, 'utf8'));
-const targets = data.posts.filter((p) => /오감쑥쑥/.test(p.tag || '') && (ALL || !p.feedTitle));
+const targets = data.posts.filter((p) => p.kind === 'activity' && (ALL || !p.feedTitle));   // 활동글만(도안 글 제목은 활동명+도안 2줄 고정이라 AI 제목 불요)
 console.log(`대상 ${targets.length}건 (${ALL ? '전부' : '신규만'})`);
 let done = 0;
 for (const p of targets) {
