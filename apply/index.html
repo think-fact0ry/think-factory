@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>서비스 신청 — 생각공작소</title>
+<meta name="robots" content="noindex">
+<!-- 문자 전용 짧은 입구(유성 2026-08-24 "문자 링크는 짧고 깔끔하게"). 전화 온 이용자에게 보내는 문자에만 이 주소를 싣는다.
+     열리면 유입버킷 tag:sms를 찍고 /contact로 즉시 이동 — 주소창은 깔끔한 /contact, 태그는 sessionStorage로 전달(analytics.js 계약).
+     검색·홈페이지 메뉴에서는 절대 이 주소로 링크하지 말 것(문자 채널 구분이 목적 — 다른 데서 쓰면 측정이 죽는다).
+     JS 없는 환경은 meta refresh가 ?s=sms 쿼리로 태그를 유지. 수집 코드(analytics.js) 없음 = 문자앱 미리보기 봇이 열어도 집계 0. -->
+<script>
+try { sessionStorage.setItem('tf_src', 'tag:sms'); } catch (e) {}
+location.replace('/contact');
+</script>
+<meta http-equiv="refresh" content="0;url=/contact?s=sms">
+</head>
+<body></body>
+</html>
