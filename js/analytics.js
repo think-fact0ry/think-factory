@@ -10,7 +10,7 @@
 // 성능: 이 파일 <2KB·async, Clarity 태그도 async — 렌더 차단 0. 집계 대상 페이지=홈·이야기·바우처·활동·상담·활동 글 미러
 // (설문 /monitoring·/feedback, 영수증 /receipt, QR /q 는 이용자 개인 맥락이라 싣지 않음).
 // 첫 진입 출처 버킷(문자 vs 검색 vs 블로그 — 백로그 §🏠 #37): 세션당 1회 sessionStorage에만 저장(외부 전송 0),
-// /contact 가 신청폼(06)에 넘겨 시트 X열 유입버킷에 범주값으로 기록. 문자 채널=전용 입구 /apply(sessionStorage에 tag:sms 직접 기록 후 /contact 이동 — 유성 08-24 "문자는 짧고 깔끔하게"). ?s=sms·?utm_source= 쿼리도 계속 인식(구형 링크·noscript 폴백).
+// /contact 가 신청폼(06)에 넘겨 시트 X열 유입버킷에 범주값으로 기록. 문자 링크=무태그 /contact 유지(유성 확정 08-24 — 기발송 링크와 일관성 우선, /apply 입구는 폐기) → direct 버킷≈문자 경유 상한으로 해석(RB-004에 규칙). ?s=·utm_source= 태그는 지원만 유지.
 window.tfSrcBucket = function () {
   try {
     var q = new URLSearchParams(location.search);
