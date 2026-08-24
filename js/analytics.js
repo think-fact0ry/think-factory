@@ -10,7 +10,7 @@
 // 성능: 이 파일 <2KB·async, Clarity 태그도 async — 렌더 차단 0. 집계 대상 페이지=홈·이야기·바우처·활동·상담·활동 글 미러
 // (설문 /monitoring·/feedback, 영수증 /receipt, QR /q 는 이용자 개인 맥락이라 싣지 않음).
 // 첫 진입 출처 버킷(문자 vs 검색 vs 블로그 — 백로그 §🏠 #37): 세션당 1회 sessionStorage에만 저장(외부 전송 0),
-// /contact 가 신청폼(06)에 넘겨 시트 X열 '유입버킷'에 범주값으로 기록. 문자 템플릿 URL=/contact?utm_source=sms.
+// /contact 가 신청폼(06)에 넘겨 시트 X열 '유입버킷'에 범주값으로 기록. 문자 템플릿 URL=/contact?s=sms(유성 확정 08-24 — 문자는 짧게, s=utm_source 약칭).
 window.tfSrcBucket = function () {
   try {
     var q = new URLSearchParams(location.search);
@@ -29,7 +29,7 @@ window.tfSrcBucket = function () {
     return 'other';
   } catch (e) { return 'other'; }
 };
-(function () { try { if (!sessionStorage.getItem('tf_src') || location.search.indexOf('utm_source=') >= 0) sessionStorage.setItem('tf_src', window.tfSrcBucket()); } catch (e) {} })();
+(function () { try { var b = window.tfSrcBucket(); if (b.indexOf('tag:') === 0 || !sessionStorage.getItem('tf_src')) sessionStorage.setItem('tf_src', b); } catch (e) {} })();
 
 (function () {
   var CLARITY_ID = 'y7dihtbv2e';               // ← Clarity 프로젝트 ID (비면 수집 0)
