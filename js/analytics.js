@@ -32,7 +32,7 @@ window.tfSrcBucket = function () {
 (function () { try { if (!sessionStorage.getItem('tf_src') || location.search.indexOf('utm_source=') >= 0) sessionStorage.setItem('tf_src', window.tfSrcBucket()); } catch (e) {} })();
 
 (function () {
-  var CLARITY_ID = '';               // ← Clarity 프로젝트 ID (비면 수집 0)
+  var CLARITY_ID = 'y7dihtbv2e';               // ← Clarity 프로젝트 ID (비면 수집 0)
   var KEY = 'tf_nocount';
   function get() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
   function set(on) { try { on ? localStorage.setItem(KEY, '1') : localStorage.removeItem(KEY); } catch (e) {} }
