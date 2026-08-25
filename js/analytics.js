@@ -59,6 +59,9 @@ window.tfSrcBucket = function () {
       t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
       y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
     })(window, document, 'clarity', 'script', CLARITY_ID);
+    // 커스텀 태그 src = 위 tfSrcBucket 범주값(06 시트 X열과 동일) → Clarity 필터 '사용자 지정 태그 › src'(유성 확정 08-25 D4).
+    // 범주값만(URL·ID 없음)이라 처리방침 무변경. 큐에 쌓였다 태그 로드 후 전송, 필터 노출까지 30분~2시간(공식).
+    try { window.clarity('set', 'src', sessionStorage.getItem('tf_src') || window.tfSrcBucket()); } catch (e) {}
   }
   if (document.prerendering) document.addEventListener('prerenderingchange', load, { once: true });
   else load();
