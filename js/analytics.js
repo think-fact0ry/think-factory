@@ -15,7 +15,7 @@ window.tfSrcBucket = function () {
   try {
     var q = new URLSearchParams(location.search);
     var raw = String(q.get('utm_source') || q.get('s') || '').toLowerCase();
-    if (/chatgpt.com|openai.com|perplexity.ai|gemini.google|copilot.microsoft/.test(raw)) return 'ai';   // ChatGPT는 링크에 ?utm_source=chatgpt.com을 붙인다(2026-08-26 첫 실측) → referrer 'ai'와 같은 버킷
+    if (/chatgpt\.com|openai\.com|perplexity\.ai|gemini\.google|copilot\.microsoft/.test(raw)) return 'ai';   // ChatGPT는 링크에 ?utm_source=chatgpt.com을 붙인다(2026-08-26 첫 실측) → referrer 'ai'와 같은 버킷
     var u = raw.replace(/[^a-z0-9_-]/g, '').slice(0, 16);
     if (u) return 'tag:' + u;
     var r = document.referrer; if (!r) return 'direct';
