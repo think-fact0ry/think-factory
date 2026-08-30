@@ -84,7 +84,6 @@
 @media (prefers-reduced-motion:reduce){ .apply-skel .sk-t,.apply-skel .sk-chip,.apply-skel .sk-tog,.apply-skel .sk-box,.apply-skel .sk-btn,.apply-skel .sk-ring{ animation:none } }
 @media (max-width:380px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }   /* 06 ≤380 값 */
 body.form-ready .apply-skel{ display:none; }
-body.skel-debug .apply-skel{ opacity:.6; }   /* ?skel=1 검수: 폼 위에 겹쳐 보기 */
 body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk-card{ background:#22332a; }
 </style>
 <div class="apply-wrap">
@@ -226,7 +225,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     var d = e.data; if (!d || d.tfApply !== 1) return;
     childWin = e.source;
     document.body.classList.add('bridged');           // 브릿지 성립 표식(실패 시 nav/리모콘 기본 노출 폴백)
-    if (d.type === 'ready') { sendVH(); if (location.search.indexOf('skel=1') < 0) document.body.classList.add('form-ready'); else document.body.classList.add('skel-debug'); }   // ?skel=1 = 뼈대를 반투명으로 유지(실기기에서 폼과 겹쳐 위치 대조하는 검수용)
+    if (d.type === 'ready') { sendVH(); document.body.classList.add('form-ready'); }
     else if (d.type === 'step' && typeof d.id === 'string') { try { if (window.clarity) window.clarity('event', 'apply_' + d.id.replace(/[^A-Za-z0-9_]/g, '_').slice(0, 40)); } catch (e) {} }   // 폼 단계(화면 전환·제출 실패 지점) → Clarity 깔때기. 시트 정본은 06 '단계로그'
     else if (d.type === 'height' && d.height) { f.style.height = d.height + 'px'; }
     else if (d.type === 'theme') { document.body.classList.toggle('form-dark', !!d.dark); }
@@ -235,7 +234,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
     else if (d.type === 'exithint') { showExitBox(); }
   });
-  (function(){ var fr = document.querySelector('.apply-frame'); if (!fr) return; fr.addEventListener('load', function(){ setTimeout(function(){ if (location.search.indexOf('skel=1') < 0) document.body.classList.add('form-ready'); }, 8000); }); })();
+  (function(){ var fr = document.querySelector('.apply-frame'); if (!fr) return; fr.addEventListener('load', function(){ setTimeout(function(){ document.body.classList.add('form-ready'); }, 8000); }); })();
   window.addEventListener('resize', sendVH);
   if (window.visualViewport) window.visualViewport.addEventListener('resize', sendVH);   // 툴바 show/hide로 보이는 높이 바뀌면 재전송
 })();
