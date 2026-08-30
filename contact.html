@@ -63,28 +63,40 @@
      폼이 브릿지 ready를 보내면 걷힌다(body.form-ready). 안전망=iframe load 후 8초. CSS는 이 페이지 전용이라 여기(site.css 미변경 — 동시 세션 충돌 회피). -->
 <style>
 .apply-wrap{ position:relative; }
-.apply-skel{ position:absolute; inset:0; z-index:1; background:#f7f5f1; padding:0 16px; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }   /* 06 .embed .intro.on = flex column center(min-height:--pvh) 와 같은 자리 — 유성 08-31 "세로 중앙 아님" 정정 */
-.apply-skel .sk-card{ background:#fff; border-radius:20px; padding:30px 24px; box-shadow:0 1px 4px rgba(0,0,0,.05); width:100%; max-width:508px; margin:0 auto; }   /* 06 .wrap max 540 − 좌우 16 */
-@media (max-width:600px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }   /* 06 L332 모바일 값 */
-.apply-skel .sk-b{ background:var(--g100); border-radius:8px; animation:skp 1.2s ease-in-out infinite; }
-.apply-skel .sk-chip{ width:84px; height:26px; border-radius:99px; margin-bottom:14px; }   /* 06 .screen-head 26+14 */
-.apply-skel .sk-h{ height:32px; width:46%; margin-bottom:10px; }   /* h1 24px×1.35 + mb10 */
-.apply-skel .sk-s{ height:16px; width:78%; margin-bottom:28px; }   /* .intro-sub 13.5×1.6≈22 + mb22 */
-.apply-skel .sk-box{ background:var(--g100); border-radius:14px; padding:18px; margin-bottom:24px; animation:skp 1.2s ease-in-out infinite; }
-.apply-skel .sk-box i{ display:block; height:20px; background:#fff; opacity:.9; border-radius:8px; margin-bottom:12px; }   /* .guide 3줄(14.5×1.75) = 84 */
-.apply-skel .sk-box i:last-child{ margin-bottom:0; width:70%; }
-.apply-skel .sk-btn{ height:61px; border-radius:15px; }   /* .btn-next 17px×1.6 + 17×2 */
-.apply-skel .sk-g{ height:22px; width:60%; margin:26px auto 14px; }   /* .btn-ghost 14×1.6 + 14×2 + mt12 */
+.apply-skel{ position:absolute; inset:0; z-index:1; background:#f7f5f1; padding:0 16px; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }   /* 06 .embed .intro.on = flex column center(min-height:--pvh)와 같은 자리 */
+/* 카드 = 06 intro-card를 같은 폰트·크기·행간으로 조판(문구도 실제 것) — 글자는 투명, 줄마다 막대(box-decoration-break:clone). 폭이 달라 줄이 바뀌어도 높이가 실물과 같이 움직인다(유성 실측 08-31 모바일 줄바꿈). 06 첫 화면 문구·치수를 바꾸면 여기도(0-9). */
+.apply-skel .sk-card{ background:#fff; border-radius:20px; padding:30px 24px; box-shadow:0 1px 4px rgba(0,0,0,.05); width:100%; max-width:508px; margin:0 auto; font-family:'Pretendard',-apple-system,sans-serif; font-size:16px; line-height:1.6; letter-spacing:0; word-break:keep-all; color:transparent; -webkit-text-size-adjust:100%; }
+.apply-skel .sk-t{ background:var(--g100); color:transparent; border-radius:6px; -webkit-box-decoration-break:clone; box-decoration-break:clone; animation:skp 1.2s ease-in-out infinite; }
+.apply-skel .sk-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+.apply-skel .sk-chip{ display:inline-block; font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; background:var(--g100); animation:skp 1.2s ease-in-out infinite; }
+.apply-skel .sk-tog{ flex-shrink:0; width:34px; height:34px; border-radius:99px; background:var(--g100); animation:skp 1.2s ease-in-out infinite; }
+.apply-skel .sk-h1{ font-size:clamp(23px,3.4vw,30px); font-weight:700; letter-spacing:-.5px; line-height:1.35; margin:0 0 10px; }
+.apply-skel .sk-sub{ font-size:13.5px; margin:0 0 22px; }
+.apply-skel .sk-box{ background:var(--g100); border:1px solid transparent; border-radius:14px; padding:18px; margin-bottom:24px; animation:skp 1.2s ease-in-out infinite; }
+.apply-skel .sk-box p{ font-size:14.5px; line-height:1.75; margin:0; }
+.apply-skel .sk-box p+p{ margin-top:12px; }
+.apply-skel .sk-box .sk-t{ background:#fff; opacity:.9; animation:none; }
+.apply-skel .sk-btn{ padding:17px; font-size:17px; font-weight:700; text-align:center; border-radius:15px; background:var(--g100); animation:skp 1.2s ease-in-out infinite; }
+.apply-skel .sk-g{ margin-top:12px; padding:14px; font-size:14px; font-weight:600; text-align:center; }
 .apply-skel .sk-ring{ position:absolute; left:50%; top:50%; width:44px; height:44px; margin:-22px 0 0 -22px; border-radius:50%; border:3px solid var(--g200); border-top-color:var(--green); animation:skr .9s linear infinite; }
 @keyframes skp{ 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
 @keyframes skr{ to{ transform:rotate(360deg) } }
-@media (prefers-reduced-motion:reduce){ .apply-skel .sk-b,.apply-skel .sk-box,.apply-skel .sk-ring{ animation:none } }
+@media (prefers-reduced-motion:reduce){ .apply-skel .sk-t,.apply-skel .sk-chip,.apply-skel .sk-tog,.apply-skel .sk-box,.apply-skel .sk-btn,.apply-skel .sk-ring{ animation:none } }
+@media (max-width:380px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }   /* 06 ≤380 값 */
 body.form-ready .apply-skel{ display:none; }
+body.skel-debug .apply-skel{ opacity:.6; }   /* ?skel=1 검수: 폼 위에 겹쳐 보기 */
 body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk-card{ background:#22332a; }
 </style>
 <div class="apply-wrap">
 <div class="apply-skel" id="applySkel" aria-hidden="true">
-  <div class="sk-card"><div class="sk-b sk-chip"></div><div class="sk-b sk-h"></div><div class="sk-b sk-s"></div><div class="sk-box"><i></i><i></i><i></i></div><div class="sk-b sk-btn"></div><div class="sk-b sk-g"></div></div>
+  <div class="sk-card">
+    <div class="sk-head"><span class="sk-chip">생각공작소</span><span class="sk-tog"></span></div>
+    <div class="sk-h1"><span class="sk-t">바우처 신청</span></div>
+    <p class="sk-sub"><span class="sk-t">적어주신 정보는 서비스 안내와 배정에만 써요.</span></p>
+    <div class="sk-box"><p><span class="sk-t">신청서를 접수하면, 스케줄을 확인해서 접수하신 순서대로 연락드려요.</span></p><p><span class="sk-t">평일 오후(3~6시)를 가장 많이 찾으세요.</span><br><span class="sk-t">요일·시간을 <b>최대한 많이</b> 골라주실수록 더 빨리 배정해드릴 수 있어요 😊</span></p></div>
+    <div class="sk-btn">신청하기</div>
+    <div class="sk-g"><span class="sk-t">이미 신청했나요? 내용 수정하기 →</span></div>
+  </div>
   <div class="sk-ring"></div>
 </div>
 <iframe class="apply-frame" title="오감쑥쑥 바우처 신청폼"
@@ -214,7 +226,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     var d = e.data; if (!d || d.tfApply !== 1) return;
     childWin = e.source;
     document.body.classList.add('bridged');           // 브릿지 성립 표식(실패 시 nav/리모콘 기본 노출 폴백)
-    if (d.type === 'ready') { sendVH(); document.body.classList.add('form-ready'); }
+    if (d.type === 'ready') { sendVH(); if (location.search.indexOf('skel=1') < 0) document.body.classList.add('form-ready'); else document.body.classList.add('skel-debug'); }   // ?skel=1 = 뼈대를 반투명으로 유지(실기기에서 폼과 겹쳐 위치 대조하는 검수용)
     else if (d.type === 'step' && typeof d.id === 'string') { try { if (window.clarity) window.clarity('event', 'apply_' + d.id.replace(/[^A-Za-z0-9_]/g, '_').slice(0, 40)); } catch (e) {} }   // 폼 단계(화면 전환·제출 실패 지점) → Clarity 깔때기. 시트 정본은 06 '단계로그'
     else if (d.type === 'height' && d.height) { f.style.height = d.height + 'px'; }
     else if (d.type === 'theme') { document.body.classList.toggle('form-dark', !!d.dark); }
@@ -223,7 +235,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
     else if (d.type === 'exithint') { showExitBox(); }
   });
-  (function(){ var fr = document.querySelector('.apply-frame'); if (!fr) return; fr.addEventListener('load', function(){ setTimeout(function(){ document.body.classList.add('form-ready'); }, 8000); }); })();
+  (function(){ var fr = document.querySelector('.apply-frame'); if (!fr) return; fr.addEventListener('load', function(){ setTimeout(function(){ if (location.search.indexOf('skel=1') < 0) document.body.classList.add('form-ready'); }, 8000); }); })();
   window.addEventListener('resize', sendVH);
   if (window.visualViewport) window.visualViewport.addEventListener('resize', sendVH);   // 툴바 show/hide로 보이는 높이 바뀌면 재전송
 })();
