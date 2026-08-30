@@ -43,10 +43,16 @@
     '#tfpv.on{display:block}',
     '#tfpv .pv-bd{position:absolute;inset:0;background:#000;opacity:0;transition:opacity .26s ease}',
     '#tfpv.in .pv-bd{opacity:1}',
-    '#tfpv .pv-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:56px 0 104px}',
-    '#tfpv .pv-img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;opacity:0;transition:opacity .26s ease;will-change:transform,opacity}',
-    '#tfpv.in .pv-img{opacity:1}',
-    '#tfpv .pv-img.mv{transition:transform .3s cubic-bezier(.22,.7,.25,1),opacity .26s ease}',
+    // 필름스트립 — 사진 요소가 하나면 손 뗄 때 '제자리로 돌아오며 src만 바뀌어' 새 사진이 반대 방향에서 튀어나온다(유성 08-31 반려).
+    // 그래서 [이전][지금][다음] 3칸을 실제로 옆에 두고 트랙을 민다. 끌고 있는 동안 지금 사진은 절대 안 바뀐다.
+    '#tfpv .pv-stage{position:absolute;inset:0;overflow:hidden}',
+    '#tfpv .pv-track{position:absolute;left:0;right:0;top:56px;bottom:104px;display:flex;transform:translateX(-100%);' +
+      'opacity:0;transition:opacity .26s ease;will-change:transform}',
+    '#tfpv.in .pv-track{opacity:1}',
+    '#tfpv .pv-track.mv{transition:transform .3s cubic-bezier(.22,.7,.25,1),opacity .26s ease}',
+    '#tfpv .pv-cell{flex:0 0 100%;display:flex;align-items:center;justify-content:center;min-width:0}',
+    '#tfpv .pv-img{max-width:100%;max-height:100%;width:auto;height:auto;display:block}',
+    '#tfpv .pv-cell.empty .pv-img{visibility:hidden}',
     // 크롬(상단바·카운터·썸네일)
     '#tfpv .pv-chrome{opacity:0;transition:opacity .24s ease}',
     '#tfpv.in .pv-chrome{opacity:1}',
@@ -116,7 +122,11 @@
   pv.setAttribute('aria-modal', 'true');
   pv.innerHTML =
     '<div class="pv-bd"></div>' +
-    '<div class="pv-stage"><img class="pv-img" alt="" draggable="false"></div>' +          // alt="" — 본문 alt는 SEO 키워드 문자열이라 복제하지 않는다
+    '<div class="pv-stage"><div class="pv-track">' +                                        // alt="" — 본문 alt는 SEO 키워드 문자열이라 복제하지 않는다
+      '<div class="pv-cell"><img class="pv-img" alt="" draggable="false"></div>' +          // 이전
+      '<div class="pv-cell"><img class="pv-img" alt="" draggable="false"></div>' +          // 지금
+      '<div class="pv-cell"><img class="pv-img" alt="" draggable="false"></div>' +          // 다음
+    '</div></div>' +
     '<div class="pv-load"><span>사진을 불러오고 있어요<span class="pv-dots"><i></i><i></i><i></i></span></span></div>' +
     '<div class="pv-chrome">' +
       '<div class="pv-top"><div class="pv-title"></div><span class="pv-sp"></span>' +
@@ -131,7 +141,11 @@
   document.body.appendChild(pv);
 
   var $ = function (s) { return pv.querySelector(s); };
-  var stage = $('.pv-stage'), pvImg = $('.pv-img'), elCount = $('.pv-count'), elThumbs = $('.pv-thumbs');
+  var stage = $('.pv-stage'), track = $('.pv-track');
+  var cells = [].slice.call(pv.querySelectorAll('.pv-cell'));      // [이전, 지금, 다음]
+  var cellImg = cells.map(function (c) { return c.querySelector('.pv-img'); });
+  var curImg = function () { return cellImg[1]; };
+  var elCount = $('.pv-count'), elThumbs = $('.pv-thumbs');
   var elPrev = $('.pv-prev'), elNext = $('.pv-next'), toast = $('.pv-toast'), toastMsg = $('.pv-toast .msg');
   $('.pv-title').textContent = TITLE;
 
@@ -150,13 +164,22 @@
     });
   }
 
+  // 3칸에 실제 사진을 앉힌다(이전·지금·다음). 트랙은 항상 -100%에 서서 가운데 칸을 보여준다.
+  function renderCells(i) {
+    [i - 1, i, i + 1].forEach(function (n, k) {
+      var has = n >= 0 && n < N;
+      cells[k].classList.toggle('empty', !has);
+      cellImg[k].src = has ? imgs[n].src : cellImg[k].src || '';
+    });
+    var c = curImg();
+    pv.classList.toggle('loading', !c.complete);
+    c.onload = function () { pv.classList.remove('loading'); };
+  }
+  function trackX(pct, px) { track.style.transform = 'translateX(calc(' + pct + '% + ' + (px || 0) + 'px))'; }
+
   // syncUrl=false = 주소를 건드리지 않는다. ⚠ 열 때 여기서 replaceState를 하면 **글의 히스토리 칸**에
   //   `#p=` 상태가 덮어씌워져, 뒤로가기가 '닫기'가 아니라 '그 칸으로 복귀'가 되고 닫은 뒤에도 주소에 해시가 남는다.
-  function paint(i, syncUrl) {
-    idx = i;
-    pvImg.src = imgs[i].src;
-    pv.classList.toggle('loading', !pvImg.complete);
-    pvImg.onload = function () { pv.classList.remove('loading'); };
+  function syncUI(i, syncUrl) {
     elCount.textContent = (i + 1) + ' / ' + N;
     pv.setAttribute('aria-label', '사진 ' + (i + 1) + ' / ' + N);
     for (var j = 0; j < elThumbs.children.length; j++) {
@@ -169,9 +192,40 @@
     prefetch(i);
     if (syncUrl) { try { history.replaceState({ pv: 1, i: i }, '', '#p=' + (i + 1)); } catch (e) {} }   // 넘김은 칸을 쌓지 않고 주소만 갈아끼운다
   }
+  function paint(i, syncUrl) { idx = i; renderCells(i); trackX(-100); syncUI(i, syncUrl); }
 
+  // 옆 칸으로 한 장 — 트랙을 그 칸까지 밀고, **끝난 뒤에** 칸을 재배치한다(재배치는 눈에 안 보인다).
+  var sliding = false, slideT = null;
+  // 진행 중인 밀기를 그 자리서 마무리한다. 막지 않고 마무리하는 이유 = 화살표 연타·빠른 연속 스와이프가
+  // 300ms 동안 통째로 먹히면 "안 눌린다"로 읽힌다(실측: 5연타 중 1번만 반영).
+  function finishSlide() {
+    if (!sliding) return;
+    clearTimeout(slideT); slideT = null;
+    track.classList.remove('mv');
+    renderCells(idx);
+    trackX(-100);
+    sliding = false;
+  }
+  function slide(dir) {
+    var to = idx + dir;
+    if (to < 0 || to >= N) { settleBack(); return; }
+    finishSlide();                                       // 이전 밀기를 닫고 새 위치를 기준으로 이어 민다
+    idx = to;
+    syncUI(idx, true);                                   // 카운터·주소는 즉시 — 들어오는 사진이 이미 보이니까
+    if (REDUCED) { renderCells(idx); trackX(-100); return; }
+    sliding = true;
+    track.classList.add('mv');
+    trackX(dir > 0 ? -200 : 0);                          // 다음=왼쪽으로, 이전=오른쪽으로 밀린다
+    slideT = setTimeout(finishSlide, 300);               // 전환 끄고 같은 프레임에 재배치+원위치 → 깜빡임 0
+    if (!nexted) { nexted = true; tag('photo_next'); }
+  }
+  function settleBack() { track.classList.add('mv'); trackX(-100); }
+
+  // 옆 칸이면 밀고, 멀리 뛰면(썸네일 탭) 그냥 갈아끼운다 — 10칸을 밀어 보여줄 이유가 없다.
   function go(i) {
     if (i < 0 || i >= N || i === idx) return;
+    if (Math.abs(i - idx) === 1) { slide(i - idx); return; }
+    finishSlide();
     paint(i, true);
     if (!nexted) { nexted = true; tag('photo_next'); }
   }
@@ -197,8 +251,10 @@
     pv.classList.remove('in');
     setTimeout(function () {
       pv.classList.remove('on', 'loading');
-      pvImg.classList.remove('mv');
-      pvImg.style.transform = ''; pvImg.style.opacity = '';
+      track.classList.remove('mv');
+      track.style.opacity = '';
+      trackX(-100);
+      sliding = false;
       $('.pv-bd').style.opacity = '';
       document.body.style.overflow = bodyOv;
       var t = imgs[idx];
@@ -225,7 +281,7 @@
   }
   elPrev.addEventListener('click', function () { navClick(elPrev, idx - 1); });
   elNext.addEventListener('click', function () { navClick(elNext, idx + 1); });
-  pvImg.addEventListener('click', function (e) {
+  track.addEventListener('click', function (e) {
     e.stopPropagation();
     if (moved) { moved = false; return; }        // 끌고 나서 뗀 것은 '탭'이 아니다(안 그러면 넘길 때마다 닫힌다)
     requestClose();                              // 유성 픽: 사진 탭 = 닫기
@@ -248,17 +304,18 @@
   // 세로는 위·아래 둘 다 탈출(아래만 열어 두면 위로 올린 손가락이 영영 안 닫힌다 — 유성 실측 2026-08-31).
   var sx = 0, sy = 0, dx = 0, dy = 0, axis = '', dragging = false, moved = false, t0 = 0, edgeBack = false;
   // 세로 탈출 임계(px) · 속도 임계(px/ms). 가로는 아래 dend()의 폭 18%.
-  // 🔧 이 셋을 다시 만질 땐 조절판에서 정하고 옮긴다 = 부모 레포 `prototype/홈페이지_활동글_사진뷰어_프리뷰.html`
-  //    (실물 21장·실제 배치로 안 A/B/C와 축 8개를 렌더 비교 + 마우스로 스와이프를 만져 볼 수 있다).
+  // 🔧 이 셋과 슬라이드 속도(.3s, 위 `.pv-track.mv`)를 다시 만질 땐 조절판에서 정하고 옮긴다
+  //    = 부모 레포 `prototype/홈페이지_활동글_사진뷰어_프리뷰.html`(실물 21장·실제 배치, 마우스로도 스와이프됨).
   var SWIPE_Y = 72, SWIPE_V = .45;
 
   function dstart(x, y) {
     if (!open) return;
+    finishSlide();                                 // 밀던 중이면 그 자리서 닫고 새 손가락을 바로 받는다
     sx = x; sy = y; dx = dy = 0; axis = ''; dragging = true; moved = false; t0 = Date.now();
     // 좌측 가장자리 = OS 뒤로 제스처 자리. 대개 안드로이드가 먼저 먹지만, 안 먹는 기기에선 우리에게 온다
     // → 그때도 '이전 사진'이 아니라 '나가기'가 되게 한다. (오른쪽 가장자리는 '다음 사진'과 충돌해 넣지 않는다)
     edgeBack = (x - stage.getBoundingClientRect().left) <= 24;
-    pvImg.style.transition = 'none';
+    track.classList.remove('mv');                  // 손가락은 즉시 따라온다
   }
   function dmove(x, y, e) {
     if (!dragging) return;
@@ -269,32 +326,34 @@
     }
     moved = true;
     if (e && e.cancelable) e.preventDefault();
-    if (axis === 'x') pvImg.style.transform = 'translateX(' + dx + 'px)';
-    else {
-      pvImg.style.transform = 'translateY(' + dy + 'px) scale(' + Math.max(.82, 1 - Math.abs(dy) / 900) + ')';
+    if (axis === 'x') {
+      // 끝에서는 저항을 준다 — 옆 칸이 비어 있는데 그대로 따라오면 검은 빈칸이 끌려 나온다
+      var d = dx;
+      if ((idx === 0 && d > 0) || (idx === N - 1 && d < 0)) d = d * .28;
+      trackX(-100, d);
+    } else {
+      track.style.transform = 'translateX(-100%) translateY(' + dy + 'px) scale(' + Math.max(.82, 1 - Math.abs(dy) / 900) + ')';
       $('.pv-bd').style.opacity = String(Math.max(.25, 1 - Math.abs(dy) / 500));
     }
   }
   // 닫힐 땐 끌던 방향으로 날려 보낸다 — 제자리로 튕겼다 닫히면 '내가 닫은 것'으로 안 읽힌다
   function flyOut(tx, ty) {
-    pvImg.classList.add('mv');
-    pvImg.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(.9)';
-    pvImg.style.opacity = '0';
+    track.classList.add('mv');
+    track.style.transform = 'translateX(-100%) translate(' + tx + 'px,' + ty + 'px) scale(.9)';
+    track.style.opacity = '0';
     $('.pv-bd').style.opacity = '';
     requestClose();
   }
   function dend() {
     if (!dragging) return;
     dragging = false;
-    pvImg.style.transition = '';
-    pvImg.classList.add('mv');
     var r = stage.getBoundingClientRect();
     var dt = Math.max(1, Date.now() - t0);
     var vx = Math.abs(dx) / dt, vy = Math.abs(dy) / dt;
     if (edgeBack && axis === 'x' && dx > 40) { flyOut(r.width * .6, 0); return; }
-    if (axis === 'x' && (Math.abs(dx) > r.width * .18 || vx > SWIPE_V)) { pvImg.style.transform = ''; go(dx < 0 ? idx + 1 : idx - 1); return; }
+    if (axis === 'x' && (Math.abs(dx) > r.width * .18 || vx > SWIPE_V)) { slide(dx < 0 ? 1 : -1); return; }
     if (axis === 'y' && (Math.abs(dy) > SWIPE_Y || vy > SWIPE_V)) { flyOut(0, dy < 0 ? -r.height * .5 : r.height * .5); return; }
-    pvImg.style.transform = ''; $('.pv-bd').style.opacity = '';
+    settleBack(); $('.pv-bd').style.opacity = '';                 // 임계 미달 = 잡고 있던 사진이 제자리로
   }
   stage.addEventListener('touchstart', function (e) { if (e.touches.length === 1) dstart(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
   stage.addEventListener('touchmove', function (e) { if (e.touches.length === 1) dmove(e.touches[0].clientX, e.touches[0].clientY, e); }, { passive: false });
