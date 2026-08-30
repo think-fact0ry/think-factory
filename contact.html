@@ -66,7 +66,7 @@
 .apply-skel{ position:absolute; inset:0; z-index:1; background:#f7f5f1; padding:0 16px; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }   /* 06 .embed .intro.on = flex column center(min-height:--pvh)와 같은 자리 */
 /* 카드 = 06 intro-card를 같은 폰트·크기·행간으로 조판(문구도 실제 것) — 글자는 투명, 줄마다 막대(box-decoration-break:clone). 폭이 달라 줄이 바뀌어도 높이가 실물과 같이 움직인다(유성 실측 08-31 모바일 줄바꿈). 06 첫 화면 문구·치수를 바꾸면 여기도(0-9). */
 .apply-skel .sk-card{ background:#fff; border-radius:20px; padding:30px 24px; box-shadow:0 1px 4px rgba(0,0,0,.05); width:100%; max-width:508px; margin:0 auto; font-family:'Pretendard',-apple-system,sans-serif; font-size:16px; line-height:1.6; letter-spacing:0; word-break:keep-all; color:transparent; -webkit-text-size-adjust:100%; }
-.apply-skel .sk-t{ background:var(--g100); color:transparent; border-radius:6px; -webkit-box-decoration-break:clone; box-decoration-break:clone; animation:skp 1.2s ease-in-out infinite; }
+.apply-skel .sk-t{ background:var(--g100); color:transparent; border-radius:6px; -webkit-box-decoration-break:clone; box-decoration-break:clone; animation:skp 1.2s ease-in-out infinite; position:relative; top:2px; }   /* 한글 글리프가 라인 하단에 붙어 막대가 위로 보임 — 시각 보정(relative라 조판 무영향) */
 .apply-skel .sk-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
 .apply-skel .sk-chip{ display:inline-block; font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; background:var(--g100); animation:skp 1.2s ease-in-out infinite; }
 .apply-skel .sk-tog{ flex-shrink:0; width:34px; height:34px; border-radius:99px; background:var(--g100); animation:skp 1.2s ease-in-out infinite; }
@@ -76,8 +76,8 @@
 .apply-skel .sk-box p{ font-size:14.5px; line-height:1.75; margin:0; }
 .apply-skel .sk-box p+p{ margin-top:12px; }
 .apply-skel .sk-box .sk-t{ background:#fff; opacity:.9; animation:none; }
-.apply-skel .sk-btn{ padding:17px; font-size:17px; font-weight:700; text-align:center; border-radius:15px; background:var(--g100); animation:skp 1.2s ease-in-out infinite; }
-.apply-skel .sk-g{ margin-top:12px; padding:14px; font-size:14px; font-weight:600; text-align:center; }
+.apply-skel .sk-btn{ padding:17px; font-size:17px; font-weight:700; line-height:normal; text-align:center; border-radius:15px; background:var(--g100); animation:skp 1.2s ease-in-out infinite; }   /* button 기본 line-height=normal — 1.6 상속하면 7px 커짐(프로브 61vs54) */
+.apply-skel .sk-g{ margin-top:12px; padding:14px; font-size:14px; font-weight:600; line-height:normal; text-align:center; }
 .apply-skel .sk-ring{ position:absolute; left:50%; top:50%; width:44px; height:44px; margin:-22px 0 0 -22px; border-radius:50%; border:3px solid var(--g200); border-top-color:var(--green); animation:skr .9s linear infinite; }
 @keyframes skp{ 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
 @keyframes skr{ to{ transform:rotate(360deg) } }
