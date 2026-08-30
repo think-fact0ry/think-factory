@@ -63,8 +63,9 @@
      폼이 브릿지 ready를 보내면 걷힌다(body.form-ready). 안전망=iframe load 후 8초. CSS는 이 페이지 전용이라 여기(site.css 미변경 — 동시 세션 충돌 회피). -->
 <style>
 .apply-wrap{ position:relative; }
-.apply-skel{ position:absolute; inset:0; z-index:1; background:#f7f5f1; padding:24px 16px; overflow:hidden; }
-.apply-skel .sk-card{ background:#fff; border-radius:20px; padding:30px 24px; box-shadow:0 1px 4px rgba(0,0,0,.05); max-width:480px; margin:0 auto; }
+.apply-skel{ position:absolute; inset:0; z-index:1; background:#f7f5f1; padding:0 16px; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }   /* 06 .embed .intro.on = flex column center(min-height:--pvh) 와 같은 자리 — 유성 08-31 "세로 중앙 아님" 정정 */
+.apply-skel .sk-card{ background:#fff; border-radius:20px; padding:30px 24px; box-shadow:0 1px 4px rgba(0,0,0,.05); width:100%; max-width:508px; margin:0 auto; }   /* 06 .wrap max 540 − 좌우 16 */
+@media (max-width:600px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }   /* 06 L332 모바일 값 */
 .apply-skel .sk-b{ background:var(--g100); border-radius:8px; animation:skp 1.2s ease-in-out infinite; }
 .apply-skel .sk-chip{ width:84px; height:26px; border-radius:99px; margin-bottom:16px; }
 .apply-skel .sk-h{ height:28px; width:46%; margin-bottom:12px; }
