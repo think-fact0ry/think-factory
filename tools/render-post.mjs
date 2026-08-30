@@ -103,6 +103,7 @@ export function renderPost(post, blocks, desc, ogImage) {
 <link rel="stylesheet" href="../../css/site.css">
 <script type="application/ld+json">${jsonLd(ld)}</script>
 <script src="/js/analytics.js" async></script>
+<script src="/js/photo-viewer.js" defer></script>
 </head>
 <body>
 
@@ -118,7 +119,7 @@ export function renderPost(post, blocks, desc, ogImage) {
   </div>
 </nav>
 
-<article class="post">
+<article class="post" data-t1="${esc(post.t1 || title)}">
   <div class="inner">
     <a class="back" href="../../activities">← 활동 이야기</a>
     <div class="date">${esc(post.date)}${post.tag ? ' · ' + esc(post.tag) : ''}</div>
