@@ -247,7 +247,10 @@
   // 8px 임계를 넘긴 뒤에만 preventDefault → 사진을 길게 눌러 저장하는 게 살아 있다.
   // 세로는 위·아래 둘 다 탈출(아래만 열어 두면 위로 올린 손가락이 영영 안 닫힌다 — 유성 실측 2026-08-31).
   var sx = 0, sy = 0, dx = 0, dy = 0, axis = '', dragging = false, moved = false, t0 = 0, edgeBack = false;
-  var SWIPE_Y = 72, SWIPE_V = .45;               // 세로 탈출 임계(px) · 속도 임계(px/ms)
+  // 세로 탈출 임계(px) · 속도 임계(px/ms). 가로는 아래 dend()의 폭 18%.
+  // 🔧 이 셋을 다시 만질 땐 조절판에서 정하고 옮긴다 = 부모 레포 `prototype/홈페이지_활동글_사진뷰어_프리뷰.html`
+  //    (실물 21장·실제 배치로 안 A/B/C와 축 8개를 렌더 비교 + 마우스로 스와이프를 만져 볼 수 있다).
+  var SWIPE_Y = 72, SWIPE_V = .45;
 
   function dstart(x, y) {
     if (!open) return;
