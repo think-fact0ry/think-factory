@@ -59,8 +59,36 @@
 <h1 class="sr-only">생각공작소 상담 신청 — 오감쑥쑥 바우처</h1>
 <!-- 06 오감쑥쑥 신청폼 임베드 (GAS 웹앱, ALLOWALL — 배너 없는 브랜드 URL).
      GAS·saenggak 리다이렉트는 그대로라 기존 주소도 계속 작동 -->
+<!-- 신청서가 오기 전 수 초(GAS 콜드스타트): 백지 대신 첫 화면과 같은 자리의 회색 뼈대 + 중앙 그린 링(§5.4·§5.2, 유성 픽 2026-08-31 "뼈대+링, 텍스트 없음").
+     폼이 브릿지 ready를 보내면 걷힌다(body.form-ready). 안전망=iframe load 후 8초. CSS는 이 페이지 전용이라 여기(site.css 미변경 — 동시 세션 충돌 회피). -->
+<style>
+.apply-wrap{ position:relative; }
+.apply-skel{ position:absolute; inset:0; z-index:1; background:#f7f5f1; padding:24px 16px; overflow:hidden; }
+.apply-skel .sk-card{ background:#fff; border-radius:20px; padding:30px 24px; box-shadow:0 1px 4px rgba(0,0,0,.05); max-width:480px; margin:0 auto; }
+.apply-skel .sk-b{ background:var(--g100); border-radius:8px; animation:skp 1.2s ease-in-out infinite; }
+.apply-skel .sk-chip{ width:84px; height:26px; border-radius:99px; margin-bottom:16px; }
+.apply-skel .sk-h{ height:28px; width:46%; margin-bottom:12px; }
+.apply-skel .sk-s{ height:14px; width:78%; margin-bottom:24px; }
+.apply-skel .sk-box{ background:var(--g100); border-radius:14px; padding:18px; margin-bottom:24px; animation:skp 1.2s ease-in-out infinite; }
+.apply-skel .sk-box i{ display:block; height:13px; background:#fff; opacity:.9; border-radius:8px; margin-bottom:9px; }
+.apply-skel .sk-box i:last-child{ margin-bottom:0; width:70%; }
+.apply-skel .sk-btn{ height:56px; border-radius:15px; }
+.apply-skel .sk-g{ height:20px; width:60%; margin:14px auto 0; }
+.apply-skel .sk-ring{ position:absolute; left:50%; top:50%; width:44px; height:44px; margin:-22px 0 0 -22px; border-radius:50%; border:3px solid var(--g200); border-top-color:var(--green); animation:skr .9s linear infinite; }
+@keyframes skp{ 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
+@keyframes skr{ to{ transform:rotate(360deg) } }
+@media (prefers-reduced-motion:reduce){ .apply-skel .sk-b,.apply-skel .sk-box,.apply-skel .sk-ring{ animation:none } }
+body.form-ready .apply-skel{ display:none; }
+body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk-card{ background:#22332a; }
+</style>
+<div class="apply-wrap">
+<div class="apply-skel" id="applySkel" aria-hidden="true">
+  <div class="sk-card"><div class="sk-b sk-chip"></div><div class="sk-b sk-h"></div><div class="sk-b sk-s"></div><div class="sk-box"><i></i><i></i><i></i></div><div class="sk-b sk-btn"></div><div class="sk-b sk-g"></div></div>
+  <div class="sk-ring"></div>
+</div>
 <iframe class="apply-frame" title="오감쑥쑥 바우처 신청폼"
   src="https://script.google.com/macros/s/AKfycbyDLm7VCcRNmPrK08waOFx3JHt9lvxP22coImDfK9xfWNheiS11My2xcJJrqrE6GVRPSw/exec"></iframe>
+</div>
 
 <!-- 폼(흰 배경)↔FAQ(흰 배경) 경계 — 좌우 페이드 회색선. 모바일/터치 전용, PC=여백(§4.7, 유성 2026-07-05) -->
 <hr class="faq-div" aria-hidden="true">
@@ -185,7 +213,8 @@
     var d = e.data; if (!d || d.tfApply !== 1) return;
     childWin = e.source;
     document.body.classList.add('bridged');           // 브릿지 성립 표식(실패 시 nav/리모콘 기본 노출 폴백)
-    if (d.type === 'ready') { sendVH(); }
+    if (d.type === 'ready') { sendVH(); document.body.classList.add('form-ready'); }
+    else if (d.type === 'step' && typeof d.id === 'string') { try { if (window.clarity) window.clarity('event', 'apply_' + d.id.replace(/[^A-Za-z0-9_]/g, '_').slice(0, 40)); } catch (e) {} }   // 폼 단계(화면 전환·제출 실패 지점) → Clarity 깔때기. 시트 정본은 06 '단계로그'
     else if (d.type === 'height' && d.height) { f.style.height = d.height + 'px'; }
     else if (d.type === 'theme') { document.body.classList.toggle('form-dark', !!d.dark); }
     else if (d.type === 'scrolltop') { var t = f.getBoundingClientRect().top + window.pageYOffset - navOffset(); window.scrollTo({ top: Math.max(0, t), behavior: 'auto' }); }
@@ -193,6 +222,7 @@
     else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
     else if (d.type === 'exithint') { showExitBox(); }
   });
+  (function(){ var fr = document.querySelector('.apply-frame'); if (!fr) return; fr.addEventListener('load', function(){ setTimeout(function(){ document.body.classList.add('form-ready'); }, 8000); }); })();
   window.addEventListener('resize', sendVH);
   if (window.visualViewport) window.visualViewport.addEventListener('resize', sendVH);   // 툴바 show/hide로 보이는 높이 바뀌면 재전송
 })();
