@@ -85,7 +85,11 @@
       'padding:14px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(0,0,0,.5) 45%)}',
     '#tfpv .pv-thumbs::-webkit-scrollbar{display:none}',
     '#tfpv .pv-thumbs img{flex:0 0 auto;width:46px;height:46px;object-fit:cover;border-radius:var(--r-sm,8px);opacity:.42;' +
-      'outline:2px solid transparent;outline-offset:-2px;cursor:pointer;transition:opacity .18s,outline-color .18s}',
+      // 🔴 outline-color는 트랜지션하지 않는다 — 색을 보간하는 0.18초 동안 썸네일 줄이 **프레임마다 다시 그려지고**,
+      //    그게 사진 슬라이드와 겹쳐 미세한 끊김이 된다(유성 실기기 08-31 "아주아주 미세하게 덜덜").
+      //    트레이스 실측(같은 페이지·3회, 값 동일): 지금 paint 140 / outline-color만 빼면 **15** / 전부 끄면 10(바닥)
+      //    / opacity만 빼면 140(그대로) ⇒ 범인은 outline-color 하나. 테두리는 즉시 켜지고 opacity만 부드럽게.
+      'outline:2px solid transparent;outline-offset:-2px;cursor:pointer;transition:opacity .18s}',
     '#tfpv .pv-thumbs img.cur{opacity:1;outline-color:var(--ink-on-dark,#F9FBFA)}',   // ⛔ 솔리드 초록 선택 상태는 재제안 금지 목록
     // 로딩 = 출렁이는 점 3개(§5.2 — 정적 '…' 금지)
     '#tfpv .pv-load{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--ink-on-dark,#F9FBFA);' +
