@@ -67,14 +67,14 @@
 .apply-skel .sk-card{ background:#fff; border-radius:20px; padding:30px 24px; box-shadow:0 1px 4px rgba(0,0,0,.05); width:100%; max-width:508px; margin:0 auto; }   /* 06 .wrap max 540 − 좌우 16 */
 @media (max-width:600px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }   /* 06 L332 모바일 값 */
 .apply-skel .sk-b{ background:var(--g100); border-radius:8px; animation:skp 1.2s ease-in-out infinite; }
-.apply-skel .sk-chip{ width:84px; height:26px; border-radius:99px; margin-bottom:16px; }
-.apply-skel .sk-h{ height:28px; width:46%; margin-bottom:12px; }
-.apply-skel .sk-s{ height:14px; width:78%; margin-bottom:24px; }
+.apply-skel .sk-chip{ width:84px; height:26px; border-radius:99px; margin-bottom:14px; }   /* 06 .screen-head 26+14 */
+.apply-skel .sk-h{ height:32px; width:46%; margin-bottom:10px; }   /* h1 24px×1.35 + mb10 */
+.apply-skel .sk-s{ height:16px; width:78%; margin-bottom:28px; }   /* .intro-sub 13.5×1.6≈22 + mb22 */
 .apply-skel .sk-box{ background:var(--g100); border-radius:14px; padding:18px; margin-bottom:24px; animation:skp 1.2s ease-in-out infinite; }
-.apply-skel .sk-box i{ display:block; height:13px; background:#fff; opacity:.9; border-radius:8px; margin-bottom:9px; }
+.apply-skel .sk-box i{ display:block; height:20px; background:#fff; opacity:.9; border-radius:8px; margin-bottom:12px; }   /* .guide 3줄(14.5×1.75) = 84 */
 .apply-skel .sk-box i:last-child{ margin-bottom:0; width:70%; }
-.apply-skel .sk-btn{ height:56px; border-radius:15px; }
-.apply-skel .sk-g{ height:20px; width:60%; margin:14px auto 0; }
+.apply-skel .sk-btn{ height:61px; border-radius:15px; }   /* .btn-next 17px×1.6 + 17×2 */
+.apply-skel .sk-g{ height:22px; width:60%; margin:26px auto 14px; }   /* .btn-ghost 14×1.6 + 14×2 + mt12 */
 .apply-skel .sk-ring{ position:absolute; left:50%; top:50%; width:44px; height:44px; margin:-22px 0 0 -22px; border-radius:50%; border:3px solid var(--g200); border-top-color:var(--green); animation:skr .9s linear infinite; }
 @keyframes skp{ 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
 @keyframes skr{ to{ transform:rotate(360deg) } }
@@ -200,7 +200,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
   function navOffset() { if (window.matchMedia('(max-width:760px)').matches) return 0; var n = document.querySelector('.nav'); return n ? n.offsetHeight : 60; }
   // 폼 세로중앙 = 전체 뷰포트 정중앙. nav(N)가 sticky로 위 N을 차지하고 iframe은 그 아래서 시작하므로,
   // 센터 박스를 2N 줄이면 위(nav)·아래 여백이 N으로 대칭 = 정중앙. 높이는 visualViewport(툴바 제외, 모바일 ex28 보정). 모바일은 nav 숨김이라 N=0.
-  function vpH() { var vv = window.visualViewport ? window.visualViewport.height : window.innerHeight; return vv - 2 * navOffset(); }
+  function vpH() { var vv = window.visualViewport ? window.visualViewport.height : window.innerHeight; return vv - navOffset(); }   // PC=뷰포트−nav(폼이 nav 아래를 꽉 채움, 초기 iframe 100svh−60과 동일 → 뼈대와 같은 상자). 옛 2×nav는 아래 60px 흰 띠를 만들었다(유성 08-31 실측 791 vs 851). 모바일=nav fixed라 0.
   // src=첫 진입 출처 버킷(analytics.js가 세션 1회 저장; 문자 vs 검색 vs 블로그 — 06 시트 X열 '유입버킷'). 범주값만, 원문 URL·ID 금지.
   function srcBucket() { try { return sessionStorage.getItem('tf_src') || (window.tfSrcBucket ? window.tfSrcBucket() : ''); } catch (e) { return ''; } }
   function sendVH() { if (childWin) { try { childWin.postMessage({ tfParent: 1, vh: vpH(), src: srcBucket() }, '*'); } catch (e) {} } }
