@@ -213,8 +213,23 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
   // 센터 박스를 2N 줄이면 위(nav)·아래 여백이 N으로 대칭 = 정중앙. 높이는 visualViewport(툴바 제외, 모바일 ex28 보정). 모바일은 nav 숨김이라 N=0.
   function vpH() { var vv = window.visualViewport ? window.visualViewport.height : window.innerHeight; return vv - navOffset(); }   // PC=뷰포트−nav(폼이 nav 아래를 꽉 채움, 초기 iframe 100svh−60과 동일 → 뼈대와 같은 상자). 옛 2×nav는 아래 60px 흰 띠를 만들었다(유성 08-31 실측 791 vs 851). 모바일=nav fixed라 0.
   // src=첫 진입 출처 버킷(analytics.js가 세션 1회 저장; 문자 vs 검색 vs 블로그 — 06 시트 X열 '유입버킷'). 범주값만, 원문 URL·ID 금지.
-  function srcBucket() { try { return sessionStorage.getItem('tf_src') || (window.tfSrcBucket ? window.tfSrcBucket() : ''); } catch (e) { return ''; } }
-  function sendVH() { if (childWin) { try { childWin.postMessage({ tfParent: 1, vh: vpH(), src: srcBucket() }, '*'); } catch (e) {} } }
+  // 두 소스를 각각 감싼다 — 옛 코드는 try 하나로 묶여 있어 인앱 브라우저에서 sessionStorage 접근이 예외를 던지면 tfSrcBucket() 폴백까지 같이 삼켰다(빈 값 전송).
+  function srcBucket() {
+    var v = ''; try { v = sessionStorage.getItem('tf_src') || ''; } catch (e) {}
+    if (!v) { try { v = window.tfSrcBucket ? window.tfSrcBucket() : ''; } catch (e) {} }
+    return v;
+  }
+  // 버킷이 비면 src 키 자체를 뺀다 — 폼은 typeof d.src==='string'일 때만 _tfSrc를 덮으므로, 늦게 온 진짜 값이 빈 값에 지워지지 않는다(06 재배포 불요). 반환=버킷을 실었나.
+  function sendVH() {
+    if (!childWin) return false;
+    var m = { tfParent: 1, vh: vpH() }, s = srcBucket(); if (s) m.src = s;
+    try { childWin.postMessage(m, '*'); } catch (e) {}
+    return !!s;
+  }
+  // analytics.js는 async라 폼 ready가 먼저 올 수 있다. 옛 코드는 ready 때 딱 한 번만 보내서, 그 순간 버킷이 없으면 그 세션은 영영 빈 값이었다
+  // (2026-08-31 실측: 오감 탭 최근 제출 14건 중 6건이 빈 버킷 — 08-28 빈칸 3 + 08-31 embed-nosrc 3. X열 유입버킷 = RB-004 1차 지표).
+  var srcTries = 0;
+  function pushSrc() { if (sendVH() || ++srcTries > 6) return; setTimeout(pushSrc, 500); }   // 최대 7회·약 3초
   // GAS 폼 출처만 허용 — 호스트네임 정확/접미 매칭(부분문자열 'google'은 google.attacker.com도 통과해 위험)
   function okGasOrigin(o) { try { var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); } catch (e) { return false; } }
   // 폼 검증 알림 토스트(임베드 시 폼이 부모에 요청 — iframe 내부 fixed는 실제 화면 하단이 아님)
@@ -225,7 +240,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     var d = e.data; if (!d || d.tfApply !== 1) return;
     childWin = e.source;
     document.body.classList.add('bridged');           // 브릿지 성립 표식(실패 시 nav/리모콘 기본 노출 폴백)
-    if (d.type === 'ready') { sendVH(); document.body.classList.add('form-ready'); }
+    if (d.type === 'ready') { pushSrc(); document.body.classList.add('form-ready'); }   // pushSrc가 첫 sendVH를 겸한다(vh 전달 동일) + 버킷이 늦게 오면 재시도
     else if (d.type === 'step' && typeof d.id === 'string') { try { if (window.clarity) window.clarity('event', 'apply_' + d.id.replace(/[^A-Za-z0-9_]/g, '_').slice(0, 40)); } catch (e) {} }   // 폼 단계(화면 전환·제출 실패 지점) → Clarity 깔때기. 시트 정본은 06 '단계로그'
     else if (d.type === 'height' && d.height) { f.style.height = d.height + 'px'; }
     else if (d.type === 'theme') { document.body.classList.toggle('form-dark', !!d.dark); }
