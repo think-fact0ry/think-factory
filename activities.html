@@ -73,6 +73,30 @@ function fallbackTitle(p) {
   var l1 = (p.t1 || p.title).replace(EMO_TAIL, '').trim(), l2 = (p.t2 || '').replace(EMO_TAIL, '').trim();
   return l2 ? l1 + '\n' + l2 : l1;
 }
+// 도안 카드 — 썸네일 우하단에 박힌 '생각공작소' 로고를 프레임 밖으로 밀어낸다(유성 2026-09-06 "거슬려서").
+// 비율로 추측하지 않고 로고를 직접 찾는다: 도안은 순수 흑백(선화 채도 0 실측)이고 로고만 초록이라 채도로 갈린다.
+// 로고가 없는 썸네일은 손대지 않는다 — tools/도안후처리/벡터정서.py 가 로고 자리에 도안 선이 있으면 로고를 아예 생략하므로(tdark),
+// 그런 썸네일을 크롭하면 로고는 없는데 도안만 잘린다. 실측: 지금 2건을 4:5 썸네일 규격으로 재현하면 둘 다 로고가 생략된다.
+// 썸네일 형태가 A4형(0.707)이든 4:5형(0.800)이든 로고 위치를 그때그때 재서 필요한 배율만 낸다. 근거 전문=css/site.css .doan-crop 주석·docs/1 §531.
+function doanCrop(img, a) {
+  try {
+    var W = img.naturalWidth, H = img.naturalHeight;
+    if (!W || !H) return;
+    var rx = Math.floor(W * 0.55), ry = Math.floor(H * 0.8), rw = W - rx, rh = H - ry;   // 로고는 우하단에만 온다 — 그 구석만 읽는다(가벼움)
+    var cv = document.createElement('canvas'); cv.width = rw; cv.height = rh;
+    var cx = cv.getContext('2d'); cx.drawImage(img, rx, ry, rw, rh, 0, 0, rw, rh);
+    var d = cx.getImageData(0, 0, rw, rh).data, top = -1;
+    for (var y = 0; y < rh && top < 0; y++) for (var x = 0; x < rw; x++) {
+      var i = (y * rw + x) * 4;
+      if (Math.max(d[i], d[i + 1], d[i + 2]) - Math.min(d[i], d[i + 1], d[i + 2]) > 30) { top = ry + y; break; }   // 채도 = 로고(도안은 무채색)
+    }
+    if (top < 0) return;   // 로고 없음 → 원본 그대로
+    // 카드는 4:5. 위정렬에서 보이는 세로(이미지 px) = 1.25 x W / 배율 → 그게 로고 상단(top)보다 위여야 한다. 여유 3%.
+    // 하한 1.08 = 유성이 지정한 '조금 확대'. A4형(top=633, W=480)은 계산값이 0.98이라 이 하한이 걸린다.
+    a.style.setProperty('--doan-zoom', Math.max(1.08, 1.25 * W / top * 1.03).toFixed(3));
+    a.classList.add('doan-crop');
+  } catch (e) { /* 캔버스를 못 읽으면(교차출처 등) 원본 그대로 — 로고가 보일 뿐 깨지지 않는다 */ }
+}
 fetch('activities/posts.json')
   .then(function (r) { if (!r.ok) throw 0; return r.json(); })
   .then(function (data) {
@@ -89,12 +113,7 @@ fetch('activities/posts.json')
       var th = document.createElement('div'); th.className = 'thumb';
       if (p.thumb) {
         var img = document.createElement('img'); img.src = 'activities/' + p.thumb; img.alt = p.title; img.loading = 'lazy';
-        // 도안 썸네일은 두 형태로 온다 — A4형(비율 0.707, 옛 산출물)과 4:5형(0.800, 벡터정서.py _도안_썸네일.png = 앞으로의 기본).
-        // 우하단 로고를 크롭으로 밀어내는 건 카드(4:5)보다 세로로 긴 A4형에서만 안전하다(4:5형은 여유 0.54%p + 도안 잉크가 잘림).
-        // 기준 0.78 = 안전 상한 0.804 아래로 잡은 값. 근거 전문은 css/site.css의 .doan-tall 주석과 docs/1 §531.
-        if (p.kind === 'pattern') img.addEventListener('load', function () {
-          if (img.naturalWidth && img.naturalWidth / img.naturalHeight < 0.78) a.classList.add('doan-tall');
-        });
+        if (p.kind === 'pattern') img.addEventListener('load', function () { doanCrop(img, a); });
         th.appendChild(img);
       }
       var body = document.createElement('div'); body.className = 'body';
