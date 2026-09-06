@@ -1,8 +1,12 @@
 // 피드 제목 자동 생성 — 클로드 API. posts.json의 활동글 중 feedTitle 없는 글(=새 글)만 채운다.
-// 동기화(sync-blog.mjs) 뒤에 돌리면, 블로그 새 글이 자동으로 깔끔한 2~3줄 피드 제목을 단다.
+// 동기화(sync-blog.mjs) 뒤에 돌리면, 블로그 새 글이 자동으로 깔끔한 2줄 피드 제목을 단다.
 //   node tools/gen-feed-titles.mjs         (없는 것만)
 //   node tools/gen-feed-titles.mjs --all   (전부 다시 — 프롬프트 튜닝 후)
 // 키: 환경변수 ANTHROPIC_API_KEY (로컬 .env 또는 GitHub Actions secret). 채팅/코드에 평문 금지.
+//
+// ⚠️ 2026-09-06 유성 "3줄도 과하게 느껴져. 2줄로 수정" → 3줄본(1=킥/2=설명/3=활동명) 폐지, 2줄본(1=킥/2=활동명).
+//    카드 CSS가 -webkit-line-clamp:2라 3줄을 뱉으면 *마지막 줄=활동 이름*이 잘려 사라진다 → 2줄이 아니면 통째로 버린다(원제 폴백).
+//    기존 44건 일괄 전환 = tools/_apply-feedtitles-2line.mjs (일회성 백필).
 import { readFile, writeFile } from 'node:fs/promises';
 
 // ⚠️ 모델은 항상 최신 소넷으로 유지(유성 2026-08-03). 새 소넷이 나오면 전 레포 스윕해 같이 올린다
@@ -12,26 +16,27 @@ const KEY = process.env.ANTHROPIC_API_KEY;
 const ALL = process.argv.includes('--all');
 const POSTS = new URL('../activities/posts.json', import.meta.url);
 
-const SYSTEM = `너는 생각공작소(인천 영유아 발달 방문수업 '오감쑥쑥')의 활동사진 피드에 얹을 짧은 한국어 제목을 만든다. 인스타 피드 사진 위 2~3줄 제목.
+const SYSTEM = `너는 생각공작소(인천 영유아 발달 방문수업 '오감쑥쑥')의 활동사진 피드에 얹을 짧은 한국어 제목을 만든다. 인스타 피드 사진 위 2줄 제목.
 
 규칙:
-- 2줄 또는 3줄(보통 3줄).
-- 각 줄 '폭' ≤ 8.3. 폭 = 글자수 + 띄어쓰기수×0.3. 예) "퍼니버니 보드게임"=8+0.3=8.3(상한). 물음표·느낌표·숫자·영문은 좁아서 살짝 더 길어도 됨.
-- 줄끼리 길이가 비슷해야 한다. 한 줄만 너무 길면 안 됨.
-- 너무 잘게 쪼개지 마라(예 "달토끼가/만들어준/인절미"=나쁨, 한 단어를 억지로 한 줄로 두지 말 것).
-- 느슨한 틀: 1줄=짧은 훅(의성어·질문·반전·감탄), 2줄=재미있는 설명, 3줄=핵심 명사. 단 모든 글에 같은 틀 금지 — 글마다 변주(어떤 건 2줄, 질문형, 끝이 동사 등).
-- "만들기"로 꼭 끝낼 필요 없다.
+- 반드시 2줄. 3줄 금지.
+- 1줄 = 킥(의성어·질문·반전·감탄·아이가 한 말). 2줄 = 활동 이름(핵심 명사) — 카드만 보고 무슨 활동인지 알아야 한다.
+- 각 줄 '폭' ≤ 8.3. 폭 = 띄어쓰기 뺀 글자수 + 띄어쓰기수×0.3. 예) "퍼니버니 보드게임"=8+0.3=8.3(상한). 물음표·느낌표·숫자·영문은 좁아서 살짝 더 길어도 됨.
+- 두 줄 길이가 비슷해야 한다. 한 줄만 너무 길면 안 됨.
+- 너무 잘게 쪼개지 마라 — 한 단어만 덩그러니 한 줄로 두지 말 것.
+- 1줄은 글마다 변주(의성어·질문·감탄·아이 목소리를 돌려 쓴다). 모든 글에 같은 틀 금지.
+- 2줄은 "만들기"로 꼭 끝낼 필요 없다. 활동 이름 그대로가 제일 좋다.
 - 킥(재치·반전·아이 목소리)이 있어야 한다. 밋밋한 요약 금지.
 - 이모지·해시태그·따옴표·말줄임표·영어설명 금지. 순수 한국어.
-- 출력은 제목 2~3줄만. 각 줄 줄바꿈. 다른 말 금지.
+- 출력은 제목 2줄만. 각 줄 줄바꿈. 다른 말 금지.
 
 예시:
-퍼니버니 보드게임(당근밭 토끼) → 두근두근\\n당근밭 대소동\\n퍼니버니 보드게임
-개미집(땅 속 상상) → 땅 속을\\n상상해 봤어?\\n개미집 만들기
-인절미(동화 속 달토끼) → 동화 속 달토끼\\n콩콩 빚은\\n쫀득 인절미
-햄버거김밥(도시락 속 미니햄버거인 줄, 사실 김밥) → 이게 햄버거라고?\\n한 입 먹으면 김밥\\n햄버거 김밥
-키키리키 보드게임(승리보다 경험, 건강한 좌절) → 져도 괜찮아\\n지는 법도 배워\\n키키리키
-겨울 간식 포차 → 오뎅 어묵\\n겨울 간식\\n포차 오픈!`;
+퍼니버니 보드게임(당근밭 토끼) → 두근두근 당근밭\n퍼니버니 보드게임
+개미집(땅 속 상상) → 땅 속이 궁금해\n개미집 만들기
+인절미(동화 속 달토끼) → 동화 속 달토끼가\n쫀득 인절미
+햄버거김밥(도시락 속 미니햄버거인 줄, 사실 김밥) → 한 입 먹으면 김밥\n햄버거 김밥
+키키리키 보드게임(승리보다 경험, 건강한 좌절) → 져도 괜찮아\n키키리키 보드게임
+겨울 간식 포차 → 오뎅 어묵 꿀맛\n겨울 간식 포차`;
 
 async function genOne(title, excerpt) {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -45,10 +50,10 @@ async function genOne(title, excerpt) {
   if (!res.ok) throw new Error(`API ${res.status}: ${(await res.text()).slice(0, 200)}`);
   const j = await res.json();
   const text = (j.content || []).map((c) => c.text || '').join('').trim();
-  // 2~3줄만, 각 줄 군더더기 제거
-  const lines = text.split('\n').map((l) => l.replace(/^["'\s]+|["'\s]+$/g, '')).filter(Boolean).slice(0, 3);
-  // 형식 미달이면 원문을 CI 로그에 — 2026-08-23: 물안경 글(224380806878)이 매일 '형식 미달'로 실패 중인데 로컬엔 키가 없어 재현 불가. 원인은 다음 CI 로그로 본다.
-  if (lines.length < 2) { console.warn(`  원문(stop=${j.stop_reason || '?'}): ${JSON.stringify(text).slice(0, 160)}`); return null; }
+  const lines = text.split('\n').map((l) => l.replace(/^["'\s]+|["'\s]+$/g, '')).filter(Boolean);
+  // 정확히 2줄만 통과. 3줄이면 앞 2줄만 살려도 *활동 이름*이 사라지므로 버린다(원제 폴백 + CI 로그로 프롬프트 튜닝).
+  // 2026-08-23: 물안경 글(224380806878)이 매일 '형식 미달'로 실패 중인데 로컬엔 키가 없어 재현 불가. 원인은 CI 로그로 본다.
+  if (lines.length !== 2) { console.warn(`  원문(${lines.length}줄, stop=${j.stop_reason || '?'}): ${JSON.stringify(text).slice(0, 160)}`); return null; }
   return lines.join('\n');
 }
 
@@ -61,7 +66,7 @@ for (const p of targets) {
   try {
     const ft = await genOne(p.title, p.excerpt);
     if (ft) { p.feedTitle = ft; done++; console.log(`✓ ${p.logNo}: ${ft.replace(/\n/g, ' / ')}`); }
-    else console.warn(`✗ ${p.logNo}: 형식 미달, 건너뜀`);
+    else console.warn(`✗ ${p.logNo}: 형식 미달(2줄 아님), 건너뜀`);
   } catch (e) { console.warn(`✗ ${p.logNo}: ${e.message}`); }
 }
 if (done) await writeFile(POSTS, JSON.stringify(data, null, 1), 'utf8');

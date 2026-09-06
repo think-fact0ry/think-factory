@@ -83,7 +83,7 @@ fetch('activities/posts.json')
     var posts = [], pages = 1;
     function card(p) {
       var a = document.createElement('a');
-      a.className = 'act';
+      a.className = p.kind === 'pattern' ? 'act doan' : 'act';   // 도안 카드는 제목이 원제 2줄(감기면 3줄) — .doan이 line-clamp 3을 되살린다(활동 카드는 2줄)
       if (p.page === false) { a.href = p.url; a.target = '_blank'; a.rel = 'noopener'; } // 본문 추출 실패분만 네이버 폴백
       else a.href = 'activities/posts/' + p.logNo + '.html';                            // 내부 글 페이지(블로그 미러, 구글 색인)
       var th = document.createElement('div'); th.className = 'thumb';
