@@ -87,7 +87,16 @@ fetch('activities/posts.json')
       if (p.page === false) { a.href = p.url; a.target = '_blank'; a.rel = 'noopener'; } // 본문 추출 실패분만 네이버 폴백
       else a.href = 'activities/posts/' + p.logNo + '.html';                            // 내부 글 페이지(블로그 미러, 구글 색인)
       var th = document.createElement('div'); th.className = 'thumb';
-      if (p.thumb) { var img = document.createElement('img'); img.src = 'activities/' + p.thumb; img.alt = p.title; img.loading = 'lazy'; th.appendChild(img); }
+      if (p.thumb) {
+        var img = document.createElement('img'); img.src = 'activities/' + p.thumb; img.alt = p.title; img.loading = 'lazy';
+        // 도안 썸네일은 두 형태로 온다 — A4형(비율 0.707, 옛 산출물)과 4:5형(0.800, 벡터정서.py _도안_썸네일.png = 앞으로의 기본).
+        // 우하단 로고를 크롭으로 밀어내는 건 카드(4:5)보다 세로로 긴 A4형에서만 안전하다(4:5형은 여유 0.54%p + 도안 잉크가 잘림).
+        // 기준 0.78 = 안전 상한 0.804 아래로 잡은 값. 근거 전문은 css/site.css의 .doan-tall 주석과 docs/1 §531.
+        if (p.kind === 'pattern') img.addEventListener('load', function () {
+          if (img.naturalWidth && img.naturalWidth / img.naturalHeight < 0.78) a.classList.add('doan-tall');
+        });
+        th.appendChild(img);
+      }
       var body = document.createElement('div'); body.className = 'body';
       var date = document.createElement('div'); date.className = 'date'; date.textContent = p.date + (p.tag ? ' · ' + p.tag : '');
       var h3 = document.createElement('h3'); h3.textContent = fallbackTitle(p);   // AI 정제 제목 우선, 없으면 원제목 2줄(도안 글은 항상 원제 2줄 — 유성 픽 2026-08-23)
