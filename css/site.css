@@ -234,20 +234,20 @@ img{ max-width:100%; display:block; }
 .acts .act .thumb{ position:absolute; inset:0; aspect-ratio:auto; }
 .acts .act .body{ position:absolute; inset:0; padding:clamp(7px,5cqw,16px) clamp(8px,5.5cqw,18px); display:flex; flex-direction:column; justify-content:flex-end; }   /* 페이드 없음 — 유성 2026-09-06 "너무 어두워, 아예 없애". 사진 위 가독은 text-shadow만 (홈 캐러셀 .car는 그대로) */
 .acts .act .date{ display:none; }   /* 피드형은 제목만(인스타처럼) */
-.acts .act h3{ color:var(--ink-on-dark); font-size:clamp(12px,9cqw,28px); font-weight:700; line-height:1.3; letter-spacing:-.3px; margin:0;
-  text-shadow:0 1px 3px rgba(0,0,0,.45); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }   /* 폰트=카드폭 비례(cqw)라 PC서 이미지와 함께 커짐. §4 ink-on-dark(순백 X). 2줄=유성 2026-09-06 — AI 피드 제목도 2줄본(1=킥/2=활동 이름)으로 전환됨 */
+.acts .act h3{ color:var(--ink-on-dark); font-size:clamp(10.7px,8cqw,24.9px); font-weight:700; line-height:1.3; letter-spacing:-.3px; margin:0;
+  text-shadow:0 1px 3px rgba(0,0,0,.45); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }   /* 폰트=카드폭 비례(cqw)라 PC서 이미지와 함께 커짐. §4 ink-on-dark(순백 X). 2줄=유성 2026-09-06. 9cqw→8cqw 축소(유성 2026-09-07 "살짝 크다", PC 기준) — clamp의 px 하한·상한도 같은 8/9로 내림(12→10.7 / 28→24.9) */
 .acts .act.doan h3{ -webkit-line-clamp:3; }   /* 도안 카드만 3줄 — 제목이 AI 2줄본이 아니라 블로그 원제 2줄(t1+t2)이고 t2가 길어 폰에선 감김(폭 12.2 실측) */
 /* 도안 카드만 그라데이션 존치 — 도안 썸네일은 '흰 바탕 선화'라 페이드를 빼면 흰 제목이 흰 종이에 묻혀 안 읽힌다(2026-09-06 실측).
    유성의 "아예 없애"는 활동사진 3x3 피드 대상이고, 여기는 사진이 아니라 도안이라 조건이 다르다. 활동 카드는 페이드 0 유지. */
 .acts .act.doan .body{ background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 23%, rgba(0,0,0,0) 50%, rgba(0,0,0,.60) 100%); }   /* 유성 지정 2026-09-06(상단 어둠 0·하단 .66→.60). 지정 원문의 첫 스톱은 alpha -1인데 크롬 실측상 0으로 클램프돼 계산값이 alpha 0과 완전히 같다 → 브라우저 간 안전하게 0으로 명시(렌더 동일) */
 /* 도안 썸네일 위상단 정렬 + 확대 — 우하단 '생각공작소' 로고를 프레임 밖으로 밀어낸다(유성 2026-09-06 "거슬려서").
    ⚠️ 배율·적용 여부를 비율로 추측하지 않는다. activities.html이 이미지 우하단을 실제로 훑어 로고를 찾고,
-   있으면 그 로고 상단이 프레임 밖으로 나가는 만큼만 --doan-zoom 을 계산해 넣는다(없으면 이 클래스 자체가 안 붙어 원본 그대로).
+   있으면 그 로고 상단이 프레임 밖으로 나가는 만큼만 --crop-zoom 을 계산해 넣는다(없으면 .crop-top 자체가 안 붙어 원본 그대로).
    검출 근거(실측): 도안은 순수 흑백이라 선화 채도 0 / 로고 영역은 채도>30 픽셀이 34.7%(초록 rgb(128,186,159) 등) — 오탐 0으로 갈린다.
    왜 '있을 때만'인가: tools/도안후처리/벡터정서.py 는 로고 자리에 도안 선이 있으면 로고를 아예 생략한다(tdark 검사).
    실제로 지금 2건을 4:5 썸네일 규격으로 재현하면 잉크가 세로로 꽉 차 로고가 생략된다 → 로고 없는 썸네일을 크롭하면 도안만 손해다.
    최소 1.08배는 유성이 지정한 '조금 확대'를 유지하는 하한. A4형 2건은 이 하한이 걸려 1.08(보이는 구간 y0~555.6, 로고까지 여유 77px). */
-.acts .act.doan-crop .thumb img{ object-position:50% 0; transform:scale(var(--doan-zoom,1.08)); transform-origin:50% 0; }
+.acts .act.crop-top .thumb img{ object-position:50% var(--crop-y,0%); transform:scale(var(--crop-zoom,1)); transform-origin:50% 0; }   /* 도안=로고 픽셀 실측 확대 / 활동 사진=워터마크 기하 계산(activities.html actCrop). 값은 카드마다 JS가 인라인 변수로 넣는다 */
 @container (min-width:210px){ .acts .act h3{ font-weight:600; } }   /* 큰 카드(PC·태블릿)는 웨이트도 살짝 가볍게 — 반응형 웨이트(유성) */
 @media (max-width:520px){ .acts{ margin-left:-20px; margin-right:-20px; } }   /* 모바일 풀블리드(.inner 좌우 패딩 상쇄) */
 /* 페이지 번호 — '아이들의 오늘' 12개/페이지(4×3) */
