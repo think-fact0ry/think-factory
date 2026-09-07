@@ -53,7 +53,7 @@ br.mo{ display:none; }
    풀페이지 전환은 CSS 스냅 대신 index의 JS(휠 1회=1섹션, 700ms 이징)가 담당 */
 html{ scroll-behavior:smooth; scroll-padding-top:60px; }
 body{
-  margin:0; font-family:'Pretendard',-apple-system,sans-serif;
+  margin:0; font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif;
   background:#fff; color:var(--g900);
   -webkit-text-size-adjust:100%; -webkit-font-smoothing:antialiased;
   word-break:keep-all; letter-spacing:-.2px;

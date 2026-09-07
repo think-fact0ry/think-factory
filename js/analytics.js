@@ -41,7 +41,7 @@ window.tfSrcBucket = function () {
   function pill(msg, ms) {
     var d = document.createElement('div');
     d.textContent = msg;
-    d.style.cssText = 'position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9999;background:rgba(25,31,40,.88);color:#fff;font:600 13px/1.4 Pretendard,-apple-system,sans-serif;padding:8px 14px;border-radius:99px;pointer-events:none;letter-spacing:-.2px;';
+    d.style.cssText = 'position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9999;background:rgba(25,31,40,.88);color:#fff;font:600 13px/1.4 Pretendard Variable,Pretendard,-apple-system,sans-serif;padding:8px 14px;border-radius:99px;pointer-events:none;letter-spacing:-.2px;';
     function mount() { document.body.appendChild(d); setTimeout(function () { d.remove(); }, ms); }
     document.body ? mount() : document.addEventListener('DOMContentLoaded', mount);
   }
