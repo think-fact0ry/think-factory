@@ -232,9 +232,10 @@ img{ max-width:100%; display:block; }
 .acts .act{ position:relative; aspect-ratio:4/5; border:none; border-radius:0; background:var(--g100); overflow:hidden; container-type:inline-size; }   /* 4:5 + cqw(카드폭 기준) 폰트용 컨테이너 */
 .acts .act:hover{ transform:none; }   /* 피드형은 카드 들림 없음 */
 .acts .act .thumb{ position:absolute; inset:0; aspect-ratio:auto; }
-.acts .act .body{ position:absolute; inset:0; padding:clamp(7px,5cqw,16px) clamp(8px,5.5cqw,18px); display:flex; flex-direction:column; justify-content:flex-end; }   /* 페이드 없음 — 유성 2026-09-06 "너무 어두워, 아예 없애". 사진 위 가독은 text-shadow만 (홈 캐러셀 .car는 그대로) */
+.acts .act .body{ position:absolute; inset:0; padding:clamp(7px,5cqw,16px) clamp(8px,5.5cqw,18px); display:flex; flex-direction:column; justify-content:flex-end;
+  background:linear-gradient(to bottom, rgba(0,0,0,.00) 0%, rgba(0,0,0,0) 24%, rgba(0,0,0,0) 48%, rgba(0,0,0,.11) 100%); }   /* 유성 지정 2026-09-07 "조금의 어두움은 있어야겠다" — 09-06에 0으로 뺐던 것을 하단만 .11로 되돌림(상단 어둠은 0 유지). ⚠️.acts .act.doan .body가 더 구체적이라 도안 카드는 자기 값(.60) 유지 */
 .acts .act .date{ display:none; }   /* 피드형은 제목만(인스타처럼) */
-.acts .act h3{ color:var(--ink-on-dark); font-size:clamp(10.7px,8cqw,24.9px); font-weight:700; line-height:1.3; letter-spacing:-.3px; margin:0;
+.acts .act h3{ color:var(--ink-on-dark); font-size:clamp(10.7px,8cqw,24.9px); font-weight:500; line-height:1.3; letter-spacing:-.3px; margin:0;
   text-shadow:0 1px 3px rgba(0,0,0,.45); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }   /* 폰트=카드폭 비례(cqw)라 PC서 이미지와 함께 커짐. §4 ink-on-dark(순백 X). 2줄=유성 2026-09-06. 9cqw→8cqw 축소(유성 2026-09-07 "살짝 크다", PC 기준) — clamp의 px 하한·상한도 같은 8/9로 내림(12→10.7 / 28→24.9) */
 .acts .act.doan h3{ -webkit-line-clamp:3; }   /* 도안 카드만 3줄 — 제목이 AI 2줄본이 아니라 블로그 원제 2줄(t1+t2)이고 t2가 길어 폰에선 감김(폭 12.2 실측) */
 /* 도안 카드만 그라데이션 존치 — 도안 썸네일은 '흰 바탕 선화'라 페이드를 빼면 흰 제목이 흰 종이에 묻혀 안 읽힌다(2026-09-06 실측).
@@ -248,7 +249,7 @@ img{ max-width:100%; display:block; }
    실제로 지금 2건을 4:5 썸네일 규격으로 재현하면 잉크가 세로로 꽉 차 로고가 생략된다 → 로고 없는 썸네일을 크롭하면 도안만 손해다.
    최소 1.08배는 유성이 지정한 '조금 확대'를 유지하는 하한. A4형 2건은 이 하한이 걸려 1.08(보이는 구간 y0~555.6, 로고까지 여유 77px). */
 .acts .act.crop-top .thumb img{ object-position:50% var(--crop-y,0%); transform:scale(var(--crop-zoom,1)); transform-origin:50% 0; }   /* 도안=로고 픽셀 실측 확대 / 활동 사진=워터마크 기하 계산(activities.html actCrop). 값은 카드마다 JS가 인라인 변수로 넣는다 */
-@container (min-width:210px){ .acts .act h3{ font-weight:600; } }   /* 큰 카드(PC·태블릿)는 웨이트도 살짝 가볍게 — 반응형 웨이트(유성) */
+/* 반응형 웨이트(큰 카드 600) 폐지 — 유성 2026-09-07 "폰트 웨이트 500으로"로 폰·PC 한 값(500)이 됨. 홈 캐러셀 .car는 700/600 그대로 */
 @media (max-width:520px){ .acts{ margin-left:-20px; margin-right:-20px; } }   /* 모바일 풀블리드(.inner 좌우 패딩 상쇄) */
 /* 페이지 번호 — '아이들의 오늘' 12개/페이지(4×3) */
 .pager{ display:flex; justify-content:center; align-items:center; gap:5px; flex-wrap:wrap; margin-top:30px; }
@@ -330,7 +331,7 @@ footer .legal a:hover{ color:var(--g900); }
 .car .act:hover{ transform:translateY(-3px); }
 .car .act .thumb{ position:absolute; inset:0; aspect-ratio:auto; }
 .car .act .body{ position:absolute; inset:0; padding:clamp(9px,5cqw,16px) clamp(10px,5.5cqw,18px); display:flex; flex-direction:column; justify-content:flex-end;
-  background:linear-gradient(to bottom, rgba(0,0,0,.30) 0%, rgba(0,0,0,0) 24%, rgba(0,0,0,0) 48%, rgba(0,0,0,.66) 100%); }
+  background:linear-gradient(to bottom, rgba(0,0,0,.00) 0%, rgba(0,0,0,0) 24%, rgba(0,0,0,0) 48%, rgba(0,0,0,.66) 100%); }   /* 유성 지정 2026-09-07 — 상단 어둠만 0으로, 하단 .66은 유지. 그래서 캐러셀은 사진 워터마크가 계속 가려진다(유성 "캐러셀은 워터마크 없애지 않아도됨") = index.html엔 actCrop 미적용 */
 .car .act h3{ color:var(--ink-on-dark); font-size:clamp(12px,8cqw,20px); font-weight:700; line-height:1.3; letter-spacing:-.3px; margin:0; min-height:0;
   text-shadow:0 1px 3px rgba(0,0,0,.45); -webkit-line-clamp:2; }   /* 카드폭 비례(cqw)·§4 ink-on-dark. 홈 캐러셀=활동글만이라 제목이 항상 AI 2줄본(2026-09-06) */
 @container (min-width:210px){ .car .act h3{ font-weight:600; } }
