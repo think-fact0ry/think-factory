@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>추천서 신청 — 생각공작소</title>
+<meta name="description" content="아동청소년 심리지원 바우처 신청에 필요한 추천서를 생각공작소 임상심리사가 작성해 드려요.">
+<link rel="canonical" href="https://think-factory.kr/recommend/">
+<meta property="og:title" content="생각공작소 추천서 신청">
+<meta property="og:description" content="아이의 정보와 평소 모습을 적어주시면 추천서를 작성해 드려요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://think-factory.kr/recommend/">
+<!-- og:image 없음(/receipt와 같은 이유 — 오감 신청폼 배너가 따라붙어 혼동). 카톡은 제목+설명 텍스트 카드 -->
+<!-- noindex = 법무 게이트(privacy §7 위탁 Anthropic 추가·거부권 4호 고지) 통과 전까지. 링크로만 열리는 폼(유성이 카톡으로 보냄). 게이트 통과 후 색인 여부는 유성 결정 -->
+<meta name="robots" content="noindex">
+<script>
+// 카톡 인앱 브라우저 = 상하단 바가 폼 버튼을 가림 → 기본 브라우저로(docs/1 §3.7, /receipt와 같은 결 — /feedback은 채널 노출 때문에 일부러 안 함)
+(function(){
+  if (/KAKAOTALK/i.test(navigator.userAgent)) {
+    location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
+  }
+})();
+</script>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{ --g100:#f2f4f6; --g200:#e5e8eb; --green:#3a8a5f; }
+  html,body{ margin:0; height:100%; background:#f7f5f1; }   /* 폼 캔버스와 같은 색(§3.6-3) — svh 아래 남는 띠가 폼과 같아 보인다 */
+  /* 22 추천서 접수 폼(GAS 웹앱, doGet ALLOWALL) 임베드 — 배너 없는 브랜드 URL. 폼 안 fixed(토스트·종료 안내)는 iframe이 화면 전체라 그 자리가 곧 화면 하단 */
+  .rc-wrap{ position:relative; height:100vh; height:100svh; height:100dvh; }
+  .rc-frame{ display:block; width:100%; height:100%; border:0; background:#f7f5f1; }
+  /* 폼이 오기 전 수 초(GAS 콜드스타트): 백지 대신 첫 화면과 같은 자리의 뼈대 + 중앙 그린 링(§5.4, /contact 래퍼와 같은 것).
+     글자는 실제 문구를 투명색으로 깔아 폰에서 줄이 바뀌어도 카드 높이가 실물과 같다. 폼이 브릿지 ready를 보내면 걷힌다(body.form-ready). 안전망=iframe load 후 8초.
+     ⚠️ 폼 첫 화면 문구·치수(Index.html .intro-card)를 바꾸면 여기도(0-9). */
+  .apply-skel{ position:absolute; inset:0; z-index:1; background:#f7f5f1; padding:0 16px; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
+  .apply-skel .sk-card{ background:#fff; border-radius:20px; padding:30px 24px; box-shadow:0 1px 4px rgba(0,0,0,.05); width:100%; max-width:508px; margin:0 auto; font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif; font-size:16px; line-height:1.6; letter-spacing:0; word-break:keep-all; color:transparent; -webkit-text-size-adjust:100%; position:relative; }
+  .apply-skel .sk-t{ background:var(--g100); color:transparent; border-radius:6px; -webkit-box-decoration-break:clone; box-decoration-break:clone; animation:skp 1.2s ease-in-out infinite; position:relative; top:2px; }
+  .apply-skel .sk-t b{ color:transparent; }
+  .apply-skel .sk-chip{ display:inline-block; font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; background:var(--g100); color:transparent; margin-bottom:16px; animation:skp 1.2s ease-in-out infinite; }
+  .apply-skel .sk-h1{ font-size:clamp(23px,3.4vw,30px); font-weight:700; letter-spacing:-.5px; line-height:1.35; margin:0 0 10px; }
+  .apply-skel .sk-sub{ font-size:13.5px; margin:0 0 22px; }
+  .apply-skel .sk-box{ background:var(--g100); border:1px solid transparent; border-radius:14px; padding:18px; margin-bottom:24px; animation:skp 1.2s ease-in-out infinite; }
+  .apply-skel .sk-box p{ font-size:14.5px; line-height:1.75; margin:0; }
+  .apply-skel .sk-box p+p{ margin-top:12px; }
+  .apply-skel .sk-box .sk-t{ background:#fff; opacity:.9; animation:none; }
+  .apply-skel .sk-btn{ padding:17px; font-size:17px; font-weight:700; line-height:normal; text-align:center; border-radius:15px; background:var(--g100); animation:skp 1.2s ease-in-out infinite; }
+  .apply-skel .sk-g{ margin-top:12px; padding:14px; font-size:14px; font-weight:600; line-height:normal; text-align:center; }
+  .apply-skel .sk-ring{ position:absolute; left:50%; top:50%; width:44px; height:44px; margin:-22px 0 0 -22px; border-radius:50%; border:3px solid var(--g200); border-top-color:var(--green); animation:skr .9s linear infinite; }
+  @keyframes skp{ 0%,100%{ opacity:1 } 50%{ opacity:.5 } }
+  @keyframes skr{ to{ transform:rotate(360deg) } }
+  @media (prefers-reduced-motion:reduce){ .apply-skel .sk-t,.apply-skel .sk-chip,.apply-skel .sk-box,.apply-skel .sk-btn,.apply-skel .sk-ring{ animation:none } }
+  @media (max-width:380px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }
+  body.form-ready .apply-skel{ display:none; }
+</style>
+</head>
+<body>
+<div class="rc-wrap">
+  <div class="apply-skel" id="applySkel" aria-hidden="true">
+    <div class="sk-card">
+      <span class="sk-chip">생각공작소</span>
+      <div class="sk-h1"><span class="sk-t">추천서 신청</span></div>
+      <p class="sk-sub"><span class="sk-t">적어주신 내용은 추천서 작성에만 써요.</span></p>
+      <div class="sk-box"><p><span class="sk-t">아동청소년 심리지원 바우처를 신청할 때 필요한 추천서를 저희 임상심리사 선생님이 작성해 드려요.</span></p><p><span class="sk-t">아이의 정보와 평소 모습을 적어주세요 ☺️</span></p><p><span class="sk-t">아이가 여러 명이면 <b>한 명씩 따로</b> 적어주세요.</span></p></div>
+      <div class="sk-btn">작성하기</div>
+      <div class="sk-g"><span class="sk-t">이미 신청했나요? 내용 수정하기 →</span></div>
+      <div class="sk-ring"></div>
+    </div>
+  </div>
+  <!-- 파라미터 전달 안 함(하드코딩 /exec) — doGet은 인자를 받지 않는다(/receipt·/feedback과 같은 결) -->
+  <iframe class="rc-frame" title="추천서 신청"
+    src="https://script.google.com/macros/s/AKfycbxiaIfUdh0q1C_OF65xmk-4QQLUklWPjcq2ZKBVpnI5TYhHV9TXyKUUWqRxEkZk_WnR0A/exec"></iframe>
+</div>
+<script>
+// 폼(iframe) → 페이지 브릿지: ready(스켈레톤 걷기)만 받는다. GAS 폼 출처만 허용(호스트 정확/접미 매칭)
+(function(){
+  function okGasOrigin(o){ try{ var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); }catch(e){ return false; } }
+  window.addEventListener('message', function(e){
+    if (!okGasOrigin(e.origin)) return;
+    var d = e.data; if (!d || d.tfApply !== 1) return;
+    if (d.type === 'ready') document.body.classList.add('form-ready');
+  });
+  var fr = document.querySelector('.rc-frame');
+  if (fr) fr.addEventListener('load', function(){ setTimeout(function(){ document.body.classList.add('form-ready'); }, 8000); });
+})();
+</script>
+</body>
+</html>
