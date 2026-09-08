@@ -24,6 +24,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   :root{ --g100:#f2f4f6; --g200:#e5e8eb; --green:#3a8a5f; }
+  *{ box-sizing:border-box; }   /* ⚠️ 폼과 같은 상자 모델 — 이게 없으면 .sk-card가 padding 48px만큼 폼 카드보다 넓어져(360폭 372 vs 336) 폰에서 화면 밖으로 삐져나가고 줄바꿈이 달라진다(유성 09-09 "모바일 스켈레톤이 PC판 같다", 헤드리스 실측) */
   html,body{ margin:0; height:100%; background:#f7f5f1; }   /* 폼 캔버스와 같은 색(§3.6-3) — svh 아래 남는 띠가 폼과 같아 보인다 */
   /* 22 추천서 접수 폼(GAS 웹앱, doGet ALLOWALL) 임베드 — 배너 없는 브랜드 URL. 폼 안 fixed(토스트·종료 안내)는 iframe이 화면 전체라 그 자리가 곧 화면 하단 */
   .rc-wrap{ position:relative; height:100vh; height:100svh; height:100dvh; }
