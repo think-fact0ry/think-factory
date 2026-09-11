@@ -133,7 +133,7 @@ img{ max-width:100%; display:block; }
 @media (max-width:760px){ .sec{ padding:48px 0; } .sec h2{ font-size:23px; } }
 
 /* ── 서비스 카드 ── */
-.cards{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }   /* 서비스 3종 — 성인심리 내림(2026-09-11) */
 @media (max-width:980px){ .cards{ grid-template-columns:repeat(2,1fr); } }
 @media (max-width:520px){ .cards{ grid-template-columns:1fr; } }
 .card{ background:#fff; border:1px solid var(--g200); border-radius:var(--r-md); padding:26px 22px; transition:border-color .15s, transform .15s; }
@@ -605,7 +605,7 @@ footer .legal a:hover{ color:var(--g900); }
 }
 /* (제거 2026-08-03) `.svc-extra` 가격 보조 안내 — HTML 사용 0건 */
 
-/* 준비 중 안내(아청심·정신토탈·성인심리) — 2026-08-03 실사용 개시(옛 통짜 회색 띠 대체, 유성 ⓑ 확정) */
+/* 준비 중 안내(아청심·정신토탈) — 2026-08-03 실사용 개시(옛 통짜 회색 띠 대체, 유성 ⓑ 확정) */
 .svc-soon{ background:var(--g50); border-radius:var(--r-md); padding:28px 22px; text-align:center; color:var(--g700); font-size:15px; line-height:1.8; margin:0 0 32px; }   /* g50 면 위 → g700 */
 @media (max-width:600px){ .svc-soon{ padding:24px 18px; margin-bottom:26px; } }
 
