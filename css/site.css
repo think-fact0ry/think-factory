@@ -480,6 +480,20 @@ footer .legal a:hover{ color:var(--g900); }
 .sst.on{ color:var(--green-dark); background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.1); }
 @media (max-width:600px){ .svc-sticky .inner{ width:auto; gap:3px; padding:4px; margin:0 14px; } .sst{ flex:1 1 0; min-width:0; font-size:12.5px; letter-spacing:-.4px; padding:8px 4px; white-space:nowrap; text-align:center; } }
 @media (max-width:600px){ .svc-tabs{ width:auto; flex-wrap:nowrap; gap:3px; margin:18px 14px 0; } .svc-tab{ flex:1 1 0; min-width:0; font-size:12.5px; letter-spacing:-.4px; padding:9px 4px; white-space:nowrap; text-align:center; } }
+/* PC(마우스) 바우처 첫 섹션을 한 화면에 — 탭만 가운데, 제목과 부제는 화면에서 뺀다 (유성 2026-09-13)
+   왜: 첫 섹션 829px이 창 안쪽 849px 미만에서 휠 1회에 안 넘어가고 90%만 내려갔다(풀페이지 go()의 긴 섹션 규칙).
+   탭 = 가운데 고정: 스크롤 뒤 붙는 .svc-sticky 탭도 화면 가운데라 같은 축이어야 한다(탭 오른쪽 한 줄 안은 269px 어긋나 기각).
+   h1은 화면에서만 숨긴다(.sr-only와 같은 방식) — 이 페이지의 유일한 h1이라 문서 구조와 검색엔 남긴다.
+   폰(≤600)과 터치 태블릿은 기존 박스 그대로. 실측과 기각안 = 부모 레포 백로그 §🏠 스크롤 멈춤 항목. */
+@media (min-width:761px) and (pointer:fine){
+  .svc-hero-box{ padding:16px 22px; margin-bottom:20px; }
+  .svc-hero-box h1{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  .svc-hero-box p{ display:none; }
+  .svc-tabs{ margin:0 auto; }
+}
+/* 낮은 창에서만 첫 섹션 아래 여백 56→36 (유성: 전체에 주면 페이지가 눌려 보인다 → 한 휠에 안 담기는 곳만)
+   기준 740 = 위 규칙 적용 후 첫 섹션 717px(가장 긴 탭 내용 535px 기준) + 20, 섹션 높이의 소수점 때문에 737px 창에서도 멈춰 여유 3px. 탭 내용 높이가 바뀌면 다시 잴 것. */
+@media (min-width:761px) and (pointer:fine) and (max-height:740px){ .sp1{ padding-bottom:36px; } }
 
 /* 패널 — 탭 전환 시 박스가 위아래로 안 움직이게 4개를 같은 그리드 셀에 겹쳐 쌓아 컨테이너 높이를 가장 큰 패널로 고정 */
 .svc-stack{ display:grid; }
