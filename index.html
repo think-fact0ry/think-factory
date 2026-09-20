@@ -539,7 +539,10 @@
     if (window.naver && naver.maps && naver.maps.Service) initMap();
     else naver.maps.onJSContentLoaded = initMap;
   };
-  function initMap() {
+  function initMap(n) {
+    // 지오코더가 아직 안 붙은 채 불리면 TypeError(Clarity 09-17 실측 "reading 'geocode'") → 0.2초×10회만 기다리고, 끝내 없으면 폴백 링크 유지
+    n = typeof n === 'number' ? n : 0;
+    if (!(naver.maps.Service && naver.maps.Service.geocode)) { if (n < 10) setTimeout(function () { initMap(n + 1); }, 200); return; }
     naver.maps.Service.geocode({ query: ADDR }, function (status, res) {
       if (status !== naver.maps.Service.Status.OK || !res.v2.addresses.length) {
         console.warn('네이버 지오코딩 실패(폴백 링크 유지) — NCP 앱에 Geocoding API 체크됐는지 확인:', status, res);
