@@ -43,7 +43,9 @@ async function genOne(title, excerpt) {
     method: 'POST',
     headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
     body: JSON.stringify({
-      model: MODEL, max_tokens: 80, system: SYSTEM,
+      // thinking 명시 끔: sonnet-5는 생략 시 adaptive로 돌고, 사고 토큰이 max_tokens 80 안에 들어가 제목이 잘릴 수 있다.
+      // (08-17~22 물안경 글 6연속 '형식 미달'의 유력 원인 — stop 로그 추가 전이라 미확정. 05·11·17과 같은 결)
+      model: MODEL, max_tokens: 80, thinking: { type: 'disabled' }, system: SYSTEM,
       messages: [{ role: 'user', content: `글 제목: ${title}\n본문 발췌: ${excerpt || ''}\n\n이 활동의 피드 제목을 만들어줘.` }],
     }),
   });
@@ -52,7 +54,7 @@ async function genOne(title, excerpt) {
   const text = (j.content || []).map((c) => c.text || '').join('').trim();
   const lines = text.split('\n').map((l) => l.replace(/^["'\s]+|["'\s]+$/g, '')).filter(Boolean);
   // 정확히 2줄만 통과. 3줄이면 앞 2줄만 살려도 *활동 이름*이 사라지므로 버린다(원제 폴백 + CI 로그로 프롬프트 튜닝).
-  // 2026-08-23: 물안경 글(224380806878)이 매일 '형식 미달'로 실패 중인데 로컬엔 키가 없어 재현 불가. 원인은 CI 로그로 본다.
+  // 2026-08-23: 물안경 글(224380806878)이 매일 '형식 미달'로 실패 → 제목은 08-23 수기 주입(adf7d30)으로 해결. 재발 시 아래 stop= 값이 원인.
   if (lines.length !== 2) { console.warn(`  원문(${lines.length}줄, stop=${j.stop_reason || '?'}): ${JSON.stringify(text).slice(0, 160)}`); return null; }
   return lines.join('\n');
 }
