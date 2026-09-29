@@ -11,7 +11,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 
 // ⚠️ 모델은 항상 최신 소넷으로 유지(유성 2026-08-03). 새 소넷이 나오면 전 레포 스윕해 같이 올린다
 //    — 이 파일은 2026-06-29 생성 당시 최신이던 sonnet-4-6이 박힌 뒤 갱신이 안 돼 홀로 낡아 있었다.
-const MODEL = process.env.FEEDTITLE_MODEL || 'claude-sonnet-5';
+const MODEL = process.env.FEEDTITLE_MODEL || 'claude-sonnet-5-5';
 const KEY = process.env.ANTHROPIC_API_KEY;
 const ALL = process.argv.includes('--all');
 const POSTS = new URL('../activities/posts.json', import.meta.url);
@@ -43,9 +43,9 @@ async function genOne(title, excerpt) {
     method: 'POST',
     headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
     body: JSON.stringify({
-      // thinking 명시 끔: sonnet-5는 생략 시 adaptive로 돌고, 사고 토큰이 max_tokens 80 안에 들어가 제목이 잘릴 수 있다.
+      // thinking 최저: 생략하면 adaptive로 돌고(5·5.5 공통), 사고 토큰이 max_tokens 80 안에 들어가 제목이 잘릴 수 있다.
       // (08-17~22 물안경 글 6연속 '형식 미달'의 유력 원인 — stop 로그 추가 전이라 미확정. 05·11·17과 같은 결)
-      model: MODEL, max_tokens: 80, thinking: { type: 'disabled' }, system: SYSTEM,
+      model: MODEL, max_tokens: 80, thinking: { type: 'between_tools' },   /* 5.5는 'disabled'가 400 */ system: SYSTEM,
       messages: [{ role: 'user', content: `글 제목: ${title}\n본문 발췌: ${excerpt || ''}\n\n이 활동의 피드 제목을 만들어줘.` }],
     }),
   });
