@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>안전교육 — 생각공작소</title>
+<meta name="robots" content="noindex">
+<!-- ⚠️ 카톡 인앱 = 상하단 바가 설문을 가림(§3.7) → 기본 브라우저로 탈출(유성 2026-07-08). iframe 로드보다 먼저 head에서 실행.
+     탈출되면 기본 브라우저에서 이 페이지가 다시 열려 아래 iframe이 정상 렌더. 기본 브라우저 UA엔 KAKAOTALK 없어 재탈출 루프 없음. -->
+<script>
+  if (/KAKAOTALK/i.test(navigator.userAgent)) {
+    location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
+  }
+</script>
+<!-- 안전교육 확인(2026-10-01). think-factory.kr/safety → 14_모니터링설문 GAS 웹앱 ?mode=safety(Safety.html)를 iframe 임베드.
+     /monitoring 페이지 복제 — 07 안전교육 알림톡 버튼 주소(템플릿 심사본에 박힘 → 주소를 바꾸면 템플릿 재심사).
+     뼈대 문구는 Safety.html 게이트와 같아야 한다(0-9). 아래는 /monitoring 원문 설명:
+     리다이렉트(=주소가 script.google.com으로 바뀌고 구글 배너 노출) 대신 임베드라 주소·배너 깨끗.
+     14 doGet이 XFrameOptionsMode.ALLOWALL이라 프레임 허용됨(contact.html이 06을 같은 방식으로 임베드).
+     이동 대상이 바뀌면 아래 EXEC 한 줄만 교체. (옛 /m 리다이렉트는 레거시 — 새 발송은 /monitoring 사용) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<!-- 폼이 오기 전 수 초(GAS 콜드스타트): 백지 대신 폼 첫 화면(신원 게이트)과 같은 자리의 뼈대 + 훑기 모션(§5.4, 2026-10-01 유성 — /contact와 같은 결).
+     뼈대 = 폼 게이트를 같은 CSS 값으로 조판 복제(실제 문구를 투명 글자로 깔아 폰에서 줄이 바뀌어도 높이가 같다). PC 폰 목업(§3.8)도 같은 치수로.
+     기다림 문구·연결 끊김 알림·다시 불러오기 = /js/form-wait.js(뼈대 *위*에 겹침, 위치 불변). 폼이 ready를 보내면 걷힌다(body.form-ready).
+     ⚠️ 폼 게이트 문구·치수(GAS Index.html .wrap·.intro-card·.tfield·.btn·§3.8 목업)를 바꾸면 여기도(0-9). -->
+<style>
+  .apply-skel{ --g100:#f2f4f6; --g200:#e5e8eb; position:fixed; inset:0; z-index:1; background:#f7f5f1; overflow:hidden; font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif; line-height:1.6; word-break:keep-all; color:transparent; -webkit-text-size-adjust:100%; }
+  .apply-skel *{ box-sizing:border-box; }
+  .apply-skel .sk-wrap{ max-width:460px; margin:0 auto; height:100%; display:flex; flex-direction:column; padding:20px 18px 26px; }
+  .apply-skel .sk-card{ background:#fff; border-radius:clamp(13px,3.2vw,20px); padding:26px 22px; box-shadow:0 2px 12px rgba(0,0,0,.05); }
+  .apply-skel .sk-t{ background:var(--g100); color:transparent; border-radius:6px; -webkit-box-decoration-break:clone; box-decoration-break:clone; position:relative; top:2px; }
+  .apply-skel .sk-chip{ display:inline-block; font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; background:var(--g100); margin-bottom:14px; }
+  .apply-skel .sk-h1{ font-size:clamp(23px,3.4vw,30px); font-weight:700; letter-spacing:-.5px; margin:0 0 11px; line-height:1.3; }
+  .apply-skel .sk-h1 .em{ font-weight:400; }
+  .apply-skel .sk-lead{ font-size:14.5px; margin:0 0 20px; letter-spacing:-.2px; line-height:1.6; }
+  .apply-skel .sk-f{ margin-bottom:15px; } .apply-skel .sk-f.last{ margin-bottom:6px; }
+  .apply-skel .sk-f .lb{ display:block; font-size:12.5px; font-weight:600; margin:0 0 5px; }
+  .apply-skel .sk-f .in{ border-bottom:2px solid var(--g200); font-size:18px; font-weight:500; line-height:1.5; letter-spacing:-.2px; padding:2px 34px 3px 0; }
+  .apply-skel .sk-sib{ font-size:14px; font-weight:600; text-align:center; padding:14px 4px 2px; margin-top:8px; }
+  .apply-skel .sk-note{ font-size:13px; text-align:center; margin:14px 2px 0; line-height:1.5; }
+  .apply-skel .sk-sp{ flex:1; min-height:18px; }
+  .apply-skel .sk-btn{ flex-shrink:0; padding:16px; border-radius:15px; font-size:16px; font-weight:700; line-height:1.5; letter-spacing:-.3px; text-align:center; background:var(--g100); margin-top:14px; }
+  @media (min-width:480px) and (hover:hover) and (pointer:fine){
+    .apply-skel{ background:var(--g200); padding-top:19px; }
+    .apply-skel .sk-wrap{ max-width:min(460px,calc(100% - 38px)); background:#f7f5f1; border-radius:40px 40px 0 0; box-shadow:0 8px 20px rgba(25,31,40,.15); overflow:hidden; }
+  }
+  body.form-ready .apply-skel{ display:none; }
+</style>
+<script src="/js/form-wait.js"></script>
+<style>
+  html, body { height: 100%; margin: 0; background: #f7f5f1; }
+  iframe { border: 0; width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+<!-- web-share: iOS 리뷰 영수증 저장이 공유시트(navigator.share)를 씀 — 크로스오리진 iframe은 이 위임 없으면 NotAllowedError.
+     GAS 자체 sandboxFrame은 web-share * 위임 확인됨(2026-07-11 curl 실측) → 우리 층만 열면 끝. -->
+<div class="apply-skel" id="applySkel" aria-hidden="true"><div class="sk-wrap">
+    <div class="sk-card">
+      <span class="sk-chip">안전교육</span>
+      <div class="sk-h1"><span class="sk-t">함께 지켜요,<br>안전 약속</span></div>
+      <p class="sk-lead"><span class="sk-t">해마다 한 번 보내 드리는 안전 안내예요.<br>읽고 확인만 눌러 주세요.</span></p>
+      <div class="sk-f"><span class="lb"><span class="sk-t">이용자 이름</span></span><div class="in"><span class="sk-t">이름</span></div></div>
+      <div class="sk-f last"><span class="lb"><span class="sk-t">생년월일</span></span><div class="in"><span class="sk-t">0000. 00. 00</span></div></div>
+      <div class="sk-sib"><span class="sk-t">＋ 함께 다니는 가족이 있어요</span></div>
+    </div>
+    <div class="sk-sp"></div>
+    <div class="sk-btn">다음</div>
+</div></div>
+<iframe id="survey" title="안전교육" allow="web-share; clipboard-write"></iframe>
+<script>
+  var EXEC = "https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec";
+  // mode=safety를 맨 앞에(GAS e.parameter는 같은 이름이면 첫 값) + 붙어 온 쿼리는 뒤에 그대로(?preview=child 등)
+  var qs = (location.search || "").replace(/^\?/, "");
+  document.getElementById('survey').src = EXEC + "?mode=safety" + (qs ? "&" + qs : "");
+  // 대기 화면(문구·연결 끊김·다시 불러오기) = /js/form-wait.js — 14가 ready를 보내면 뼈대를 걷는다(GAS Index.html renderGate 직후).
+  if (window.tfFormWait) window.tfFormWait({ frame: document.getElementById('survey'), skel: document.getElementById('applySkel'), host: document.querySelector('#applySkel .sk-wrap'), card: [document.querySelector('#applySkel .sk-card'), document.querySelector('#applySkel .sk-btn')], obj: '안내를' });
+</script>
+</body>
+</html>
