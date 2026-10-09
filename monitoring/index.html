@@ -2,7 +2,10 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!-- interactive-widget=resizes-content(2026-10-10): 키보드가 레이아웃을 줄이게 한다. 없으면 안드로이드 크롬(108~)이 화면을 밀어 올렸다 내리는데,
+     키보드가 내려간 뒤 그 밀림이 iframe 터치 좌표에 남는 것으로 본다 — 유성 실기기 「시작하기 버튼 그 위에 베이지색 배경을 누를때 시작하기가 눌려」(다음 쪽까지 계속). 진단 = /monitoring?touch=1(누른 자리 빨간 점).
+     /feedback(16)·/recommend(22)는 처음부터 이 값이라 같은 게이트인데 이 증상이 없다. /safety도 같은 줄(0-9) -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content">
 <title>모니터링 설문 — 생각공작소</title>
 <meta name="robots" content="noindex">
 <!-- ⚠️ 카톡 인앱 = 상하단 바가 설문을 가림(§3.7) → 기본 브라우저로 탈출(유성 2026-07-08). iframe 로드보다 먼저 head에서 실행.
