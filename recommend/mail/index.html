@@ -87,6 +87,10 @@
   .btn.gate:active{ background:var(--p-disabled); }
   @keyframes shakeX{20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(1px)}}
   .shake{ animation:shakeX .28s cubic-bezier(.36,.07,.19,.97); }
+  /* 1차 CTA = 화면 하단(유성 10-09 「위에 다 몰려 있어서 버튼을 아래에」, docs/1 §4.1-5) — 내용이 짧으면 버튼만 아래로, 길면 내용 끝에 이어진다 */
+  #scr-form.on{ display:flex; flex-direction:column; min-height:calc(100svh - 68px); }
+  #scr-form #sendBtn{ margin-top:auto; }
+  @media (max-width:380px){ #scr-form.on{ min-height:calc(100svh - 54px); } }
   html{ scroll-padding-bottom:84px; }
   @media (any-pointer:coarse){
     body:has(#scr-form.on input:focus) #sendBtn:not(.gate){ position:fixed; left:0; right:0; bottom:0; width:auto; z-index:50; border-radius:0; padding:19px; margin:0; transition:none; }
