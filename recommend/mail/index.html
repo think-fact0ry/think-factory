@@ -208,7 +208,15 @@ $('email').addEventListener('input', function(){ this.value=this.value.replace(/
   document.addEventListener('click', function(e){ if(!wrap.contains(e.target)) open(false); });
 })();
 var toastT;
-function toast(m, ms){ var t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove('on'); }, ms || 2800); }
+/* 토스트 자리 = 보이는 「추천서 다시 받기」 위 12px(docs/1 §5.5, 22 접수 폼과 같은 식). 버튼을 화면 맨 아래로 내린 뒤(§4.1-5, 10-09) 고정 90px이면 큰 폰에서 버튼을 덮었다(10-10 실측 6px).
+   버튼이 없거나 화면 밖이면 '' = CSS 기본(90px). 문구를 먼저 넣어야 토스트 높이(줄 수)가 정해져 클램프가 맞다 */
+function toastBottom(t){
+  var vh=window.innerHeight, th=(t && t.offsetHeight) || 66, lim=Math.max(30, vh-th-8);
+  var b=document.querySelector('#scr-form.on #sendBtn'); if(!b || !b.getClientRects().length) return '';
+  var top=b.getBoundingClientRect().top; if(top>=vh) return '';
+  return Math.min(Math.max(Math.round(vh-top)+12, 30), lim)+'px';
+}
+function toast(m, ms){ var t=$('toast'); t.textContent=m; t.style.bottom=toastBottom(t); t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove('on'); }, ms || 2800); }
 
 /* ── 게이팅(§4.1-5) — 세 칸이 다 차기 전엔 연초록, 누르면 흔들고 빠진 칸 ── */
 function vals(){ return { phone:$('phone').value.replace(/\D/g,''), dob:$('dob').value.replace(/\D/g,''), local:$('email').value.trim(), domain:$('domain').value.trim().toLowerCase() }; }

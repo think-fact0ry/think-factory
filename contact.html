@@ -230,7 +230,16 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
   // GAS 폼 출처만 허용 — 호스트네임 정확/접미 매칭(부분문자열 'google'은 google.attacker.com도 통과해 위험)
   function okGasOrigin(o) { try { var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); } catch (e) { return false; } }
   // 폼 검증 알림 토스트(임베드 시 폼이 부모에 요청 — iframe 내부 fixed는 실제 화면 하단이 아님)
-  function showFormToast(msg, kind) { var t = document.getElementById('formToast'); if (!t) return; t.textContent = msg; t.className = 'form-toast show' + (kind === 'error' ? ' err' : ''); clearTimeout(t._ft); t._ft = setTimeout(function () { t.className = 'form-toast'; }, 2300); }
+  // above = 폼이 알려 준 하단 버튼의 위쪽(폼 문서 기준 px, 06 수정 찾기의 '수정하기'). 그 버튼이 화면 맨 아래로 내려온 뒤(docs/1 §4.1-5, 10-10) 바닥 20px 토스트가 버튼을 덮어서,
+  // 버튼 위 12px에 띄운다(§5.5, 14, 16 toastBottom과 같은 식). 버튼이 화면 밖이거나 값이 없으면 '' = site.css 기본(바닥 20px). 문구를 먼저 넣어야 토스트 높이가 정해져 클램프가 맞다
+  function formToastBottom(t, above) {
+    if (typeof above !== 'number') return '';
+    var vh = window.innerHeight, top = f.getBoundingClientRect().top + above;
+    if (top <= 0 || top >= vh) return '';
+    var th = t.offsetHeight || 46;
+    return Math.min(Math.max(Math.round(vh - top) + 12, 20), Math.max(20, vh - th - 8)) + 'px';
+  }
+  function showFormToast(msg, kind, above) { var t = document.getElementById('formToast'); if (!t) return; t.textContent = msg; t.style.bottom = formToastBottom(t, above); t.className = 'form-toast show' + (kind === 'error' ? ' err' : ''); clearTimeout(t._ft); t._ft = setTimeout(function () { t.className = 'form-toast'; }, 2300); }
   function showExitBox() { var e = document.getElementById('exitHint'); if (!e) return; e.classList.add('show'); clearTimeout(e._et); e._et = setTimeout(function () { e.classList.remove('show'); }, 2000); }
   window.addEventListener('message', function (e) {
     if (!okGasOrigin(e.origin)) return;               // 폼(googleusercontent/script.google) 출처만
@@ -242,7 +251,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     else if (d.type === 'height' && d.height) { f.style.height = d.height + 'px'; }
     else if (d.type === 'theme') { document.body.classList.toggle('form-dark', !!d.dark); }
     else if (d.type === 'scrolltop') { var t = f.getBoundingClientRect().top + window.pageYOffset - navOffset(); window.scrollTo({ top: Math.max(0, t), behavior: 'auto' }); }
-    else if (d.type === 'toast') { showFormToast(d.msg, d.kind); }
+    else if (d.type === 'toast') { showFormToast(d.msg, d.kind, d.above); }
     else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
     else if (d.type === 'exithint') { showExitBox(); }
   });
