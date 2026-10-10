@@ -96,8 +96,8 @@ img{ max-width:100%; display:block; }
 
 .btn{ display:inline-block; padding:15px 26px; border-radius:var(--r-md); font-size:16px; font-weight:700; letter-spacing:-.3px; transition:transform .08s; cursor:pointer; border:none; font-family:inherit; }
 .btn:active{ transform:scale(.97); }
-.btn.fill{ background:var(--green-dark); color:#fff; }   /* 흰 글자 16px = 4.5 기준 → green700(6.79). green600은 4.22 미달 */
-.btn.fill:active{ background:var(--green800); }
+.btn.fill{ background:var(--green); color:#fff; }   /* ⚠️대비 예외: 채움 green600 + 흰 16px = 4.22(4.5 미달)를 알고 고름(유성 2026-10-10 「btn fill 도 그린 600으로 … 어두워서 바꿨는데 그냥 600으로」 — 08-03 green700 되돌림, docs/1 §3.1-3) */
+.btn.fill:active{ background:var(--green-dark); }   /* 누름 = green700(§3.1 스케일의 active 칸) */
 .btn.soft{ background:var(--g100); color:var(--g900); }
 
 /* ── 실시간 신청 띠 (fold 하단) — 우→좌 마키 ── */
