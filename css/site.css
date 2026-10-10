@@ -395,18 +395,18 @@ footer .legal a:hover{ color:var(--g900); }
 /* ── 우하단 플로팅 SNS 버튼 ── */
 .fab{ position:fixed; right:20px; bottom:20px; display:flex; flex-direction:column; gap:10px; z-index:20; }
 /* 브랜드 원색 대신 사이트 팔레트(흰 바탕·그레이 아이콘·호버 그린)로 톤 통일 */
-.fab .f{ width:48px; height:48px; border-radius:99px; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--g500); border:1px solid var(--g200); box-shadow:0 2px 10px rgba(0,0,0,.07); transition:transform .12s, color .15s, border-color .15s; }
+.fab .f{ width:48px; height:48px; border-radius:99px; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--g500); border:1px solid var(--g200); box-shadow:0 2px 10px rgba(0,0,0,.07); transition:transform .12s, color .25s, border-color .25s, background-color .25s, box-shadow .25s, translate .3s cubic-bezier(.22,.7,.25,1); }
 .fab .f:hover{ transform:translateY(-2px); color:var(--green); border-color:var(--green); }
 .fab .f:active{ transform:scale(.94); }
 .fab .f svg{ width:22px; height:22px; }
-/* 맨 위로 — 한 화면 이상 내려가야 나타남 */
-/* 서브 페이지: 화살표 숨김 시 자리(구멍)도 비움 → 네이버블로그가 모서리로 내려옴.
-   화살표가 생기면 다른 버튼이 위로 밀림 */
-.fab .top{ display:none; }
-.fab .top.show{ display:flex; }
-/* 홈(.fab.home)만 기존 동작 유지: 자리 고정(페이드) — 히어로 영상 위 레이아웃 안정 */
-.fab.home .top{ display:flex; opacity:0; pointer-events:none; transform:translateY(6px); transition:opacity .25s, transform .25s, color .15s, border-color .15s; }
-.fab.home .top.show{ opacity:1; pointer-events:auto; transform:none; }
+/* 맨 위로 — 300px 내려가면 나타남(페이지마다 #toTop .show). 모든 페이지 같은 규칙(유성 2026-10-10):
+   자리는 늘 맨 아래(모서리)에 있고, 숨어 있는 동안엔 SNS 셋이 그 자리까지 내려와 있다가 나타나면 같이 미끄러져 올라간다.
+   (옛: 홈은 빈 자리를 비워 둬 네이버 아래가 뜨고, 서브는 자리를 없애 화살표가 생길 때 버튼이 툭 밀렸다)
+   한 칸 = 자기 높이 + 간격(10px) — translate 속성이라 hover·누름 transform과 겹쳐도 안 튄다. :has 못 쓰는 브라우저는 옛 홈 모양(빈 자리)으로 남는다 */
+.fab .top{ display:flex; opacity:0; pointer-events:none; transform:translateY(6px); transition:opacity .25s, transform .25s, color .25s, border-color .25s, background-color .25s; }
+.fab .top.show{ opacity:1; pointer-events:auto; transform:none; }
+.fab:has(.top):not(:has(.top.show)) .f:not(.top):not(.ask){ translate:0 calc(100% + 10px); }
+@media (prefers-reduced-motion:reduce){ .fab .f{ transition:none; } }
 @media (max-width:760px){ .fab{ right:14px; bottom:14px; } .fab .f{ width:44px; height:44px; } }
 
 /* ── 서비스 안내 — 풀페이지(JS, 홈과 동일 600ms 이징) + 탭 ── */

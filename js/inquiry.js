@@ -36,14 +36,21 @@
     + 'html.tfinq-open .fab{opacity:0;pointer-events:none}'
     + '.fab .ask.shk{animation:tfInqShk .28s cubic-bezier(.36,.07,.19,.97)}'
     + '@keyframes tfInqShk{20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(1px)}}'
-    // 상담 신청 페이지 폰 화면 = SNS 버튼과 같은 규칙(FAQ가 보일 때만) — 폼 아래쪽 버튼을 가리지 않게
-    + '@media (max-width:760px){body.apply-page .fab .ask{display:none}body.apply-page.faq-visible .fab .ask{display:flex}}';
+    // 폰 = 왼쪽 아래(오른쪽 아래 끝은 「맨 위로」 자리), 「맨 위로」가 나타날 때 같이 나타남(첫 화면엔 없음 — 「실시간 신청 소식」을 가린다, 유성 10-10)
+    + '@media (max-width:760px){'
+    + '.fab .f.ask{position:fixed;left:14px;right:auto;bottom:14px;opacity:0;pointer-events:none;translate:0 8px;transition:opacity .25s,translate .3s cubic-bezier(.22,.7,.25,1),transform .12s,color .25s,border-color .25s,background-color .25s,box-shadow .25s}'
+    + '.fab .f.ask.vis{opacity:1;pointer-events:auto;translate:none}'
+    // 상담 신청 페이지 = SNS 버튼과 같은 규칙(FAQ가 보일 때만) — 폼 아래쪽 버튼을 가리지 않게
+    + 'body.apply-page .fab .ask{display:none}body.apply-page.faq-visible .fab .ask{display:flex}}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
   var b = document.createElement('button');
   b.type = 'button'; b.className = 'f ask'; b.id = 'tfInqBtn'; b.setAttribute('aria-label', '문의하기');
   b.innerHTML = '<span class="tfi-dot"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17A2.5 2.5 0 0 1 4 14.5z"/></svg><span class="t">문의하기</span>';
-  fab.appendChild(b);   // 맨 아래 = 모서리. 「맨 위로」가 나타나도 이 버튼은 제자리
+  fab.appendChild(b);   // PC = 줄 맨 아래(모서리) 늘, 「맨 위로」는 그 위 / 폰 = 왼쪽 아래(위 CSS)
+  var toTop = document.getElementById('toTop');   // 폰에서 보일 때 = 「맨 위로」가 보일 때(그 페이지 스크립트가 .show를 붙인다)
+  function vis() { b.classList.toggle('vis', !toTop || toTop.classList.contains('show')); }
+  vis(); if (toTop && window.MutationObserver) new MutationObserver(vis).observe(toTop, { attributes: true, attributeFilter: ['class'] });
 
   // 초록 점 = 지금 채팅 모드(행정 근무 중). 화면을 다 그린 뒤 한 번만, 답은 3분 동안 다시 안 묻는다
   function setLive(m) { b.classList.toggle('staff', m === 'chat'); }

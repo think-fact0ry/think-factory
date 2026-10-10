@@ -243,7 +243,7 @@
 (function () {
   var fab = document.querySelector('.fab'), hero = document.querySelector('.st-hero');
   if (!fab || !hero) return;
-  function upd() { fab.classList.toggle('on-hero', window.pageYOffset < hero.offsetHeight - 120); }
+  function upd() { fab.classList.toggle('on-hero', window.pageYOffset <= 300); }   // 맨 위로가 나타나는 그 순간(300px)에 같이(유성 10-10 「동시에」)
   window.addEventListener('scroll', upd, { passive: true });
   window.addEventListener('resize', upd, { passive: true });
   upd();
