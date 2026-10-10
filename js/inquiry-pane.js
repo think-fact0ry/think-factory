@@ -98,7 +98,7 @@
     '#tfInq{--ease:cubic-bezier(.22,.7,.25,1);font-family:"Pretendard Variable",Pretendard,-apple-system,sans-serif;color:var(--g900);word-break:keep-all;letter-spacing:-.2px;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}',
     '#tfInq *{box-sizing:border-box}',
     '#tfInq button{font-family:inherit}',
-    '#tfInq .ti-pane{position:fixed;left:0;top:0;width:100%;height:100%;z-index:1150;background:#fff;display:flex;flex-direction:column;overflow:hidden;transform-origin:70px calc(100% - 36px);transform:scale(.4);opacity:0;pointer-events:none;transition:transform .38s var(--ease),opacity .22s ease;-webkit-user-select:none;user-select:none;touch-action:pan-x pan-y}',   // 기준점 = 폰 「문의하기」(왼쪽 아래, 실제 값은 open·close 때 버튼 위치로 — originToBtn) · touch-action = 두 손가락 확대 막음(유성 10-10 「렉이 걸려」)
+    '#tfInq .ti-pane{position:fixed;left:0;top:0;width:100%;height:100%;z-index:1150;background:#fff;display:flex;flex-direction:column;overflow:hidden;transform-origin:left bottom;transform:scale(.4);opacity:0;pointer-events:none;transition:transform .38s var(--ease),opacity .22s ease;-webkit-user-select:none;user-select:none;touch-action:pan-x pan-y}',   // 기준점 = 폰 「문의하기」(왼쪽 아래 — 실제 값은 open·close 때 버튼 가운데를 재서 originToBtn, 이 값은 버튼이 없을 때만) · touch-action = 두 손가락 확대 막음(유성 10-10 「렉이 걸려」)
     '#tfInq.on .ti-pane{transform:none;opacity:1;pointer-events:auto}',
     '@media (min-width:761px){#tfInq .ti-pane{left:auto;top:auto;right:20px;bottom:20px;width:380px;height:min(640px,calc(100vh - 40px));border-radius:20px;box-shadow:0 12px 40px rgba(25,31,40,.18),0 2px 8px rgba(25,31,40,.08);transform-origin:calc(100% - 40px) calc(100% - 20px)}}',
     '#tfInq.page .ti-pane{transition:none;transform:none;opacity:1;pointer-events:auto}',
@@ -176,6 +176,7 @@
     // 입력 칸 = 흐름 안 맨 아래(px 여유 없음). 키보드가 커서 보이는 높이가 모자라면 대화 칸이 먼저 0까지 줄고, 그래도 모자라면 입력 칸이 스스로 스크롤
     //   (메모리 responsive-first 10-10 「키보드 위 버튼 — 띄우고 px로 맞추지 말 것」: 지금 적는 칸 우선)
     '#tfInq.kb .ti-comp{padding-bottom:14px}',   // 키패드가 올라오면 아래 막대는 키패드 뒤 = 막대 높이 여백 없음(유성 10-10 「좀 잘려서 붙어」)
+    '@media (max-width:760px){#tfInq.on.kb:not(.page)::before{content:"";position:fixed;inset:0;background:#fff;z-index:1149}}',   // 키패드가 올라오는 동안 창(보이는 높이로 먼저 줄어듦)과 키패드 사이에 뒤 화면이 비치지 않게 흰 바닥(유성 10-10 「채팅 뒤쪽 화면이 보이는듯함」)
     '#tfInq .ti-comp{border-top:1px solid var(--g100);padding:10px 12px 14px;padding-bottom:calc(14px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;background:#fff;flex:0 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none}',
     '#tfInq .ti-comp::-webkit-scrollbar{width:0}',
     '#tfInq .ti-taw{flex:1;min-width:0;position:relative;border-radius:20px;overflow:hidden}',
@@ -270,7 +271,7 @@
       + '<button class="ti-x" type="button" aria-label="닫기">' + ICO.x + '</button></div>'
       + '<div class="ti-th" aria-live="polite"></div>'
       + '<div class="ti-comp">'
-      + '<div class="ti-line ti-chatline"><div class="ti-taw"><textarea class="ti-ta" id="tiTa" rows="1" maxlength="' + MAX_LEN + '" placeholder="궁금한 걸 적어 주세요" autocomplete="off"></textarea></div>'
+      + '<div class="ti-line ti-chatline"><div class="ti-taw"><textarea class="ti-ta" id="tiTa" rows="1" maxlength="' + MAX_LEN + '" placeholder="어떤 점이 궁금하세요?" autocomplete="off"></textarea></div>'
       + '<button class="ti-send off" type="button" aria-label="보내기">' + ICO.up + '</button></div>'
       + '<div class="ti-mailf"><div class="ti-fl f1">문의 내용</div><div class="ti-taw"><textarea class="ti-ta" id="tiTa2" maxlength="' + MAX_LEN + '" placeholder="어떤 점이 궁금하세요?" autocomplete="off"></textarea></div>'
       + '<div class="ti-fl f2">휴대폰 번호</div><input class="ti-inp" id="tiPh2" inputmode="numeric" placeholder="010-0000-0000" autocomplete="off">'
@@ -408,7 +409,7 @@
     var v = window.visualViewport;
     if (v && v.scale > 1.01) return;   // 확대 중엔 손대지 않음(확대를 키패드로 알고 창을 줄였다 늘였다 = 렉 — 확대는 막았지만 접근성 강제 확대 대비)
     var atEnd = TH.scrollTop + TH.clientHeight >= TH.scrollHeight - 30;
-    var kb = !!v && (screen.height - v.height > 200 || innerHeight - v.height > 60);   // 키패드 = 화면 높이보다 보이는 높이가 크게 작음(레이아웃 높이가 같이 줄어도 잡힘 — 10-10 갤럭시 잘림)
+    var kb = !!v && ((screen.height - v.height) / screen.height > 0.25 || (innerHeight - v.height) / innerHeight > 0.15);   // 키패드 = 보이는 높이가 화면의 3/4 아래(레이아웃이 같이 줄어도 잡힘). 비율 = 기기 크기 무관(유성 10-10 「반응형으로 고친 것 맞는지?」 — 옛 200px·60px 고정 숫자)
     R.classList.toggle('kb', kb);
     if (kb) { P.style.height = Math.round(v.height) + 'px'; P.style.top = Math.round(v.offsetTop) + 'px'; }   // 키보드 = 보이는 높이에 맞춤(§4.2-2)
     else { P.style.height = ''; P.style.top = ''; }   // 키보드 없음 = 화면 끝까지(제스처 막대 자리 포함 — 어두운 막이 화면 전체를 덮게, 아래 vpCover)
@@ -417,8 +418,9 @@
     if (a && a !== document.body && R.contains(a) && a.scrollIntoView) a.scrollIntoView({ block: 'nearest' });
   }
   function scrollEnd() { TH.scrollTop = TH.scrollHeight; }
-  // 폰 창이 열려 있는 동안만 viewport-fit=cover(크롬 135+ 안드로이드 edge-to-edge) — 페이지가 화면 맨 아래 제스처 막대 자리까지 그려져
-  // 동의 시트의 어두운 막이 그 띠까지 덮는다(유성 10-10 「맨 하단 하얀선」). 입력 칸·시트 버튼은 env(safe-area-inset-bottom)로 막대 위에. 닫으면 원래대로
+  // 동의 시트가 떠 있는 동안만 viewport-fit=cover(크롬 135+ 안드로이드 edge-to-edge) — 페이지가 화면 맨 아래 제스처 막대 자리까지 그려져
+  // 시트의 어두운 막이 그 띠까지 덮는다(유성 10-10 「맨 하단 하얀선」). 시트 버튼은 env(safe-area-inset-bottom)로 막대 위에. 시트가 닫히면 원래대로.
+  // 창 내내 켜 두던 것(10-10 12:40)을 좁힘 — 그 뒤 갤럭시에서 키패드 위 입력 줄이 잘리기 시작(13:23 캡처, 첫 시험 11:16엔 지적 없음). 시트엔 입력 칸이 없어 키패드와 안 겹친다
   var VP0 = null;
   function vpCover(on) {
     var m = document.querySelector('meta[name=viewport]'); if (!m || PAGE) return;
@@ -472,7 +474,7 @@
   function sys(text, cls) { var n = el('<div class="ti-sys ti-new' + (cls ? ' ' + cls : '') + '"></div>'); n.textContent = text; TH.appendChild(n); return n; }
 
   // ── 인사, 번호 카드, 모드 ──
-  var GREET = { chat: '안녕하세요, 생각공작소예요.\n궁금한 걸 편하게 남겨 주세요 ☺️', mail: '안녕하세요, 생각공작소예요.\n남겨 주시면 확인하는 대로\n문자 드릴게요 ☺️' };
+  var GREET = { chat: '안녕하세요, 생각공작소예요.\n궁금한 점을 편하게 남겨 주세요 ☺️', mail: '안녕하세요, 생각공작소예요.\n남겨 주시면 확인하는 대로\n문자 드릴게요 ☺️' };
   function skel() {   // 모드·대화를 아직 모를 때 = 훑는 뼈대(§5.4)
     TH.innerHTML = '<div class="ti-sk" style="width:62%"></div><div class="ti-sk" style="width:48%;align-self:flex-end"></div><div class="ti-sk" style="width:70%"></div>';
     lastDay = ''; R.classList.remove('mailnew');
@@ -699,8 +701,8 @@
   function hideResume() { if (resumeEl) { resumeEl.remove(); resumeEl = null; } }
 
   // ── 창 열기·닫기 ──
-  function openSheet() { var d = $('.ti-dim'), s = $('.ti-sheet'); d.classList.add('on'); s.classList.remove('on'); void s.offsetWidth; s.classList.add('on'); }
-  function closeSheet() { $('.ti-dim').classList.remove('on'); $('.ti-sheet').classList.remove('on'); }
+  function openSheet() { if (mqPhone.matches && !PAGE) vpCover(true); var d = $('.ti-dim'), s = $('.ti-sheet'); d.classList.add('on'); s.classList.remove('on'); void s.offsetWidth; s.classList.add('on'); }
+  function closeSheet() { vpCover(false); $('.ti-dim').classList.remove('on'); $('.ti-sheet').classList.remove('on'); }
   function fresh() {
     S.key = ''; S.sentFresh = false; S.hasPhone = false;
     var c = null; try { c = JSON.parse(ss(K('tf_inq_mode')) || 'null'); } catch (e) {}
@@ -739,7 +741,6 @@
     if (S.key && S.loaded === S.key) { lastChange = Date.now(); schedule(true); }
     else if (S.key) loadRoom();
     else if (!S.sentFresh) { fresh(); recover(); }
-    if (mqPhone.matches) vpCover(true);
     requestAnimationFrame(fitVV);
     autosize(TA, 120); $('.ti-send').classList.toggle('off', !TA.value.trim());
     if (!coarse && consentAt()) setTimeout(function () { if (S.open) (R.classList.contains('mailnew') ? $('#tiTa2') : TA).focus({ preventScroll: true }); }, 380);   // PC = 바로 칠 수 있게(폰은 키보드가 화면을 덮으니 안 함)
