@@ -316,6 +316,8 @@
     ta.addEventListener('scroll', f); ta.addEventListener('input', f); return f;
   }
   function autosize(ta, max) { ta.style.height = 'auto'; ta.style.height = Math.min(max, ta.scrollHeight + 3) + 'px'; }
+  // 메일 칸이 떠 있는 동안 채팅 칸은 숨어 있어 autosize가 0을 재 3px로 굳는다 → 보이게 되는 자리마다 다시 잰다(유성 10-11 「인풋이 갑자기 쪼그라들었어」 — 실측 22px, 정상 46)
+  function showChatLine() { R.classList.remove('mailnew'); autosize(TA, 120); }
   var toastT = 0;
   function toast(msg) {
     var t = $('.ti-toast'); t.textContent = msg;
@@ -480,7 +482,7 @@
   var MAIL_NOTE = '지금은 채팅 시간이 아니에요\n문의를 남겨 주시면\n문자로 답해 드릴게요 :)';   // 메일 모드 첫 화면 둘째 말풍선(세 줄 = 말풍선 폭에서 「답해/드릴게요」로 끊기지 않게)(유성 10-10 — 「:)」 = 위 ☺️와 안 겹치게)
   function skel() {   // 모드·대화를 아직 모를 때 = 훑는 뼈대(§5.4)
     TH.innerHTML = '<div class="ti-sk" style="width:62%"></div><div class="ti-sk" style="width:48%;align-self:flex-end"></div><div class="ti-sk" style="width:70%"></div>';
-    lastDay = ''; R.classList.remove('mailnew');
+    lastDay = ''; showChatLine();
   }
   function freshView() {
     TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.read = 0; S.more = false; S.noteMode = '';
@@ -491,7 +493,7 @@
       rowEl('them', MAIL_NOTE, '', false).classList.add('greet');
       TH.appendChild(el('<div class="ti-nc ti-info"><div class="t1">창을 닫아도 답을 받을 수 있어요</div><div class="t2">휴대폰 번호를 남겨 주시면 문자로 답해 드려요.</div></div>'));
     }
-    R.classList.toggle('mailnew', S.mode !== 'chat');
+    if (S.mode !== 'chat') R.classList.add('mailnew'); else showChatLine();
     if (S.mode !== 'chat' && TA.value.trim() && !$('#tiTa2').value) { $('#tiTa2').value = TA.value; TA.value = ''; }   // 뼈대 동안 채팅 칸에 쓴 글은 메일 칸으로 옮겨 준다
     if (S.mode === 'chat' && !S.hasPhone && !S.phonePending) numCard();
     if (S.phonePending && S.mode === 'chat') phoneDone(S.phonePending);
@@ -509,7 +511,7 @@
       if (was !== m) freshView();
       return;
     }
-    R.classList.remove('mailnew');   // 대화가 있으면 입력은 늘 채팅 칸
+    showChatLine();   // 대화가 있으면 입력은 늘 채팅 칸
     noteForMode();
   }
   function noteForMode() {   // 메일 모드로 대화를 이어 가면 한 줄로 알린다(5차에 없던 상태 — 사전 계획 §4 ⑧ ⑨)
@@ -560,7 +562,7 @@
     var v = TA.value.trim(); if (!v) return;
     if (!S.key && !consentAt()) { openSheet(); return; }
     TA.value = ''; ss(K('tf_inq_draft'), ''); $('.ti-send').classList.add('off'); autosize(TA, 120);
-    if (!S.key) { S.sentFresh = true; R.classList.remove('mailnew'); if (TH.querySelector('.ti-sk')) { TH.innerHTML = ''; lastDay = ''; } }
+    if (!S.key) { S.sentFresh = true; showChatLine(); if (TH.querySelector('.ti-sk')) { TH.innerHTML = ''; lastDay = ''; } }
     hideResume(); dayIf(new Date().toISOString());   // 어제 대화에 오늘 보내면 「오늘」 줄부터(번호 카드는 5차처럼 인사 아래 제자리)
     var r = rowEl('me', v, '', true); r.classList.add('pend');
     scrollEnd(); lastChange = Date.now();
@@ -571,7 +573,7 @@
     if (!consentAt()) { openSheet(); return; }
     S.sentFresh = true; S.phonePending = phone;
     var ta2 = $('#tiTa2'); ta2.value = ''; $('#tiPh2').value = ''; $('#tiMail').classList.add('gate'); autosize(ta2, 150);
-    R.classList.remove('mailnew');
+    showChatLine();
     hideResume(); dayIf(new Date().toISOString());
     var r = rowEl('me', text, '', true); r.classList.add('pend');
     scrollEnd(); lastChange = Date.now();
@@ -634,7 +636,7 @@
   // ── 이어보기 · 묻기 ──
   function loadRoom() {
     TH.innerHTML = '<div class="ti-sk" style="width:62%"></div><div class="ti-sk" style="width:48%;align-self:flex-end"></div><div class="ti-sk" style="width:70%"></div>';
-    R.classList.remove('mailnew');
+    showChatLine();
     read({ action: 'v_load', key: S.key }).then(function (r) {
       if (!r || !r.ok) { if (r && r.code === 'gone') return gone(); return loadFail(); }
       TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = ''; S.saidMail = false;   // 이어보기엔 첫 화면 말풍선이 없음
@@ -651,7 +653,7 @@
   }
   function gone() {
     ls(K('tf_inq_key'), null); S.key = ''; S.loaded = ''; S.sentFresh = false; queue = []; clearTimeout(pollT);
-    TH.innerHTML = ''; R.classList.remove('mailnew');
+    TH.innerHTML = ''; showChatLine();
     var g = el('<div class="ti-gone"><b>대화를 찾을 수 없어요</b><p>마지막 대화 뒤 1년이 지나면 지워져요</p><button class="ti-btn" type="button"><span class="ti-bl">' + (PAGE ? '홈페이지로 가기' : '새로 문의하기') + '</span></button></div>');
     ripple(g.querySelector('.ti-btn'));
     g.querySelector('.ti-btn').addEventListener('click', function () { if (PAGE) { location.href = '/'; return; } fresh(); });
