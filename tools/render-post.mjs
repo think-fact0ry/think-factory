@@ -104,6 +104,7 @@ export function renderPost(post, blocks, desc, ogImage) {
 <script type="application/ld+json">${jsonLd(ld)}</script>
 <script src="/js/analytics.js" async></script>
 <script src="/js/photo-viewer.js" defer></script>
+<script src="/js/inquiry.js?v=1" defer></script>
 </head>
 <body>
 
