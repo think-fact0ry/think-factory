@@ -5,7 +5,9 @@
 <script src="/js/form-wait.js"></script>
 <script src="/js/analytics.js" async></script>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- interactive-widget=resizes-content(2026-10-10): 키보드가 화면 자체를 줄이게 한다(/recommend, /monitoring, /feedback과 같은 값). 없으면 안드로이드 크롬(108~)이 화면을 밀기만 해서
+     ①수정 찾기 「수정하기」가 키보드 위에 안 붙었고(유성 실기기) ②/monitoring에서 키보드가 내려간 뒤 iframe 터치가 위아래로 어긋났다(같은 부류, 그쪽은 이 줄로 해결 확인). docs/1 §4.1-5 ⓔ -->
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
 <title>상담 신청 | 생각공작소</title>
 <meta name="description" content="바우처가 없어도 신청할 수 있어요.">
 <meta property="og:title" content="생각공작소 상담 신청">
@@ -82,6 +84,7 @@
 .apply-skel .sk-g{ margin-top:12px; padding:14px; font-size:14px; font-weight:600; line-height:normal; text-align:center; }
 @media (max-width:380px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }   /* 06 ≤380 값 */
 body.form-ready .apply-skel{ display:none; }
+body.kb-open .fab{ display:none; }   /* 키보드가 떠 있는 동안 우하단 떠 있는 버튼(맨 위로 등) 숨김 — resizes-content라 키보드 위로 따라 올라와 입력 칸을 가린다. 판정 = 아래 kb-open 스크립트 */
 body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk-card{ background:#22332a; }
 </style>
 <div class="apply-wrap">
@@ -259,6 +262,17 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
   if (window.tfFormWait) window.tfFormWait({ frame: f, skel: document.getElementById('applySkel'), card: document.querySelector('#applySkel .sk-card'), obj: '신청서를' });
   window.addEventListener('resize', sendVH);
   if (window.visualViewport) window.visualViewport.addEventListener('resize', sendVH);   // 툴바 show/hide로 보이는 높이 바뀌면 재전송
+})();
+
+// ── 키보드 판정(2026-10-10): resizes-content라 키보드가 뜨면 화면 높이 자체가 준다. 같은 폭에서 본 가장 큰 높이보다 150px 넘게 줄면 키보드로 본다
+//    (주소창이 숨었다 나타나는 건 60px 안팎이라 안 걸린다. 회전하면 폭이 바뀌어 기준을 새로 잡는다) → body.kb-open = 떠 있는 버튼 숨김 ──
+(function () {
+  if (!window.matchMedia || !window.matchMedia('(any-pointer:coarse)').matches) return;   // PC 창 높이를 줄인 걸 키보드로 오인하지 않게 터치 기기만
+  var maxH = 0, w = 0;
+  function chk() { if (window.innerWidth !== w) { w = window.innerWidth; maxH = 0; } maxH = Math.max(maxH, window.innerHeight); document.body.classList.toggle('kb-open', maxH - window.innerHeight > 150); }
+  window.addEventListener('resize', chk);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', chk);
+  chk();
 })();
 
 // ── 리모콘(카톡·인스타·블로그)은 자주 묻는 질문 영역이 보일 때만 등장(모바일) ──
