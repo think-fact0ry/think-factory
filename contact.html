@@ -84,6 +84,13 @@
 .apply-skel .sk-g{ margin-top:12px; padding:14px; font-size:14px; font-weight:600; line-height:normal; text-align:center; }
 @media (max-width:380px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }   /* 06 ≤380 값 */
 body.form-ready .apply-skel{ display:none; }
+/* 폼 앱 모드(폰) = 06 수정 찾기 화면 동안 폼이 화면 전체를 덮고 페이지 스크롤 잠금(폼의 appmode 메시지). /recommend와 같은 구조 —
+   안 그러면 키보드가 뜰 때 크롬이 이 페이지를 스크롤해 FAQ가 올라오고 「수정하기」가 키보드에 안 붙었다(2026-10-10 유성 실기기). 다른 화면은 지금처럼 흐름 안 iframe */
+@media (max-width:760px){
+  html:has(body.form-app), body.form-app{ overflow:hidden; }
+  body.form-app .apply-frame{ position:fixed; top:0; left:0; width:100%; height:100% !important; min-height:0 !important; z-index:40; }   /* iframe은 top/bottom 0만으론 안 늘어난다(기본 150px — 10-10 실측) → 높이 100% = 화면(키보드가 뜨면 resizes-content로 같이 준다) */
+  body.form-app .nav, body.form-app .fab{ display:none; }
+}
 body.kb-open .fab{ display:none; }   /* 키보드가 떠 있는 동안 우하단 떠 있는 버튼(맨 위로 등) 숨김 — resizes-content라 키보드 위로 따라 올라와 입력 칸을 가린다. 판정 = 아래 kb-open 스크립트 */
 body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk-card{ background:#22332a; }
 </style>
@@ -255,6 +262,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     else if (d.type === 'theme') { document.body.classList.toggle('form-dark', !!d.dark); }
     else if (d.type === 'scrolltop') { var t = f.getBoundingClientRect().top + window.pageYOffset - navOffset(); window.scrollTo({ top: Math.max(0, t), behavior: 'auto' }); }
     else if (d.type === 'toast') { showFormToast(d.msg, d.kind, d.above); }
+    else if (d.type === 'appmode') { document.body.classList.toggle('form-app', !!d.on); }   // 06 수정 찾기 동안 폰에서 폼 화면 전체 고정(위 style 주석)
     else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
     else if (d.type === 'exithint') { showExitBox(); }
   });
