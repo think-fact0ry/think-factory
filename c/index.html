@@ -20,7 +20,8 @@
   .c-fb{max-width:360px;margin:30vh auto 0;padding:0 24px;text-align:center;font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;color:var(--g900);word-break:keep-all}
   .c-fb b{display:block;font-size:17px;margin-bottom:6px}
   .c-fb p{margin:0 0 18px;color:var(--g600);font-size:14px;line-height:1.5}
-  .c-fb button{border:0;border-radius:14px;background:var(--green700);color:#fff;font:inherit;font-size:16px;font-weight:700;padding:14px 22px;cursor:pointer}
+  .c-fb button{border:0;border-radius:14px;background:var(--green600);color:#fff;font:inherit;font-size:16px;font-weight:700;padding:14px 22px;cursor:pointer}
+  .c-fb button:active{background:var(--green700)}
 </style>
 </head>
 <body>
@@ -34,7 +35,7 @@
     document.body.insertAdjacentHTML('beforeend', '<div class="c-fb"><b>대화를 아직 못 불러왔어요</b><p>인터넷이 느리면 조금 더 걸려요</p><button type="button" onclick="location.reload()">다시 불러오기</button></div>');
   }
   var s = document.createElement('script');
-  s.src = '/js/inquiry-pane.js?v=1';
+  s.src = '/js/inquiry-pane.js?v=2';
   s.onload = function () { window.tfInqPane.open({ gas: GAS, page: true, key: k }); };
   s.onerror = fail;
   document.head.appendChild(s);

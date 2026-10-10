@@ -86,7 +86,7 @@
 
   // ── 상태 ──
   var R = null, P, TH, TA;
-  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '' };
+  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '', saidMail: false };
   var known = {};          // 화면에 그린 줄 번호
   var queue = [], sending = null;
   var pollT = 0, polling = false, lastChange = Date.now();
@@ -133,7 +133,7 @@
     '#tfInq .them .ti-bub{background:var(--g100);color:var(--g900)}',
     '#tfInq .them:not(.cont) .ti-bub{border-top-left-radius:6px}',
     '#tfInq .them .ti-bub a{color:var(--green700);text-decoration:underline;text-underline-offset:2px}',
-    '#tfInq .me .ti-bub{background:var(--green700);color:#fff}',
+    '#tfInq .me .ti-bub{background:var(--green600);color:#fff}',   // 채움 600(유성 10-10 「추천대로」 — 700은 너무 강함)
     // 우리 쪽 말풍선 = 네 모서리 18px(꼬리 모서리 없음) — 유성 10-10 「오른쪽이 잘려있는 듯」, 실측 잘림 0·원인 = 마지막 말풍선의 6px 꼬리(받은함 1-c와 같이)
     '#tfInq .ti-meta{font-size:11px;color:var(--g600);white-space:nowrap;margin-bottom:2px;display:flex;flex-direction:column;align-items:flex-end;line-height:1.35}',
     '#tfInq .them .ti-meta{align-items:flex-start}',
@@ -466,6 +466,7 @@
     TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.read = 0; S.more = false; S.noteMode = '';
     dayIf(new Date().toISOString());
     var g = rowEl('them', GREET[S.mode === 'chat' ? 'chat' : 'mail'], '', false); g.classList.add('greet');
+    S.saidMail = S.mode !== 'chat';   // 메일 인사가 이미 「문자 드릴게요」를 약속함 = 아래 문자 안내 줄 생략(채팅을 거치면 다시 띄움)
     R.classList.toggle('mailnew', S.mode !== 'chat');
     if (S.mode !== 'chat' && TA.value.trim() && !$('#tiTa2').value) { $('#tiTa2').value = TA.value; TA.value = ''; }   // 뼈대 동안 채팅 칸에 쓴 글은 메일 칸으로 옮겨 준다
     if (S.mode === 'chat' && !S.hasPhone && !S.phonePending) numCard();
@@ -479,6 +480,7 @@
   function setMode(m) {
     if (!m) return;
     var was = S.mode; S.mode = m; applyMode(m);
+    if (m === 'chat') S.saidMail = false;
     if (!S.key && !S.sentFresh) {   // 아직 아무것도 안 보낸 새 문의 = 인사와 입력 칸을 모드에 맞게 다시
       if (was !== m) freshView();
       return;
@@ -492,7 +494,7 @@
     var old = TH.querySelector('.ti-sys.mode'); if (old) old.remove();
     var oldNc = TH.querySelector('.ti-nc.bymode:not(.done)'); if (oldNc && want !== 'mail') oldNc.remove();
     S.noteMode = want;
-    if (want === 'mailphone') sys('확인하는 대로 문자로 답장 드릴게요', 'mode');
+    if (want === 'mailphone') { if (!S.saidMail) sys('답은 문자로 보내 드릴게요', 'mode'); }   // 유성 10-10 대안 1. 메일로 처음 보낸 방은 인사와 겹쳐 안 띄움
     // 메일 모드 + 번호 없음 = 번호 카드(이미 떠 있으면 그대로, 이 창에서 한 번만)
     else if (want === 'mail') { sys('지금은 바로 답하기 어려워요', 'mode'); if (!TH.querySelector('.ti-nc') && !S.mailNc) { S.mailNc = true; numCard(true); } }
     scrollEnd();
@@ -611,7 +613,7 @@
     R.classList.remove('mailnew');
     read({ action: 'v_load', key: S.key }).then(function (r) {
       if (!r || !r.ok) { if (r && r.code === 'gone') return gone(); return loadFail(); }
-      TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = '';
+      TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = ''; S.saidMail = false;   // 이어보기엔 인사가 없음
       S.hasPhone = !!r.hasPhone; S.more = !!r.more; S.read = r.read || 0; S.loaded = S.key;
       (r.msgs || []).forEach(function (m) { addMsg(m, false); });
       markRead(); setMode(r.mode || S.mode || 'mail'); noteForMode(); scrollEnd();
