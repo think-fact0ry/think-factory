@@ -98,7 +98,7 @@
     '#tfInq{--ease:cubic-bezier(.22,.7,.25,1);font-family:"Pretendard Variable",Pretendard,-apple-system,sans-serif;color:var(--g900);word-break:keep-all;letter-spacing:-.2px;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}',
     '#tfInq *{box-sizing:border-box}',
     '#tfInq button{font-family:inherit}',
-    '#tfInq .ti-pane{position:fixed;left:0;top:0;width:100%;height:100%;z-index:1150;background:#fff;display:flex;flex-direction:column;overflow:hidden;transform-origin:calc(100% - 50px) calc(100% - 30px);transform:scale(.4);opacity:0;pointer-events:none;transition:transform .38s var(--ease),opacity .22s ease;-webkit-user-select:none;user-select:none}',
+    '#tfInq .ti-pane{position:fixed;left:0;top:0;width:100%;height:100%;z-index:1150;background:#fff;display:flex;flex-direction:column;overflow:hidden;transform-origin:70px calc(100% - 36px);transform:scale(.4);opacity:0;pointer-events:none;transition:transform .38s var(--ease),opacity .22s ease;-webkit-user-select:none;user-select:none;touch-action:pan-x pan-y}',   // 기준점 = 폰 「문의하기」(왼쪽 아래, 실제 값은 open·close 때 버튼 위치로 — originToBtn) · touch-action = 두 손가락 확대 막음(유성 10-10 「렉이 걸려」)
     '#tfInq.on .ti-pane{transform:none;opacity:1;pointer-events:auto}',
     '@media (min-width:761px){#tfInq .ti-pane{left:auto;top:auto;right:20px;bottom:20px;width:380px;height:min(640px,calc(100vh - 40px));border-radius:20px;box-shadow:0 12px 40px rgba(25,31,40,.18),0 2px 8px rgba(25,31,40,.08);transform-origin:calc(100% - 40px) calc(100% - 20px)}}',
     '#tfInq.page .ti-pane{transition:none;transform:none;opacity:1;pointer-events:auto}',
@@ -175,6 +175,7 @@
     // 입력
     // 입력 칸 = 흐름 안 맨 아래(px 여유 없음). 키보드가 커서 보이는 높이가 모자라면 대화 칸이 먼저 0까지 줄고, 그래도 모자라면 입력 칸이 스스로 스크롤
     //   (메모리 responsive-first 10-10 「키보드 위 버튼 — 띄우고 px로 맞추지 말 것」: 지금 적는 칸 우선)
+    '#tfInq.kb .ti-comp{padding-bottom:14px}',   // 키패드가 올라오면 아래 막대는 키패드 뒤 = 막대 높이 여백 없음(유성 10-10 「좀 잘려서 붙어」)
     '#tfInq .ti-comp{border-top:1px solid var(--g100);padding:10px 12px 14px;padding-bottom:calc(14px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;background:#fff;flex:0 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none}',
     '#tfInq .ti-comp::-webkit-scrollbar{width:0}',
     '#tfInq .ti-taw{flex:1;min-width:0;position:relative;border-radius:20px;overflow:hidden}',
@@ -322,6 +323,17 @@
   function wire() {
     [].forEach.call(R.querySelectorAll('.ti-btn'), ripple);
     $('.ti-x').addEventListener('click', function () { if (PAGE) { location.href = '/'; return; } requestClose(); });
+    R.addEventListener('gesturestart', function (e) { e.preventDefault(); }, { passive: false });   // 아이폰 사파리 = touch-action 대신 이것으로 확대 막음
+    // 빈 칸을 누르고 있으면 뜨는 안드로이드 글자 돋보기(유성 10-10 「매우 불편함. 없애」) = 빈 칸일 때만 기본 동작을 막고 손을 떼면 직접 포커스.
+    // 글이 있는 칸은 그대로 — 커서 옮기기·글자 고르기에 돋보기가 쓰이고, 안드로이드 시스템 기능이라 웹이 따로 끌 수 없다. 빈 칸 길게 눌러 붙여넣기도 같이 막힘(키보드 클립보드 버튼은 됨)
+    var tz = null;
+    R.addEventListener('touchstart', function (e) {
+      var t = e.target; tz = null;
+      if (e.touches.length !== 1 || !t || !/^(TEXTAREA|INPUT)$/.test(t.tagName) || t.value) return;
+      e.preventDefault(); tz = { el: t, x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: false });
+    R.addEventListener('touchmove', function (e) { if (tz && Math.hypot(e.touches[0].clientX - tz.x, e.touches[0].clientY - tz.y) > 10) tz = null; }, { passive: true });
+    R.addEventListener('touchend', function (e) { if (!tz) return; var el = tz.el; tz = null; e.preventDefault(); el.focus(); }, { passive: false });
     var send = $('.ti-send'), fTa = fadeWatch(TA);
     TA.value = ss(K('tf_inq_draft')) || '';
     var sync = function () { send.classList.toggle('off', !TA.value.trim()); autosize(TA, 120); fTa(); ss(K('tf_inq_draft'), TA.value); };
@@ -394,8 +406,11 @@
     if (!R || !S.open) return;
     if (!mqPhone.matches && !PAGE) { P.style.height = ''; P.style.top = ''; return; }
     var v = window.visualViewport;
+    if (v && v.scale > 1.01) return;   // 확대 중엔 손대지 않음(확대를 키패드로 알고 창을 줄였다 늘였다 = 렉 — 확대는 막았지만 접근성 강제 확대 대비)
     var atEnd = TH.scrollTop + TH.clientHeight >= TH.scrollHeight - 30;
-    if (v && innerHeight - v.height > 60) { P.style.height = Math.round(v.height) + 'px'; P.style.top = Math.round(v.offsetTop) + 'px'; }   // 키보드 = 보이는 높이에 맞춤(§4.2-2)
+    var kb = !!v && (screen.height - v.height > 200 || innerHeight - v.height > 60);   // 키패드 = 화면 높이보다 보이는 높이가 크게 작음(레이아웃 높이가 같이 줄어도 잡힘 — 10-10 갤럭시 잘림)
+    R.classList.toggle('kb', kb);
+    if (kb) { P.style.height = Math.round(v.height) + 'px'; P.style.top = Math.round(v.offsetTop) + 'px'; }   // 키보드 = 보이는 높이에 맞춤(§4.2-2)
     else { P.style.height = ''; P.style.top = ''; }   // 키보드 없음 = 화면 끝까지(제스처 막대 자리 포함 — 어두운 막이 화면 전체를 덮게, 아래 vpCover)
     if (atEnd) scrollEnd();
     var a = document.activeElement;   // 줄어든 뒤 지금 적는 칸이 보이게(스크롤 위치만 — 치수는 흐름이 정한다)
@@ -714,6 +729,7 @@
     GAS = opts.gas || GAS; DEMO = !!opts.demo; PAGE = !!opts.page;
     if (!R) { build(); if (DEMO) demoPanel(); }
     if (S.open) return;
+    originToBtn();
     S.open = true; R.classList.add('on'); R.classList.toggle('page', PAGE);
     document.documentElement.classList.add('tfinq-open'); if (PAGE) document.documentElement.classList.add('tfinq-page');
     if (!PAGE) { try { history.pushState({ tfinq: 1 }, ''); } catch (e) {} }
@@ -734,8 +750,13 @@
     S.open = false; clearTimeout(pollT); hideResume();
     R.classList.remove('on'); closeSheet();
     document.documentElement.classList.remove('tfinq-open'); vpCover(false);
-    P.style.height = ''; P.style.top = '';
+    P.style.height = ''; P.style.top = ''; R.classList.remove('kb'); originToBtn();
     if (document.activeElement && R.contains(document.activeElement)) document.activeElement.blur();
+  }
+  function originToBtn() {   // 폰 = 창이 「문의하기」(왼쪽 아래)에서 나오고 그리로 들어감(유성 10-10 「좌하단으로 내려가야해」). PC·문자 링크 페이지는 CSS 값
+    if (!P) return;
+    var b = document.getElementById('tfInqBtn'), r = b && mqPhone.matches && !PAGE ? b.getBoundingClientRect() : null;
+    P.style.transformOrigin = r && r.width ? Math.round(r.left + r.width / 2) + 'px ' + Math.round(r.top + r.height / 2) + 'px' : '';
   }
 
   // ── 연습 화면(?inq=demo — 서버 없이, 수집 0) ──

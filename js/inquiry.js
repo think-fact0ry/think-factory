@@ -9,7 +9,7 @@
 (function () {
   'use strict';
   var OPEN = false;   // ← 모두에게 켜는 스위치(10-15 이후 유성 GO 때 true)
-  var PANE_SRC = '/js/inquiry-pane.js?v=2';   // 창 코드를 고치면 ?v= 올리기 — 여기 + c/index.html 두 곳(Pages 캐시 10분)
+  var PANE_SRC = '/js/inquiry-pane.js?v=3';   // 창 코드를 고치면 ?v= 올리기 — 여기 + c/index.html 두 곳(Pages 캐시 10분)
   var GAS = 'https://script.google.com/macros/s/AKfycbwUdo5pLFvgVxu_3EjspA6U6U196Hu-RzKcC0ucVwRPGMBP3oIQT2fKMK_7fvLmeOx9Gg/exec';
 
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
@@ -20,6 +20,9 @@
   if (q === '0') { ls('tf_inq', null); ss('tf_inq_demo', ''); }
   if (q === 'demo') ss('tf_inq_demo', '1');
   var demo = ss('tf_inq_demo') === '1';
+  var dg = (location.search.match(/[?&]diag=([01])/) || [])[1];   // 실기기 실측 상자(유성 폰, 이 탭에서만) — ?diag=1 켬 / ?diag=0 끔. 수집 0(화면에만)
+  if (dg) ss('tf_diag', dg);
+  if (ss('tf_diag') === '1') { var ds = document.createElement('script'); ds.src = '/js/inq-diag.js?v=1'; document.head.appendChild(ds); }
   if (!OPEN && ls('tf_inq') !== '1' && !demo) return;   // 켜기 전 = 아무것도 안 함(서버도 안 부름)
 
   var fab = document.querySelector('.fab');
@@ -38,7 +41,7 @@
     + '@keyframes tfInqShk{20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(1px)}}'
     // 폰 = 왼쪽 아래(오른쪽 아래 끝은 「맨 위로」 자리), 「맨 위로」가 나타날 때 같이 나타남(첫 화면엔 없음 — 「실시간 신청 소식」을 가린다, 유성 10-10)
     + '@media (max-width:760px){'
-    + '.fab .f.ask{position:fixed;left:14px;right:auto;bottom:14px;opacity:0;pointer-events:none;translate:0 8px;transition:opacity .25s,translate .3s cubic-bezier(.22,.7,.25,1),transform .12s,color .25s,border-color .25s,background-color .25s,box-shadow .25s}'
+    + '.fab .f.ask{position:fixed;left:14px;right:auto;bottom:calc(14px + env(safe-area-inset-bottom, 0px));opacity:0;pointer-events:none;translate:0 8px;transition:opacity .25s,translate .3s cubic-bezier(.22,.7,.25,1),transform .12s,color .25s,border-color .25s,background-color .25s,box-shadow .25s}'
     + '.fab .f.ask.vis{opacity:1;pointer-events:auto;translate:none}'
     // 상담 신청 페이지 = SNS 버튼과 같은 규칙(FAQ가 보일 때만) — 폼 아래쪽 버튼을 가리지 않게
     + 'body.apply-page .fab .ask{display:none}body.apply-page.faq-visible .fab .ask{display:flex}}';
