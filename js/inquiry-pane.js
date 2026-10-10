@@ -86,7 +86,7 @@
 
   // ── 상태 ──
   var R = null, P, TH, TA;
-  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '', saidMail: false };
+  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '' };
   var known = {};          // 화면에 그린 줄 번호
   var queue = [], sending = null;
   var pollT = 0, polling = false, lastChange = Date.now();
@@ -123,6 +123,7 @@
     '#tfInq .ti-th{flex:1 1 0;min-height:0;overflow-y:auto;padding:18px 16px 12px;display:flex;flex-direction:column;scrollbar-width:none;position:relative;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}',
     '#tfInq .ti-th::-webkit-scrollbar{width:0}',
     '#tfInq .ti-day,#tfInq .ti-sys{align-self:center;font-size:12px;color:var(--g600);margin:16px 0 0;text-align:center;line-height:1.5}',
+    '#tfInq .ti-sys{white-space:pre-line}',   // 안내 두 줄(메일 모드 + 번호)
     '#tfInq .ti-th>.ti-day:first-child{margin-top:0}',
     '#tfInq .ti-day+.ti-row{margin-top:12px}',
     '#tfInq .ti-row{display:flex;gap:6px;align-items:flex-end;max-width:100%;margin-top:16px}',
@@ -474,7 +475,7 @@
   function sys(text, cls) { var n = el('<div class="ti-sys ti-new' + (cls ? ' ' + cls : '') + '"></div>'); n.textContent = text; TH.appendChild(n); return n; }
 
   // ── 인사, 번호 카드, 모드 ──
-  var GREET = { chat: '안녕하세요, 생각공작소예요.\n궁금한 점을 편하게 남겨 주세요 ☺️', mail: '안녕하세요, 생각공작소예요.\n남겨 주시면 확인하는 대로\n문자 드릴게요 ☺️' };
+  var GREET = { chat: '안녕하세요, 생각공작소예요.\n궁금한 점을 편하게 남겨 주세요 ☺️', mail: '안녕하세요,\n생각공작소예요 ☺️' };
   function skel() {   // 모드·대화를 아직 모를 때 = 훑는 뼈대(§5.4)
     TH.innerHTML = '<div class="ti-sk" style="width:62%"></div><div class="ti-sk" style="width:48%;align-self:flex-end"></div><div class="ti-sk" style="width:70%"></div>';
     lastDay = ''; R.classList.remove('mailnew');
@@ -483,7 +484,6 @@
     TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.read = 0; S.more = false; S.noteMode = '';
     dayIf(new Date().toISOString());
     var g = rowEl('them', GREET[S.mode === 'chat' ? 'chat' : 'mail'], '', false); g.classList.add('greet');
-    S.saidMail = S.mode !== 'chat';   // 메일 인사가 이미 「문자 드릴게요」를 약속함 = 아래 문자 안내 줄 생략(채팅을 거치면 다시 띄움)
     R.classList.toggle('mailnew', S.mode !== 'chat');
     if (S.mode !== 'chat' && TA.value.trim() && !$('#tiTa2').value) { $('#tiTa2').value = TA.value; TA.value = ''; }   // 뼈대 동안 채팅 칸에 쓴 글은 메일 칸으로 옮겨 준다
     if (S.mode === 'chat' && !S.hasPhone && !S.phonePending) numCard();
@@ -497,7 +497,6 @@
   function setMode(m) {
     if (!m) return;
     var was = S.mode; S.mode = m; applyMode(m);
-    if (m === 'chat') S.saidMail = false;
     if (!S.key && !S.sentFresh) {   // 아직 아무것도 안 보낸 새 문의 = 인사와 입력 칸을 모드에 맞게 다시
       if (was !== m) freshView();
       return;
@@ -511,9 +510,9 @@
     var old = TH.querySelector('.ti-sys.mode'); if (old) old.remove();
     var oldNc = TH.querySelector('.ti-nc.bymode:not(.done)'); if (oldNc && want !== 'mail') oldNc.remove();
     S.noteMode = want;
-    if (want === 'mailphone') { if (!S.saidMail) sys('답은 문자로 보내 드릴게요', 'mode'); }   // 유성 10-10 대안 1. 메일로 처음 보낸 방은 인사와 겹쳐 안 띄움
+    if (want === 'mailphone') sys('지금은 채팅 시간이 아니에요\n이어서 남겨 주시면 문자로 답해 드릴게요 :)', 'mode');   // 유성 10-10 확정 — 「:)」 = 위 인사 ☺️와 겹치지 않게(유성). 메일 인사가 문자 약속을 뺐으니 메일로 처음 보낸 방에도 띄움
     // 메일 모드 + 번호 없음 = 번호 카드(이미 떠 있으면 그대로, 이 창에서 한 번만)
-    else if (want === 'mail') { sys('지금은 바로 답하기 어려워요', 'mode'); if (!TH.querySelector('.ti-nc') && !S.mailNc) { S.mailNc = true; numCard(true); } }
+    else if (want === 'mail') { sys('지금은 채팅 시간이 아니에요', 'mode'); if (!TH.querySelector('.ti-nc') && !S.mailNc) { S.mailNc = true; numCard(true); } }
     scrollEnd();
   }
   function numCard(byMode) {
@@ -630,7 +629,7 @@
     R.classList.remove('mailnew');
     read({ action: 'v_load', key: S.key }).then(function (r) {
       if (!r || !r.ok) { if (r && r.code === 'gone') return gone(); return loadFail(); }
-      TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = ''; S.saidMail = false;   // 이어보기엔 인사가 없음
+      TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = '';
       S.hasPhone = !!r.hasPhone; S.more = !!r.more; S.read = r.read || 0; S.loaded = S.key;
       (r.msgs || []).forEach(function (m) { addMsg(m, false); });
       markRead(); setMode(r.mode || S.mode || 'mail'); noteForMode(); scrollEnd();
