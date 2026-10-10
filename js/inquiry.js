@@ -9,7 +9,7 @@
 (function () {
   'use strict';
   var OPEN = false;   // ← 모두에게 켜는 스위치(10-15 이후 유성 GO 때 true)
-  var PANE_SRC = '/js/inquiry-pane.js?v=5';   // 창 코드를 고치면 ?v= 올리기 — 여기 + c/index.html 두 곳(Pages 캐시 10분)
+  var PANE_SRC = '/js/inquiry-pane.js?v=6';   // 창 코드를 고치면 ?v= 올리기 — 여기 + c/index.html 두 곳(Pages 캐시 10분)
   var GAS = 'https://script.google.com/macros/s/AKfycbwUdo5pLFvgVxu_3EjspA6U6U196Hu-RzKcC0ucVwRPGMBP3oIQT2fKMK_7fvLmeOx9Gg/exec';
 
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }

@@ -86,7 +86,7 @@
 
   // ── 상태 ──
   var R = null, P, TH, TA;
-  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '' };
+  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '', saidMail: false };
   var known = {};          // 화면에 그린 줄 번호
   var queue = [], sending = null;
   var pollT = 0, polling = false, lastChange = Date.now();
@@ -158,6 +158,7 @@
     '#tfInq .ti-nc{align-self:stretch;background:#fff;border:1px solid var(--g200);border-radius:16px;padding:16px 14px 14px;margin-top:8px;box-shadow:0 1px 3px rgba(25,31,40,.06)}',
     '#tfInq .ti-nc .t1{font-size:15px;font-weight:700;margin-bottom:6px}',
     '#tfInq .ti-nc .t2{font-size:13.5px;color:var(--g700);margin-bottom:10px}',
+    '#tfInq .ti-nc.ti-info{padding:16px 14px}#tfInq .ti-nc.ti-info .t2{margin-bottom:0}',   // 메일 모드 첫 화면 안내 상자 = 번호 카드의 글만(칸·남기기 없음, 유성 10-10)
     '#tfInq .ti-line{display:flex;gap:8px;align-items:flex-end}',
     '#tfInq .ti-inp{flex:1;min-width:0;background:var(--g100);border:1.5px solid transparent;border-radius:12px;padding:11px 12px;font-size:16px;font-family:inherit;color:var(--g900);outline:none;caret-color:var(--green600);transition:background .15s,border-color .15s;-webkit-user-select:text;user-select:text}',
     '#tfInq .ti-inp::placeholder{color:var(--g500)}',
@@ -476,6 +477,7 @@
 
   // ── 인사, 번호 카드, 모드 ──
   var GREET = { chat: '안녕하세요, 생각공작소예요.\n궁금한 점을 편하게 남겨 주세요 ☺️', mail: '안녕하세요,\n생각공작소예요 ☺️' };
+  var MAIL_NOTE = '지금은 채팅 시간이 아니에요\n문의를 남겨 주시면\n문자로 답해 드릴게요 :)';   // 메일 모드 첫 화면 둘째 말풍선(세 줄 = 말풍선 폭에서 「답해/드릴게요」로 끊기지 않게)(유성 10-10 — 「:)」 = 위 ☺️와 안 겹치게)
   function skel() {   // 모드·대화를 아직 모를 때 = 훑는 뼈대(§5.4)
     TH.innerHTML = '<div class="ti-sk" style="width:62%"></div><div class="ti-sk" style="width:48%;align-self:flex-end"></div><div class="ti-sk" style="width:70%"></div>';
     lastDay = ''; R.classList.remove('mailnew');
@@ -484,6 +486,11 @@
     TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.read = 0; S.more = false; S.noteMode = '';
     dayIf(new Date().toISOString());
     var g = rowEl('them', GREET[S.mode === 'chat' ? 'chat' : 'mail'], '', false); g.classList.add('greet');
+    S.saidMail = S.mode !== 'chat';
+    if (S.saidMail) {   // 메일 모드 = 처음 보이는 것 말풍선 2 + 상자 1(유성 10-10 「전화번호를 넣어야하는 설명문구 같은게 없어서」)
+      rowEl('them', MAIL_NOTE, '', false).classList.add('greet');
+      TH.appendChild(el('<div class="ti-nc ti-info"><div class="t1">창을 닫아도 답을 받을 수 있어요</div><div class="t2">휴대폰 번호를 남겨 주시면 문자로 답해 드려요.</div></div>'));
+    }
     R.classList.toggle('mailnew', S.mode !== 'chat');
     if (S.mode !== 'chat' && TA.value.trim() && !$('#tiTa2').value) { $('#tiTa2').value = TA.value; TA.value = ''; }   // 뼈대 동안 채팅 칸에 쓴 글은 메일 칸으로 옮겨 준다
     if (S.mode === 'chat' && !S.hasPhone && !S.phonePending) numCard();
@@ -497,6 +504,7 @@
   function setMode(m) {
     if (!m) return;
     var was = S.mode; S.mode = m; applyMode(m);
+    if (m === 'chat') S.saidMail = false;   // 채팅을 거치면 다음 메일 전환 땐 가운데 안내 줄을 다시 띄운다
     if (!S.key && !S.sentFresh) {   // 아직 아무것도 안 보낸 새 문의 = 인사와 입력 칸을 모드에 맞게 다시
       if (was !== m) freshView();
       return;
@@ -510,9 +518,9 @@
     var old = TH.querySelector('.ti-sys.mode'); if (old) old.remove();
     var oldNc = TH.querySelector('.ti-nc.bymode:not(.done)'); if (oldNc && want !== 'mail') oldNc.remove();
     S.noteMode = want;
-    if (want === 'mailphone') sys('지금은 채팅 시간이 아니에요\n이어서 남겨 주시면 문자로 답해 드릴게요 :)', 'mode');   // 유성 10-10 확정 — 「:)」 = 위 인사 ☺️와 겹치지 않게(유성). 메일 인사가 문자 약속을 뺐으니 메일로 처음 보낸 방에도 띄움
+    if (want === 'mailphone') { if (!S.saidMail) sys('지금은 채팅 시간이 아니에요\n이어서 남겨 주시면 문자로 답해 드릴게요 :)', 'mode'); }   // 채팅하다 메일로 바뀐 방 + 번호. 메일로 처음 연 방은 둘째 말풍선이 같은 말이라 안 띄움(유성 10-10 「중앙 글자 x 삭제」)
     // 메일 모드 + 번호 없음 = 번호 카드(이미 떠 있으면 그대로, 이 창에서 한 번만)
-    else if (want === 'mail') { sys('지금은 채팅 시간이 아니에요', 'mode'); if (!TH.querySelector('.ti-nc') && !S.mailNc) { S.mailNc = true; numCard(true); } }
+    else if (want === 'mail') { sys('지금은 채팅 시간이 아니에요', 'mode'); if (!TH.querySelector('.ti-nc:not(.ti-info)') && !S.mailNc) { S.mailNc = true; numCard(true); } }
     scrollEnd();
   }
   function numCard(byMode) {
@@ -629,7 +637,7 @@
     R.classList.remove('mailnew');
     read({ action: 'v_load', key: S.key }).then(function (r) {
       if (!r || !r.ok) { if (r && r.code === 'gone') return gone(); return loadFail(); }
-      TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = '';
+      TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = ''; S.saidMail = false;   // 이어보기엔 첫 화면 말풍선이 없음
       S.hasPhone = !!r.hasPhone; S.more = !!r.more; S.read = r.read || 0; S.loaded = S.key;
       (r.msgs || []).forEach(function (m) { addMsg(m, false); });
       markRead(); setMode(r.mode || S.mode || 'mail'); noteForMode(); scrollEnd();
