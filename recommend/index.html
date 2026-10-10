@@ -81,5 +81,6 @@
 // 폼(iframe) 대기 화면 = /js/form-wait.js — 폼의 ready(브릿지)로 뼈대를 걷고, 늦으면 문구·끊김 알림·다시 불러오기를 뼈대 위에 띄운다.
 if (window.tfFormWait) window.tfFormWait({ frame: document.querySelector('.rc-frame'), skel: document.getElementById('applySkel'), card: document.querySelector('#applySkel .sk-card'), obj: '신청서를' });
 </script>
+<script>if (/[?&]kbd=1/.test(location.search)) { var s = document.createElement('script'); s.src = '/js/kbd-diag.js'; document.body.appendChild(s); }</script>   <!-- 키보드 실기기 진단(?kbd=1일 때만, js/kbd-diag.js 머리말) -->
 </body>
 </html>
