@@ -71,8 +71,8 @@ img{ max-width:100%; display:block; }
 .nav a.menu{ font-size:15px; font-weight:600; color:var(--g700); padding:6px 2px; }
 .nav a.menu:hover{ color:var(--g900); }
 .nav a.menu.on{ color:var(--green-dark); }   /* 15px 글자 = 본문 4.5 기준 → green700(6.79). green600은 4.22 미달 (§3.1 2026-08-03) */
-.nav a.cta{ font-size:14px; font-weight:700; color:#fff; background:var(--green-dark); padding:9px 16px; border-radius:var(--r-sm); transition:transform .08s; }   /* 흰 글자 14px = 4.5 기준 → 채움 green700(6.79) */
-.nav a.cta:active{ transform:scale(.97); background:var(--green800); }
+.nav a.cta{ font-size:14px; font-weight:700; color:#fff; background:var(--green); padding:9px 16px; border-radius:var(--r-sm); transition:transform .08s; }   /* ⚠️대비 예외: 채움 green600 + 흰 14px = 4.22(4.5 미달)를 알고 고름(유성 2026-10-10 「우상단만 green600」, 프리뷰 3안 중 ①). 히어로 .btn.fill·.drawer a.dcta는 green700 유지 — 이 버튼 하나만 예외. docs/1 §3.1 대비 */
+.nav a.cta:active{ transform:scale(.97); background:var(--green-dark); }   /* 누름 = green700(green600의 active 칸, §3.1 스케일) */
 @media (max-width:600px){ .nav a.menu{ display:none; } }   /* 600: 태블릿(~700px CSS폭)은 PC 내비, 폰만 햄버거 (유성 2026-06-29 태블릿=PC) */
 
 /* ── 첫 화면(fold): nav(60px) 제외한 한 화면을 hero+실시간 띠가 꽉 채움 ── */
