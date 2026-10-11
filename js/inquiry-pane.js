@@ -178,6 +178,8 @@
     '#tfInq .ti-view iframe{width:min(920px,100%);height:100%;border:0;border-radius:8px;background:#fff}',
     '#tfInq .ti-vx{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}',
     '#tfInq .ti-vx svg{width:22px;height:22px}',
+    '#tfInq .ti-vx{transition:transform .12s}',
+    '#tfInq .ti-vx:active{transform:scale(.86)}',   // §5.3 — 누른 X만 잠깐 작아진다(유성 10-11 행정 앱 같은 X 「x 버튼만 버튼처럼 축소」)
     '#tfInq .ldd{display:inline-flex;gap:3px;margin-left:5px;vertical-align:middle}#tfInq .ldd i{width:4px;height:4px;border-radius:50%;background:currentColor;animation:tiLdb 1s ease-in-out infinite}#tfInq .ldd i:nth-child(2){animation-delay:.16s}#tfInq .ldd i:nth-child(3){animation-delay:.32s}',   // §5.2 출렁점
     '@keyframes tiLdb{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-3px);opacity:1}}',
     // 번호 카드
