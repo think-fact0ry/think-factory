@@ -2,80 +2,705 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<!-- interactive-widget=resizes-content(2026-10-10): /monitoring과 같은 이유 — 없으면 키보드가 내려간 뒤 iframe 터치가 위아래로 어긋난다(유성 실기기, 그 주석 참조) -->
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>안전교육 — 생각공작소</title>
 <meta name="robots" content="noindex">
-<!-- ⚠️ 카톡 인앱 = 상하단 바가 설문을 가림(§3.7) → 기본 브라우저로 탈출(유성 2026-07-08). iframe 로드보다 먼저 head에서 실행.
-     탈출되면 기본 브라우저에서 이 페이지가 다시 열려 아래 iframe이 정상 렌더. 기본 브라우저 UA엔 KAKAOTALK 없어 재탈출 루프 없음. -->
+<!--
+  think-factory.kr/safety — 이용자 안전교육 카드 덱(2026-10-11, 유성 「2 카드 덱」 확정 → 실제 화면). 옛 14 GAS ?mode=safety iframe 래퍼를 갈아 끼움.
+  입구 = 07 안전교육 알림톡 버튼 「안전교육 보기」 → /safety?for=child|adult&k=#{키}(주소는 템플릿 심사본에 박힘 → 바꾸면 재심사) / 대체문자 = 열쇠 없이 ?for=만.
+  서버 = 14 웹앱 doPost(safe_open / safe_done / safe_warm, Code.js 맨 끝 절). 이름은 서버가 돌려주지 않고 화면에도 없다
+  (열쇠 GO 때 약속 — 링크가 전달돼도 아이 이름, 상담 이용 사실이 안 드러나게). 열쇠 없으면 끝에서 이름 + 생년월일.
+  정본 화면 = prototype/안전교육_웹_E디자인_화면.html(디자인 라운드는 거기서, 여기는 실서비스 판). 원칙 = docs/1 §5.7(다음 유도), §4.11(뒤로), §4.13-6(아래 띠).
+  ?demo=1 = 서버 없이 화면만(헤드리스 확인용, &mom=1 = 엄마 카드) / ?at=N = 그 장 바로. ⚠️ 사용자 문구에 가운뎃점(U+00B7) 금지.
+-->
 <script>
-  if (/KAKAOTALK/i.test(navigator.userAgent)) {
-    location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
-  }
+// 카톡 인앱 브라우저 = 상하단 바가 카드와 버튼을 가린다 → 기본 브라우저로(/monitoring, /recommend와 같은 결, 유성 2026-07-08)
+(function(){ if (/KAKAOTALK/i.test(navigator.userAgent) && !/demo=1/.test(location.search)) location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href); })();
 </script>
-<!-- 안전교육 확인(2026-10-01). think-factory.kr/safety → 14_모니터링설문 GAS 웹앱 ?mode=safety(Safety.html)를 iframe 임베드.
-     /monitoring 페이지 복제 — 07 안전교육 알림톡 버튼 주소(템플릿 심사본에 박힘 → 주소를 바꾸면 템플릿 재심사).
-     뼈대 문구는 Safety.html 게이트와 같아야 한다(0-9). 아래는 /monitoring 원문 설명:
-     리다이렉트(=주소가 script.google.com으로 바뀌고 구글 배너 노출) 대신 임베드라 주소·배너 깨끗.
-     14 doGet이 XFrameOptionsMode.ALLOWALL이라 프레임 허용됨(contact.html이 06을 같은 방식으로 임베드).
-     이동 대상이 바뀌면 아래 EXEC 한 줄만 교체. (옛 /m 리다이렉트는 레거시 — 새 발송은 /monitoring 사용) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- 폼이 오기 전 수 초(GAS 콜드스타트): 백지 대신 폼 첫 화면(신원 게이트)과 같은 자리의 뼈대 + 훑기 모션(§5.4, 2026-10-01 유성 — /contact와 같은 결).
-     뼈대 = 폼 게이트를 같은 CSS 값으로 조판 복제(실제 문구를 투명 글자로 깔아 폰에서 줄이 바뀌어도 높이가 같다). PC 폰 목업(§3.8)도 같은 치수로.
-     기다림 문구·연결 끊김 알림·다시 불러오기 = /js/form-wait.js(뼈대 *위*에 겹침, 위치 불변). 폼이 ready를 보내면 걷힌다(body.form-ready).
-     ⚠️ 폼 게이트 문구·치수(GAS Index.html .wrap·.intro-card·.tfield·.btn·§3.8 목업)를 바꾸면 여기도(0-9). -->
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
-  .apply-skel{ --g100:#f2f4f6; --g200:#e5e8eb; position:fixed; inset:0; z-index:1; background:#f7f5f1; overflow:hidden; font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif; line-height:1.6; word-break:keep-all; color:transparent; -webkit-text-size-adjust:100%; }
-  .apply-skel *{ box-sizing:border-box; }
-  .apply-skel .sk-wrap{ max-width:460px; margin:0 auto; height:100%; display:flex; flex-direction:column; padding:20px 18px 26px; }
-  .apply-skel .sk-card{ background:#fff; border-radius:clamp(13px,3.2vw,20px); padding:26px 22px; box-shadow:0 2px 12px rgba(0,0,0,.05); }
-  .apply-skel .sk-t{ background:var(--g100); color:transparent; border-radius:6px; -webkit-box-decoration-break:clone; box-decoration-break:clone; position:relative; top:2px; }
-  .apply-skel .sk-chip{ display:inline-block; font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; background:var(--g100); margin-bottom:14px; }
-  .apply-skel .sk-h1{ font-size:clamp(23px,3.4vw,30px); font-weight:700; letter-spacing:-.5px; margin:0 0 11px; line-height:1.3; }
-  .apply-skel .sk-h1 .em{ font-weight:400; }
-  .apply-skel .sk-lead{ font-size:14.5px; margin:0 0 20px; letter-spacing:-.2px; line-height:1.6; }
-  .apply-skel .sk-f{ margin-bottom:15px; } .apply-skel .sk-f.last{ margin-bottom:6px; }
-  .apply-skel .sk-f .lb{ display:block; font-size:12.5px; font-weight:600; margin:0 0 5px; }
-  .apply-skel .sk-f .in{ border-bottom:2px solid var(--g200); font-size:18px; font-weight:500; line-height:1.5; letter-spacing:-.2px; padding:2px 34px 3px 0; }
-  .apply-skel .sk-sib{ font-size:14px; font-weight:600; text-align:center; padding:14px 4px 2px; margin-top:8px; }
-  .apply-skel .sk-note{ font-size:13px; text-align:center; margin:14px 2px 0; line-height:1.5; }
-  .apply-skel .sk-sp{ flex:1; min-height:18px; }
-  .apply-skel .sk-btn{ flex-shrink:0; padding:16px; border-radius:15px; font-size:16px; font-weight:700; line-height:1.5; letter-spacing:-.3px; text-align:center; background:var(--g100); margin-top:14px; }
-  @media (min-width:480px) and (hover:hover) and (pointer:fine){
-    .apply-skel{ background:var(--g200); padding-top:19px; }
-    .apply-skel .sk-wrap{ max-width:min(460px,calc(100% - 38px)); background:#f7f5f1; border-radius:40px 40px 0 0; box-shadow:0 8px 20px rgba(25,31,40,.15); overflow:hidden; }
+  :root{
+    --g50:#f9fafb; --g100:#f2f4f6; --g200:#e5e8eb; --g300:#d1d6db; --g400:#b0b8c1; --g500:#8b95a1; --g600:#6b7684; --g700:#4e5968; --g800:#333d4b; --g900:#191f28;
+    --green50:#f8fbf9; --green100:#e9f8ee; --green200:#cef2db; --green300:#a7e7c0; --green400:#7bcb9c; --green500:#57a77a; --green600:#3a8a5f; --green700:#166841; --green800:#01492a;
+    --green:var(--green600); --green-dark:var(--green700);
+    --warn:#f5a623; --warn-weak-bg:#fef4e2; --warn-weak-fg:#8a5a00; --dark:#525966;
+    --p-disabled:#b7e0c8; --ink-on-dark:#F9FBFA;
+    --r-sm:clamp(7px,1.8vw,10px); --r-md:clamp(10px,2.6vw,14px); --r-lg:clamp(13px,3.2vw,20px);
+    --fs-h1:clamp(23px,3.4vw,30px); --fs-h2:clamp(20px,2.6vw,26px); --fs-title:17px; --fs-body:15px;
+    --beige:#f7f5f1; --cream:#fbf7ef;
+    /* 그림자 — kr site.css 그린틴트 2겹(§3.4). 버튼은 한 단 진하게(램프 상한 안) */
+    --sh1:0 1px 2px rgba(47,111,77,.05), 0 4px 14px rgba(47,111,77,.06);
+    --sh2:0 2px 8px rgba(47,111,77,.08), 0 12px 30px rgba(47,111,77,.12);
+    --sh-btn:0 1px 2px rgba(47,111,77,.10), 0 6px 16px rgba(47,111,77,.12);
+    --red:#f04452;   /* 에러 상태(§3.1) — 끝 이름 칸 */
+    /* 스크롤 그라디언트 §4.13-6(§3.1 정본 값) — 아래쪽만(위쪽 띠는 14, 16처럼 뺌: 글자 위에 얹히면 막으로 읽힘) */
+    --sf-bot:linear-gradient(to bottom,rgba(22,104,65,0) 0%,rgba(22,104,65,.055) 100%),
+             linear-gradient(to bottom,rgba(22,104,65,0) 58%,rgba(22,104,65,.115) 100%);
   }
-  body.form-ready .apply-skel{ display:none; }
-</style>
-<script src="/js/form-wait.js"></script>
-<style>
-  html, body { height: 100%; margin: 0; background: #f7f5f1; }
-  iframe { border: 0; width: 100%; height: 100%; display: block; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; height:100%; background:var(--beige); }
+  body{ font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif; color:var(--g900); line-height:1.6;
+    -webkit-text-size-adjust:100%; word-break:keep-all; -webkit-font-smoothing:antialiased; overscroll-behavior:none;
+    -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; cursor:default; }
+  input{ -webkit-user-select:text; user-select:text; -webkit-touch-callout:default; cursor:text; }
+  img{ -webkit-user-drag:none; user-select:none; pointer-events:none; }
+  .wrap{ max-width:460px; margin:0 auto; min-height:100%; display:flex; flex-direction:column; padding:20px 18px 22px; position:relative; }
+  .scr{ display:none; flex-direction:column; flex:1; }
+  .scr.on{ display:flex; }
+  .spacer{ flex:1; min-height:18px; }
+
+  /* ── 버튼(14 Index 실코드 + ripple §5.3) ── */
+  .btn{ flex-shrink:0; width:100%; padding:16px; border:none; border-radius:15px; font-family:inherit; line-height:1.5;
+    font-size:16px; font-weight:700; color:#fff; background:var(--green); cursor:pointer;
+    transition:background .2s, transform .1s; letter-spacing:-.3px; position:relative; overflow:hidden; }
+  .btn:active{ background:var(--green-dark); transform:scale(.97); }
+  .btn .bl{ position:relative; z-index:1; }
+  .btn .rip{ position:absolute; z-index:0; width:30px; height:30px; margin:-15px 0 0 -15px; border-radius:50%; background:rgba(0,0,0,.20); pointer-events:none; transform:scale(0); }
+  .btn .rip.go{ transform:scale(var(--rs,16)); opacity:0; transition:transform .46s ease-out, opacity .46s ease-out; }
+  .btn:disabled{ background:var(--p-disabled); color:#fff; }
+  .btn:disabled:active{ background:var(--p-disabled); transform:none; }
+  .btn.gate{ background:var(--p-disabled); }   /* 아직 못 눌러요(§4.1-5 게이팅 색) — disabled 대신 클래스: 눌렀을 때 흔들림이 확실히 온다 */
+  .btn.gate:active{ background:var(--p-disabled); transform:none; }
+  .shake{ animation:shakeX .28s cubic-bezier(.36,.07,.19,.97); }
+  @keyframes shakeX{20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(1px)}}
+  .foot{ flex-shrink:0; padding-top:16px; position:relative; }
+
+  /* ── 위 띠: ← + 묶음별 진행 막대(묶음 사이 간격이 더 넓다) + 장 수 ── */
+  .top{ display:flex; align-items:center; gap:10px; height:38px; margin:-6px 0 6px; flex-shrink:0; position:relative; z-index:6; }
+  .nav-arrow{ flex:0 0 auto; width:34px; height:34px; border:none; background:transparent; cursor:pointer; padding:0;
+    display:flex; align-items:center; justify-content:center; color:var(--g700); border-radius:8px; margin-left:-6px; transition:transform .12s; }
+  .nav-arrow:active{ transform:scale(.9); }
+  .nav-arrow svg{ width:22px; height:22px; }
+  .segs{ flex:1; display:flex; gap:8px; }
+  .segs .sg{ display:flex; gap:3px; }
+  .segs i{ flex:1; height:4px; border-radius:2px; background:var(--g200); transition:background .25s; }
+  .segs i.on{ background:var(--green); }
+  .cnt{ flex:0 0 auto; font-size:13px; font-weight:600; color:var(--g600); min-width:34px; text-align:right; font-variant-numeric:tabular-nums; }
+
+  /* 묶음 뱃지 — 흰 카드 안이라 weak 면이 보인다(§4.15). 베이지 위에는 두지 않는다(유성 10-10) */
+  .gchip{ display:inline-block; font-size:12.5px; font-weight:700; padding:4px 11px; border-radius:99px; letter-spacing:-.2px; }
+  .gchip.kid, .gchip.before{ background:var(--green100); color:var(--green-dark); }
+  .gchip.parent{ background:var(--warn-weak-bg); color:var(--warn-weak-fg); }
+  .gchip.teacher, .gchip.act{ background:var(--g100); color:var(--dark); }
+  .gchip.adult{ background:var(--g100); color:var(--g700); }
+
+  /* ── 그림 칸 — 최종 GPT 그림은 4:3 한 장. 지금은 대역이라 가운데 놓고 1.5배까지만 키운다 ── */
+  .pic{ display:flex; align-items:center; justify-content:center; background:var(--cream); overflow:hidden; }
+  .pic img{ display:block; max-width:100%; max-height:100%; object-fit:contain; }
+
+  /* ── 글 ── */
+  .ttl{ font-size:var(--fs-h1); font-weight:700; letter-spacing:-.5px; line-height:1.32; }
+  .lines{ font-size:17px; color:var(--g700); line-height:1.6; letter-spacing:-.2px; }
+  .lines p{ margin:0; } .lines p + p{ margin-top:6px; }
+  .topic{ font-size:14px; font-weight:700; color:var(--g600); margin:12px 0 4px; }
+  .stmt{ font-size:var(--fs-h2); font-weight:700; letter-spacing:-.4px; line-height:1.4; }
+  .hint{ font-size:14px; font-weight:700; color:var(--green); margin:8px 0 0; }
+
+  /* ── O/X — 흰 채움 + 그린틴트 2겹 그림자(유성 10-10, §4.9 「밝은 캔버스 위 옵션 = 흰 채움 + 그림자」) ── */
+  .ox{ display:grid; grid-template-columns:1fr 1fr; gap:12px; flex-shrink:0; }
+  .ox button{ height:84px; border:none; border-radius:var(--r-lg); background:#fff; color:var(--g800); box-shadow:var(--sh-btn); cursor:pointer; font-family:inherit;
+    display:flex; align-items:center; justify-content:center; position:relative; transition:transform .1s, background .2s, color .2s, box-shadow .2s, opacity .2s; }
+  .ox button:active{ transform:scale(.96); box-shadow:var(--sh1); }
+  .ox button svg{ width:40px; height:40px; fill:none; stroke:currentColor; stroke-width:3.4; stroke-linecap:round; }
+  .ox button.right{ background:var(--green500); color:var(--ink-on-dark); box-shadow:none; }
+  .ox button.mine{ background:var(--g600); color:var(--ink-on-dark); box-shadow:none; }
+  .ox button.dim{ opacity:.45; box-shadow:none; }
+  .ox.answered button{ pointer-events:none; }
+  .ox button .tag{ position:absolute; top:8px; right:11px; font-size:12.5px; font-weight:700; color:var(--ink-on-dark); }
+
+  /* 답(카드 뒷면) */
+  .res{ display:flex; align-items:center; gap:8px; font-size:24px; font-weight:700; letter-spacing:-.3px; margin:0 0 12px; color:var(--g900); }
+  .res.ok{ color:var(--green-dark); }
+  .res .rc{ width:30px; height:30px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; flex:0 0 auto; }
+  .res .rc svg{ width:17px; height:17px; stroke:#fff; stroke-width:3; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .ansl p{ margin:0; font-size:17px; color:var(--g700); line-height:1.6; } .ansl p + p{ margin-top:6px; }
+
+  /* ── 줄 목록 — 굵은 한 마디 + 한 줄(그림은 위 한 장, §3.5) ── */
+  .rw{ padding:12px 0; border-top:1px solid var(--g100); }
+  .rw:first-child{ border-top:none; padding-top:4px; }
+  .rw b{ display:block; font-size:16.5px; font-weight:700; color:var(--g900); letter-spacing:-.3px; line-height:1.4; }
+  .rw span{ display:block; font-size:15px; color:var(--g700); line-height:1.5; margin-top:2px; }
+  .kv{ display:flex; gap:12px; align-items:baseline; font-size:14.5px; margin:2px 0 0; padding-top:12px; border-top:1px solid var(--g100); }
+  .kv .k{ flex:0 0 auto; color:var(--g600); font-weight:600; } .kv .v{ color:var(--g800); font-weight:600; }
+
+  /* ── 순서 줄(다치면) ── */
+  .tl{ list-style:none; margin:0; padding:0; }
+  .tl li{ display:flex; align-items:center; gap:14px; position:relative; padding:9px 0; }
+  .tl li:not(:last-child)::before{ content:''; position:absolute; left:13px; top:calc(50% + 15px); height:calc(100% - 30px); width:2px; border-radius:1px; background:var(--green200); }
+  .tl .num{ flex:0 0 auto; width:28px; height:28px; border-radius:50%; background:var(--green); color:#fff; font-size:14px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .tl .tx{ font-size:16.5px; font-weight:600; color:var(--g900); line-height:1.45; letter-spacing:-.3px; }
+
+  /* ── 위기 전화 줄(14 Safety.html .tel-row 실코드) + 성인 칸 ── */
+  .ab{ padding:14px 0; border-top:1px solid var(--g100); } .ab:first-child{ border-top:none; padding-top:2px; } .ab:last-child{ padding-bottom:2px; }
+  .ab h3{ font-size:16.5px; font-weight:700; letter-spacing:-.3px; margin:0 0 4px; }
+  .ab p{ margin:0; font-size:15px; color:var(--g700); line-height:1.6; }
+  .tel-row{ display:flex; align-items:center; gap:10px; margin:10px 0 0; padding:11px 13px; border-radius:12px; background:var(--g50); text-decoration:none; color:inherit; transition:transform .12s; }
+  .tel-row:active{ transform:scale(.98); }
+  .tel-row + .tel-row{ margin-top:7px; }
+  .tel-row .tn{ font-size:16px; font-weight:800; color:var(--green-dark); letter-spacing:-.2px; min-width:82px; }
+  .tel-row .tl2{ font-size:13.5px; color:var(--g700); line-height:1.45; }
+
+  /* ── 카드 덱 — 카드가 남은 높이를 다 채운다 + 뒤에 카드 두 장이 비친다 + 뒤집어서 답 ── */
+  .stage{ flex:1; display:flex; flex-direction:column; position:relative; min-height:0; }
+  .card{ display:flex; flex-direction:column; flex:1; }
+  .dkwrap{ position:relative; flex:1; display:flex; flex-direction:column; }
+  .dk{ position:relative; z-index:2; flex:1; display:flex; flex-direction:column; perspective:1400px; touch-action:pan-y; margin-bottom:18px; transition:transform .26s cubic-bezier(.22,.85,.25,1), opacity .26s; }
+  .dk.drag{ transition:none; }
+  .dk.rise{ animation:rise .34s cubic-bezier(.22,.85,.25,1) both; }
+  @keyframes rise{ from{ transform:translateY(16px) scale(.955); opacity:.5; } to{ transform:none; opacity:1; } }
+  .dk.fly{ transform:translateX(-125%) rotate(-9deg) !important; opacity:0; }
+  /* 앞, 뒤 두 면을 같은 칸에 겹친다 → 카드 높이 = 둘 중 긴 쪽. 뒷면 설명이 길어도(작은 폰, 글자 키움, 가로) 잘리지 않는다 */
+  .dk-in{ position:relative; flex:1; display:grid; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.3,.7,.25,1); }
+  .dk.flip .dk-in{ transform:rotateY(180deg); }
+  .face{ background:#fff; border-radius:22px; box-shadow:var(--sh2); overflow:hidden; display:flex; flex-direction:column; -webkit-backface-visibility:hidden; backface-visibility:hidden; }
+  .face{ grid-area:1 / 1; }
+  .face.back{ transform:rotateY(180deg); }
+  .dk-pic{ flex:1 1 0; min-height:18svh; }   /* 남은 높이를 그림 칸이 다 가진다(상한 없음). 줄이 많은 장은 그림이 줄어 「다음」이 화면 안에 남게 — 바닥만 화면 높이 비례 */
+  .dk-body{ padding:16px 20px 20px; flex-shrink:0; }
+  .dk-body .ttl{ margin:12px 0 16px; }
+  .face.back .dk-body{ flex:1; display:flex; flex-direction:column; padding:26px 24px; }
+  .face.back .bmain{ margin:auto 0; }
+  .flipnote{ padding-top:18px; font-size:13px; font-weight:600; color:var(--g500); text-align:center; }
+  .peek{ position:absolute; z-index:1; left:14px; right:14px; bottom:9px; height:70px; background:#fff; border-radius:20px; opacity:.7; box-shadow:var(--sh1); }
+  .peek.p2{ left:30px; right:30px; bottom:0; opacity:.42; z-index:0; }
+
+  /* ── 표지 — 그림 = 포스터 앞면(유성 10-11) ── */
+  /* 포스터 = 늘 통째로(유성 10-11 2차 「너무 커, 아래가 끊기지 않게」 — 1차의 폭 채우고 아래 흐리게 자르기는 폐기).
+     크기 = 카드 폭의 72%(비율이라 화면 따라 같이 큼, 고정 px 상한 없음 — 1차 「max 걸지 말고」 유지).
+     화면이 짧으면 칸이 줄어 포스터도 같이 준다 — 글, 버튼이 먼저. 화면이 길어 남는 높이는 글 칸이 가진다(아래 .cv-body).
+     칸 = size 컨테이너(제 내용으로 카드를 키우지 않음 — 앞뒤 면 grid 겹침이 카드를 내용만큼 키우기 때문). 칸 높이 천장 = 포스터가 카드 폭 72%일 때 높이(카드 cqw 기준) */
+  .face.cv{ container:card / inline-size; }
+  .cv-art{ flex:1 1 0; min-height:26svh; max-height:calc(72cqw * 1009 / 720 + 32px); container:art / size; display:flex; align-items:center; justify-content:center; overflow:hidden; background:var(--cream); }
+  .cv-art img{ display:block; width:min(calc(100cqw - 32px), calc((100cqh - 32px) * 720 / 1009)); height:auto; border-radius:6px; box-shadow:0 1px 3px rgba(25,31,40,.10), 0 6px 18px rgba(25,31,40,.10); }
+  .cv-body{ padding:20px 20px 0; }
+  .face.cv > .cv-meta{ margin:auto 20px 0; padding:20px 0; }   /* 위 auto = 포스터 칸이 천장에 닿고 남은 높이만 글과 칸 사이로 */
+  @supports not (width:1cqw){ .cv-art{ max-height:none; padding:16px; } .cv-art img{ width:auto; height:26svh; max-width:100%; } }   /* 아주 옛 브라우저만 */
+  .cv-hi{ font-size:15px; font-weight:700; color:var(--green-dark); margin:0 0 6px; letter-spacing:-.2px; }
+  .cv-t{ font-size:27px; font-weight:700; letter-spacing:-.6px; line-height:1.32; margin:0; }
+  .cv-sub{ font-size:var(--fs-body); font-weight:400; color:var(--g700); line-height:1.6; letter-spacing:-.2px; margin:10px 0 0; }   /* §3.2 본문 + 굵기 사다리 400 = 부제 */
+  .cv-meta{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .cv-meta div{ border-radius:var(--r-md); padding:12px 14px; background:var(--green50); }
+  .cv-meta b{ display:block; font-size:18px; font-weight:800; letter-spacing:-.3px; color:var(--g900); line-height:1.35; }
+  .cv-meta span{ font-size:13.5px; color:var(--g600); font-weight:600; }
+
+  /* ── 끝(열쇠 없을 때만) + 다 봤어요 ── */
+  .intro-card{ background:#fff; border-radius:var(--r-lg); padding:26px 22px; box-shadow:var(--sh1); }
+  .intro-card h1{ font-size:var(--fs-h1); font-weight:700; letter-spacing:-.5px; margin:0 0 20px; line-height:1.3; }
+  .tfield{ margin-bottom:15px; }
+  .tfield label{ display:block; font-size:12.5px; font-weight:600; color:var(--g600); margin:0 0 5px; transition:color .15s; }
+  .tfield.focus label{ color:var(--green); }
+  .tin-wrap{ position:relative; border-bottom:2px solid var(--g200); transition:border-color .15s; }
+  .tfield.focus .tin-wrap{ border-color:var(--green); }
+  .tin-wrap input{ width:100%; border:none; background:none; outline:none; font:inherit; line-height:1.5; font-size:18px; font-weight:600;
+    color:var(--g900); padding:2px 34px 3px 0; caret-color:var(--green); letter-spacing:-.2px; }
+  .tin-wrap .clr{ position:absolute; right:0; top:6px; width:15px; height:15px; border-radius:50%; background:var(--g300);
+    border:none; display:none; align-items:center; justify-content:center; cursor:pointer; padding:0; }
+  .tfield.has-val .clr{ display:flex; }
+  .tin-wrap .clr svg{ width:7px; height:7px; color:#fff; display:block; }
+  .tin-wrap input::placeholder{ color:var(--g500); font-weight:500; }
+  .tfield.err .tin-wrap{ border-color:var(--red); }   /* 제출 게이트(§4.9 10-08): 빈 칸만 흔들림 + 빨간 밑줄, 다시 적으면 풂 */
+  /* 그림이 아직 없는 장(아동 6, 7, 8 — GPT 그림이 오면 pic으로) = 글을 카드 가운데에 */
+  .face.front.nopic .dk-body{ margin:auto 0; padding-top:26px; padding-bottom:26px; }
+
+  /* 기다림(§5.2 최종 제출 = 전면 로더, /recommend/mail .loading 복제) + 토스트(§5.5) — 둘 다 #wrap 안(PC 목업 §3.8에 갇힘) */
+  .loading{ position:fixed; left:0; right:0; top:var(--sy,0px); bottom:calc(0px - var(--sy,0px)); z-index:1200; background:rgba(255,255,255,.78); display:none; flex-direction:column; gap:14px; align-items:center; justify-content:center; }
+  .loading.show{ display:flex; }
+  .spinner{ width:42px; height:42px; border:3px solid var(--g100); border-top-color:var(--green); border-radius:50%; animation:spin .7s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .loading p{ font-size:14.5px; font-weight:600; color:var(--g600); margin:0; }
+  .toast{ position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); background:var(--g900); color:var(--ink-on-dark);
+          font-size:14px; font-weight:600; padding:12px 18px; border-radius:12px; max-width:90%; text-align:center; white-space:pre-line; opacity:0;
+          transition:opacity .2s,transform .2s; pointer-events:none; z-index:1300; line-height:1.5; display:flex; align-items:center; gap:8px; width:max-content; }
+  .toast.on{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast .ck{ flex:0 0 auto; width:18px; height:18px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; }
+  .toast .ck svg{ width:11px; height:11px; fill:none; stroke:#fff; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+  /* 아래에 더 있다(§4.13-6) — 작은 폰에서 글이 긴 장 */
+  #wrap::after{ content:''; position:fixed; left:0; right:0; bottom:calc(0px - var(--sy,0px)); height:32px; z-index:40; pointer-events:none; opacity:0; transition:opacity .18s; background:var(--sf-bot); }
+  #wrap.more::after{ opacity:1; }
+  .done{ display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 12px; }
+  .done-top,.done-bot{ flex:1; }
+  .done .ic{ width:64px; height:64px; border-radius:50%; background:var(--green); margin:0 0 22px; display:flex; align-items:center; justify-content:center; animation:donePop .42s cubic-bezier(.34,1.45,.5,1) both; }
+  .done .ic svg{ width:30px; height:30px; stroke:#fff; stroke-width:2.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .done .ic svg polyline{ stroke-dasharray:1; stroke-dashoffset:1; }
+  #sDone.on .done .ic svg polyline{ animation:doneCheck .4s cubic-bezier(.5,0,.3,1) .30s forwards; }
+  @keyframes donePop{ 0%{transform:scale(.2); opacity:0;} 55%{opacity:1;} 100%{transform:scale(1); opacity:1;} }
+  @keyframes doneCheck{ to{stroke-dashoffset:0;} }
+  .done h1{ font-size:22px; font-weight:700; letter-spacing:-.4px; margin:0 0 6px; }
+  .done p{ margin:0; font-size:17px; font-weight:600; color:var(--green-dark); }
+  .done .idk{ margin:18px auto 0; }   /* 열쇠 없이 온 집의 형제 = 「다른 아이도 남기기」 */
+
+  /* ── 「다음」 유도(docs/1 §5.7) — 답한 뒤 가만히 있을 때만, 최대 두 번 = 빛줄기 + 화살표 + 깨우기 + 「잘 모르겠어요」(다섯 안 비교 = prototype)
+     흔들림은 쓰지 않는다: §4.9에서 흔들림 = 「지금은 못 눌러요」라, 눌러도 되는 버튼에 쓰면 뜻이 뒤집힌다 ── */
+  .btn .arr{ display:inline-block; width:0; opacity:0; overflow:hidden; vertical-align:-3px; transition:width .25s, opacity .25s, margin .25s; }
+  .btn .arr svg{ display:block; width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+  .btn.has-arr .arr{ width:18px; opacity:1; margin-left:6px; }
+  .btn.nd2::after{ content:''; position:absolute; inset:0; z-index:2; pointer-events:none;   /* 빛줄기 */
+    background:linear-gradient(105deg, transparent 25%, rgba(255,255,255,.5) 50%, transparent 75%); transform:translateX(-110%); animation:ndSheen 1.1s ease-in-out 2; }
+  @keyframes ndSheen{ 0%{ transform:translateX(-110%); } 70%,100%{ transform:translateX(110%); } }
+  .btn.nd3 .arr{ animation:ndArrow .5s ease-in-out .25s 3; }              /* 화살표 */
+  @keyframes ndArrow{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(5px); } }
+  /* 답한 순간 깨우기 — 흐린 초록 위로 진한 초록이 왼쪽부터 차오른다(카드가 뒤집힐 때 같이) */
+  .btn.wake{ background:var(--p-disabled); }
+  .btn.wake::before{ content:''; position:absolute; inset:0; z-index:0; background:var(--green); transform-origin:left center; animation:ndWake .6s cubic-bezier(.3,.7,.25,1) both; }
+  @keyframes ndWake{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+  /* 「잘 모르겠어요」 — 박스 없는 글자 버튼(§5.3-2), 밑줄로 누를 수 있게 보임(23 설문 「잘 기억이 안 나요」와 같은 결) */
+  .idk{ display:block; flex-shrink:0; margin:8px auto -6px; padding:6px 10px; border:none; background:none; font:inherit; font-size:14px; font-weight:500; color:var(--g600);
+    text-decoration:underline; text-underline-offset:3px; cursor:pointer; transition:transform .12s, opacity .2s; }
+  .idk:active{ transform:scale(.93); }
+  .idk.gone{ visibility:hidden; opacity:0; }
+
+  .btn.ndS{ box-shadow:0 0 0 3px var(--green200); }   /* 「동작 줄이기」 켠 폰 = 움직임 대신 테두리 한 번 */
+
+  @media (prefers-reduced-motion:reduce){ .dk.rise{ animation:none; } .dk-in{ transition:none; } .btn.wake::before{ animation:none; } }
+  /* PC 폰 목업(§3.8) — 허브 iframe(390)에선 안 걸린다 */
+  @media (min-width:480px) and (hover:hover) and (pointer:fine){
+    body{ background:var(--g200) !important; padding-top:19px; }
+    .wrap{ max-width:min(460px,calc(100% - 38px)); height:100%; min-height:0; background:var(--beige); border-radius:40px 40px 0 0;
+      box-shadow:0 8px 20px rgba(25,31,40,.15); transform:translateZ(0); overflow-y:auto; overflow-x:hidden; scrollbar-width:none; }
+  }
+  [hidden]{ display:none !important; }
+  html,body{ scrollbar-width:none; } html::-webkit-scrollbar,body::-webkit-scrollbar,.wrap::-webkit-scrollbar{ width:0; height:0; }
 </style>
 </head>
 <body>
-<!-- web-share: iOS 리뷰 영수증 저장이 공유시트(navigator.share)를 씀 — 크로스오리진 iframe은 이 위임 없으면 NotAllowedError.
-     GAS 자체 sandboxFrame은 web-share * 위임 확인됨(2026-07-11 curl 실측) → 우리 층만 열면 끝. -->
-<div class="apply-skel" id="applySkel" aria-hidden="true"><div class="sk-wrap">
-    <div class="sk-card">
-      <span class="sk-chip">안전교육</span>
-      <div class="sk-h1"><span class="sk-t">함께 지켜요,<br>안전 약속</span></div>
-      <p class="sk-lead"><span class="sk-t">해마다 한 번 보내 드리는 안전 안내예요.<br>읽고 확인만 눌러 주세요.</span></p>
-      <div class="sk-f"><span class="lb"><span class="sk-t">이용자 이름</span></span><div class="in"><span class="sk-t">이름</span></div></div>
-      <div class="sk-f last"><span class="lb"><span class="sk-t">생년월일</span></span><div class="in"><span class="sk-t">0000. 00. 00</span></div></div>
-      <div class="sk-sib"><span class="sk-t">＋ 함께 다니는 가족이 있어요</span></div>
+<div class="wrap" id="wrap">
+  <div class="scr" id="sCover"></div>
+  <div class="scr" id="sMain">
+    <div class="top"><button class="nav-arrow" id="dBack" aria-label="뒤로"></button><div class="segs" id="segs"></div><span class="cnt" id="cnt"></span></div>
+    <div class="stage" id="stage"></div>
+  </div>
+  <div class="scr" id="sEnd">
+    <div class="top"><button class="nav-arrow" id="endBack" aria-label="뒤로"></button></div>
+    <div class="intro-card">
+      <h1 id="endT">아이 이름을 남겨 주세요</h1>
+      <div class="tfield" id="fNameF"><label for="fName" id="fNameL">아이 이름</label><div class="tin-wrap"><input id="fName" placeholder="이름" readonly autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" enterkeyhint="next"><button class="clr" type="button" tabindex="-1" aria-label="지우기"></button></div></div>
+      <div class="tfield" id="fBirthF"><label for="fBirth">생년월일</label><div class="tin-wrap"><input id="fBirth" type="tel" inputmode="numeric" placeholder="0000. 00. 00" readonly autocomplete="off" data-lpignore="true" enterkeyhint="next"><button class="clr" type="button" tabindex="-1" aria-label="지우기"></button></div></div>
+      <div class="tfield" style="margin-bottom:6px" id="fGuardF"><label for="fGuard">보호자 이름</label><div class="tin-wrap"><input id="fGuard" placeholder="이름" readonly autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" enterkeyhint="done"><button class="clr" type="button" tabindex="-1" aria-label="지우기"></button></div></div>
     </div>
-    <div class="sk-sp"></div>
-    <div class="sk-btn">다음</div>
-</div></div>
-<iframe id="survey" title="안전교육" allow="web-share; clipboard-write"></iframe>
+    <div class="spacer"></div>
+    <button class="btn gate" type="button" id="endBtn">보내기</button>
+  </div>
+  <div class="scr" id="sDone">
+    <div class="done-top"></div>
+    <div class="done"><div class="ic"><svg viewBox="0 0 24 24"><polyline points="4 12 9 17 20 6" pathLength="1"></polyline></svg></div>
+      <h1 id="doneT">안전교육을 다 봤어요</h1><p>우리 함께 지켜요!</p>
+      <button class="idk" type="button" id="moreKid" hidden>다른 아이도 남기기</button></div>
+    <div class="done-bot"></div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"><span class="ck" id="toastCk"></span><span id="toastTx"></span></div>
+  <div class="loading" id="loading"><div class="spinner"></div><p>보내고 있어요</p></div>
+</div>
+
 <script>
-  var EXEC = "https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec";
-  // mode=safety를 맨 앞에(GAS e.parameter는 같은 이름이면 첫 값) + 붙어 온 쿼리는 뒤에 그대로(?preview=child 등)
-  var qs = (location.search || "").replace(/^\?/, "");
-  document.getElementById('survey').src = EXEC + "?mode=safety" + (qs ? "&" + qs : "");
-  // 대기 화면(문구·연결 끊김·다시 불러오기) = /js/form-wait.js — 14가 ready를 보내면 뼈대를 걷는다(GAS Index.html renderGate 직후).
-  if (window.tfFormWait) window.tfFormWait({ frame: document.getElementById('survey'), skel: document.getElementById('applySkel'), host: document.querySelector('#applySkel .sk-wrap'), card: [document.querySelector('#applySkel .sk-card'), document.querySelector('#applySkel .sk-btn')], obj: '안내를' });
+  var QS = new URLSearchParams(location.search);
+  var GAS = 'https://script.google.com/macros/s/AKfycbx6zIcFuPUPRBr4VmW6kT98HzQv0UgtEUBwVLu8V4P9xCphV9ZP9yG_ZKsRfglLA4Kx/exec';   // 14 모니터링설문 웹앱(doPost safe_*)
+  var DEMO = QS.get('demo') === '1';
+  var FOR = QS.get('for') === 'adult' ? 'adult' : 'child';    // 알림톡 버튼 주소 ?for=
+  var KEY = /^[A-Za-z0-9]{12,32}$/.test(QS.get('k') || '') ? QS.get('k') : '';   // 가구 열쇠(07이 16자로 만듦). 없거나 모양이 틀리면 끝에서 이름 + 생년월일
+  var IMG = '/safety/img/';
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
+  function br(s){ return esc(s).replace(/\n/g,'<br>'); }            // 정해 둔 줄바꿈(유성 10-11: 「가위를 건넬 때는」 「요리 수업에서 만든 음식은」 뒤)
+  function lines(arr){ return arr.map(function(x){ return '<p>'+esc(x)+'</p>'; }).join(''); }
+  var BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>';
+  var O_SVG = '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15"/></svg>';
+  var X_SVG = '<svg viewBox="0 0 48 48"><line x1="12" y1="12" x2="36" y2="36"/><line x1="36" y1="12" x2="12" y2="36"/></svg>';
+  var CHK = '<svg viewBox="0 0 24 24"><polyline points="5 12.5 10 17 19 7"/></svg>';
+  var ARR = '<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
+  var CLR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+  // ── 내용(리플렛, 포스터 확정본 + 퀴즈 문장) — 한 장 = 한 주제 = 그림 한 장(§3.5) ──
+  //    pic = [파일, 원래 폭] / 그림이 아직 없는 장 = 글만(ph = GPT로 새로 그릴 장면 메모, 화면엔 안 나감)
+  //    ⚠️ 문구, 퀴즈를 바꾸면 14 Code.js SV_DECK_VER를 올린다(누가 어느 판을 봤는지)
+  var G = { kid:'아이와 같이 알아 둬요', parent:'보호자가 챙겨 주세요', teacher:'선생님이 하는 일', adult:'상담받는 분',
+            before:'상담 전 안전 약속', act:'이럴 때는 이렇게 해요' };
+  var CHILD = [
+    { g:'kid', type:'quiz', topic:'불이 났을 때', pic:['b_fire1',195], s:'불이 나면 엘리베이터를 타고\n빨리 내려가요.', a:'x',
+      e:['“불이야” 하고 크게 외쳐요.','젖은 수건으로 코와 입을 막아요.','몸을 낮추고 움직여요.','엘리베이터 말고 계단으로 나가요.'] },
+    { g:'kid', type:'plain', t:'지진이 나면', pic:['b_quake1',285], l:['탁자 아래로 들어가 머리를 보호해요.','흔들림이 멈추면 넓은 곳으로 나가요.'] },
+    { g:'kid', type:'quiz', topic:'작은 재료와 가위', pic:['f_tools',420], s:'가위를 건넬 때는\n날이 사람을 향하지 않게 해요.', a:'o',
+      e:['가위는 선생님과 같이 써요.','작은 조각은 입, 코, 귀에 넣지 않아요.'] },
+    { g:'kid', type:'quiz', topic:'요리하는 날', pic:['f_food',340], s:'요리 수업에서 만든 음식은\n다음 날 먹어도 괜찮아요.', a:'x',
+      e:['요리 전후에는 손을 씻어요.','조리 도구와 식탁을 닦아요.','만든 음식은 그날 먹고, 오래 꺼내 두지 않아요.'] },
+    { g:'parent', type:'plain', t:'수업하는 자리 주변을 살펴요', pic:['f_hazard',635], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료, 약, 세제도요.'] },
+    { g:'parent', type:'list', t:'이럴 땐 미리 알려 주세요', ph:'보호자가 선생님에게 아이 상태를 알려 주는 장면',
+      rows:[['알레르기가 있으면','수업 전에 꼭 알려 주세요.'],['열이나 기침이 있으면','수업 날짜를 옮겨요.'],['연락처가 바뀌면','바로 알려 주세요.']], kv:['알릴 곳','담당 선생님이나 센터 032-277-2007'] },
+    { g:'teacher', type:'steps', t:'수업 중에 다치면', ph:'선생님이 다친 아이를 돌봐 주는 장면', steps:['선생님이 먼저 응급조치를 해요.','보호자와 센터에 바로 알려요.','필요하면 119에 연락해요.'] },
+    { g:'teacher', type:'list', t:'날씨에 따라 수업을 바꿔요', ph:'비 오는 창밖을 아이와 선생님이 같이 보는 장면',
+      rows:[['태풍이나 호우 특보가 내리면','수업을 쉬거나 옮길 수 있어요.'],['미세먼지가 나쁜 날은','창문을 닫고 수업해요.'],['더운 여름에는','요리 수업을 쉴 수 있어요.']] }
+  ];
+  // 성인 = 14 Safety.html CONTENT.adult 그대로, 성인 포스터 순서(앞 = 상담 전 안전 약속, 뒤 = 이럴 때는 이렇게 해요). 퀴즈 없음
+  var ADULT = [
+    { g:'before', type:'plain', t:'상담하는 자리 주변을 살펴요', pic:['a_place',625], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료도 조심해요.'] },
+    { g:'before', type:'list', t:'상담 전에 미리 알려 주세요', pic:['a_tell',415],
+      rows:[['열이나 기침이 있으면','미리 알리고 날짜를 옮겨요.'],['태풍, 호우 특보 때는','상담을 쉬거나 옮길 수 있어요.'],['연락처나 비상연락처가 바뀌면','바로 알려 주세요.'],['먹는 약이 바뀌었으면','상담사님에게 알려 주세요.']], kv:['알릴 곳','담당 상담사님이나 센터 032-277-2007'] },
+    { g:'before', type:'tel', t:'마음이 많이 힘들 때', pic:['a_heart',420], l:['혼자 견디지 말고 상담사님이나 센터에 알려요.','센터가 닫혀 있을 때는 아래 번호로 전화해요.'] },
+    { g:'act', type:'plain', t:'불이 났을 때', pic:['a_fire',185], l:['“불이야” 하고 크게 외쳐요.','젖은 수건으로 코와 입을 막아요.','몸을 낮추고 움직여요.','엘리베이터 말고 계단으로 나가요.'] },
+    { g:'act', type:'steps', t:'상담 중 몸이 안 좋을 때', pic:['a_unwell',225], steps:['어지럽거나 숨이 차면 참지 말고 바로 말해요.','상담사님이 먼저 응급조치를 하고 가족과 센터에 알려요.','필요하면 119에 연락해요.'] },
+    { g:'act', type:'plain', t:'지진이 나면', pic:['a_quake',285], l:['탁자 아래로 들어가 머리를 보호해요.','흔들림이 멈추면 넓은 곳으로 나가요.'] }
+  ];
+  var EC, NQ, MOM = false;
+  function buildDeck(){
+    EC = FOR==='adult' ? ADULT.slice() : CHILD.slice();
+    if(MOM) EC.push({ g:'adult', type:'mom', t:'상담받는 분도 챙겨 주세요' });   // 아동 가구에 성인 상담 이용자도 있으면(서버 safe_open의 mom) 성인 한 장
+    NQ = EC.filter(function(c){ return c.type==='quiz'; }).length;
+  }
+
+  function picImg(p){ return '<img src="'+IMG+p[0]+'.jpg" alt="" style="width:min(100%,'+Math.round(p[1]*1.5)+'px)">'; }   // 대역: 원래 폭의 1.5배까지만(그 이상은 흐려진다)
+  function firstQuiz(i){ for(var j=0;j<i;j++) if(EC[j].type==='quiz') return false; return true; }
+  var TEL = '<a class="tel-row" href="tel:109"><span class="tn">109</span><span class="tl2">자살예방상담전화(24시간)</span></a>'
+          + '<a class="tel-row" href="tel:15770199"><span class="tn">1577-0199</span><span class="tl2">정신건강위기상담전화</span></a>';
+
+  // ── 한 장 ──
+  function bodyHtml(c, i){
+    var h = '<span class="gchip '+c.g+'">'+G[c.g]+'</span>';
+    if(c.type==='quiz') return h + '<div class="topic">'+esc(c.topic)+'</div><div class="stmt">'+br(c.s)+'</div>'+(firstQuiz(i)?'<div class="hint">맞으면 O, 아니면 X를 눌러 주세요</div>':'');
+    h += '<h2 class="ttl">'+esc(c.t)+'</h2>';
+    if(c.type==='plain') return h + '<div class="lines">'+lines(c.l)+'</div>';
+    if(c.type==='list') return h + '<div class="rws">'+c.rows.map(function(r){ return '<div class="rw"><b>'+esc(r[0])+'</b><span>'+esc(r[1])+'</span></div>'; }).join('')+'</div>'
+      + (c.kv ? '<div class="kv"><span class="k">'+esc(c.kv[0])+'</span><span class="v">'+esc(c.kv[1])+'</span></div>' : '');
+    if(c.type==='steps') return h + '<ol class="tl">'+c.steps.map(function(s,k){ return '<li><span class="num">'+(k+1)+'</span><span class="tx">'+esc(s)+'</span></li>'; }).join('')+'</ol>';
+    if(c.type==='tel') return h + '<div class="lines">'+lines(c.l)+'</div>' + TEL;
+    // mom: 아동 가구의 성인 상담 이용자에게만 있는 칸(14 CONTENT.adult 중)
+    return h + '<div class="ab"><h3>마음이 많이 힘들 때</h3><p>혼자 견디지 말고 상담사님이나 센터에 알려요. 센터가 닫혀 있을 때는 아래 번호로 전화해요.</p>'+TEL+'</div>'
+      + '<div class="ab"><h3>상담 중 몸이 안 좋을 때</h3><p>참지 말고 바로 말해요. 상담사님이 먼저 응급조치를 하고 가족과 센터에 알려요.</p></div>'
+      + '<div class="ab"><h3>먹는 약이 바뀌면</h3><p>상담 전에 상담사님에게 알려 주세요.</p></div>';
+  }
+  function oxHtml(){ return '<div class="ox" id="ox"><button data-v="o" aria-label="O">'+O_SVG+'</button><button data-v="x" aria-label="X">'+X_SVG+'</button></div>'; }
+  function resHtml(c, v){
+    var ok = v===c.a;
+    return '<div class="res'+(ok?' ok':'')+'">'+(ok?'<span class="rc">'+CHK+'</span>맞아요':'정답은 '+c.a.toUpperCase()+'예요')+'</div><div class="ansl">'+lines(c.e)+'</div>';
+  }
+  function cardHtml(c, i){
+    var last=(i===EC.length-1), q=c.type==='quiz';
+    var front = (c.pic ? '<div class="dk-pic pic">'+picImg(c.pic)+'</div>' : '') + '<div class="dk-body">'+bodyHtml(c, i)+'</div>';
+    var back = q ? '<div class="face back"><div class="dk-body" id="backBody"></div></div>' : '';
+    return '<div class="dkwrap"><div class="peek p2"></div><div class="peek p1"></div><div class="dk" id="dk"><div class="dk-in"><div class="face front'+(c.pic?'':' nopic')+'">'+front+'</div>'+back+'</div></div></div>'
+      + (q ? oxHtml() : '') + (q ? '<button class="idk'+(picked[i]?' gone':'')+'" id="idk" type="button">잘 모르겠어요</button>' : '')
+      + '<div class="foot"><button class="btn'+(q && !picked[i]?' gate':'')+'" type="button" id="nextBtn"><span class="bl">'+(last?'확인':'다음<span class="arr">'+ARR+'</span>')+'</span></button></div>';
+  }
+
+  // ── 표지 — 그림 = 포스터 앞면(아동 = 오감, 성인 = 성인). 이름은 없다(열쇠 GO 때 약속 — 링크가 전달돼도 누구 집인지 안 드러나게) ──
+  function coverMeta(){
+    // 걸리는 시간 = 글자 수로 잰 어림을 올림(아동 656자 + O/X 3개를 아이에게 읽어 주며 ≈ 2분 반, 성인 431자 ≈ 1분 반)
+    var mins = FOR==='child' ? 3 : 2;
+    var tile2 = NQ ? '<div><b>O/X '+NQ+'개</b><span>아이와 풀어요</span></div>' : '<div><b>확인 한 번</b><span>마지막에 눌러요</span></div>';
+    return '<div><b>'+mins+'분</b><span>'+EC.length+'장을 넘겨요</span></div>'+tile2;
+  }
+  function coverHtml(){
+    var title = FOR==='child' ? '아이와 같이 봐요' : '한 장씩 넘겨 봐요';   // 한 줄(유성 10-11 3차)
+    // 부제 = 이게 무엇인지 + 1년에 한 번. 「필수」는 안 씀 — 의무는 센터 쪽(표준매뉴얼 6709행)이라 보호자에겐 사실과 다르다(유성 10-11)
+    var sub = FOR==='child' ? '우리 아이가 안전할 수 있도록<br>1년에 한 번 보는 안전교육이에요.' : '안전하게 상담받을 수 있도록<br>1년에 한 번 보는 안전교육이에요.';
+    return '<div class="dkwrap"><div class="peek p2"></div><div class="peek p1"></div><div class="dk"><div class="dk-in"><div class="face front cv">'
+      + '<div class="cv-art"><img src="'+IMG+'poster_'+FOR+'.jpg" alt="안전교육 포스터"></div>'
+      + '<div class="dk-body cv-body"><p class="cv-hi">생각공작소</p><h1 class="cv-t">'+title+'</h1><p class="cv-sub">'+sub+'</p></div>'
+      + '<div class="cv-meta" id="cvMeta">'+coverMeta()+'</div>'
+      + '</div></div></div></div><div class="foot" style="padding-top:0"><button class="btn" type="button" id="startBtn">시작하기</button></div>';
+  }
+
+  // ── 넘기기 ──
+  var deck = { i:-1 }, picked = {};
+  // ── 「다음」 유도(docs/1 §5.7, 유성 10-11 「권장대로」) — 답한 뒤 가만히 있으면 해설 읽는 시간 뒤에 빛줄기 + 화살표, 6초 뒤 한 번 더, 그다음은 멈춤.
+  //    화면을 만지거나 내리면 「읽는 중」으로 보고 처음부터 다시 기다린다. 「동작 줄이기」 폰 = 테두리 한 번
+  var nudgeT = null, nudgeN = 0, nudgeWait = 5000, RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function nudgeDelay(c){ var n=(c.e.join('').match(/[가-힣0-9A-Za-z]/g)||[]).length; return Math.max(5000, 2500 + n*200); }   // 소리 내어 읽는 시간(글자당 0.2초) + 2.5초
+  function nudgeStop(){ var nb=$('nextBtn'); if(nb) nb.classList.remove('nd2','nd3'); }
+  function nudgeClear(){ clearTimeout(nudgeT); nudgeT=null; nudgeStop(); }
+  function nudgeSchedule(ms){ clearTimeout(nudgeT); nudgeT=setTimeout(nudgePlay, ms); }
+  function nudgeArm(c){ nudgeN=0; nudgeWait=nudgeDelay(c); nudgeSchedule(nudgeWait); }
+  function nudgePlay(){
+    nudgeT=null; var nb=$('nextBtn'); if(!nb || nb.classList.contains('gate')) return;
+    if(RM){ nb.classList.add('ndS'); nudgeN=2; return; }
+    nb.classList.add('has-arr'); nb.classList.remove('nd2','nd3'); void nb.offsetWidth; nb.classList.add('nd2','nd3');
+    nudgeN++; if(nudgeN<2) nudgeSchedule(6000);
+  }
+  ['pointerdown','wheel','touchmove','keydown','scroll'].forEach(function(ev){
+    window.addEventListener(ev, function(){ if(!nudgeT && !document.querySelector('.nd2,.nd3')) return; if(nudgeN>=2 && !nudgeT) return;
+      nudgeStop(); if(nudgeN<2) nudgeSchedule(nudgeWait); }, { capture:true, passive:true });
+  });
+  function buildSegs(){
+    var h='', cur=null, groups=[];
+    EC.forEach(function(c){ if(c.g!==cur){ groups.push({n:0}); cur=c.g; } groups[groups.length-1].n++; });
+    groups.forEach(function(gp){ var s=''; for(var k=0;k<gp.n;k++) s+='<i></i>'; h += '<span class="sg" style="flex:'+gp.n+'">'+s+'</span>'; });
+    $('segs').innerHTML = h;
+  }
+  function paintTop(){
+    Array.prototype.forEach.call($('segs').querySelectorAll('i'), function(el,j){ el.classList.toggle('on', j<=deck.i); });
+    $('cnt').textContent = (deck.i+1)+' / '+EC.length;
+  }
+  function canNext(){ var c=EC[deck.i]; return c.type!=='quiz' || !!picked[deck.i]; }
+  function onScr(id){ return $(id).classList.contains('on'); }
+  function show(id){ ['sCover','sMain','sEnd','sDone'].forEach(function(s){ $(s).classList.toggle('on', s===id); }); scrollTop(); }
+  function scrollTop(){ $('wrap').scrollTop=0; window.scrollTo(0,0); }
+  function render(dir){
+    paintTop();
+    $('stage').innerHTML = '<div class="card">'+cardHtml(EC[deck.i], deck.i)+'</div>';
+    if(dir) $('dk').classList.add('rise');
+    bindCard(); scrollTop();
+  }
+  function go(d){
+    nudgeClear();
+    var ni = deck.i + d;
+    if(ni<0){ deck.i=-1; show('sCover'); return; }
+    if(ni>=EC.length){ finish(); return; }
+    if(d>0 && $('dk') && onScr('sMain')){   // 지금 카드가 왼쪽으로 날아가고 뒤 카드가 올라온다
+      $('dk').classList.add('fly'); deck.i=ni;
+      setTimeout(function(){ render(1); }, 230); return;
+    }
+    deck.i = ni; render(d);
+  }
+  function gateShake(){ [$('nextBtn'), $('ox')].forEach(function(el){ if(!el) return; el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }); }
+  function bindCard(){
+    var c=EC[deck.i], i=deck.i, nb=$('nextBtn');
+    nb.addEventListener('click', function(){ if(nb.classList.contains('gate')) gateShake(); else go(1); });
+    if(c.type==='quiz'){
+      if(picked[i]) mark(c, picked[i], false);
+      Array.prototype.forEach.call($('ox').querySelectorAll('button'), function(b){
+        b.addEventListener('click', function(){ if(picked[i]) return; picked[i]=b.getAttribute('data-v'); mark(c, picked[i], true); });
+      });
+      $('idk').addEventListener('click', function(){ if(picked[i]) return; picked[i]='?'; mark(c, '?', true); });   // 고르지 않고 정답 보기
+    }
+    enableDrag();
+  }
+  function mark(c, v, anim){
+    var box=$('ox'); box.classList.add('answered');
+    Array.prototype.forEach.call(box.querySelectorAll('button'), function(b){
+      var bv=b.getAttribute('data-v');
+      if(bv===c.a){ b.classList.add('right'); b.insertAdjacentHTML('beforeend','<span class="tag">정답</span>'); }
+      else if(bv===v) b.classList.add('mine');
+      else b.classList.add('dim');
+    });
+    var nb=$('nextBtn');
+    nb.classList.remove('gate');
+    if(anim){ nb.classList.add('wake');   // 흐린 초록 위로 진한 초록이 차오른다(카드가 뒤집힐 때 같이)
+      nb.addEventListener('animationend', function done(e){ if(e.animationName!=='ndWake') return; nb.removeEventListener('animationend', done);
+        nb.style.transition='none'; nb.classList.remove('wake'); void nb.offsetWidth; nb.style.transition=''; }); }
+    $('idk').classList.add('gone');
+    if(anim) nudgeArm(c);
+    $('backBody').innerHTML = '<div class="bmain">'+resHtml(c, v)+'</div><div class="flipnote">카드를 누르면 그림을 다시 봐요</div>';
+    var dk=$('dk'); if(anim) setTimeout(function(){ dk.classList.add('flip'); }, 380); else dk.classList.add('flip');
+  }
+  // 카드가 손가락을 따라오고, 놓으면 넘어가거나 제자리로. 답 안 한 카드는 끌어도 버틴다. 가장자리 24px는 폰 뒤로가기 몫
+  var lastDrag = 0;
+  function enableDrag(){
+    var dk=$('dk'); if(!dk) return;
+    var sx=0, sy=0, dx=0, on=false, moved=false, pid=null;
+    dk.onpointerdown = function(e){ if(busy || e.clientX<24 || e.clientX>window.innerWidth-24) return; on=true; moved=false; sx=e.clientX; sy=e.clientY; dx=0; pid=e.pointerId; };
+    dk.onpointermove = function(e){
+      if(!on) return; var mx=e.clientX-sx, my=e.clientY-sy;
+      if(!moved){ if(Math.abs(mx)<8) return; if(Math.abs(my)>Math.abs(mx)){ on=false; return; } moved=true; try{ dk.setPointerCapture(pid); }catch(_){} dk.classList.add('drag'); }
+      dx=mx; var eff = (dx<0 && !canNext()) ? dx*0.22 : dx;
+      dk.style.transform = 'translateX('+eff+'px) rotate('+(eff/24)+'deg)';
+    };
+    dk.onpointerup = function(){
+      if(!on) return; on=false; if(!moved) return;
+      lastDrag = Date.now(); dk.classList.remove('drag'); dk.style.transform='';
+      if(dx<-90 && canNext()) go(1); else if(dx>90) go(-1); else if(dx<-30 && !canNext()) gateShake();
+    };
+    dk.onpointercancel = function(){ on=false; dk.classList.remove('drag'); dk.style.transform=''; };
+    dk.onclick = function(){ if(Date.now()-lastDrag<300) return; if(EC[deck.i].type==='quiz' && picked[deck.i]) dk.classList.toggle('flip'); };
+  }
+
+  // ── 서버(14 doPost). 응답이 가끔 구글 HTML로 오거나 늦는다(메모리 gas-webapp-reply-can-be-google-html) ──
+  //    safe_done은 같은 요청이 두 번 와도 결과가 같다(14 Code.js 절 머리) → 응답을 못 받으면 다시 보내도 된다
+  function post(body, ms){
+    if(DEMO) return demoPost(body);
+    var ac = window.AbortController ? new AbortController() : null, t = ac ? setTimeout(function(){ ac.abort(); }, ms || 25000) : 0;
+    return fetch(GAS, { method:'POST', body:JSON.stringify(body), signal: ac ? ac.signal : undefined }).then(function(r){ return r.text(); }).then(function(tx){
+      clearTimeout(t);
+      var o; try{ o = JSON.parse(tx); }catch(e){ throw new Error('BAD_REPLY'); }
+      if(o.error) throw new Error(o.error);
+      return o.data;
+    }, function(e){ clearTimeout(t); throw e; });
+  }
+  var busy = false, warmed = false;
+  function warm(){ if(warmed) return; warmed = true; post({ action:'safe_warm' }, 40000).catch(function(){}); }   // 끝 이름 칸에서 안 기다리게 대장 캐시만 데움
+  function sendDone(body, label, cb){
+    if(busy) return; busy = true;
+    if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    pinOverlay(); $('loading').classList.add('show');
+    var n = 0;
+    (function attempt(){
+      n++;
+      post(body).then(function(r){ busy=false; $('loading').classList.remove('show'); cb(r || {}); }, function(){
+        if(n < 3){ setTimeout(attempt, n*1500); return; }
+        busy=false; $('loading').classList.remove('show');
+        toast('인터넷이 잠깐 끊겼어요.\n'+label+' 다시 눌러 주세요.', false, 4000);
+      });
+    })();
+  }
+
+  // ── 열기: 열쇠로 이 집 모양만 받는다(이름은 안 옴) ──
+  function applyOpen(r){
+    if(!r || !r.ok){ KEY=''; warm(); return; }   // 모르는 열쇠 = 끝에서 이름 + 생년월일
+    var onCover = onScr('sCover');
+    if(r.kind && r.kind!==FOR && onCover){ FOR = r.kind; applyFor(); }   // 07이 버튼에 붙인 ?for=와 다르면 서버가 맞다(아직 표지일 때만)
+    if(FOR==='child' && r.mom && !MOM && (onCover || (onScr('sMain') && deck.i < EC.length-1))){
+      MOM = true; buildDeck(); buildSegs();
+      if(onCover) $('cvMeta').innerHTML = coverMeta(); else paintTop();
+    }
+  }
+  function applyFor(){
+    buildDeck(); buildSegs();
+    if(FOR==='adult'){ $('endT').textContent='이름을 남겨 주세요'; $('fNameL').textContent='이름'; $('fGuardF').style.display='none'; }
+    else { $('endT').textContent='아이 이름을 남겨 주세요'; $('fNameL').textContent='아이 이름'; $('fGuardF').style.display=''; }
+    if(onScr('sCover')) showCover();
+  }
+
+  // ── 마지막 장 「확인」 ──
+  function finish(){
+    if(!KEY){ toEnd(); return; }
+    sendDone({ action:'safe_done', k:KEY }, '「확인」을', function(r){
+      if(r.ok){ toDone(false); return; }
+      if(r.code==='nokey'){ KEY=''; toEnd(); return; }   // 열쇠가 시트에서 사라졌으면(행 정리 등) 이름으로
+      toast(r.message || '지금은 기록하지 못했어요.\n잠시 뒤 다시 눌러 주세요.', false, 3600);
+    });
+  }
+  function toEnd(){ nudgeClear(); warm(); show('sEnd'); endGate(); }
+  function toDone(viaName){
+    $('doneT').textContent = viaName ? '잘 보냈어요' : '안전교육을 다 봤어요';
+    $('moreKid').hidden = !(viaName && FOR==='child');   // 열쇠 없이 온 집 = 한 번에 한 아이 → 형제는 이어서
+    show('sDone');
+  }
+
+  // ── 끝(열쇠 없을 때만): 이름 + 생년월일 (+ 보호자) ──
+  function fmtBirth(v){ var d=String(v).replace(/\D/g,'').slice(0,8); var o=d.slice(0,4); if(d.length>4)o+='. '+d.slice(4,6); if(d.length>6)o+='. '+d.slice(6,8); return o; }
+  function validBirth(d){
+    if(d.length!==8) return false;
+    var y=+d.slice(0,4), m=+d.slice(4,6), dd=+d.slice(6,8), t=new Date(y, m-1, dd);
+    return y>=1900 && t.getFullYear()===y && t.getMonth()===m-1 && t.getDate()===dd && t<=new Date();
+  }
+  function endVals(){ return { name:$('fName').value.trim(), birth:$('fBirth').value.replace(/\D/g,''), guard:FOR==='adult' ? '' : $('fGuard').value.trim() }; }
+  // 제출 게이트(§4.9 10-08) = 버튼 흔들림 + 빈 칸만 흔들림 + 빨간 밑줄, 첫 사유는 토스트(/recommend/mail과 같은 결)
+  function endCheck(loud){
+    var v=endVals(), bad=[];
+    if(!v.name) bad.push(['fNameF', FOR==='adult' ? '이름을 적어 주세요.' : '아이 이름을 적어 주세요.']);
+    if(!validBirth(v.birth)) bad.push(['fBirthF', v.birth.length<8 ? '생년월일 8자리를 적어 주세요.' : '생년월일을 다시 확인해 주세요.']);
+    if(FOR!=='adult' && !v.guard) bad.push(['fGuardF', '보호자 이름을 적어 주세요.']);
+    if(loud && bad.length){
+      bad.forEach(function(b){ var f=$(b[0]); f.classList.add('err'); f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); });
+      toast(bad[0][1], false, 2800);
+    }
+    return !bad.length;
+  }
+  function endGate(){ $('endBtn').classList.toggle('gate', !endCheck(false)); }
+  ['fName','fBirth','fGuard'].forEach(function(id){
+    var inp=$(id), tf=inp.parentNode.parentNode, clr=tf.querySelector('.clr');
+    clr.innerHTML = CLR;
+    var upd=function(){ tf.classList.toggle('has-val', inp.value.length>0); };
+    inp.addEventListener('focus', function(){ inp.removeAttribute('readonly'); tf.classList.add('focus'); if(id==='fBirth') inp._wasFull = inp.value.replace(/\D/g,'').length>=8; });   // §4.1-6 readonly 시작
+    inp.addEventListener('blur', function(){ tf.classList.remove('focus'); });
+    inp.addEventListener('input', function(){
+      if(id==='fBirth'){ inp.value=fmtBirth(inp.value); if(inp.value.replace(/\D/g,'').length===8 && !inp._wasFull) inp.blur(); }   // 8자리 = 키패드 닫기(고치러 연 칸은 예외 §4.1-4)
+      tf.classList.remove('err'); upd(); endGate();
+    });
+    inp.addEventListener('keydown', function(e){ if(e.key!=='Enter') return; e.preventDefault();
+      if(id==='fName') $('fBirth').focus(); else if(id==='fBirth' && FOR!=='adult') $('fGuard').focus(); else inp.blur(); });
+    clr.addEventListener('click', function(){ inp.value=''; inp.dispatchEvent(new Event('input')); inp.focus(); });
+  });
+  $('endBtn').addEventListener('click', function(){
+    var b=this;
+    if(b.classList.contains('gate')){ b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); endCheck(true); return; }
+    var v=endVals();
+    sendDone({ action:'safe_done', people:[{ name:v.name, birth:v.birth }], guardian:v.guard }, '「보내기」를', function(r){
+      if(r.ok){ toDone(true); return; }
+      if(r.code==='nomatch'){ $('fNameF').classList.add('err'); $('fBirthF').classList.add('err'); }
+      toast(r.message || '지금은 보내지 못했어요.\n잠시 뒤 다시 눌러 주세요.', false, 3600);
+    });
+  });
+  $('moreKid').addEventListener('click', function(){   // 형제: 아이 칸만 비우고 보호자 이름은 둔다
+    ['fName','fBirth'].forEach(function(id){ $(id).value=''; var tf=$(id+'F'); tf.classList.remove('has-val','err'); });
+    show('sEnd'); endGate();
+  });
+
+  // ── 토스트(§5.5) — 보이는 아래 버튼 위 12px. 폰 = 창 기준 / PC 목업(§3.8) = .wrap 기준 + 스크롤만큼 되돌림(14 toastBottom과 같은 프레임 판별) ──
+  var toastT;
+  function boxed(){ return getComputedStyle($('wrap')).transform!=='none'; }
+  function toastBottom(t){
+    var w=$('wrap'), bx=boxed(), y=bx ? w.scrollTop : 0;
+    var top0=bx ? w.getBoundingClientRect().top : 0, frH=bx ? w.clientHeight : window.innerHeight;
+    var th=(t && t.offsetHeight) || 50, lim=Math.max(30, frH-th-8), v=90;
+    var b=document.querySelector('.scr.on .foot .btn, .scr.on > .btn');
+    if(b && b.getClientRects().length){ var top=b.getBoundingClientRect().top - top0; if(top<frH) v=Math.min(Math.max(Math.round(frH-top)+12, 30), lim); }
+    return (v - y)+'px';
+  }
+  function toast(m, ok, ms){
+    var t=$('toast'); $('toastTx').textContent=m; $('toastCk').innerHTML=ok ? CHK : ''; $('toastCk').style.display=ok ? '' : 'none';
+    t.style.bottom=toastBottom(t); t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove('on'); }, ms || 2800);
+  }
+  function pinOverlay(){ $('wrap').style.setProperty('--sy', (boxed() ? $('wrap').scrollTop : 0)+'px'); }
+
+  // ── 아래에 더 있다(§4.13-6) — 넘치는 쪽(폰 = 창 / PC 목업 = .wrap)을 보고 아래 띠만 ──
+  function paintFade(){
+    var w=$('wrap'), bx=boxed(), sc=bx ? w : (document.scrollingElement || document.documentElement);
+    var over=sc.scrollHeight-sc.clientHeight, y=sc.scrollTop;
+    w.classList.toggle('more', over>6 && y<over-6);
+    pinOverlay();
+  }
+  var fadeQ=0; function fadeSoon(){ if(fadeQ) return; fadeQ=requestAnimationFrame(function(){ fadeQ=0; paintFade(); }); }
+  window.addEventListener('scroll', fadeSoon, { passive:true }); $('wrap').addEventListener('scroll', fadeSoon, { passive:true });
+  window.addEventListener('resize', fadeSoon); $('wrap').addEventListener('load', fadeSoon, true);   // 그림이 늦게 와서 키가 바뀔 때
+  if(window.MutationObserver) ['sCover','sMain','sEnd','sDone'].forEach(function(id){   // .wrap엔 안 건다(자기 .more 토글이 자기를 깨움)
+    new MutationObserver(fadeSoon).observe($(id), { childList:true, subtree:true, attributes:true, attributeFilter:['class'] }); });
+
+  // ── 뒤로(§4.11) — 가드 칸은 늘 1칸(23 설문 games/survey.js와 같은 꼴). 화면마다 ← 와 같은 한 단계 + 가드 다시 쌓기.
+  //    표지, 다 봤어요 = 맨 끝 → 더블백(§4.11-4): 첫 뒤로 = 토스트 「한 번 더 뒤로 가면 나가요.」 2초, 가드는 다시 쌓지 않는다
+  //    → 그 2초 안의 두 번째 뒤로는 아래가 비어 브라우저가 받아 나간다. 2초가 지나거나 그 사이 화면을 만지면 가드를 다시 쌓는다 ──
+  function backStep(){
+    if(onScr('sMain')) return function(){ go(-1); };
+    if(onScr('sEnd')) return function(){ show('sMain'); render(-1); };   // 마지막 장으로
+    return null;
+  }
+  var exitArmed=false, exitT=null;
+  function pushGuard(){ history.pushState({ sf:1 }, ''); }
+  function disarmExit(){ if(!exitArmed) return; exitArmed=false; clearTimeout(exitT); pushGuard(); }
+  history.replaceState({ sf:0 }, ''); pushGuard();
+  window.addEventListener('popstate', function(){
+    if(busy){ pushGuard(); return; }   // 보내는 중엔 머문다
+    var b=backStep(); if(b){ b(); pushGuard(); return; }
+    exitArmed=true; toast('한 번 더 뒤로 가면 나가요.', true, 2000);
+    clearTimeout(exitT); exitT=setTimeout(disarmExit, 2000);
+  });
+  document.addEventListener('pointerdown', disarmExit, true);
+  $('dBack').innerHTML = BACK; $('endBack').innerHTML = BACK;
+  $('dBack').addEventListener('click', function(){ var b=backStep(); if(b) b(); });
+  $('endBack').addEventListener('click', function(){ var b=backStep(); if(b) b(); });
+
+  // ── 누름(§5.3-1 물결) ──
+  document.addEventListener('pointerdown', function(e){
+    var btn=e.target.closest && e.target.closest('.btn'); if(!btn || btn.classList.contains('gate')) return;
+    if(!btn.querySelector('.bl')){ var bl=document.createElement('span'); bl.className='bl'; while(btn.firstChild) bl.appendChild(btn.firstChild); btn.appendChild(bl); }
+    var r=btn.getBoundingClientRect(), x=e.clientX-r.left;
+    var rs=Math.ceil(Math.hypot(Math.max(x,r.width-x), r.height/2)/15)+1;
+    var rip=document.createElement('span'); rip.className='rip'; rip.style.left=x+'px'; rip.style.top=(r.height/2)+'px'; rip.style.setProperty('--rs', rs);
+    btn.appendChild(rip); requestAnimationFrame(function(){ rip.classList.add('go'); }); setTimeout(function(){ rip.remove(); }, 480);
+  });
+
+  // ── 표지 ──
+  function showCover(){
+    $('sCover').innerHTML = coverHtml();
+    $('startBtn').addEventListener('click', function(){ show('sMain'); deck.i=-1; go(1); });
+    show('sCover');
+  }
+
+  // ── 데모(?demo=1, 서버 없음) — 열쇠 아무거나 = 그 집(&mom=1 = 엄마 카드), 열쇠 「zzzzzzzzzzzz」 = 모르는 열쇠. 이름 칸은 홍길동 2021. 03. 15만 맞음 ──
+  function demoPost(b){
+    return new Promise(function(res){ setTimeout(function(){
+      if(b.action==='safe_warm') return res({ ok:true });
+      if(b.action==='safe_open') return res(b.k==='zzzzzzzzzzzz' ? { ok:false } : { ok:true, kind:FOR, mom:QS.get('mom')==='1' });
+      if(b.k) return res(b.k==='zzzzzzzzzzzz' ? { ok:false, code:'nokey' } : { ok:true });
+      var p=(b.people||[])[0]||{};
+      if(p.name!=='홍길동' || String(p.birth).slice(-6)!=='210315') return res({ ok:false, code:'nomatch', message:'등록된 정보를 찾지 못했어요.\n이름과 생년월일을 다시 확인해 주세요.' });
+      res({ ok:true });
+    }, +(QS.get('lag')||700)); });
+  }
+
+  buildDeck(); applyFor(); showCover();
+  if(KEY) post({ action:'safe_open', k:KEY }, 20000).then(applyOpen, function(){ /* 못 받아도 끝에서 safe_done이 다시 본다 */ });
+  else warm();
+  if(QS.get('at')){ show('sMain'); deck.i=Math.min(EC.length-1, Math.max(0, +QS.get('at')-1)); render(0); }   // 확인용: 바로 그 장
+  paintFade();
 </script>
 </body>
 </html>
