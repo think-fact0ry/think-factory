@@ -3,13 +3,13 @@
  * 창 자체(js/inquiry-pane.js)는 버튼을 누를 때 받는다 — 학부모 대부분은 창을 안 열기 때문(유성 10-10 「홈페이지가 무거워지지 않게」).
  * 설계 = 생각공작소 docs/4_설계_2026-10-08_문의알리미_1단계.md D4~D8 · 디자인 = prototype/문의창_디자인5차_프리뷰.html · 원칙 = docs/1 §4.18
  *
- * 모두에게 = 2026-10-15 0시(한국)부터 저절로(유성 10-11 「켜」 — 처리방침 제1조 ④ 「2026년 10월 15일부터」와 맞춤, 그 날 다시 push 안 함).
- * 그 전엔 주소 끝 ?inq=1 을 한 번 연 기기(유성 시험)에만 보인다. ?inq=0 이면 해제. 끄기 = OPEN = false 한 줄.
+ * 모두에게 = 2026-10-11 23시(한국)부터 켜짐(유성 10-11 「지금 바로 열어」 — 처리방침 시행일도 10-15 → 10-12로 당김).
+ * 시각 비교로 둔 이유 = 켠 때가 코드에 남고, 창.test가 「켜기 전 / 켠 뒤」 경계를 그대로 잰다. ?inq=1·?inq=0·?inq=demo는 그대로. 끄기 = OPEN = false 한 줄.
  * ?inq=demo = 서버 없이 상태를 넘겨 보는 미리보기(연습 데이터, 수집 0).
  */
 (function () {
   'use strict';
-  var OPEN = Date.now() >= Date.UTC(2026, 9, 14, 15, 0, 0);   // ← 모두에게 켜는 스위치 = 2026-10-15 00:00 한국(= 10-14 15:00 UTC, 월은 0부터). 끄기 = false
+  var OPEN = Date.now() >= Date.UTC(2026, 9, 11, 14, 0, 0);   // ← 모두에게 켜는 스위치 = 2026-10-11 23:00 한국(= 14:00 UTC, 월은 0부터). 끄기 = false
   var PANE_SRC = '/js/inquiry-pane.js?v=9';   // 창 코드를 고치면 ?v= 올리기 — 여기 + c/index.html 두 곳(Pages 캐시 10분)
   var GAS = 'https://script.google.com/macros/s/AKfycbwUdo5pLFvgVxu_3EjspA6U6U196Hu-RzKcC0ucVwRPGMBP3oIQT2fKMK_7fvLmeOx9Gg/exec';
 
