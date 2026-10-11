@@ -66,7 +66,7 @@
       .then(function (t) { try { return JSON.parse(t); } catch (x) { throw new Error('BAD_REPLY'); } });
   }
   function transient(x) { return x instanceof TypeError || String(x && x.message) === 'BAD_REPLY'; }
-  function read(body) {
+  function read(body, hedgeMs) {   // hedgeMs = 두 번째 요청까지 기다릴 시간(기본 4초 — 첨부처럼 큰 응답은 길게 줘서 같은 파일을 두 번 받지 않게)
     return new Promise(function (res, rej) {
       var started = 0, inflight = 0, done = false, timer = 0;
       var go = function () {
@@ -80,7 +80,7 @@
           });
       };
       go();
-      timer = setTimeout(function () { if (!done && started < 2) go(); }, 4000);
+      timer = setTimeout(function () { if (!done && started < 2) go(); }, hedgeMs || 4000);
     });
   }
 
@@ -154,6 +154,32 @@
     '#tfInq .ti-sk{height:40px;border-radius:18px;background-color:var(--g100);background-image:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);background-size:200% 100%;background-repeat:no-repeat;animation:tiSk 1.5s linear infinite;margin-top:12px}',
     '@keyframes tiSk{0%{background-position:150% 0}70%,100%{background-position:-50% 0}}',
     '@media (prefers-reduced-motion:reduce){#tfInq .ti-sk{animation:none}}',
+    // 첨부(10-11 유성 「사진 첨부 가능하게」 — 행정 → 학부모). 사진 = 말풍선 자리에 사진(모서리 = 말풍선과 같은 18, 첫 줄 왼쪽 위 6), PDF = 흰 카드. 누르면 크게 / PDF는 폰이면 받기
+    '#tfInq .ti-att{display:block;border:0;padding:0;margin:0;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .08s}',
+    '#tfInq .ti-att:active{transform:scale(.96)}',   // §5.3 카드, 사진 타일 = .96
+    '#tfInq .them .ti-att + .ti-bub{margin-top:4px;border-top-left-radius:18px}',   // 사진 밑 글 = 이어지는 말풍선(꼬리 모서리는 첫 칸만)
+    '#tfInq .ti-img{width:220px;max-width:100%;max-height:300px;border-radius:18px;overflow:hidden;position:relative;background-color:var(--g100);background-image:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);background-size:200% 100%;background-repeat:no-repeat;animation:tiSk 1.5s ease-in-out infinite}',
+    '#tfInq .ti-img.ok{animation:none;background-image:none}',
+    '#tfInq .them:not(.cont) .ti-img{border-top-left-radius:6px}',
+    '#tfInq .ti-img img{display:block;width:100%;height:100%;object-fit:cover}',
+    '#tfInq .ti-img .ti-again{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--g600)}',
+    '#tfInq .ti-pdf{display:flex;gap:10px;align-items:center;width:230px;max-width:100%;background:#fff;border:1px solid var(--g200);border-radius:16px;padding:10px 12px;box-shadow:0 1px 3px rgba(25,31,40,.06);transition:transform .1s}',
+    '#tfInq .ti-pdf:active{transform:scale(.97)}',
+    '#tfInq .them:not(.cont) .ti-pdf{border-top-left-radius:6px}',
+    '#tfInq .ti-pdf .ic{flex:none;width:34px;height:40px;border-radius:6px;background:var(--danger-weak-bg);color:var(--danger-weak-fg);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;letter-spacing:0}',
+    '#tfInq .ti-pdf .tx{flex:1;min-width:0}',
+    '#tfInq .ti-pdf .nm{font-size:14px;font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}',
+    '#tfInq .ti-pdf .sz{display:block;font-size:12px;color:var(--g600);margin-top:2px}',
+    '#tfInq .ti-view{position:fixed;inset:0;z-index:1400;background:rgba(17,20,24,.94);display:none;align-items:center;justify-content:center;padding:56px 12px calc(16px + env(safe-area-inset-bottom, 0px))}',
+    '#tfInq .ti-view.on{display:flex;animation:tiFade .2s ease-out}',
+    '@keyframes tiFade{from{opacity:0}to{opacity:1}}',
+    '#tfInq .ti-vb{width:100%;height:100%;display:flex;align-items:center;justify-content:center}',
+    '#tfInq .ti-view img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}',
+    '#tfInq .ti-view iframe{width:min(920px,100%);height:100%;border:0;border-radius:8px;background:#fff}',
+    '#tfInq .ti-vx{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}',
+    '#tfInq .ti-vx svg{width:22px;height:22px}',
+    '#tfInq .ldd{display:inline-flex;gap:3px;margin-left:5px;vertical-align:middle}#tfInq .ldd i{width:4px;height:4px;border-radius:50%;background:currentColor;animation:tiLdb 1s ease-in-out infinite}#tfInq .ldd i:nth-child(2){animation-delay:.16s}#tfInq .ldd i:nth-child(3){animation-delay:.32s}',   // §5.2 출렁점
+    '@keyframes tiLdb{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-3px);opacity:1}}',
     // 번호 카드
     '#tfInq .ti-nc{align-self:stretch;background:#fff;border:1px solid var(--g200);border-radius:16px;padding:16px 14px 14px;margin-top:8px;box-shadow:0 1px 3px rgba(25,31,40,.06)}',
     '#tfInq .ti-nc .t1{font-size:15px;font-weight:700;margin-bottom:6px}',
@@ -396,11 +422,14 @@
     addEventListener('wheel', function (e) { if (S.open && R.contains(e.target)) e.stopPropagation(); }, { capture: true, passive: true });
     addEventListener('keydown', function (e) {
       if (!S.open) return;
+      if (e.key === 'Escape' && viewerOpen()) { closeViewer(); return; }   // 크게 보기만 닫는다(한 단계)
       if (e.key === 'Escape' && !PAGE) { requestClose(); return; }
       if (R.contains(document.activeElement) && /^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End|\s)$/.test(e.key)) e.stopPropagation();
     }, true);
     // 뒤로 = 창만 닫힘(§4.11 한 단계)
-    addEventListener('popstate', function () { if (S.open && !PAGE) doClose(); });
+    addEventListener('popstate', function () { if (viewerOpen()) { closeViewer(true); return; } if (S.open && !PAGE) doClose(); });
+    // 첨부 누르기(사진 = 크게, PDF = PC는 크게 / 폰은 받기, 못 받은 사진 = 다시 받기)
+    TH.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('.ti-att'); if (a && TH.contains(a)) openFile(a); });
     // 폰 키보드: 보이는 높이에 창을 맞춘다(§4.2-2 — 메인 페이지는 키보드가 화면을 줄이는 설정이 없다)
     if (window.visualViewport) { visualViewport.addEventListener('resize', fitVV); visualViewport.addEventListener('scroll', fitVV); }
     addEventListener('resize', fitVV);
@@ -457,7 +486,83 @@
     dayIf(m.at);
     var r = rowEl(m.who === 'v' ? 'me' : 'them', m.text, m.at, anim);
     r.dataset.seq = m.seq;
+    if (m.file) attach(r, m);
     if (m.who !== 'v') lastChange = Date.now();
+  }
+  // ── 첨부(10-11 유성 「사진 첨부 가능하게」 — 행정 → 학부모) ──
+  //   받기 = v_file(그 방 열쇠 + 줄 번호)뿐, 드라이브 링크 0. 받은 건 이 창 메모리에만(사진 = data 주소, PDF = blob 주소) — 열쇠+줄 번호로 기억
+  var FILES = {};
+  function fmtSize(s) { s = +s || 0; return s >= 1048576 ? (Math.round(s / 104857.6) / 10) + 'MB' : Math.max(1, Math.round(s / 1024)) + 'KB'; }
+  function attach(r, m) {
+    var bub = r.querySelector('.ti-bub'), f = m.file, a;
+    if (f.t === 'application/pdf') {
+      a = el('<button type="button" class="ti-att ti-pdf"><span class="ic">PDF</span><span class="tx"><span class="nm"></span><span class="sz"></span></span></button>');
+      a.querySelector('.nm').textContent = f.n;
+      a.querySelector('.sz').textContent = fmtSize(f.s) + (coarse ? ', 누르면 받아요' : ', 누르면 열려요');
+    } else {
+      a = el('<button type="button" class="ti-att ti-img" aria-label="사진 크게 보기"></button>');
+      a.style.aspectRatio = f.w && f.h ? f.w + ' / ' + f.h : '4 / 3';   // 받기 전에도 자리를 그 크기로 잡아 둔다(사진이 와도 대화가 안 밀림)
+      showImg(a, m.seq);
+    }
+    a.dataset.fseq = m.seq;
+    if (m.text) bub.parentNode.insertBefore(a, bub); else bub.parentNode.replaceChild(a, bub);
+  }
+  function fileGet(seq) {
+    var k = S.key + ':' + seq, c = FILES[k];
+    if (c) return c.p;
+    c = FILES[k] = {};
+    c.p = read({ action: 'v_file', key: S.key, seq: seq }, 15000).then(function (r) {
+      if (!r || !r.ok || !r.b64) throw new Error((r && r.error) || 'nofile');
+      c.t = r.t; c.n = r.n;
+      if (r.t === 'application/pdf') {
+        var bin = atob(r.b64), u = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+        c.url = URL.createObjectURL(new Blob([u], { type: r.t }));
+      } else c.url = 'data:' + r.t + ';base64,' + r.b64;
+      return c;
+    });
+    c.p.catch(function () { delete FILES[k]; });   // 실패는 기억 안 함(다시 누르면 다시 받는다)
+    return c.p;
+  }
+  function showImg(a, seq) {
+    fileGet(seq).then(function (f) {
+      var img = new Image(); img.alt = '사진';
+      img.onload = function () { a.classList.add('ok'); };
+      img.src = f.url; a.innerHTML = ''; a.appendChild(img);
+    }, function () { a.classList.add('ok'); a.dataset.again = '1'; a.innerHTML = '<span class="ti-again">눌러서 다시 불러오기</span>'; });
+  }
+  function openFile(a) {
+    var seq = +a.dataset.fseq, sz = a.querySelector('.sz'), was = sz && sz.textContent;
+    if (a.dataset.again) { delete a.dataset.again; a.classList.remove('ok'); a.innerHTML = ''; showImg(a, seq); return; }
+    if (sz) sz.innerHTML = '불러오는 중<span class="ldd"><i></i><i></i><i></i></span>';
+    fileGet(seq).then(function (f) {
+      if (sz) sz.textContent = was;
+      if (f.t === 'application/pdf' && coarse) {   // 폰 = 받기(폰 브라우저는 창 안에서 PDF를 못 그린다) — 받은 파일은 폰의 PDF 앱이 연다
+        var d = document.createElement('a'); d.href = f.url; d.download = f.n || '파일.pdf'; document.body.appendChild(d); d.click(); d.remove(); return;
+      }
+      viewer(f);
+    }, function () { if (sz) sz.textContent = was; toast('파일을 불러오지 못했어요. 다시 눌러 주세요'); });
+  }
+  // 크게 보기 = 창 위 어두운 막(창 안이라 녹화 가림 그대로). 닫기 = X, 바깥 누르기, Esc, 뒤로(한 단계 — 창은 그대로, §4.11)
+  var VW = null;
+  function viewer(f) {
+    if (!VW) {
+      VW = el('<div class="ti-view" role="dialog" aria-label="첨부 크게 보기"><button type="button" class="ti-vx" aria-label="닫기">' + ICO.x + '</button><div class="ti-vb"></div></div>');
+      VW.addEventListener('click', function (e) { if (e.target === VW || e.target.classList.contains('ti-vb') || e.target.closest('.ti-vx')) closeViewer(); });
+      R.appendChild(VW);
+    }
+    var b = VW.querySelector('.ti-vb'); b.innerHTML = '';
+    if (f.t === 'application/pdf') { var fr = document.createElement('iframe'); fr.title = f.n || 'PDF'; fr.src = f.url; b.appendChild(fr); }
+    else { var im = new Image(); im.alt = '사진'; im.src = f.url; b.appendChild(im); }
+    VW.classList.add('on');
+    try { history.pushState({ tfinq: 1, tfv: 1 }, ''); } catch (e) {}   // /c/ 페이지도 뒤로 = 크게 보기만 닫기
+    VW.querySelector('.ti-vx').focus();
+  }
+  function viewerOpen() { return !!(VW && VW.classList.contains('on')); }
+  function closeViewer(fromPop) {
+    if (!viewerOpen()) return;
+    if (!fromPop && history.state && history.state.tfv) { history.back(); return; }   // 뒤로가기와 같은 길로 닫는다(기록 한 칸이 안 남게)
+    VW.classList.remove('on'); VW.querySelector('.ti-vb').innerHTML = '';
   }
   function bindPending(m) {   // 보낸 응답보다 묻기가 먼저 온 경우 = 이미 그린 말풍선에 줄 번호만 붙인다
     var rows = TH.querySelectorAll('.ti-row.me:not([data-seq])');
@@ -667,7 +772,7 @@
       S.more = !!r.more;
       var head = TH.firstElementChild, saveDay = lastDay, box = document.createElement('div');
       HOST = box; lastDay = '';
-      (r.msgs || []).forEach(function (m) { if (known[m.seq]) return; known[m.seq] = 1; dayIf(m.at); rowEl(m.who === 'v' ? 'me' : 'them', m.text, m.at, false).dataset.seq = m.seq; });
+      (r.msgs || []).forEach(function (m) { if (known[m.seq]) return; known[m.seq] = 1; dayIf(m.at); var rr = rowEl(m.who === 'v' ? 'me' : 'them', m.text, m.at, false); rr.dataset.seq = m.seq; if (m.file) attach(rr, m); });
       HOST = TH; var olderDay = lastDay; lastDay = saveDay;
       if (!box.firstChild) return;
       var h0 = TH.scrollHeight, top0 = TH.scrollTop, tail = box.lastElementChild;
@@ -758,6 +863,7 @@
   function doClose() {
     if (!S.open) return;
     S.open = false; clearTimeout(pollT); hideResume();
+    if (viewerOpen()) { VW.classList.remove('on'); VW.querySelector('.ti-vb').innerHTML = ''; }
     R.classList.remove('on'); closeSheet();
     document.documentElement.classList.remove('tfinq-open'); vpCover(false);
     P.style.height = ''; P.style.top = ''; R.classList.remove('kb'); originToBtn();
@@ -771,7 +877,7 @@
 
   // ── 연습 화면(?inq=demo — 서버 없이, 수집 0) ──
   // 서버 규칙을 그대로 흉내: 작업 번호(cid)를 처음 보면 run → 끝나면 결과, 같은 번호가 또 오면 실행 안 하고 run/결과만
-  var F = { mode: 'chat', rooms: {}, slow: false, lost: false, fail: false, jobs: {} };
+  var F = { mode: 'chat', rooms: {}, slow: false, lost: false, fail: false, jobs: {}, blobs: {} };
   function fake(b) {
     var wait = function (ms, v) { return new Promise(function (ok) { setTimeout(function () { ok(v); }, ms); }); };
     var broken = function (ms) { return new Promise(function (ok, no) { setTimeout(function () { no(new Error('BAD_REPLY')); }, ms); }); };
@@ -796,10 +902,28 @@
     if (!room) return wait(300, { ok: false, code: 'gone' });
     if (b.action === 'v_phone') { room.phone = b.phone; return wait(500, { ok: true, phone: fmtPh(b.phone) }); }
     if (b.action === 'v_load') return wait(900, { ok: true, msgs: room.msgs.slice(-50), read: room.read, hasPhone: !!room.phone, more: false, mode: F.mode });
+    if (b.action === 'v_file') { var fb = F.blobs[room.key + ':' + b.seq], fm = room.msgs[+b.seq - 1]; return wait(1200, fb && fm ? { ok: true, n: fm.file.n, t: fm.file.t, b64: fb } : { ok: false, code: 'nofile' }); }
     if (b.action === 'v_poll') { var news = room.msgs.filter(function (x) { return x.seq > (b.after || 0); }); return wait(250, news.length ? { ok: true, msgs: news, read: room.read, mode: F.mode } : { ok: true, same: true, read: room.read, mode: F.mode }); }
     return wait(200, { ok: false });
   }
   function demoRoom() { var k = ls(K('tf_inq_key')) || S.key; return k && F.rooms[k]; }
+  function demoFile(kind) {   // 연습 첨부 = 이 자리에서 그린 사진(캔버스) / 한 쪽짜리 PDF — 서버·네트워크 0
+    var r = demoRoom(); if (!r) return;
+    var b64, f;
+    if (kind === 'img') {
+      var c = document.createElement('canvas'); c.width = 900; c.height = 1200; var x = c.getContext('2d'), g = x.createLinearGradient(0, 0, 900, 1200);
+      g.addColorStop(0, '#e8f3ec'); g.addColorStop(1, '#3a8a5f'); x.fillStyle = g; x.fillRect(0, 0, 900, 1200);
+      x.fillStyle = '#fff'; x.font = 'bold 72px sans-serif'; x.fillText('연습 사진', 80, 160);
+      b64 = c.toDataURL('image/jpeg', 0.85).split(',')[1];
+      f = { n: '사진.jpg', t: 'image/jpeg', s: Math.round(b64.length * 3 / 4), w: 900, h: 1200 };
+    } else {
+      var pdf = '%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>endobj\n4 0 obj<</Length 39>>stream\nBT /F1 36 Tf 72 740 Td (Demo PDF) Tj ET\nendstream endobj\n5 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF';
+      b64 = btoa(pdf); f = { n: '10월 안내문.pdf', t: 'application/pdf', s: pdf.length };
+    }
+    r.read = r.msgs.length;
+    var seq = r.msgs.length + 1; F.blobs[r.key + ':' + seq] = b64;
+    r.msgs.push({ seq: seq, at: new Date().toISOString(), who: 's', text: kind === 'img' ? '' : '안내문 보내 드려요', file: f });
+  }
   function demoPanel() {
     var d = el('<div class="ti-demo"><b>연습 화면(서버 없음, 수집 0) 접기</b></div>');
     d.firstChild.addEventListener('click', function () { d.classList.toggle('min'); d.firstChild.textContent = d.classList.contains('min') ? '연습 펴기' : '연습 화면(서버 없음, 수집 0) 접기'; });
@@ -812,6 +936,8 @@
       $('#tiTa2').value = ''; $('#tiPh2').value = ''; $('#tiMail').classList.add('gate'); fresh();
     });
     add('답장 오기', function () { var r = demoRoom(); if (!r) return; r.read = r.msgs.length; r.msgs.push({ seq: r.msgs.length + 1, at: new Date().toISOString(), who: 's', text: r.msgs.length < 3 ? '안녕하세요, 확인했어요.\n신청은 여기서 해 주세요 think-factory.kr/contact' : '네, 확인하고 다시 알려 드릴게요.' }); });
+    add('사진 답장 오기', function () { demoFile('img'); });
+    add('PDF 답장 오기', function () { demoFile('pdf'); });
     add('읽음', function () { var r = demoRoom(); if (r) r.read = r.msgs.length; });
     add('다음 보내기 = 응답 놓침(늦게 성공)', function () { F.slow = true; });
     add('다음 보내기 = 안 닿음', function () { F.lost = true; });
