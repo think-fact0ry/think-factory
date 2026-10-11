@@ -239,7 +239,7 @@
   @keyframes doneCheck{ to{stroke-dashoffset:0;} }
   .done h1{ font-size:22px; font-weight:700; letter-spacing:-.4px; margin:0 0 6px; }
   .done p{ margin:0; font-size:17px; font-weight:600; color:var(--green-dark); }
-  .done p.fin{ margin-top:14px; font-size:var(--fs-body); font-weight:400; color:var(--g600); }
+  .done p.fin{ margin-top:24px; font-size:var(--fs-body); font-weight:400; color:var(--g600); }
   .done .idk{ margin:18px auto 0; }   /* 열쇠 없이 온 집의 형제 = 「다른 아이도 남기기」 */
 
   /* ── 「다음」 유도(docs/1 §5.7) — 답한 뒤 가만히 있을 때만, 최대 두 번 = 빛줄기 + 화살표 + 깨우기 + 「잘 모르겠어요」(다섯 안 비교 = prototype)
@@ -379,8 +379,8 @@
     if(c.type==='steps') return h + '<ol class="tl">'+c.steps.map(function(s,k){ return '<li><span class="num">'+(k+1)+'</span><span class="tx">'+esc(s)+'</span></li>'; }).join('')+'</ol>';
     if(c.type==='tel') return h + '<div class="lines">'+lines(c.l)+'</div>' + TEL;
     // mom: 아동 가구의 성인 상담 이용자에게만 있는 칸(14 CONTENT.adult 중)
-    return h + '<div class="ab"><h3>마음이 많이 힘들 때</h3><p>혼자 견디지 말고 상담사님이나 센터에 알려요. 센터가 닫혀 있을 때는 아래 번호로 전화해요.</p>'+TEL+'</div>'
-      + '<div class="ab"><h3>상담 중 몸이 안 좋을 때</h3><p>참지 말고 바로 말해요. 상담사님이 먼저 응급조치를 하고 가족과 센터에 알려요.</p></div>'
+    return h + '<div class="ab"><h3>마음이 많이 힘들 때</h3><p>혼자 견디지 말고 상담사님이나 센터에 알려요.<br>센터가 닫혀 있을 때는 아래 번호로 전화해요.</p>'+TEL+'</div>'
+      + '<div class="ab"><h3>상담 중 몸이 안 좋을 때</h3><p>참지 말고 바로 말해요.<br>상담사님이 먼저 응급조치를 하고 가족과 센터에 알려요.</p></div>'
       + '<div class="ab"><h3>먹는 약이 바뀌면</h3><p>상담 전에 상담사님에게 알려 주세요.</p></div>';
   }
   function oxHtml(){ return '<div class="ox" id="ox"><button data-v="o" aria-label="O">'+O_SVG+'</button><button data-v="x" aria-label="X">'+X_SVG+'</button></div>'; }
