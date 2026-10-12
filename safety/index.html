@@ -234,15 +234,22 @@
 
   /* ── 끝(열쇠 없을 때만) + 다 봤어요 ── */
   .intro-card{ background:#fff; border-radius:var(--r-lg); padding:26px 22px; box-shadow:var(--sh1); }
-  .intro-card h1{ font-size:var(--fs-h1); font-weight:700; letter-spacing:-.5px; margin:0 0 20px; line-height:1.3; }
-  .tfield{ margin-bottom:15px; }
-  .tfield label{ display:block; font-size:15px; font-weight:600; color:var(--g600); margin:0 0 5px; transition:color .15s; }
-  .tfield.focus label{ color:var(--green); }
-  .tin-wrap{ position:relative; border-bottom:2px solid var(--g200); transition:border-color .15s; }
+  .intro-card h1{ font-size:var(--fs-h1); font-weight:700; letter-spacing:-.5px; margin:0 0 14px; line-height:1.3; }
+  /* 아이 칸(이름, 생년월일)과 보호자 칸은 카드를 나눈다(유성 10-12 「위계가 헷갈린다, 바운더리를」) — §4.7 다른 묶음 = 선 말고 여백, 밑줄 칸이라 구분선은 안 얹음 */
+  .intro-card + .intro-card{ margin-top:16px; padding-top:8px; padding-bottom:22px; }   /* 위 8 + 라벨 자리 26 = 아래 22와 눈으로 맞음 */
+  /* 플로팅 라벨(docs/1 §4.1-14 — 22 .field.fl 실코드, 유성 10-12 지시): 칸 안엔 「아이 이름」 「생년월일」 「보호자 이름」만.
+     누르면 그 글자가 위 작은 라벨로 올라가고 칸 안은 「이름」 「0000. 00. 00」. 비운 채 나가면 다시 내려온다. 칸 높이 고정(라벨 자리를 늘 비워 둠)
+     크기 = 이 화면 글씨 예외(§3.2): 라벨 15(원칙 12.5), 입력 20 → 라벨 줄 20 + 6 + 밑줄 상자 52 = 78 */
+  .tfield{ position:relative; height:78px; }
+  .tfield + .tfield{ margin-top:8px; }
+  .tfield > label{ position:absolute; left:0; top:0; font-size:15px; line-height:20px; font-weight:600; color:var(--g600); opacity:0; transform:translateY(10px); transition:opacity .18s, transform .18s, color .15s; pointer-events:none; }
+  .tfield.up > label{ opacity:1; transform:none; }
+  .tfield.focus > label{ color:var(--green); }
+  .tin-wrap{ position:absolute; left:0; right:0; bottom:0; height:52px; display:flex; align-items:center; border-bottom:2px solid var(--g200); transition:border-color .15s; }
   .tfield.focus .tin-wrap{ border-color:var(--green); }
-  .tin-wrap input{ width:100%; border:none; background:none; outline:none; font:inherit; line-height:1.5; font-size:20px; font-weight:600;
-    color:var(--g900); padding:2px 34px 3px 0; caret-color:var(--green); letter-spacing:-.2px; }
-  .tin-wrap .clr{ position:absolute; right:0; top:6px; width:15px; height:15px; border-radius:50%; background:var(--g300);
+  .tin-wrap input{ width:100%; height:100%; border:none; background:none; outline:none; font:inherit; line-height:1.5; font-size:20px; font-weight:600;
+    color:var(--g900); padding:0 34px 0 0; caret-color:var(--green); letter-spacing:-.2px; }
+  .tin-wrap .clr{ position:absolute; right:0; top:50%; margin-top:-7.5px; width:15px; height:15px; border-radius:50%; background:var(--g300);
     border:none; display:none; align-items:center; justify-content:center; cursor:pointer; padding:0; }
   .tfield.has-val .clr{ display:flex; }
   .tin-wrap .clr svg{ width:7px; height:7px; color:#fff; display:block; }
@@ -326,9 +333,11 @@
     <div class="top"><button class="nav-arrow" id="endBack" aria-label="뒤로"></button></div>
     <div class="intro-card">
       <h1 id="endT">아이 이름을 남겨 주세요</h1>
-      <div class="tfield" id="fNameF"><label for="fName" id="fNameL">아이 이름</label><div class="tin-wrap"><input id="fName" placeholder="이름" readonly autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" enterkeyhint="next"><button class="clr" type="button" tabindex="-1" aria-label="지우기"></button></div></div>
-      <div class="tfield" id="fBirthF"><label for="fBirth">생년월일</label><div class="tin-wrap"><input id="fBirth" type="tel" inputmode="numeric" placeholder="0000. 00. 00" readonly autocomplete="off" data-lpignore="true" enterkeyhint="next"><button class="clr" type="button" tabindex="-1" aria-label="지우기"></button></div></div>
-      <div class="tfield" style="margin-bottom:6px" id="fGuardF"><label for="fGuard">보호자 이름</label><div class="tin-wrap"><input id="fGuard" placeholder="이름" readonly autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" enterkeyhint="done"><button class="clr" type="button" tabindex="-1" aria-label="지우기"></button></div></div>
+      <div class="tfield" id="fNameF"><label for="fName" id="fNameL">아이 이름</label><div class="tin-wrap"><input id="fName" placeholder="아이 이름" data-ph-up="이름" readonly autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" enterkeyhint="next"><button class="clr" type="button" tabindex="-1" aria-label="지우기"></button></div></div>
+      <div class="tfield" id="fBirthF"><label for="fBirth">생년월일</label><div class="tin-wrap"><input id="fBirth" type="tel" inputmode="numeric" placeholder="생년월일" data-ph-up="0000. 00. 00" readonly autocomplete="off" data-lpignore="true" enterkeyhint="next"><button class="clr" type="button" tabindex="-1" aria-label="지우기"></button></div></div>
+    </div>
+    <div class="intro-card" id="guardCard">
+      <div class="tfield" id="fGuardF"><label for="fGuard">보호자 이름</label><div class="tin-wrap"><input id="fGuard" placeholder="보호자 이름" data-ph-up="이름" readonly autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" enterkeyhint="done"><button class="clr" type="button" tabindex="-1" aria-label="지우기"></button></div></div>
     </div>
     <div class="spacer"></div>
     <button class="btn gate" type="button" id="endBtn">보내기</button>
@@ -379,7 +388,7 @@
       e:['요리 전후에는 손을 씻어요.','조리 도구와 식탁을 닦아요.','만든 음식은 그날 먹고, 오래 꺼내 두지 않아요.'] },
     { g:'parent', type:'plain', t:'수업하는 자리 주변을 살펴요', pic:['f_hazard',635,200], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료, 약, 세제도요.'] },
     { g:'parent', type:'list', t:'이럴 땐 미리 알려 주세요', ph:'보호자가 선생님에게 아이 상태를 알려 주는 장면',
-      rows:[['알레르기가 있으면','수업 전에 꼭 알려 주세요.'],['열이나 기침이 있으면','수업 날짜를 옮겨요.'],['연락처가 바뀌면','바로 알려 주세요.']], kv:['알릴 곳','담당 선생님이나 센터 032-277-2007'] },
+      rows:[['알레르기가 있으면','수업 전에 꼭 알려 주세요.'],['열이나 기침이 있으면','수업 날짜를 옮겨요.'],['연락처가 바뀌면','바로 알려 주세요.']], kv:['알릴 곳','담당 선생님'] },
     { g:'teacher', type:'steps', t:'수업 중에 다치면', ph:'선생님이 다친 아이를 돌봐 주는 장면', steps:['선생님이 먼저 응급조치를 해요.','보호자와 센터에 바로 알려요.','필요하면 119에 연락해요.'] },
     { g:'teacher', type:'list', t:'날씨에 따라 수업을 바꿔요', ph:'비 오는 창밖을 아이와 선생님이 같이 보는 장면',
       rows:[['태풍이나 호우 특보가 내리면','수업을 쉬거나 옮길 수 있어요.'],['미세먼지가 나쁜 날은','창문을 닫고 수업해요.'],['더운 여름에는','요리 수업을 쉴 수 있어요.']] }
@@ -388,7 +397,7 @@
   var ADULT = [
     { g:'before', type:'plain', t:'상담하는 자리 주변을 살펴요', pic:['a_place',625,270], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료도 조심해요.'] },
     { g:'before', type:'list', t:'상담 전에 미리 알려 주세요', pic:['a_tell',415,360],
-      rows:[['열이나 기침이 있으면','미리 알리고 날짜를 옮겨요.'],['태풍, 호우 특보 때는','상담을 쉬거나 옮길 수 있어요.'],['연락처나 비상연락처가 바뀌면','바로 알려 주세요.'],['먹는 약이 바뀌었으면','상담사님에게 알려 주세요.']], kv:['알릴 곳','담당 상담사님이나 센터 032-277-2007'] },
+      rows:[['열이나 기침이 있으면','미리 알리고 날짜를 옮겨요.'],['태풍, 호우 특보 때는','상담을 쉬거나 옮길 수 있어요.'],['연락처나 비상연락처가 바뀌면','바로 알려 주세요.'],['먹는 약이 바뀌었으면','상담사님에게 알려 주세요.']], kv:['알릴 곳','담당 상담사님'] },
     { g:'before', type:'tel', t:'마음이 많이 힘들 때', pic:['a_heart',420,290], l:['혼자 견디지 말고 상담사님이나 센터에 알려요.','센터가 닫혀 있을 때는 아래 번호로 전화해요.'] },
     { g:'act', type:'plain', t:'불이 났을 때', pic:['a_fire',185,340], l:['“불이야” 하고 크게 외쳐요.','젖은 수건으로 코와 입을 막아요.','몸을 낮추고 움직여요.','엘리베이터 말고 계단으로 나가요.'] },
     { g:'act', type:'steps', t:'상담 중 몸이 안 좋을 때', pic:['a_unwell',225,330], steps:['어지럽거나 숨이 차면 참지 말고 바로 말해요.','상담사님이 먼저 응급조치를 하고 가족과 센터에 알려요.','필요하면 119에 연락해요.'] },
@@ -626,8 +635,9 @@
   }
   function applyFor(){
     buildDeck(); buildSegs();
-    if(FOR==='adult'){ $('endT').textContent='이름을 남겨 주세요'; $('fNameL').textContent='이름'; $('fGuardF').style.display='none'; }
-    else { $('endT').textContent='아이 이름을 남겨 주세요'; $('fNameL').textContent='아이 이름'; $('fGuardF').style.display=''; }
+    if(FOR==='adult'){ $('endT').textContent='이름을 남겨 주세요'; $('fNameL').textContent='이름'; $('fName').dataset.phUp=''; $('guardCard').style.display='none'; }   // 성인 = 라벨이 곧 「이름」이라 올라간 뒤 칸 안은 비움(같은 글자 두 번 X)
+    else { $('endT').textContent='아이 이름을 남겨 주세요'; $('fNameL').textContent='아이 이름'; $('fName').dataset.phUp='이름'; $('guardCard').style.display=''; }
+    ['fName','fBirth','fGuard'].forEach(function(id){ $(id)._fl && $(id)._fl(); });
     if(onScr('sCover')) showCover();
   }
 
@@ -678,9 +688,12 @@
   ['fName','fBirth','fGuard'].forEach(function(id){
     var inp=$(id), tf=inp.parentNode.parentNode, clr=tf.querySelector('.clr');
     clr.innerHTML = CLR;
-    var upd=function(){ tf.classList.toggle('has-val', inp.value.length>0); };
-    inp.addEventListener('focus', function(){ inp.removeAttribute('readonly'); tf.classList.add('focus'); if(id==='fBirth') inp._wasFull = inp.value.replace(/\D/g,'').length>=8; });   // §4.1-6 readonly 시작
-    inp.addEventListener('blur', function(){ tf.classList.remove('focus'); });
+    // 플로팅 라벨(§4.1-14): 커서가 있거나 값이 있으면 라벨이 위로, 칸 안 글자 = data-ph-up / 아니면 칸 안 글자 = 라벨 글자
+    var fl=inp._fl=function(){ var on = document.activeElement===inp || inp.value.length>0; tf.classList.toggle('up', on); inp.setAttribute('placeholder', on ? (inp.dataset.phUp||'') : tf.querySelector('label').textContent); };
+    var upd=function(){ tf.classList.toggle('has-val', inp.value.length>0); fl(); };
+    fl();
+    inp.addEventListener('focus', function(){ inp.removeAttribute('readonly'); tf.classList.add('focus'); fl(); if(id==='fBirth') inp._wasFull = inp.value.replace(/\D/g,'').length>=8; });   // §4.1-6 readonly 시작
+    inp.addEventListener('blur', function(){ tf.classList.remove('focus'); fl(); });
     inp.addEventListener('input', function(){
       if(id==='fBirth'){ inp.value=fmtBirth(inp.value); if(inp.value.replace(/\D/g,'').length===8 && !inp._wasFull) inp.blur(); }   // 8자리 = 키패드 닫기(고치러 연 칸은 예외 §4.1-4)
       tf.classList.remove('err'); upd(); endGate();
@@ -702,7 +715,7 @@
   $('moreKid').addEventListener('click', function(){   // 형제: 아이 칸만 비우고 보호자 이름은 둔다
     if(this.dataset.again){ delete this.dataset.again; this.textContent='다른 아이도 남기기'; this.hidden=true; $('doneT').textContent='안전교육을 다 봤어요';
       var ps=$('sDone').querySelectorAll('.done p'); ps[0].textContent='우리 함께 지켜요!'; ps[1].hidden=false; memDel(); picked={}; deck.i=-1; showCover(); return; }   // 다 본 집 「처음부터 다시 보기」
-    ['fName','fBirth'].forEach(function(id){ $(id).value=''; var tf=$(id+'F'); tf.classList.remove('has-val','err'); });
+    ['fName','fBirth'].forEach(function(id){ $(id).value=''; var tf=$(id+'F'); tf.classList.remove('has-val','err'); $(id)._fl(); });
     show('sEnd'); endGate();
   });
 
