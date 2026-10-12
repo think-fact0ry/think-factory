@@ -1,8 +1,8 @@
 // 폼 대기 화면 (GAS iframe 래퍼 공용) — 2026-10-01 유성 확정 「링 제거 + 훑기 + 말해 주는 기다림 + 연결 감지 자동 재시도」.
-// 쓰는 곳: kr /contact(06)·/recommend(22)·/monitoring(14)·/feedback(16) + 옛 saenggak/index.html(06, 이 파일을 kr 주소로 불러 씀).
+// 쓰는 곳: kr /contact(06)·/register(06 등록 모드, readyType moded)·/recommend(22)·/monitoring(14)·/feedback(16) + 옛 saenggak/index.html(06, 이 파일을 kr 주소로 불러 씀).
 // 근거·반응 보드 = 부모 레포 docs/1 §5.4 「대기가 길 때」·백로그 §🏠 「신청폼 안 열려요」.
 //
-// 페이지가 할 일: 뼈대(.apply-skel 같은 덮개 + 그 안 카드)를 그려 두고 tfFormWait({frame, skel, card, obj, host?}) 한 번 부르기.
+// 페이지가 할 일: 뼈대(.apply-skel 같은 덮개 + 그 안 카드)를 그려 두고 tfFormWait({frame, skel, card, obj, host?, readyType?}) 한 번 부르기.
 //   card = 훑기를 입힐 덩어리(하나 또는 배열) / host = 문구·오류 카드를 띄울 그릇(기본 skel, PC 폰 목업 페이지는 목업 화면).
 //   - 뼈대 위치는 이 파일이 절대 건드리지 않는다. 문구·오류 카드는 뼈대 *위*에 겹쳐 뜬다(레이아웃 0 변화) —
 //     유성 10-01: 「문구가 뼈대 아래 붙으면 뼈대가 밀려 올라가고, 폼이 그 자리에 안 나온다」.
@@ -125,7 +125,7 @@
 
     window.addEventListener('message', function (e) {
       if (ready || !okGasOrigin(e.origin)) return;
-      var d = e.data; if (!d || d.tfApply !== 1 || d.type !== 'ready') return;
+      var d = e.data; if (!d || d.tfApply !== 1 || d.type !== (o.readyType || 'ready')) return;   // readyType = 도착 판정 메시지(기본 ready). /register는 'moded' — 폼이 등록 모드로 바꾼 뒤에 걷어야 옛 첫 화면이 번쩍 안 보인다
       ready = true; clearTimers(); setPill(null); if (err) { err.remove(); err = null; }
       if (ban && !ban.classList.contains('back')) setBanner(null);
       document.body.classList.add('form-ready');

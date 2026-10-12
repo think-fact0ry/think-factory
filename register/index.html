@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script src="/js/kakao-escape.js"></script>
+<script src="/js/form-wait.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+<title>아이 정보 등록 | 생각공작소</title>
+<meta name="robots" content="noindex">
+<meta property="og:title" content="생각공작소 아이 정보 등록">
+<meta property="og:description" content="수업 중인 아이 정보를 등록하면 매달 월 계획안을 받아요 :)">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://think-factory.kr/register">
+<meta property="og:image" content="https://think-factory.kr/assets/og-image.jpg">
+<!--
+  think-factory.kr/register — 월 계획안 센터 발송의 등록 입구(2026-10-12). 선생님이 카톡으로 보호자에게 전하는 링크(25일 📌 글, 누락된 아이 답장).
+  설계 정본 = 부모 레포 docs/4_설계_2026-09-29_월안내_센터발송.md §4 §5 §6 ④. 링크 미리보기 글(og) = 유성 확정 10-12(「상담신청도 아니고」 — /contact 카드와 다르게).
+  몸통 = /contact와 같은 06 신청폼(GAS exec) + 등록 모드: 폼이 ready를 보내면 {mode:'register', src:'register'}를 돌려주고, 폼은 문구와 칸을 바꾼 뒤 'moded'로 알린다.
+  뼈대는 'moded'에서 걷는다(js/form-wait.js readyType) — ready에서 걷으면 옛 「바우처 신청」 첫 화면이 한순간 보인다.
+  /contact와 다른 점: 메뉴, 자주 묻는 질문, 하단 정보, 떠 있는 버튼, 방문 통계, 문의 창 없음(보호자가 링크로만 들어와 한 가지 일만 하는 화면). 수정 찾기 화면은 등록 모드에서 안 열려 appmode도 없음.
+  noindex = 검색에 안 나오게(링크로만 들어옴). ⚠️ 06 등록 모드 첫 화면 문구, 치수를 바꾸면 아래 뼈대도(0-9). ⚠️ 사용자 문구에 가운뎃점(U+00B7) 금지.
+-->
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/android-icon-192x192.png">
+<link rel="apple-touch-icon" href="/assets/android-icon-192x192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="/css/site.css">
+<style>
+html, body{ background:#f7f5f1; }   /* 폼 캔버스와 같은 색 — 폼 아래 남는 자리가 이어져 보이게 */
+body{ margin:0; }
+.apply-wrap{ position:relative; }
+.apply-frame{ height:100vh; height:100svh; min-height:100svh; }   /* 메뉴가 없어 화면을 꽉 채움(site.css 기본 = 100svh-60). 폼이 높이를 알려 주면 그 높이로 */
+/* 뼈대 = /contact와 같은 것(06 intro-card를 같은 폰트, 크기, 행간으로 조판 — 글자는 투명, 줄마다 막대). 문구는 등록 모드 첫 화면 것 */
+.apply-skel{ position:absolute; inset:0; z-index:1; background:#f7f5f1; padding:0 16px; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
+.apply-skel .sk-card{ background:#fff; border-radius:20px; padding:30px 24px; box-shadow:0 1px 4px rgba(0,0,0,.05); width:100%; max-width:508px; margin:0 auto; font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif; font-size:16px; line-height:1.6; letter-spacing:0; word-break:keep-all; color:transparent; -webkit-text-size-adjust:100%; }
+.apply-skel .sk-t{ background:var(--g100); color:transparent; border-radius:6px; -webkit-box-decoration-break:clone; box-decoration-break:clone; position:relative; top:2px; }
+.apply-skel .sk-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+.apply-skel .sk-chip{ display:inline-block; font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; background:var(--g100); }
+.apply-skel .sk-tog{ flex-shrink:0; width:34px; height:34px; border-radius:99px; background:var(--g100); }
+.apply-skel .sk-h1{ font-size:clamp(23px,3.4vw,30px); font-weight:700; letter-spacing:-.5px; line-height:1.35; margin:0 0 10px; }
+.apply-skel .sk-sub{ font-size:13.5px; margin:0 0 22px; }
+.apply-skel .sk-btn{ padding:17px; font-size:17px; font-weight:700; line-height:normal; text-align:center; border-radius:15px; background:var(--g100); }
+@media (max-width:380px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }
+body.form-ready .apply-skel{ display:none; }
+body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk-card{ background:#22332a; }
+</style>
+</head>
+<body>
+<h1 class="sr-only">생각공작소 아이 정보 등록</h1>
+<div class="apply-wrap">
+<div class="apply-skel" id="applySkel" aria-hidden="true">
+  <div class="sk-card">
+    <div class="sk-head"><span class="sk-chip">생각공작소</span><span class="sk-tog"></span></div>
+    <div class="sk-h1"><span class="sk-t">아이 정보 등록</span></div>
+    <p class="sk-sub"><span class="sk-t">수업 중인 아이 정보를 등록하면<br>매달 월 계획안을 받아요 :)</span></p>
+    <div class="sk-btn">등록하기</div>
+  </div>
+</div>
+<iframe class="apply-frame" title="아이 정보 등록"
+  src="https://script.google.com/macros/s/AKfycbyDLm7VCcRNmPrK08waOFx3JHt9lvxP22coImDfK9xfWNheiS11My2xcJJrqrE6GVRPSw/exec"></iframe>
+</div>
+
+<!-- 폼 안내 토스트(임베드 폼이 요청 시 화면 하단에 표시) / 종료 확인 안내 — /contact와 같은 것(site.css) -->
+<div class="form-toast" id="formToast"></div>
+<div class="exithint" id="exitHint"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>한 번 더 뒤로 가면 나가요.</div>
+
+<script>
+// ── 폼(iframe) ↔ 페이지 브릿지 = /contact 것에서 메뉴 높이(0), 유입버킷(늘 register), 등록 모드만 다르게 ──
+// GAS는 이중 iframe이라 contentWindow로 직접 못 보냄 → 폼이 window.top으로 보낸 메시지의 e.source로 회신.
+(function () {
+  var f = document.querySelector('.apply-frame');
+  if (!f) return;
+  var childWin = null, safetyT = 0;
+  function vpH() { return window.visualViewport ? window.visualViewport.height : window.innerHeight; }
+  // mode = 06 Apply.html 등록 모드 스위치. src = 시트 X열 'register'(07 월 안내 「짝 없는 등록」, 10 브리핑이 신규 신청과 가름) — 폼도 등록 모드면 스스로 'register'를 쓴다
+  function sendVH() { if (!childWin) return; try { childWin.postMessage({ tfParent: 1, vh: vpH(), src: 'register', mode: 'register' }, '*'); } catch (e) {} }
+  function okGasOrigin(o) { try { var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); } catch (e) { return false; } }
+  function formToastBottom(t, above) {
+    if (typeof above !== 'number') return '';
+    var vh = window.innerHeight, top = f.getBoundingClientRect().top + above;
+    if (top <= 0 || top >= vh) return '';
+    var th = t.offsetHeight || 46;
+    return Math.min(Math.max(Math.round(vh - top) + 12, 20), Math.max(20, vh - th - 8)) + 'px';
+  }
+  function showFormToast(msg, kind, above) { var t = document.getElementById('formToast'); if (!t) return; t.textContent = msg; t.style.bottom = formToastBottom(t, above); t.className = 'form-toast show' + (kind === 'error' ? ' err' : ''); clearTimeout(t._ft); t._ft = setTimeout(function () { t.className = 'form-toast'; }, 2300); }
+  function showExitBox() { var e = document.getElementById('exitHint'); if (!e) return; e.classList.add('show'); clearTimeout(e._et); e._et = setTimeout(function () { e.classList.remove('show'); }, 2000); }
+  window.addEventListener('message', function (e) {
+    if (!okGasOrigin(e.origin)) return;
+    var d = e.data; if (!d || d.tfApply !== 1) return;
+    childWin = e.source;
+    if (d.type === 'ready') {   // 첫 회신 = 뷰포트 + 등록 모드. 뼈대는 폼이 'moded'를 보낼 때 form-wait.js가 걷는다
+      sendVH();
+      if (!safetyT) safetyT = setTimeout(function () { document.body.classList.add('form-ready'); }, 3000);   // 폼이 등록 모드를 모르는 옛 판이면 'moded'가 안 온다 — 20초 오류 카드 대신 그냥 신청폼을 보인다
+    }
+    else if (d.type === 'height' && d.height) { f.style.height = d.height + 'px'; }
+    else if (d.type === 'theme') { document.body.classList.toggle('form-dark', !!d.dark); }
+    else if (d.type === 'scrolltop') { var t = f.getBoundingClientRect().top + window.pageYOffset; window.scrollTo({ top: Math.max(0, t), behavior: 'auto' }); }
+    else if (d.type === 'toast') { showFormToast(d.msg, d.kind, d.above); }
+    else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
+    else if (d.type === 'exithint') { showExitBox(); }
+  });
+  // 대기 화면(문구, 연결 끊김, 다시 불러오기) = js/form-wait.js. readyType 'moded' = 등록 모드로 바뀐 뒤에 뼈대를 걷는다
+  if (window.tfFormWait) window.tfFormWait({ frame: f, skel: document.getElementById('applySkel'), card: document.querySelector('#applySkel .sk-card'), obj: '등록 화면을', readyType: 'moded' });
+  window.addEventListener('resize', sendVH);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', sendVH);
+})();
+</script>
+</body>
+</html>
