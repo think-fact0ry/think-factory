@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>안전교육 — 생각공작소</title>
 <meta name="robots" content="noindex">
+<!-- 다크 모드여도 밝은 화면 그대로(유성 10-12 「다크모드일때와 기본일때 똑같이」) — 이 화면엔 다크 CSS가 없고, 어두워지는 건 삼성 인터넷이 페이지를 강제로 칠하는 것.
+     only light = 브라우저 강제 칠하기를 끄는 표준 신호(크롬 헤드리스 강제 다크에서 막히는 것 확인). 삼성 인터넷은 판과 설정에 따라 안 따를 수 있다는 보고가 있어 실기기 확인 몫 -->
+<meta name="color-scheme" content="only light">
 <!--
   think-factory.kr/safety — 이용자 안전교육 카드 덱(2026-10-11, 유성 「2 카드 덱」 확정 → 실제 화면). 옛 14 GAS ?mode=safety iframe 래퍼를 갈아 끼움.
   입구 = 07 안전교육 알림톡 버튼 「안전교육 보기」 → /safety?for=child|adult&k=#{키}(주소는 템플릿 심사본에 박힘 → 바꾸면 재심사) / 대체문자 = 열쇠 없이 ?for=만.
@@ -38,6 +41,7 @@
     --sf-bot:linear-gradient(to bottom,rgba(22,104,65,0) 0%,rgba(22,104,65,.055) 100%),
              linear-gradient(to bottom,rgba(22,104,65,0) 58%,rgba(22,104,65,.115) 100%);
   }
+  :root{ color-scheme:only light; }   /* 위 meta와 한 쌍(meta를 못 읽는 경로 대비) */
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ margin:0; height:100%; background:var(--beige); }
   body{ font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif; color:var(--g900); line-height:1.6;
