@@ -15,6 +15,10 @@
   (열쇠 GO 때 약속 — 링크가 전달돼도 아이 이름, 상담 이용 사실이 안 드러나게). 열쇠 없으면 끝에서 이름 + 생년월일.
   디자인 정본 = 이 파일(10-11 2차 유성 폰 확인부터 — prototype/안전교육_웹_E디자인_화면.html은 1차까지의 기록). 원칙 = docs/1 §5.7(다음 숨김, 반짝, 5초 유도), §5.8(두 장 넘김), §3.7(제목 → 첫 줄 > 줄 사이), §4.6(끝 화면 한 줄), §4.11(뒤로), §4.13-6(아래 띠).
   ?demo=1 = 서버 없이 화면만(헤드리스 확인용, &mom=1 = 엄마 카드) / ?at=N = 그 장 바로. ⚠️ 사용자 문구에 가운뎃점(U+00B7) 금지.
+  10-12 소장님 실사용(유성 주안) → 유성 픽(비교판 = git 10e1cb30 prototype/안전교육_웹_소장님피드백_프리뷰.html):
+    A1 표지 부제 18, 칸 글 16 + 카드 안 14px 이하 글자 16(이 화면만 §3.2 예외) / B1 답하면 O/X가 사라지고 카드 테두리(맞음 초록, 틀림 흔들림 + 주의 주황),
+    「잘 모르겠어요」 없앰, O/X는 맨 아래 「다음」 자리에(답하면 그 자리에 「다음」) / C4 이 폰이 보던 곳을 기억 + 다 본 집은 「이미 봤어요」 + html 당김 막기 /
+    E3 짧고 넓은 화면이면 그림 왼쪽 글 오른쪽 + E1 표지 포스터 누르면 크게.
 -->
 <script>
 // 카톡 인앱 브라우저 = 상하단 바가 카드와 버튼을 가린다 → 기본 브라우저로(/monitoring, /recommend와 같은 결, 유성 2026-07-08)
@@ -44,6 +48,7 @@
   :root{ color-scheme:only light; }   /* 위 meta와 한 쌍(meta를 못 읽는 경로 대비) */
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ margin:0; height:100%; background:var(--beige); }
+  html{ overscroll-behavior-y:none; }   /* 아래로 당겨 새로고침 막기 — 크롬 계열은 body가 아니라 html을 본다(유성 10-12 C4와 한 쌍). 막혀도 주소창 새로고침은 아래 「보던 곳 기억」이 받는다 */
   body{ font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif; color:var(--g900); line-height:1.6;
     -webkit-text-size-adjust:100%; word-break:keep-all; -webkit-font-smoothing:antialiased; overscroll-behavior:none;
     -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; cursor:default; }
@@ -83,7 +88,8 @@
   .cnt{ flex:0 0 auto; font-size:13px; font-weight:600; color:var(--g600); min-width:34px; text-align:right; font-variant-numeric:tabular-nums; }
 
   /* 묶음 뱃지 — 흰 카드 안이라 weak 면이 보인다(§4.15). 베이지 위에는 두지 않는다(유성 10-10) */
-  .gchip{ display:inline-block; font-size:12.5px; font-weight:600; padding:4px 11px; border-radius:99px; letter-spacing:-.2px; }
+  /* 카드 안 14px 이하 글자 = 16px(유성 10-12 A1 「권장대로」 — 소장님 「글씨 작음」, 이 화면만 §3.2 예외: 칩, 주제, 안내 줄, 뒤집기 안내, 전화 줄) */
+  .gchip{ display:inline-block; font-size:16px; font-weight:600; padding:5px 12px; border-radius:99px; letter-spacing:-.2px; }
   .gchip.kid, .gchip.before{ background:var(--green100); color:var(--green-dark); }
   .gchip.parent{ background:var(--warn-weak-bg); color:var(--warn-weak-fg); }
   .gchip.teacher, .gchip.act{ background:var(--g100); color:var(--dark); }
@@ -97,9 +103,9 @@
   .ttl{ font-size:var(--fs-h1); font-weight:700; letter-spacing:-.5px; line-height:1.32; }
   .lines{ font-size:17px; color:var(--g700); line-height:1.6; letter-spacing:-.2px; }
   .lines p{ margin:0; } .lines p + p{ margin-top:6px; }
-  .topic{ font-size:14px; font-weight:600; color:var(--g600); margin:12px 0 4px; }
+  .topic{ font-size:16px; font-weight:600; color:var(--g600); margin:12px 0 4px; }
   .stmt{ font-size:var(--fs-h2); font-weight:700; letter-spacing:-.4px; line-height:1.4; }
-  .hint{ font-size:14px; font-weight:600; color:var(--green); margin:8px 0 0; }
+  .hint{ font-size:16px; font-weight:600; color:var(--green); margin:8px 0 0; }
 
   /* ── O/X — 흰 채움 + 그린틴트 2겹 그림자(유성 10-10, §4.9 「밝은 캔버스 위 옵션 = 흰 채움 + 그림자」) ── */
   .ox{ display:grid; grid-template-columns:1fr 1fr; gap:12px; flex-shrink:0; }
@@ -107,11 +113,21 @@
     display:flex; align-items:center; justify-content:center; position:relative; transition:transform .1s, background .2s, color .2s, box-shadow .2s, opacity .2s; }
   .ox button:active{ transform:scale(.96); box-shadow:var(--sh1); }
   .ox button svg{ width:40px; height:40px; fill:none; stroke:currentColor; stroke-width:3.4; stroke-linecap:round; }
-  .ox button.right{ background:var(--green500); color:var(--ink-on-dark); box-shadow:none; }
-  .ox button.mine{ background:var(--g600); color:var(--ink-on-dark); box-shadow:none; }
-  .ox button.dim{ opacity:.45; box-shadow:none; }
   .ox.answered button{ pointer-events:none; }
-  .ox button .tag{ position:absolute; top:8px; right:11px; font-size:12.5px; font-weight:700; color:var(--ink-on-dark); }
+  /* 퀴즈 장 아래 칸 = O/X와 「다음」이 같은 칸에 겹친다(유성 10-12 B1 「잘 모르겠어요와 다음 버튼이 없어졌으니 카드를 더 키우고 O/X를 내려」).
+     답하기 전 = O/X만 맨 아래, 답하면 O/X가 사라지고 같은 칸 바닥에 「다음」 → 칸 높이 = O/X 84px 그대로라 카드가 1px도 안 움직인다.
+     옛 판(답한 뒤 O/X가 정답 초록, 고른 쪽 진회색으로 남음)은 소장님이 그 단추를 또 눌렀다 — 칠해진 단추가 「다음」보다 크고 진했다 */
+  .bslot{ display:grid; flex-shrink:0; }
+  .bslot > .ox, .bslot > .foot{ grid-area:1 / 1; }
+  .bslot > .foot{ align-self:end; padding-top:0; z-index:2; pointer-events:none; }
+  .bslot > .foot .btn{ pointer-events:auto; }
+  .ox.gone{ opacity:0; visibility:hidden; transition:opacity .2s, visibility 0s .2s; }
+  /* 답하면 카드가 말한다 — 맞음 = 초록 테두리 / 틀림 = 카드가 흔들리고 주의 주황 테두리(유성 10-12 「red 아닌 브랜드 주의 색으로」, 빨강 = 오류색) */
+  .dk .face{ transition:box-shadow .25s; }
+  .dk.ok .face{ box-shadow:0 0 0 3px var(--green500), var(--sh2); }
+  .dk.ng .face{ box-shadow:0 0 0 3px var(--warn), var(--sh2); }
+  .cshake{ animation:cShake .46s cubic-bezier(.36,.07,.19,.97); }   /* 카드 전체라 단추 표준(3px)보다 크게 — §4.9 「못 눌러요」 흔들림과 다른 뜻(오답), docs/1 §5.7 */
+  @keyframes cShake{ 15%{transform:translateX(-8px)} 30%{transform:translateX(7px)} 45%{transform:translateX(-5px)} 60%{transform:translateX(4px)} 75%{transform:translateX(-2px)} 90%{transform:translateX(1px)} }
 
   /* 답(카드 뒷면) */
   .res{ display:flex; align-items:center; gap:8px; font-size:24px; font-weight:700; letter-spacing:-.3px; margin:0 0 12px; color:var(--g900); }
@@ -143,7 +159,7 @@
   .tel-row:active{ transform:scale(.98); }
   .tel-row + .tel-row{ margin-top:7px; }
   .tel-row .tn{ font-size:16px; font-weight:700; color:var(--green-dark); letter-spacing:-.2px; min-width:82px; }
-  .tel-row .tl2{ font-size:13.5px; color:var(--g700); line-height:1.45; }
+  .tel-row .tl2{ font-size:16px; color:var(--g700); line-height:1.45; }
 
   /* ── 카드 덱 — 카드가 남은 높이를 다 채운다 + 뒤에 카드 두 장이 비친다 + 뒤집어서 답 ── */
   .stage{ flex:1; display:flex; flex-direction:column; position:relative; min-height:0; }
@@ -154,7 +170,7 @@
   /* 다음 = 지금 카드가 왼쪽으로 날아가고, 그 밑에 깔려 있던 다음 카드가 뒤 자리에서 올라온다 / 뒤로 = 앞 카드가 왼쪽에서 들어와 덮는다.
      떠나는 카드는 같은 칸에 겹쳐(.leaving = absolute) 둘이 동시에 보인다 — 통째로 다시 그리면 깜빡인다. 아래 버튼 줄은 바뀌는 것만 서서히 */
   .card.leaving{ position:absolute; inset:0; pointer-events:none; }
-  .card.leaving .peek, .card.leaving .ox, .card.leaving .idk, .card.leaving .foot{ visibility:hidden; }
+  .card.leaving .peek, .card.leaving .ox, .card.leaving .foot{ visibility:hidden; }
   .card.out-next{ z-index:3; } .card.out-next .dk, .dk.fly-out{ animation:dkOut .34s cubic-bezier(.45,0,.85,.55) forwards; }
   @keyframes dkOut{ to{ transform:translateX(-118%) rotate(-8deg); opacity:0; } }
   .card.in-next .dk{ animation:dkRise .4s cubic-bezier(.22,.85,.25,1) .04s both; }
@@ -163,7 +179,7 @@
   @keyframes dkSink{ to{ transform:translateY(14px) scale(.955); opacity:0; } }
   .card.in-prev{ position:relative; z-index:3; } .card.in-prev .dk, .dk.in-l{ animation:dkIn .38s cubic-bezier(.22,.85,.25,1) both; }
   @keyframes dkIn{ from{ transform:translateX(-118%) rotate(-8deg); } to{ transform:none; } }
-  .card.ox-in .ox, .card.ox-in .idk, .card.foot-in .foot{ animation:ctlIn .26s ease .12s both; }
+  .card.ox-in .ox, .card.foot-in .foot{ animation:ctlIn .26s ease .12s both; }
   @keyframes ctlIn{ from{ opacity:0; } }
   /* 앞, 뒤 두 면을 같은 칸에 겹친다 → 카드 높이 = 둘 중 긴 쪽. 뒷면 설명이 길어도(작은 폰, 글자 키움, 가로) 잘리지 않는다 */
   .dk-in{ position:relative; flex:1; display:grid; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.3,.7,.25,1); }
@@ -176,7 +192,7 @@
   .dk-body .ttl{ margin:12px 0 22px; }   /* 제목 → 내용 22 > 줄 사이 16(유성 10-11 「제목과 첫 줄이 너무 붙어 있다」) */
   .face.back .dk-body{ flex:1; display:flex; flex-direction:column; padding:26px 24px; }
   .face.back .bmain{ margin:auto 0; }
-  .flipnote{ padding-top:18px; font-size:13px; font-weight:600; color:var(--g500); text-align:center; }
+  .flipnote{ padding-top:18px; font-size:16px; font-weight:600; color:var(--g500); text-align:center; }
   .peek{ position:absolute; z-index:1; left:14px; right:14px; bottom:9px; height:70px; background:#fff; border-radius:20px; opacity:.7; box-shadow:var(--sh1); }
   .peek.p2{ left:30px; right:30px; bottom:0; opacity:.42; z-index:0; }
 
@@ -191,13 +207,26 @@
   .cv-body{ padding:20px 20px 0; }
   .face.cv > .cv-meta{ margin:auto 20px 0; padding:20px 0; }   /* 위 auto = 포스터 칸이 천장에 닿고 남은 높이만 글과 칸 사이로 */
   @supports not (width:1cqw){ .cv-art{ max-height:none; padding:16px; } .cv-art img{ width:auto; height:26svh; max-width:100%; } }   /* 아주 옛 브라우저만 */
-  .cv-hi{ font-size:15px; font-weight:600; color:var(--green-dark); margin:0 0 6px; letter-spacing:-.2px; }
+  .cv-art{ position:relative; cursor:zoom-in; }
+  .cv-art img{ transition:transform .12s; } .cv-art:active img{ transform:scale(.98); }   /* 누르면 살짝 눌림(§5.3) */
+  .zoomhint{ position:absolute; right:12px; bottom:12px; display:flex; align-items:center; gap:5px; padding:6px 12px 6px 10px; border-radius:99px;
+    background:rgba(25,31,40,.74); color:#fff; font-size:13.5px; font-weight:600; pointer-events:none; }
+  .zoomhint svg{ width:15px; height:15px; fill:none; stroke:#fff; stroke-width:2.4; stroke-linecap:round; }
+  #pv{ position:fixed; inset:0; z-index:1500; background:#fff; display:none; flex-direction:column; }
+  #pv.on{ display:flex; animation:ctlIn .2s ease both; }
+  #pv .pv-top{ flex:0 0 auto; height:52px; display:flex; align-items:center; padding:0 10px; }
+  #pv .pv-x{ width:40px; height:40px; border:none; background:none; color:var(--g800); display:flex; align-items:center; justify-content:center; border-radius:10px; cursor:pointer; transition:transform .12s; }
+  #pv .pv-x:active{ transform:scale(.9); }
+  #pv .pv-x svg{ width:24px; height:24px; }
+  #pv .pv-sc{ flex:1; overflow:auto; padding:0 12px 20px; }
+  #pv .pv-sc img{ display:block; width:100%; max-width:720px; height:auto; margin:0 auto; border-radius:6px; box-shadow:0 1px 3px rgba(25,31,40,.10), 0 6px 18px rgba(25,31,40,.10); }
+  .cv-hi{ font-size:16px; font-weight:600; color:var(--green-dark); margin:0 0 6px; letter-spacing:-.2px; }
   .cv-t{ font-size:27px; font-weight:700; letter-spacing:-.6px; line-height:1.32; margin:0; }
-  .cv-sub{ font-size:var(--fs-body); font-weight:400; color:var(--g700); line-height:1.6; letter-spacing:-.2px; margin:10px 0 0; }   /* §3.2 본문 + 굵기 사다리 400 = 부제 */
+  .cv-sub{ font-size:18px; font-weight:400; color:var(--g700); line-height:1.55; letter-spacing:-.2px; margin:10px 0 0; }   /* 굵기 사다리 400 = 부제. 크기 = 18(유성 10-12 A1 — 소장님 「서브텍스트 너무 작음」, §3.2 본문 15의 이 화면 예외) */
   .cv-meta{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .cv-meta div{ border-radius:var(--r-md); padding:12px 14px; background:var(--green50); }
-  .cv-meta b{ display:block; font-size:18px; font-weight:700; letter-spacing:-.3px; color:var(--g900); line-height:1.35; }
-  .cv-meta span{ font-size:13.5px; color:var(--g600); font-weight:600; }
+  .cv-meta b{ display:block; font-size:19px; font-weight:700; letter-spacing:-.3px; color:var(--g900); line-height:1.35; }
+  .cv-meta span{ font-size:16px; color:var(--g600); font-weight:600; }
 
   /* ── 끝(열쇠 없을 때만) + 다 봤어요 ── */
   .intro-card{ background:#fff; border-radius:var(--r-lg); padding:26px 22px; box-shadow:var(--sh1); }
@@ -246,7 +275,7 @@
   .done p.fin{ margin-top:24px; font-size:var(--fs-body); font-weight:400; color:var(--g600); }
   .done .idk{ margin:18px auto 0; }   /* 열쇠 없이 온 집의 형제 = 「다른 아이도 남기기」 */
 
-  /* ── 「다음」 유도(docs/1 §5.7) — 답한 뒤 가만히 있을 때만, 최대 두 번 = 빛줄기 + 화살표 + 깨우기 + 「잘 모르겠어요」(다섯 안 비교 = prototype)
+  /* ── 「다음」 유도(docs/1 §5.7) — 답한 뒤 가만히 있을 때만, 5초마다 빛줄기 + 화살표(다섯 안 비교 = prototype)
      흔들림은 쓰지 않는다: §4.9에서 흔들림 = 「지금은 못 눌러요」라, 눌러도 되는 버튼에 쓰면 뜻이 뒤집힌다 ── */
   .btn .arr{ display:inline-block; width:0; opacity:0; overflow:hidden; vertical-align:-3px; transition:width .25s, opacity .25s, margin .25s; }
   .btn .arr svg{ display:block; width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
@@ -257,22 +286,35 @@
   .btn.nd3 .arr{ animation:ndArrow .5s ease-in-out .25s 3; }              /* 화살표 */
   @keyframes ndArrow{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(5px); } }
   /* 답한 순간 깨우기 — 흐린 초록 위로 진한 초록이 왼쪽부터 차오른다(카드가 뒤집힐 때 같이) */
-  /* 답하기 전 = 자리만 지킨다(visibility) → O/X, 잘 모르겠어요, 그 위 카드는 답한 뒤에도 1px도 안 움직인다(유성 10-11 「위치 고정」) */
+  /* 답하기 전 = 자리만 지킨다(visibility) — 퀴즈 장은 O/X와 같은 칸이라(.bslot) 카드는 답한 뒤에도 1px도 안 움직인다(유성 10-11 「위치 고정」) */
   .btn.pre{ visibility:hidden; }
   /* 답하면 반짝 = 살짝 커지며 나타나고 빛이 한 번 지나간다 */
   .btn.pop{ animation:ndPop .42s cubic-bezier(.34,1.45,.5,1) both; }
   @keyframes ndPop{ 0%{ opacity:0; transform:scale(.88); } 55%{ opacity:1; } 100%{ opacity:1; transform:scale(1); } }
   .btn.pop::after{ content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
     background:linear-gradient(105deg, transparent 25%, rgba(255,255,255,.55) 50%, transparent 75%); transform:translateX(-110%); animation:ndSheen .8s ease-in-out .16s 1 both; }
-  /* 「잘 모르겠어요」 — 박스 없는 글자 버튼(§5.3-2), 밑줄로 누를 수 있게 보임(23 설문 「잘 기억이 안 나요」와 같은 결) */
+  /* 밑줄 글자 버튼(§5.3-2) — 끝 화면 「다른 아이도 남기기」, 「처음부터 다시 보기」. (퀴즈의 「잘 모르겠어요」는 10-12 유성 「불필요」로 없앰) */
   .idk{ display:block; flex-shrink:0; margin:8px auto -6px; padding:6px 10px; border:none; background:none; font:inherit; font-size:14px; font-weight:500; color:var(--g600);
     text-decoration:underline; text-underline-offset:3px; cursor:pointer; transition:transform .12s, opacity .2s; }
   .idk:active{ transform:scale(.93); }
-  .idk.gone{ visibility:hidden; opacity:0; }
 
   .btn.ndS{ box-shadow:0 0 0 3px var(--green200); }   /* 「동작 줄이기」 켠 폰 = 움직임 대신 테두리 한 번 */
 
-  @media (prefers-reduced-motion:reduce){ .card.in-next .dk, .card.in-prev .dk, .dk.in-l, .card.ox-in .ox, .card.ox-in .idk, .card.foot-in .foot, .btn.pop, .btn.pop::after{ animation:none; } .dk-in{ transition:none; } }
+  @media (prefers-reduced-motion:reduce){ .card.in-next .dk, .card.in-prev .dk, .dk.in-l, .card.ox-in .ox, .card.foot-in .foot, .btn.pop, .btn.pop::after, .cshake{ animation:none; } .dk-in{ transition:none; } }
+  /* 짧고 넓은 화면(유성 10-12 E3 — 소장님 폴드 + 삼성 인터넷: 보이는 칸 약 475×565, 포스터가 159px까지 줄었다) = 두 칸.
+     조건 = 터치 화면 + 가로:세로 3:4보다 넓음 + 높이 700 이하(태블릿 가로처럼 높이가 넉넉하면 그대로) */
+  @media (hover:none) and (min-aspect-ratio:3/4) and (max-height:700px){
+    .face.cv{ display:grid; grid-template-columns:53% 1fr; grid-template-rows:1fr auto; }
+    .cv-art{ grid-row:1 / 3; grid-column:1; max-height:none; min-height:0; padding:0; }
+    .cv-art img{ width:min(calc(100cqw - 18px), calc((100cqh - 18px) * 720 / 1009)); }
+    .face.cv > .cv-body{ grid-column:2; padding:20px 16px 0 14px; align-self:end; }
+    .face.cv > .cv-meta{ grid-column:2; grid-template-columns:1fr; margin:0 16px 0 14px; padding:14px 0 16px; }
+    .cv-t{ font-size:26px; }
+    .face.front:not(.nopic){ display:grid; grid-template-columns:44% 1fr; }
+    .face.front:not(.nopic) .dk-pic{ min-height:0; }
+    .face.front:not(.nopic) .pic img{ max-height:100%; width:auto !important; max-width:calc(100% - 16px); }
+    .face.front:not(.nopic) .dk-body{ align-self:center; padding:18px 18px 18px 16px; }
+  }
   /* PC 폰 목업(§3.8) — 허브 iframe(390)에선 안 걸린다 */
   @media (min-width:480px) and (hover:hover) and (pointer:fine){
     body{ background:var(--g200) !important; padding-top:19px; }
@@ -308,6 +350,7 @@
       <button class="idk" type="button" id="moreKid" hidden>다른 아이도 남기기</button></div>
     <div class="done-bot"></div>
   </div>
+  <div id="pv" role="dialog" aria-label="포스터 크게 보기"><div class="pv-top"><button class="pv-x" type="button" id="pvX" aria-label="닫기"></button></div><div class="pv-sc"><img id="pvImg" alt="안전교육 포스터"></div></div>
   <div class="toast" id="toast" role="status" aria-live="polite"><span class="ck" id="toastCk"></span><span id="toastTx"></span></div>
   <div class="loading" id="loading"><div class="spinner"></div><p>보내고 있어요</p></div>
 </div>
@@ -328,6 +371,7 @@
   var X_SVG = '<svg viewBox="0 0 48 48"><line x1="12" y1="12" x2="36" y2="36"/><line x1="36" y1="12" x2="12" y2="36"/></svg>';
   var CHK = '<svg viewBox="0 0 24 24"><polyline points="5 12.5 10 17 19 7"/></svg>';
   var ARR = '<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
+  var ZOOM = '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/><line x1="11" y1="8.2" x2="11" y2="13.8"/><line x1="8.2" y1="11" x2="13.8" y2="11"/></svg>';
   var CLR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
   // ── 내용(리플렛, 포스터 확정본 + 퀴즈 문장) — 한 장 = 한 주제 = 그림 한 장(§3.5) ──
@@ -397,8 +441,9 @@
     var front = (c.pic ? '<div class="dk-pic pic">'+picImg(c.pic)+'</div>' : '') + '<div class="dk-body">'+bodyHtml(c, i)+'</div>';
     var back = q ? '<div class="face back"><div class="dk-body" id="backBody"></div></div>' : '';
     return '<div class="dkwrap"><div class="peek p2"></div><div class="peek p1"></div><div class="dk" id="dk"><div class="dk-in"><div class="face front'+(c.pic?'':' nopic')+'">'+front+'</div>'+back+'</div></div></div>'
-      + (q ? oxHtml() : '') + (q ? '<button class="idk'+(picked[i]?' gone':'')+'" id="idk" type="button">잘 모르겠어요</button>' : '')
-      + '<div class="foot"><button class="btn'+(q && !picked[i]?' pre':'')+'" type="button" id="nextBtn"><span class="bl">'+(last?'확인':'다음<span class="arr">'+ARR+'</span>')+'</span></button></div>';
+      + (q ? '<div class="bslot">'+oxHtml() : '')   // 퀴즈 장 = O/X와 「다음」이 같은 칸(답하면 O/X 자리에 「다음」)
+      + '<div class="foot"><button class="btn'+(q && !picked[i]?' pre':'')+'" type="button" id="nextBtn"><span class="bl">'+(last?'확인':'다음<span class="arr">'+ARR+'</span>')+'</span></button></div>'
+      + (q ? '</div>' : '');
   }
 
   // ── 표지 — 그림 = 포스터 앞면(아동 = 오감, 성인 = 성인). 이름은 없다(열쇠 GO 때 약속 — 링크가 전달돼도 누구 집인지 안 드러나게) ──
@@ -413,7 +458,7 @@
     // 부제 = 이게 무엇인지 + 1년에 한 번. 「필수」는 안 씀 — 의무는 센터 쪽(표준매뉴얼 6709행)이라 보호자에겐 사실과 다르다(유성 10-11)
     var sub = FOR==='child' ? '우리 아이가 안전할 수 있도록<br>1년에 한 번 보는 안전교육이에요.' : '안전하게 상담받을 수 있도록<br>1년에 한 번 보는 안전교육이에요.';
     return '<div class="dkwrap"><div class="peek p2"></div><div class="peek p1"></div><div class="dk"><div class="dk-in"><div class="face front cv">'
-      + '<div class="cv-art"><img src="'+IMG+'poster_'+FOR+'.jpg" alt="안전교육 포스터"></div>'
+      + '<div class="cv-art" id="cvArt"><img src="'+IMG+'poster_'+FOR+'.jpg" alt="안전교육 포스터"><span class="zoomhint">'+ZOOM+'크게 보기</span></div>'
       + '<div class="dk-body cv-body"><p class="cv-hi">생각공작소</p><h1 class="cv-t">'+title+'</h1><p class="cv-sub">'+sub+'</p></div>'
       + '<div class="cv-meta" id="cvMeta">'+coverMeta()+'</div>'
       + '</div></div></div></div><div class="foot" style="padding-top:0"><button class="btn" type="button" id="startBtn">시작하기</button></div>';
@@ -421,10 +466,17 @@
 
   // ── 넘기기 ──
   var deck = { i:-1 }, picked = {};
+  // ── 보던 곳 기억(유성 10-12 C4) — 새로고침, 창 닫고 다시 열기에도 그 장, 고른 답 그대로. 이 폰(브라우저)에만 남는다.
+  //    열쇠(가구마다, 해마다 새로)로 칸을 나눈다. 진행 = 30일, 다 봄 = 150일(14 안전교육 확인의 150일과 같은 결) 지나면 버린다. 이름, 생년월일은 안 남긴다
+  var MEM_KEY = 'sf_mem_'+(KEY || FOR), MEM_PROG_MS = 30*864e5, MEM_DONE_MS = 150*864e5;
+  function memGet(){ try{ var o=JSON.parse(localStorage.getItem(MEM_KEY)||'null'); if(!o || !o.t) return null; if(Date.now()-o.t > (o.scr==='sDone' ? MEM_DONE_MS : MEM_PROG_MS)) return null; return o; }catch(_){ return null; } }
+  function memPut(o){ try{ o.t=Date.now(); localStorage.setItem(MEM_KEY, JSON.stringify(o)); }catch(_){} }
+  function memDel(){ try{ localStorage.removeItem(MEM_KEY); }catch(_){} }
+  function memSave(){ memPut({ scr:onScr('sEnd') ? 'sEnd' : 'sMain', i:deck.i, picked:picked }); }
   // ── 「다음」(docs/1 §5.7, 유성 10-11 2차) — 답하기 전엔 자리만 지키고(.pre), 답하면 반짝 나타난다(.pop).
   //    그 뒤 가만히 있으면 5초마다 빛줄기 + 화살표를 되풀이한다(5, 10, 15, 20초 …, 유성 「한 번만 치면 안 됨」).
   //    화면을 만지거나 내리면 그때부터 다시 5초. 「동작 줄이기」 폰 = 테두리 한 번(되풀이 없음)
-  var NUDGE_MS = 5000, POP_MS = 650;   // POP_MS = 고른 뒤 카드가 뒤집히기 시작한 다음(380ms) 버튼이 나오는 때
+  var NUDGE_MS = 5000, POP_MS = 820;   // POP_MS = 고른 뒤 테두리, 흔들림(0~0.46초) → 뒤집기(0.56초) 다음 버튼이 나오는 때
   var nudgeT = null, popT = null, nudgeOn = false, RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   function nudgeStop(){ var nb=$('nextBtn'); if(nb) nb.classList.remove('nd2','nd3'); }
   function nudgeClear(){ clearTimeout(nudgeT); clearTimeout(popT); nudgeT=null; popT=null; nudgeOn=false; nudgeStop(); }
@@ -475,13 +527,13 @@
       stage.innerHTML=''; stage.appendChild(nw);
       if(dir && !RM){ nw.classList.add(dir>0 ? 'in-next' : 'in-prev'); setTimeout(function(){ nw.classList.remove('in-next','in-prev'); }, SWAP_MS); }
     }
-    bindCard(); scrollTop();
+    bindCard(); scrollTop(); memSave();
   }
   function go(d){
     nudgeClear();
     var ni = deck.i + d;
     if(ni<0 || ni>=EC.length){ var dk0=$('dk'); if(dk0) dk0.style.transform=''; }   // 카드가 안 바뀌는 길 = 끌던 자리 되돌림
-    if(ni<0){ deck.i=-1; toCover(); return; }
+    if(ni<0){ deck.i=-1; memDel(); toCover(); return; }
     if(ni>=EC.length){ finish(); return; }
     deck.i = ni; render(d);
   }
@@ -500,30 +552,24 @@
       Array.prototype.forEach.call($('ox').querySelectorAll('button'), function(b){
         b.addEventListener('click', function(){ if(picked[i]) return; picked[i]=b.getAttribute('data-v'); mark(c, picked[i], true); });
       });
-      $('idk').addEventListener('click', function(){ if(picked[i]) return; picked[i]='?'; mark(c, '?', true); });   // 고르지 않고 정답 보기
     }
     enableDrag();
   }
   function mark(c, v, anim){
-    var box=$('ox'); box.classList.add('answered');
-    Array.prototype.forEach.call(box.querySelectorAll('button'), function(b){
-      var bv=b.getAttribute('data-v');
-      if(bv===c.a){ b.classList.add('right'); b.insertAdjacentHTML('beforeend','<span class="tag">정답</span>'); }
-      else if(bv===v) b.classList.add('mine');
-      else b.classList.add('dim');
-    });
-    var nb=$('nextBtn');
-    $('idk').classList.add('gone');   // 자리는 그대로(visibility) — O/X가 안 움직인다
-    if(anim){
-      popT=setTimeout(function(){   // 카드가 뒤집히기 시작한 뒤 「다음」이 반짝 나온다
-        popT=null; if(nb.id!=='nextBtn') return;   // 그 사이 넘겼으면(끌어서) 떠난 카드라 id가 없다
-        nb.classList.remove('pre');
-        if(!RM){ nb.classList.add('pop'); setTimeout(function(){ nb.classList.remove('pop'); }, 1000); }   // 남겨 두면 :active 눌림 축소를 막는다
-        nudgeArm();
-      }, POP_MS);
-    } else nb.classList.remove('pre');
+    var box=$('ox'), nb=$('nextBtn'), dk=$('dk'), ok=(v===c.a);
+    memSave();
+    box.classList.add('answered','gone');   // 답한 단추는 화면에서 사라진다(남겨 두면 또 누른다 — 유성 10-12 소장님 실사용)
     $('backBody').innerHTML = '<div class="bmain">'+resHtml(c, v)+'</div><div class="flipnote">카드를 누르면 그림을 다시 봐요</div>';
-    var dk=$('dk'); if(anim) setTimeout(function(){ dk.classList.add('flip'); }, 380); else dk.classList.add('flip');
+    dk.classList.add(ok ? 'ok' : 'ng');
+    if(!anim){ dk.classList.add('flip'); nb.classList.remove('pre'); return; }
+    if(!ok && !RM){ var w=dk.parentNode; w.classList.remove('cshake'); void w.offsetWidth; w.classList.add('cshake'); }
+    setTimeout(function(){ if(dk.id==='dk') dk.classList.add('flip'); }, 560);   // 테두리, 흔들림을 앞면에서 먼저 본 뒤 뒤집힌다
+    popT=setTimeout(function(){   // 그다음 「다음」이 O/X 자리 바닥에서 반짝 나온다
+      popT=null; if(nb.id!=='nextBtn') return;   // 그 사이 넘겼으면(끌어서) 떠난 카드라 id가 없다
+      nb.classList.remove('pre');
+      if(!RM){ nb.classList.add('pop'); setTimeout(function(){ nb.classList.remove('pop'); }, 1000); }   // 남겨 두면 :active 눌림 축소를 막는다
+      nudgeArm();
+    }, POP_MS);
   }
   // 카드가 손가락을 따라오고, 놓으면 넘어가거나 제자리로. 답 안 한 카드는 끌어도 버틴다. 가장자리 24px는 폰 뒤로가기 몫
   var lastDrag = 0;
@@ -602,13 +648,20 @@
       toast(r.message || '지금은 기록하지 못했어요.\n잠시 뒤 다시 눌러 주세요.', false, 3600);
     });
   }
-  function toEnd(){ nudgeClear(); warm(); show('sEnd'); endGate(); }
+  function toEnd(){ nudgeClear(); warm(); show('sEnd'); endGate(); memSave(); }
   function toDone(viaName){
     $('doneT').textContent = viaName ? '잘 보냈어요' : '안전교육을 다 봤어요';
     $('moreKid').hidden = !(viaName && FOR==='child');   // 열쇠 없이 온 집 = 한 번에 한 아이 → 형제는 이어서
-    show('sDone');
+    show('sDone'); memPut({ scr:'sDone' });
   }
 
+  function doneAgain(o){
+    var d=new Date(o.t), ps=$('sDone').querySelectorAll('.done p');
+    $('doneT').textContent='안전교육을 이미 다 봤어요';
+    ps[0].textContent=(d.getMonth()+1)+'월 '+d.getDate()+'일에 확인했어요'; ps[1].hidden=true;
+    var mk=$('moreKid'); mk.hidden=false; mk.textContent='처음부터 다시 보기'; mk.dataset.again='1';
+    show('sDone');
+  }
   // ── 끝(열쇠 없을 때만): 이름 + 생년월일 (+ 보호자) ──
   function fmtBirth(v){ var d=String(v).replace(/\D/g,'').slice(0,8); var o=d.slice(0,4); if(d.length>4)o+='. '+d.slice(4,6); if(d.length>6)o+='. '+d.slice(6,8); return o; }
   function validBirth(d){
@@ -655,6 +708,8 @@
     });
   });
   $('moreKid').addEventListener('click', function(){   // 형제: 아이 칸만 비우고 보호자 이름은 둔다
+    if(this.dataset.again){ delete this.dataset.again; this.textContent='다른 아이도 남기기'; this.hidden=true; $('doneT').textContent='안전교육을 다 봤어요';
+      var ps=$('sDone').querySelectorAll('.done p'); ps[0].textContent='우리 함께 지켜요!'; ps[1].hidden=false; memDel(); picked={}; deck.i=-1; showCover(); return; }   // 다 본 집 「처음부터 다시 보기」
     ['fName','fBirth'].forEach(function(id){ $(id).value=''; var tf=$(id+'F'); tf.classList.remove('has-val','err'); });
     show('sEnd'); endGate();
   });
@@ -692,10 +747,12 @@
   // ── 뒤로(§4.11) — 가드 칸은 늘 1칸(23 설문 games/survey.js와 같은 꼴). 화면마다 ← 와 같은 한 단계 + 가드 다시 쌓기.
   //    표지, 다 봤어요 = 맨 끝 → 더블백(§4.11-4): 첫 뒤로 = 토스트 「한 번 더 뒤로 가면 나가요.」 2초, 가드는 다시 쌓지 않는다
   //    → 그 2초 안의 두 번째 뒤로는 아래가 비어 브라우저가 받아 나간다. 2초가 지나거나 그 사이 화면을 만지면 가드를 다시 쌓는다 ──
+  function pvOpen(){ return $('pv').classList.contains('on'); }
   function backStep(){
+    if(pvOpen()) return function(){ $('pv').classList.remove('on'); };   // 포스터 크게 보기 = 뒤로 한 번에 닫힘(§4.11)
     if(onScr('sMain')) return function(){ go(-1); };
     if(onScr('sEnd')) return function(){   // 마지막 장으로(다시 그리지 않고 그대로 — 왼쪽에서 들어온다)
-      show('sMain'); var c=$('stage').querySelector('.card');
+      show('sMain'); memSave(); var c=$('stage').querySelector('.card');
       if(c && !RM){ c.classList.add('in-prev'); setTimeout(function(){ c.classList.remove('in-prev'); }, SWAP_MS); }
     };
     return null;
@@ -712,6 +769,7 @@
   });
   document.addEventListener('pointerdown', disarmExit, true);
   $('dBack').innerHTML = BACK; $('endBack').innerHTML = BACK;
+  $('pvX').innerHTML = CLR.replace('stroke-width="3"', 'stroke-width="2.2"'); $('pvX').addEventListener('click', function(){ $('pv').classList.remove('on'); });
   $('dBack').addEventListener('click', function(){ var b=backStep(); if(b) b(); });
   $('endBack').addEventListener('click', function(){ var b=backStep(); if(b) b(); });
 
@@ -729,6 +787,7 @@
   function showCover(){
     $('sCover').innerHTML = coverHtml();
     var starting=false;
+    $('cvArt').addEventListener('click', function(){ $('pvImg').src=IMG+'poster_'+FOR+'.jpg'; $('pv').classList.add('on'); });   // 포스터 크게(유성 10-12 E1)
     $('startBtn').addEventListener('click', function(){
       if(starting) return; starting=true;
       var cdk=$('sCover').querySelector('.dk');
@@ -754,6 +813,11 @@
   if(KEY) post({ action:'safe_open', k:KEY }, 20000).then(applyOpen, function(){ /* 못 받아도 끝에서 safe_done이 다시 본다 */ });
   else warm();
   if(QS.get('at')){ show('sMain'); deck.i=Math.min(EC.length-1, Math.max(0, +QS.get('at')-1)); render(0); }   // 확인용: 바로 그 장
+  else (function(){ var o=memGet(); if(!o) return;   // 보던 곳 기억(C4)
+    if(o.scr==='sDone'){ doneAgain(o); return; }
+    picked=o.picked||{}; show('sMain'); deck.i=Math.min(EC.length-1, Math.max(0, o.i||0)); render(0);
+    if(o.scr==='sEnd') toEnd();
+  })();
   paintFade();
 </script>
 </body>
