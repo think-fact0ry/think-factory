@@ -61,7 +61,7 @@
 
   /* ── 버튼(14 Index 실코드 + ripple §5.3) ── */
   .btn{ flex-shrink:0; width:100%; padding:16px; border:none; border-radius:15px; font-family:inherit; line-height:1.5;
-    font-size:16px; font-weight:700; color:#fff; background:var(--green); cursor:pointer;
+    font-size:18px; font-weight:700; color:#fff; background:var(--green); cursor:pointer;
     transition:background .2s, transform .1s; letter-spacing:-.3px; position:relative; overflow:hidden; }
   .btn:active{ background:var(--green-dark); transform:scale(.97); }
   .btn .bl{ position:relative; z-index:1; }
@@ -85,11 +85,11 @@
   .segs .sg{ display:flex; gap:3px; }
   .segs i{ flex:1; height:4px; border-radius:2px; background:var(--g200); transition:background .25s; }
   .segs i.on{ background:var(--green); }
-  .cnt{ flex:0 0 auto; font-size:13px; font-weight:600; color:var(--g600); min-width:34px; text-align:right; font-variant-numeric:tabular-nums; }
+  .cnt{ flex:0 0 auto; font-size:15px; font-weight:600; color:var(--g600); min-width:34px; text-align:right; font-variant-numeric:tabular-nums; }
 
   /* 묶음 뱃지 — 흰 카드 안이라 weak 면이 보인다(§4.15). 베이지 위에는 두지 않는다(유성 10-10) */
-  /* 카드 안 14px 이하 글자 = 16px(유성 10-12 A1 「권장대로」 — 소장님 「글씨 작음」, 이 화면만 §3.2 예외: 칩, 주제, 안내 줄, 뒤집기 안내, 전화 줄) */
-  .gchip{ display:inline-block; font-size:16px; font-weight:600; padding:5px 12px; border-radius:99px; letter-spacing:-.2px; }
+  /* 글씨 = §3.2보다 두 칸 큼(이 화면만 예외 — 유성 10-12 A1 소장님 「글씨 작음」 → 2차 「아직 작다」: 칸 글 19, 제목 26, 퀴즈 문장 24, 작은 글 17 이상) */
+  .gchip{ display:inline-block; font-size:17px; font-weight:600; padding:5px 12px; border-radius:99px; letter-spacing:-.2px; }
   .gchip.kid, .gchip.before{ background:var(--green100); color:var(--green-dark); }
   .gchip.parent{ background:var(--warn-weak-bg); color:var(--warn-weak-fg); }
   .gchip.teacher, .gchip.act{ background:var(--g100); color:var(--dark); }
@@ -97,15 +97,19 @@
 
   /* ── 그림 칸 — 최종 GPT 그림은 4:3 한 장. 지금은 대역이라 가운데 놓고 1.5배까지만 키운다 ── */
   .pic{ display:flex; align-items:center; justify-content:center; background:var(--cream); overflow:hidden; }
+  /* 그림 바닥 = 보이는 높이의 40%(그림이 원래 폭 1.5배로 그보다 낮으면 그 높이). 화면이 남으면 지금처럼 그림 칸이 더 가진다.
+     글까지 합쳐 화면보다 길면 내려서 본다(소장님 2차 「그림 비중이 작다」 + 「글씨 아직 작다」 — 폴드 565px 높이엔 둘 다 한 화면에 못 들어간다) */
+  .face.front{ container-type:inline-size; }
+  :root{ --pic-floor:40svh; }
   .pic img{ display:block; max-width:100%; max-height:100%; object-fit:contain; }
 
   /* ── 글 ── */
-  .ttl{ font-size:var(--fs-h1); font-weight:700; letter-spacing:-.5px; line-height:1.32; }
-  .lines{ font-size:17px; color:var(--g700); line-height:1.6; letter-spacing:-.2px; }
+  .ttl{ font-size:26px; font-weight:700; letter-spacing:-.5px; line-height:1.32; }
+  .lines{ font-size:19px; color:var(--g700); line-height:1.6; letter-spacing:-.2px; }
   .lines p{ margin:0; } .lines p + p{ margin-top:6px; }
-  .topic{ font-size:16px; font-weight:600; color:var(--g600); margin:12px 0 4px; }
-  .stmt{ font-size:var(--fs-h2); font-weight:700; letter-spacing:-.4px; line-height:1.4; }
-  .hint{ font-size:16px; font-weight:600; color:var(--green); margin:8px 0 0; }
+  .topic{ font-size:17px; font-weight:600; color:var(--g600); margin:12px 0 4px; }
+  .stmt{ font-size:24px; font-weight:700; letter-spacing:-.4px; line-height:1.4; }
+  .hint{ font-size:17px; font-weight:600; color:var(--green); margin:8px 0 0; }
 
   /* ── O/X — 흰 채움 + 그린틴트 2겹 그림자(유성 10-10, §4.9 「밝은 캔버스 위 옵션 = 흰 채움 + 그림자」) ── */
   .ox{ display:grid; grid-template-columns:1fr 1fr; gap:12px; flex-shrink:0; }
@@ -130,36 +134,36 @@
   @keyframes cShake{ 15%{transform:translateX(-8px)} 30%{transform:translateX(7px)} 45%{transform:translateX(-5px)} 60%{transform:translateX(4px)} 75%{transform:translateX(-2px)} 90%{transform:translateX(1px)} }
 
   /* 답(카드 뒷면) */
-  .res{ display:flex; align-items:center; gap:8px; font-size:24px; font-weight:700; letter-spacing:-.3px; margin:0 0 12px; color:var(--g900); }
+  .res{ display:flex; align-items:center; gap:8px; font-size:26px; font-weight:700; letter-spacing:-.3px; margin:0 0 12px; color:var(--g900); }
   .res.ok{ color:var(--green-dark); }
   .res .rc{ width:30px; height:30px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; flex:0 0 auto; }
   .res .rc svg{ width:17px; height:17px; stroke:#fff; stroke-width:3; fill:none; stroke-linecap:round; stroke-linejoin:round; }
-  .ansl p{ margin:0; font-size:17px; color:var(--g700); line-height:1.6; } .ansl p + p{ margin-top:6px; }
+  .ansl p{ margin:0; font-size:19px; color:var(--g700); line-height:1.6; } .ansl p + p{ margin-top:6px; }
 
   /* ── 줄 목록 — 굵은 한 마디 + 한 줄(그림은 위 한 장, §3.5) ── */
   .rw + .rw{ margin-top:16px; }
-  .rw b{ display:block; font-size:16px; font-weight:600; color:var(--g900); letter-spacing:-.3px; line-height:1.4; }
-  .rw span{ display:block; font-size:15px; color:var(--g600); line-height:1.5; margin-top:2px; }
-  .kv{ display:flex; gap:12px; align-items:baseline; font-size:14.5px; margin:20px 0 0; }
+  .rw b{ display:block; font-size:19px; font-weight:600; color:var(--g900); letter-spacing:-.3px; line-height:1.4; }
+  .rw span{ display:block; font-size:17px; color:var(--g600); line-height:1.5; margin-top:2px; }
+  .kv{ display:flex; gap:12px; align-items:baseline; font-size:17px; margin:20px 0 0; }
   .kv .k{ flex:0 0 auto; color:var(--g600); font-weight:400; } .kv .v{ color:var(--g800); font-weight:600; }
 
   /* ── 순서 줄(다치면) ── */
   .tl{ list-style:none; margin:0; padding:0; }
   .tl li{ display:flex; align-items:center; gap:14px; position:relative; padding:7px 0; }
   .tl{ margin:-7px 0; }   /* 첫 줄 위, 끝 줄 아래 7px은 바깥 리듬(제목 → 내용 22)에 안 얹히게 */
-  .tl li:not(:last-child)::before{ content:''; position:absolute; left:13px; top:calc(50% + 16px); height:calc(100% - 32px); width:2px; border-radius:1px; background:var(--green200); }
-  .tl .num{ flex:0 0 auto; width:28px; height:28px; border-radius:50%; background:var(--green); color:#fff; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; }
-  .tl .tx{ font-size:16px; font-weight:400; color:var(--g700); line-height:1.5; letter-spacing:-.2px; }   /* 설명 = 400(§3.2, 유성 10-11 「위계가 너무 진함」) — 번호 원이 이미 강조 */
+  .tl li:not(:last-child)::before{ content:''; position:absolute; left:14px; top:calc(50% + 17px); height:calc(100% - 34px); width:2px; border-radius:1px; background:var(--green200); }
+  .tl .num{ flex:0 0 auto; width:30px; height:30px; border-radius:50%; background:var(--green); color:#fff; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  .tl .tx{ font-size:18px; font-weight:400; color:var(--g700); line-height:1.5; letter-spacing:-.2px; }   /* 설명 = 400(§3.2, 유성 10-11 「위계가 너무 진함」) — 번호 원이 이미 강조 */
 
   /* ── 위기 전화 줄(14 Safety.html .tel-row 실코드) + 성인 칸 ── */
   .ab + .ab{ margin-top:22px; }
-  .ab h3{ font-size:16px; font-weight:600; letter-spacing:-.3px; margin:0 0 4px; }
-  .ab p{ margin:0; font-size:15px; color:var(--g700); line-height:1.6; }
+  .ab h3{ font-size:18px; font-weight:600; letter-spacing:-.3px; margin:0 0 4px; }
+  .ab p{ margin:0; font-size:17px; color:var(--g700); line-height:1.6; }
   .tel-row{ display:flex; align-items:center; gap:10px; margin:10px 0 0; padding:11px 13px; border-radius:12px; background:var(--g50); text-decoration:none; color:inherit; transition:transform .12s; }
   .tel-row:active{ transform:scale(.98); }
   .tel-row + .tel-row{ margin-top:7px; }
-  .tel-row .tn{ font-size:16px; font-weight:700; color:var(--green-dark); letter-spacing:-.2px; min-width:82px; }
-  .tel-row .tl2{ font-size:16px; color:var(--g700); line-height:1.45; }
+  .tel-row .tn{ font-size:18px; font-weight:700; color:var(--green-dark); letter-spacing:-.2px; min-width:94px; }
+  .tel-row .tl2{ font-size:17px; color:var(--g700); line-height:1.45; }
 
   /* ── 카드 덱 — 카드가 남은 높이를 다 채운다 + 뒤에 카드 두 장이 비친다 + 뒤집어서 답 ── */
   .stage{ flex:1; display:flex; flex-direction:column; position:relative; min-height:0; }
@@ -187,22 +191,22 @@
   .face{ background:#fff; border-radius:22px; box-shadow:var(--sh2); overflow:hidden; display:flex; flex-direction:column; -webkit-backface-visibility:hidden; backface-visibility:hidden; }
   .face{ grid-area:1 / 1; }
   .face.back{ transform:rotateY(180deg); }
-  .dk-pic{ flex:1 1 0; min-height:18svh; }   /* 남은 높이를 그림 칸이 다 가진다(상한 없음). 줄이 많은 장은 그림이 줄어 「다음」이 화면 안에 남게 — 바닥만 화면 높이 비례 */
+  .dk-pic{ flex:1 1 0; }   /* 남은 높이를 그림 칸이 다 가진다(상한 없음). 바닥 = picBox()의 min-height(위 --pic-floor) */
   .dk-body{ padding:16px 20px 20px; flex-shrink:0; }
   .dk-body .ttl{ margin:12px 0 22px; }   /* 제목 → 내용 22 > 줄 사이 16(유성 10-11 「제목과 첫 줄이 너무 붙어 있다」) */
   .face.back .dk-body{ flex:1; display:flex; flex-direction:column; padding:26px 24px; }
   .face.back .bmain{ margin:auto 0; }
-  .flipnote{ padding-top:18px; font-size:16px; font-weight:600; color:var(--g500); text-align:center; }
+  .flipnote{ padding-top:18px; font-size:17px; font-weight:600; color:var(--g500); text-align:center; }
   .peek{ position:absolute; z-index:1; left:14px; right:14px; bottom:9px; height:70px; background:#fff; border-radius:20px; opacity:.7; box-shadow:var(--sh1); }
   .peek.p2{ left:30px; right:30px; bottom:0; opacity:.42; z-index:0; }
 
   /* ── 표지 — 그림 = 포스터 앞면(유성 10-11) ── */
   /* 포스터 = 늘 통째로(유성 10-11 2차 「너무 커, 아래가 끊기지 않게」 — 1차의 폭 채우고 아래 흐리게 자르기는 폐기).
      크기 = 카드 폭의 72%(비율이라 화면 따라 같이 큼, 고정 px 상한 없음 — 1차 「max 걸지 말고」 유지).
-     화면이 짧으면 칸이 줄어 포스터도 같이 준다 — 글, 버튼이 먼저. 화면이 길어 남는 높이는 글 칸이 가진다(아래 .cv-body).
+     화면이 짧으면 칸이 줄되 바닥 = 보이는 높이 40%와 카드 폭 45% 폭 포스터 중 큰 쪽 — 그 밑이면 내려서 본다(10-12 소장님 2차 「그림 비중이 작다」, 옛 「글, 버튼이 먼저」 폐기). 화면이 길어 남는 높이는 글 칸이 가진다(아래 .cv-body).
      칸 = size 컨테이너(제 내용으로 카드를 키우지 않음 — 앞뒤 면 grid 겹침이 카드를 내용만큼 키우기 때문). 칸 높이 천장 = 포스터가 카드 폭 72%일 때 높이(카드 cqw 기준) */
   .face.cv{ container:card / inline-size; }
-  .cv-art{ flex:1 1 0; min-height:26svh; max-height:calc(72cqw * 1009 / 720 + 32px); container:art / size; display:flex; align-items:center; justify-content:center; overflow:hidden; background:var(--cream); }
+  .cv-art{ flex:1 1 0; min-height:calc(max(var(--pic-floor), 45cqw * 1009 / 720) + 32px); max-height:calc(72cqw * 1009 / 720 + 32px); container:art / size; display:flex; align-items:center; justify-content:center; overflow:hidden; background:var(--cream); }
   .cv-art img{ display:block; width:min(calc(100cqw - 32px), calc((100cqh - 32px) * 720 / 1009)); height:auto; border-radius:6px; box-shadow:0 1px 3px rgba(25,31,40,.10), 0 6px 18px rgba(25,31,40,.10); }
   .cv-body{ padding:20px 20px 0; }
   .face.cv > .cv-meta{ margin:auto 20px 0; padding:20px 0; }   /* 위 auto = 포스터 칸이 천장에 닿고 남은 높이만 글과 칸 사이로 */
@@ -210,7 +214,7 @@
   .cv-art{ position:relative; cursor:zoom-in; }
   .cv-art img{ transition:transform .12s; } .cv-art:active img{ transform:scale(.98); }   /* 누르면 살짝 눌림(§5.3) */
   .zoomhint{ position:absolute; right:12px; bottom:12px; display:flex; align-items:center; gap:5px; padding:6px 12px 6px 10px; border-radius:99px;
-    background:rgba(25,31,40,.74); color:#fff; font-size:13.5px; font-weight:600; pointer-events:none; }
+    background:rgba(25,31,40,.74); color:#fff; font-size:15px; font-weight:600; pointer-events:none; }
   .zoomhint svg{ width:15px; height:15px; fill:none; stroke:#fff; stroke-width:2.4; stroke-linecap:round; }
   #pv{ position:fixed; inset:0; z-index:1500; background:#fff; display:none; flex-direction:column; }
   #pv.on{ display:flex; animation:ctlIn .2s ease both; }
@@ -220,23 +224,23 @@
   #pv .pv-x svg{ width:24px; height:24px; }
   #pv .pv-sc{ flex:1; overflow:auto; padding:0 12px 20px; }
   #pv .pv-sc img{ display:block; width:100%; max-width:720px; height:auto; margin:0 auto; border-radius:6px; box-shadow:0 1px 3px rgba(25,31,40,.10), 0 6px 18px rgba(25,31,40,.10); }
-  .cv-hi{ font-size:16px; font-weight:600; color:var(--green-dark); margin:0 0 6px; letter-spacing:-.2px; }
-  .cv-t{ font-size:27px; font-weight:700; letter-spacing:-.6px; line-height:1.32; margin:0; }
-  .cv-sub{ font-size:18px; font-weight:400; color:var(--g700); line-height:1.55; letter-spacing:-.2px; margin:10px 0 0; }   /* 굵기 사다리 400 = 부제. 크기 = 18(유성 10-12 A1 — 소장님 「서브텍스트 너무 작음」, §3.2 본문 15의 이 화면 예외) */
+  .cv-hi{ font-size:17px; font-weight:600; color:var(--green-dark); margin:0 0 6px; letter-spacing:-.2px; }
+  .cv-t{ font-size:30px; font-weight:700; letter-spacing:-.6px; line-height:1.32; margin:0; }
+  .cv-sub{ font-size:20px; font-weight:400; color:var(--g700); line-height:1.55; letter-spacing:-.2px; margin:10px 0 0; }   /* 굵기 사다리 400 = 부제. 크기 = 20(유성 10-12 A1 18 → 소장님 2차 「아직 작다」, §3.2 본문 15의 이 화면 예외) */
   .cv-meta{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .cv-meta div{ border-radius:var(--r-md); padding:12px 14px; background:var(--green50); }
-  .cv-meta b{ display:block; font-size:19px; font-weight:700; letter-spacing:-.3px; color:var(--g900); line-height:1.35; }
-  .cv-meta span{ font-size:16px; color:var(--g600); font-weight:600; }
+  .cv-meta b{ display:block; font-size:21px; font-weight:700; letter-spacing:-.3px; color:var(--g900); line-height:1.35; }
+  .cv-meta span{ font-size:17px; color:var(--g600); font-weight:600; }
 
   /* ── 끝(열쇠 없을 때만) + 다 봤어요 ── */
   .intro-card{ background:#fff; border-radius:var(--r-lg); padding:26px 22px; box-shadow:var(--sh1); }
   .intro-card h1{ font-size:var(--fs-h1); font-weight:700; letter-spacing:-.5px; margin:0 0 20px; line-height:1.3; }
   .tfield{ margin-bottom:15px; }
-  .tfield label{ display:block; font-size:12.5px; font-weight:600; color:var(--g600); margin:0 0 5px; transition:color .15s; }
+  .tfield label{ display:block; font-size:15px; font-weight:600; color:var(--g600); margin:0 0 5px; transition:color .15s; }
   .tfield.focus label{ color:var(--green); }
   .tin-wrap{ position:relative; border-bottom:2px solid var(--g200); transition:border-color .15s; }
   .tfield.focus .tin-wrap{ border-color:var(--green); }
-  .tin-wrap input{ width:100%; border:none; background:none; outline:none; font:inherit; line-height:1.5; font-size:18px; font-weight:600;
+  .tin-wrap input{ width:100%; border:none; background:none; outline:none; font:inherit; line-height:1.5; font-size:20px; font-weight:600;
     color:var(--g900); padding:2px 34px 3px 0; caret-color:var(--green); letter-spacing:-.2px; }
   .tin-wrap .clr{ position:absolute; right:0; top:6px; width:15px; height:15px; border-radius:50%; background:var(--g300);
     border:none; display:none; align-items:center; justify-content:center; cursor:pointer; padding:0; }
@@ -252,9 +256,9 @@
   .loading.show{ display:flex; }
   .spinner{ width:42px; height:42px; border:3px solid var(--g100); border-top-color:var(--green); border-radius:50%; animation:spin .7s linear infinite; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
-  .loading p{ font-size:14.5px; font-weight:600; color:var(--g600); margin:0; }
+  .loading p{ font-size:16px; font-weight:600; color:var(--g600); margin:0; }
   .toast{ position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); background:var(--g900); color:var(--ink-on-dark);
-          font-size:14px; font-weight:600; padding:12px 18px; border-radius:12px; max-width:90%; text-align:center; white-space:pre-line; opacity:0;
+          font-size:16px; font-weight:600; padding:12px 18px; border-radius:12px; max-width:90%; text-align:center; white-space:pre-line; opacity:0;
           transition:opacity .2s,transform .2s; pointer-events:none; z-index:1300; line-height:1.5; display:flex; align-items:center; gap:8px; width:max-content; }
   .toast.on{ opacity:1; transform:translateX(-50%) translateY(0); }
   .toast .ck{ flex:0 0 auto; width:18px; height:18px; border-radius:50%; background:var(--green); display:flex; align-items:center; justify-content:center; }
@@ -270,9 +274,9 @@
   #sDone.on .done .ic svg polyline{ animation:doneCheck .4s cubic-bezier(.5,0,.3,1) .30s forwards; }
   @keyframes donePop{ 0%{transform:scale(.2); opacity:0;} 55%{opacity:1;} 100%{transform:scale(1); opacity:1;} }
   @keyframes doneCheck{ to{stroke-dashoffset:0;} }
-  .done h1{ font-size:22px; font-weight:700; letter-spacing:-.4px; margin:0 0 6px; }
-  .done p{ margin:0; font-size:17px; font-weight:600; color:var(--green-dark); }
-  .done p.fin{ margin-top:24px; font-size:var(--fs-body); font-weight:400; color:var(--g600); }
+  .done h1{ font-size:26px; font-weight:700; letter-spacing:-.4px; margin:0 0 6px; }
+  .done p{ margin:0; font-size:19px; font-weight:600; color:var(--green-dark); }
+  .done p.fin{ margin-top:24px; font-size:17px; font-weight:400; color:var(--g600); }
   .done .idk{ margin:18px auto 0; }   /* 열쇠 없이 온 집의 형제 = 「다른 아이도 남기기」 */
 
   /* ── 「다음」 유도(docs/1 §5.7) — 답한 뒤 가만히 있을 때만, 5초마다 빛줄기 + 화살표(다섯 안 비교 = prototype)
@@ -294,27 +298,13 @@
   .btn.pop::after{ content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
     background:linear-gradient(105deg, transparent 25%, rgba(255,255,255,.55) 50%, transparent 75%); transform:translateX(-110%); animation:ndSheen .8s ease-in-out .16s 1 both; }
   /* 밑줄 글자 버튼(§5.3-2) — 끝 화면 「다른 아이도 남기기」, 「처음부터 다시 보기」. (퀴즈의 「잘 모르겠어요」는 10-12 유성 「불필요」로 없앰) */
-  .idk{ display:block; flex-shrink:0; margin:8px auto -6px; padding:6px 10px; border:none; background:none; font:inherit; font-size:14px; font-weight:500; color:var(--g600);
+  .idk{ display:block; flex-shrink:0; margin:8px auto -6px; padding:6px 10px; border:none; background:none; font:inherit; font-size:16px; font-weight:500; color:var(--g600);
     text-decoration:underline; text-underline-offset:3px; cursor:pointer; transition:transform .12s, opacity .2s; }
   .idk:active{ transform:scale(.93); }
 
   .btn.ndS{ box-shadow:0 0 0 3px var(--green200); }   /* 「동작 줄이기」 켠 폰 = 움직임 대신 테두리 한 번 */
 
   @media (prefers-reduced-motion:reduce){ .card.in-next .dk, .card.in-prev .dk, .dk.in-l, .card.ox-in .ox, .card.foot-in .foot, .btn.pop, .btn.pop::after, .cshake{ animation:none; } .dk-in{ transition:none; } }
-  /* 짧고 넓은 화면(유성 10-12 E3 — 소장님 폴드 + 삼성 인터넷: 보이는 칸 약 475×565, 포스터가 159px까지 줄었다) = 두 칸.
-     조건 = 터치 화면 + 가로:세로 3:4보다 넓음 + 높이 700 이하(태블릿 가로처럼 높이가 넉넉하면 그대로) */
-  @media (hover:none) and (min-aspect-ratio:3/4) and (max-height:700px){
-    .face.cv{ display:grid; grid-template-columns:53% 1fr; grid-template-rows:1fr auto; }
-    .cv-art{ grid-row:1 / 3; grid-column:1; max-height:none; min-height:0; padding:0; }
-    .cv-art img{ width:min(calc(100cqw - 18px), calc((100cqh - 18px) * 720 / 1009)); }
-    .face.cv > .cv-body{ grid-column:2; padding:20px 16px 0 14px; align-self:end; }
-    .face.cv > .cv-meta{ grid-column:2; grid-template-columns:1fr; margin:0 16px 0 14px; padding:14px 0 16px; }
-    .cv-t{ font-size:26px; }
-    .face.front:not(.nopic){ display:grid; grid-template-columns:44% 1fr; }
-    .face.front:not(.nopic) .dk-pic{ min-height:0; }
-    .face.front:not(.nopic) .pic img{ max-height:100%; width:auto !important; max-width:calc(100% - 16px); }
-    .face.front:not(.nopic) .dk-body{ align-self:center; padding:18px 18px 18px 16px; }
-  }
   /* PC 폰 목업(§3.8) — 허브 iframe(390)에선 안 걸린다 */
   @media (min-width:480px) and (hover:hover) and (pointer:fine){
     body{ background:var(--g200) !important; padding-top:19px; }
@@ -375,19 +365,19 @@
   var CLR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
   // ── 내용(리플렛, 포스터 확정본 + 퀴즈 문장) — 한 장 = 한 주제 = 그림 한 장(§3.5) ──
-  //    pic = [파일, 원래 폭] / 그림이 아직 없는 장 = 글만(ph = GPT로 새로 그릴 장면 메모, 화면엔 안 나감)
+  //    pic = [파일, 원래 폭, 원래 높이] / 그림이 아직 없는 장 = 글만(ph = GPT로 새로 그릴 장면 메모, 화면엔 안 나감)
   //    ⚠️ 문구, 퀴즈를 바꾸면 14 Code.js SV_DECK_VER를 올린다(누가 어느 판을 봤는지)
   var G = { kid:'아이와 같이 알아 둬요', parent:'보호자가 챙겨 주세요', teacher:'선생님이 하는 일', adult:'상담받는 분',
             before:'상담 전 안전 약속', act:'이럴 때는 이렇게 해요' };
   var CHILD = [
-    { g:'kid', type:'quiz', topic:'불이 났을 때', pic:['b_fire1',195], s:'불이 나면 엘리베이터를 타고\n빨리 내려가요.', a:'x',
+    { g:'kid', type:'quiz', topic:'불이 났을 때', pic:['b_fire1',195,280], s:'불이 나면 엘리베이터를 타고\n빨리 내려가요.', a:'x',
       e:['“불이야” 하고 크게 외쳐요.','젖은 수건으로 코와 입을 막아요.','몸을 낮추고 움직여요.','엘리베이터 말고 계단으로 나가요.'] },
-    { g:'kid', type:'plain', t:'지진이 나면', pic:['b_quake1',285], l:['탁자 아래로 들어가 머리를 보호해요.','흔들림이 멈추면 넓은 곳으로 나가요.'] },
-    { g:'kid', type:'quiz', topic:'작은 재료와 가위', pic:['f_tools',420], s:'가위를 건넬 때는\n날이 사람을 향하지 않게 해요.', a:'o',
+    { g:'kid', type:'plain', t:'지진이 나면', pic:['b_quake1',285,195], l:['탁자 아래로 들어가 머리를 보호해요.','흔들림이 멈추면 넓은 곳으로 나가요.'] },
+    { g:'kid', type:'quiz', topic:'작은 재료와 가위', pic:['f_tools',420,270], s:'가위를 건넬 때는\n날이 사람을 향하지 않게 해요.', a:'o',
       e:['가위는 선생님과 같이 써요.','작은 조각은 입, 코, 귀에 넣지 않아요.'] },
-    { g:'kid', type:'quiz', topic:'요리하는 날', pic:['f_food',340], s:'요리 수업에서 만든 음식은\n다음 날 먹어도 괜찮아요.', a:'x',
+    { g:'kid', type:'quiz', topic:'요리하는 날', pic:['f_food',340,205], s:'요리 수업에서 만든 음식은\n다음 날 먹어도 괜찮아요.', a:'x',
       e:['요리 전후에는 손을 씻어요.','조리 도구와 식탁을 닦아요.','만든 음식은 그날 먹고, 오래 꺼내 두지 않아요.'] },
-    { g:'parent', type:'plain', t:'수업하는 자리 주변을 살펴요', pic:['f_hazard',635], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료, 약, 세제도요.'] },
+    { g:'parent', type:'plain', t:'수업하는 자리 주변을 살펴요', pic:['f_hazard',635,200], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료, 약, 세제도요.'] },
     { g:'parent', type:'list', t:'이럴 땐 미리 알려 주세요', ph:'보호자가 선생님에게 아이 상태를 알려 주는 장면',
       rows:[['알레르기가 있으면','수업 전에 꼭 알려 주세요.'],['열이나 기침이 있으면','수업 날짜를 옮겨요.'],['연락처가 바뀌면','바로 알려 주세요.']], kv:['알릴 곳','담당 선생님이나 센터 032-277-2007'] },
     { g:'teacher', type:'steps', t:'수업 중에 다치면', ph:'선생님이 다친 아이를 돌봐 주는 장면', steps:['선생님이 먼저 응급조치를 해요.','보호자와 센터에 바로 알려요.','필요하면 119에 연락해요.'] },
@@ -396,13 +386,13 @@
   ];
   // 성인 = 14 Safety.html CONTENT.adult 그대로, 성인 포스터 순서(앞 = 상담 전 안전 약속, 뒤 = 이럴 때는 이렇게 해요). 퀴즈 없음
   var ADULT = [
-    { g:'before', type:'plain', t:'상담하는 자리 주변을 살펴요', pic:['a_place',625], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료도 조심해요.'] },
-    { g:'before', type:'list', t:'상담 전에 미리 알려 주세요', pic:['a_tell',415],
+    { g:'before', type:'plain', t:'상담하는 자리 주변을 살펴요', pic:['a_place',625,270], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료도 조심해요.'] },
+    { g:'before', type:'list', t:'상담 전에 미리 알려 주세요', pic:['a_tell',415,360],
       rows:[['열이나 기침이 있으면','미리 알리고 날짜를 옮겨요.'],['태풍, 호우 특보 때는','상담을 쉬거나 옮길 수 있어요.'],['연락처나 비상연락처가 바뀌면','바로 알려 주세요.'],['먹는 약이 바뀌었으면','상담사님에게 알려 주세요.']], kv:['알릴 곳','담당 상담사님이나 센터 032-277-2007'] },
-    { g:'before', type:'tel', t:'마음이 많이 힘들 때', pic:['a_heart',420], l:['혼자 견디지 말고 상담사님이나 센터에 알려요.','센터가 닫혀 있을 때는 아래 번호로 전화해요.'] },
-    { g:'act', type:'plain', t:'불이 났을 때', pic:['a_fire',185], l:['“불이야” 하고 크게 외쳐요.','젖은 수건으로 코와 입을 막아요.','몸을 낮추고 움직여요.','엘리베이터 말고 계단으로 나가요.'] },
-    { g:'act', type:'steps', t:'상담 중 몸이 안 좋을 때', pic:['a_unwell',225], steps:['어지럽거나 숨이 차면 참지 말고 바로 말해요.','상담사님이 먼저 응급조치를 하고 가족과 센터에 알려요.','필요하면 119에 연락해요.'] },
-    { g:'act', type:'plain', t:'지진이 나면', pic:['a_quake',285], l:['탁자 아래로 들어가 머리를 보호해요.','흔들림이 멈추면 넓은 곳으로 나가요.'] }
+    { g:'before', type:'tel', t:'마음이 많이 힘들 때', pic:['a_heart',420,290], l:['혼자 견디지 말고 상담사님이나 센터에 알려요.','센터가 닫혀 있을 때는 아래 번호로 전화해요.'] },
+    { g:'act', type:'plain', t:'불이 났을 때', pic:['a_fire',185,340], l:['“불이야” 하고 크게 외쳐요.','젖은 수건으로 코와 입을 막아요.','몸을 낮추고 움직여요.','엘리베이터 말고 계단으로 나가요.'] },
+    { g:'act', type:'steps', t:'상담 중 몸이 안 좋을 때', pic:['a_unwell',225,330], steps:['어지럽거나 숨이 차면 참지 말고 바로 말해요.','상담사님이 먼저 응급조치를 하고 가족과 센터에 알려요.','필요하면 119에 연락해요.'] },
+    { g:'act', type:'plain', t:'지진이 나면', pic:['a_quake',285,270], l:['탁자 아래로 들어가 머리를 보호해요.','흔들림이 멈추면 넓은 곳으로 나가요.'] }
   ];
   var EC, NQ, MOM = false;
   function buildDeck(){
@@ -411,7 +401,9 @@
     NQ = EC.filter(function(c){ return c.type==='quiz'; }).length;
   }
 
-  function picImg(p){ return '<img src="'+IMG+p[0]+'.jpg" alt="" style="width:min(100%,'+Math.round(p[1]*1.5)+'px)">'; }   // 대역: 원래 폭의 1.5배까지만(그 이상은 흐려진다)
+  // 대역: 원래 폭의 1.5배까지만(그 이상은 흐려진다). 칸 바닥 = 화면 높이 40%와 「그 폭에서 그림 높이」 중 작은 쪽(넓은 그림이 크림 빈칸에 뜨지 않게)
+  function picBox(p){ var w=Math.round(p[1]*1.5);
+    return '<div class="dk-pic pic" style="min-height:min(var(--pic-floor),calc(min(100cqw,'+w+'px) * '+p[2]+' / '+p[1]+'))"><img src="'+IMG+p[0]+'.jpg" alt="" style="width:min(100%,'+w+'px)"></div>'; }
   function firstQuiz(i){ for(var j=0;j<i;j++) if(EC[j].type==='quiz') return false; return true; }
   var TEL = '<a class="tel-row" href="tel:109"><span class="tn">109</span><span class="tl2">자살예방상담전화(24시간)</span></a>'
           + '<a class="tel-row" href="tel:15770199"><span class="tn">1577-0199</span><span class="tl2">정신건강위기상담전화</span></a>';
@@ -438,7 +430,7 @@
   }
   function cardHtml(c, i){
     var last=(i===EC.length-1), q=c.type==='quiz';
-    var front = (c.pic ? '<div class="dk-pic pic">'+picImg(c.pic)+'</div>' : '') + '<div class="dk-body">'+bodyHtml(c, i)+'</div>';
+    var front = (c.pic ? picBox(c.pic) : '') + '<div class="dk-body">'+bodyHtml(c, i)+'</div>';
     var back = q ? '<div class="face back"><div class="dk-body" id="backBody"></div></div>' : '';
     return '<div class="dkwrap"><div class="peek p2"></div><div class="peek p1"></div><div class="dk" id="dk"><div class="dk-in"><div class="face front'+(c.pic?'':' nopic')+'">'+front+'</div>'+back+'</div></div></div>'
       + (q ? '<div class="bslot">'+oxHtml() : '')   // 퀴즈 장 = O/X와 「다음」이 같은 칸(답하면 O/X 자리에 「다음」)
