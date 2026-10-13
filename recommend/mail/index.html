@@ -40,7 +40,7 @@
 
   /* 22 「수정 찾기」 화면 골격 */
   .app-h1{ font-size:var(--fs-h1); font-weight:700; letter-spacing:-.5px; line-height:1.32; margin:8px 0 8px; }
-  .app-sub{ font-size:min(14px, calc((100vw - 24px) / 22.5)); color:var(--g600);   /* 설명 두 줄 고정(유성 10-13 「세 줄은 안 돼」) — 긴 둘째 줄 ≈21.6em이 좁은 폰에서도 한 줄에 들게 글자만 조금 줄인다 */ font-weight:500; line-height:1.5; margin-bottom:26px; }
+  .app-sub{ font-size:min(14px, calc((100vw - 24px) / 21)); color:var(--g600);   /* 설명 한 줄(유성 10-13) — 글 폭 ≈20.1em, 300px 이하 폰에서만 글자를 조금 줄여 한 줄 유지 */ font-weight:500; line-height:1.5; margin-bottom:26px; }
   .sent-to{ font-size:14px; color:var(--g600); margin:-14px 0 26px; }
   .sent-to b{ color:var(--g900); font-weight:600; word-break:break-all; }
 
@@ -133,7 +133,7 @@
 <div class="wrap">
   <section class="scr on" id="scr-form">
     <h1 class="app-h1">받을 메일 주소를<br>다시 적어주세요</h1>
-    <p class="app-sub">추천서를 신청할 때 적은<br>휴대폰 번호와 아이 생년월일을 확인해 다시 보내드려요.</p>
+    <p class="app-sub">추천서를 신청할 때 적은 정보를 확인해 다시 보내요.</p>
     <div class="field uf" id="f-phone"><label for="phone">휴대폰 번호</label><div class="inw"><input class="in" id="phone" type="tel" inputmode="numeric" placeholder="010-0000-0000" readonly autocomplete="off"><button type="button" class="clr" tabindex="-1" aria-label="지우기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg></button></div></div>
     <div class="field uf" id="f-dob"><label for="dob">아이 생년월일</label><div class="inw"><input class="in" id="dob" type="tel" inputmode="numeric" placeholder="0000. 00. 00" readonly autocomplete="off"><button type="button" class="clr" tabindex="-1" aria-label="지우기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg></button></div></div>
     <div class="field uf" id="f-email"><label for="email">받을 메일 주소</label>
