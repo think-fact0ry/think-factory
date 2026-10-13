@@ -40,7 +40,7 @@
 
   /* 22 「수정 찾기」 화면 골격 */
   .app-h1{ font-size:var(--fs-h1); font-weight:700; letter-spacing:-.5px; line-height:1.32; margin:8px 0 8px; }
-  .app-sub{ font-size:14px; color:var(--g600); font-weight:500; line-height:1.5; margin-bottom:26px; }
+  .app-sub{ font-size:min(14px, calc((100vw - 24px) / 22.5)); color:var(--g600);   /* 설명 두 줄 고정(유성 10-13 「세 줄은 안 돼」) — 긴 둘째 줄 ≈21.6em이 좁은 폰에서도 한 줄에 들게 글자만 조금 줄인다 */ font-weight:500; line-height:1.5; margin-bottom:26px; }
   .sent-to{ font-size:14px; color:var(--g600); margin:-14px 0 26px; }
   .sent-to b{ color:var(--g900); font-weight:600; word-break:break-all; }
 
