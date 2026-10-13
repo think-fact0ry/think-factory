@@ -133,7 +133,7 @@
 <div class="wrap">
   <section class="scr on" id="scr-form">
     <h1 class="app-h1">받을 메일 주소를<br>다시 적어주세요</h1>
-    <p class="app-sub">신청할 때 적은 휴대폰 번호와 아이 생년월일로 찾아요.</p>
+    <p class="app-sub">추천서를 신청할 때 적은 휴대폰 번호와 아이 생년월일을 확인해 다시 보내드려요.</p>
     <div class="field uf" id="f-phone"><label for="phone">휴대폰 번호</label><div class="inw"><input class="in" id="phone" type="tel" inputmode="numeric" placeholder="010-0000-0000" readonly autocomplete="off"><button type="button" class="clr" tabindex="-1" aria-label="지우기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg></button></div></div>
     <div class="field uf" id="f-dob"><label for="dob">아이 생년월일</label><div class="inw"><input class="in" id="dob" type="tel" inputmode="numeric" placeholder="0000. 00. 00" readonly autocomplete="off"><button type="button" class="clr" tabindex="-1" aria-label="지우기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg></button></div></div>
     <div class="field uf" id="f-email"><label for="email">받을 메일 주소</label>
@@ -292,7 +292,7 @@ function demoPost(b){
     if(b.action==='mailfixres') return res(null);
     if(b.phone==='01099998888') return res({ ok:false, code:'expired', message:'주소를 고칠 수 있는 기간이 지났어요.\n센터로 전화 주세요: 032-277-5007' });   // 14일 지난 경우
     if(/naver\.con$/.test(b.email) && !b.force) return res({ ok:false, code:'typo', typo:b.email.replace(/con$/,'com') });
-    if(b.phone!=='01012345678' || b.dob.slice(2)!=='150315') return res({ ok:false, code:'nomatch', message:'정보가 맞는 신청을 찾지 못했어요.\n휴대폰 번호와 아이 생년월일을 다시 확인해주세요.' });
+    if(b.phone!=='01012345678' || b.dob.slice(2)!=='150315') return res({ ok:false, code:'nomatch', message:'추천서를 신청할 때 적은 정보와 달라요.\n휴대폰 번호와 아이 생년월일을 다시 확인해주세요.' });
     res({ ok:true });
   }, 900); });
 }
