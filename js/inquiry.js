@@ -6,6 +6,8 @@
  * 모두에게 = 2026-10-11 23시(한국)부터 켜짐(유성 10-11 「지금 바로 열어」 — 처리방침 시행일도 10-15 → 10-12로 당김).
  * 시각 비교로 둔 이유 = 켠 때가 코드에 남고, 창.test가 「켜기 전 / 켠 뒤」 경계를 그대로 잰다. ?inq=1·?inq=0·?inq=demo는 그대로. 끄기 = OPEN = false 한 줄.
  * ?inq=demo = 서버 없이 상태를 넘겨 보는 미리보기(연습 데이터, 수집 0).
+ * ?inq=open = 화면을 다 그린 뒤 창을 바로 연다(「문의하기」를 한 번 더 누르지 않게). 입구 = /ask(25 부재중 알림톡 「그 밖의 문의」 주소, 10-13 유성).
+ *   여는 즉시 주소에서 inq=open을 지운다 — 새로고침이나 뒤로가기로 창이 다시 튀어나오지 않게.
  */
 (function () {
   'use strict';
@@ -21,6 +23,7 @@
   if (q === '0') { ls('tf_inq', null); ss('tf_inq_demo', ''); }
   if (q === 'demo') ss('tf_inq_demo', '1');
   var demo = ss('tf_inq_demo') === '1';
+  var autoOpen = q === 'open';
   if (!OPEN && ls('tf_inq') !== '1' && !demo) return;   // 켜기 전 = 아무것도 안 함(서버도 안 부름)
 
   var fab = document.querySelector('.fab');
@@ -85,4 +88,10 @@
     load().then(function () { window.tfInqPane.open({ gas: GAS, demo: demo }); })
       .catch(function () { b.classList.remove('shk'); void b.offsetWidth; b.classList.add('shk'); });   // 창 코드를 못 받음(연결 끊김) = 흔들어 알리고 다음 누름에 다시(§4.9 조용한 무반응 금지)
   });
+  // ?inq=open = 다 그린 뒤 바로 연다(맨 끝에 둔 이유 = 위 var loading 초기화보다 뒤여야 받기 약속이 안 지워진다)
+  if (autoOpen) {
+    try { history.replaceState(null, '', location.pathname + location.search.replace(/([?&])inq=open(&|$)/, function (m, a, z) { return z ? a : ''; }) + location.hash); } catch (e) {}
+    var openNow = function () { load().then(function () { window.tfInqPane.open({ gas: GAS, demo: demo }); }).catch(function () {}); };   // 못 받으면 「문의하기」 버튼은 그대로 있다
+    if (document.readyState === 'complete') openNow(); else addEventListener('load', openNow);
+  }
 })();
