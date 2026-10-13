@@ -385,14 +385,14 @@
     { g:'kid', type:'plain', t:'지진이 나면', pic:['b_quake1',285,195], l:['탁자 아래로 들어가 머리를 보호해요.','흔들림이 멈추면 넓은 곳으로 나가요.'] },
     { g:'kid', type:'quiz', topic:'작은 재료와 가위', pic:['f_tools',420,270], s:'가위를 건넬 때는\n날이 사람을 향하지 않게 해요.', a:'o',
       e:['가위는 선생님과 같이 써요.','작은 조각은 입, 코, 귀에 넣지 않아요.'] },
-    { g:'kid', type:'quiz', topic:'요리하는 날', pic:['f_food',340,205], s:'요리 수업에서 만든 음식은\n다음 날 먹어도 괜찮아요.', a:'x',
+    { g:'kid', vo:1, type:'quiz', topic:'요리하는 날', pic:['f_food',340,205], s:'요리 수업에서 만든 음식은\n다음 날 먹어도 괜찮아요.', a:'x',
       e:['요리 전후에는 손을 씻어요.','조리 도구와 식탁을 닦아요.','만든 음식은 그날 먹고, 오래 꺼내 두지 않아요.'] },
-    { g:'parent', type:'plain', t:'수업하는 자리 주변을 살펴요', pic:['f_hazard',635,200], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료, 약, 세제도요.'] },
+    { g:'parent', vo:1, type:'plain', t:'수업하는 자리 주변을 살펴요', pic:['f_hazard',635,200], l:['콘센트, 전선, 난방기구를 가까이 두지 않아요.','뜨거운 음료, 약, 세제도요.'] },
     { g:'parent', type:'list', t:'이럴 땐 미리 알려 주세요', ph:'보호자가 선생님에게 아이 상태를 알려 주는 장면',
       rows:[['알레르기가 있으면','수업 전에 꼭 알려 주세요.'],['열이나 기침이 있으면','수업 날짜를 옮겨요.'],['연락처가 바뀌면','바로 알려 주세요.']], kv:['알릴 곳','담당 선생님'] },
     { g:'teacher', type:'steps', t:'수업 중에 다치면', ph:'선생님이 다친 아이를 돌봐 주는 장면', steps:['선생님이 먼저 응급조치를 해요.','보호자와 센터에 바로 알려요.','필요하면 119에 연락해요.'] },
     { g:'teacher', type:'list', t:'날씨에 따라 수업을 바꿔요', ph:'비 오는 창밖을 아이와 선생님이 같이 보는 장면',
-      rows:[['태풍이나 호우 특보가 내리면','수업을 쉬거나 옮길 수 있어요.'],['미세먼지가 나쁜 날은','창문을 닫고 수업해요.'],['더운 여름에는','요리 수업을 쉴 수 있어요.']] }
+      rows:[['태풍이나 호우 특보가 내리면','수업을 쉬거나 옮길 수 있어요.'],['미세먼지가 나쁜 날은','창문을 닫고 수업해요.'],['더운 여름에는','요리 수업을 쉴 수 있어요.','vo']] }
   ];
   // 성인 = 14 Safety.html CONTENT.adult 그대로, 성인 포스터 순서(앞 = 상담 전 안전 약속, 뒤 = 이럴 때는 이렇게 해요). 퀴즈 없음
   var ADULT = [
@@ -404,9 +404,10 @@
     { g:'act', type:'steps', t:'상담 중 몸이 안 좋을 때', pic:['a_unwell',225,330], steps:['어지럽거나 숨이 차면 참지 말고 바로 말해요.','상담사님이 먼저 응급조치를 하고 가족과 센터에 알려요.','필요하면 119에 연락해요.'] },
     { g:'act', type:'plain', t:'지진이 나면', pic:['a_quake',285,270], l:['탁자 아래로 들어가 머리를 보호해요.','흔들림이 멈추면 넓은 곳으로 나가요.'] }
   ];
-  var EC, NQ, MOM = false;
+  var EC, NQ, MOM = false, CS = false;   // CS = 아청심만 있는 집(서버 safe_open의 counsel, 10-13 유성) — 센터 상담이라 방문 수업 장(vo)을 뺀다
   function buildDeck(){
-    EC = FOR==='adult' ? ADULT.slice() : CHILD.slice();
+    EC = FOR==='adult' ? ADULT.slice() : (CS ? CHILD.filter(function(c){ return !c.vo; }).map(function(c){
+      return c.rows ? Object.assign({}, c, { rows:c.rows.filter(function(r){ return r[2]!=='vo'; }) }) : c; }) : CHILD.slice());
     if(MOM) EC.push({ g:'adult', type:'mom', t:'상담받는 분도 챙겨 주세요' });   // 아동 가구에 성인 상담 이용자도 있으면(서버 safe_open의 mom) 성인 한 장
     NQ = EC.filter(function(c){ return c.type==='quiz'; }).length;
   }
@@ -451,7 +452,7 @@
   // ── 표지 — 그림 = 포스터 앞면(아동 = 오감, 성인 = 성인). 이름은 없다(열쇠 GO 때 약속 — 링크가 전달돼도 누구 집인지 안 드러나게) ──
   function coverMeta(){
     // 걸리는 시간 = 글자 수로 잰 어림을 올림(아동 656자 + O/X 3개를 아이에게 읽어 주며 ≈ 2분 반, 성인 431자 ≈ 1분 반)
-    var mins = FOR==='child' ? 3 : 2;
+    var mins = FOR==='child' && !CS ? 3 : 2;
     var tile2 = NQ ? '<div><b>O/X '+NQ+'개</b><span>아이와 풀어요</span></div>' : '<div><b>확인 한 번</b><span>마지막에 눌러요</span></div>';
     return '<div><b>'+mins+'분</b><span>'+EC.length+'장을 넘겨요</span></div>'+tile2;
   }
@@ -474,7 +475,7 @@
   function memGet(){ try{ var o=JSON.parse(localStorage.getItem(MEM_KEY)||'null'); if(!o || !o.t) return null; if(Date.now()-o.t > (o.scr==='sDone' ? MEM_DONE_MS : MEM_PROG_MS)) return null; return o; }catch(_){ return null; } }
   function memPut(o){ try{ o.t=Date.now(); localStorage.setItem(MEM_KEY, JSON.stringify(o)); }catch(_){} }
   function memDel(){ try{ localStorage.removeItem(MEM_KEY); }catch(_){} }
-  function memSave(){ memPut({ scr:onScr('sEnd') ? 'sEnd' : 'sMain', i:deck.i, picked:picked }); }
+  function memSave(){ memPut({ scr:onScr('sEnd') ? 'sEnd' : 'sMain', i:deck.i, picked:picked, cs:CS }); }
   // ── 「다음」(docs/1 §5.7, 유성 10-11 2차) — 답하기 전엔 자리만 지키고(.pre), 답하면 반짝 나타난다(.pop).
   //    그 뒤 가만히 있으면 5초마다 빛줄기 + 화살표를 되풀이한다(5, 10, 15, 20초 …, 유성 「한 번만 치면 안 됨」).
   //    화면을 만지거나 내리면 그때부터 다시 5초. 「동작 줄이기」 폰 = 테두리 한 번(되풀이 없음)
@@ -629,6 +630,7 @@
     if(!r || !r.ok){ KEY=''; warm(); return; }   // 모르는 열쇠 = 끝에서 이름 + 생년월일
     var onCover = onScr('sCover');
     if(r.kind && r.kind!==FOR && onCover){ FOR = r.kind; applyFor(); }   // 07이 버튼에 붙인 ?for=와 다르면 서버가 맞다(아직 표지일 때만)
+    if(FOR==='child' && r.counsel && !CS && onCover){ CS = true; buildDeck(); buildSegs(); $('cvMeta').innerHTML = coverMeta(); }
     if(FOR==='child' && r.mom && !MOM && (onCover || (onScr('sMain') && deck.i < EC.length-1))){
       MOM = true; buildDeck(); buildSegs();
       if(onCover) $('cvMeta').innerHTML = coverMeta(); else paintTop();
@@ -803,11 +805,11 @@
     show('sCover');
   }
 
-  // ── 데모(?demo=1, 서버 없음) — 열쇠 아무거나 = 그 집(&mom=1 = 엄마 카드), 열쇠 「zzzzzzzzzzzz」 = 모르는 열쇠. 이름 칸은 홍길동 2021. 03. 15만 맞음 ──
+  // ── 데모(?demo=1, 서버 없음) — 열쇠 아무거나 = 그 집(&mom=1 = 엄마 카드, &cs=1 = 아청심만 있는 집), 열쇠 「zzzzzzzzzzzz」 = 모르는 열쇠. 이름 칸은 홍길동 2021. 03. 15만 맞음 ──
   function demoPost(b){
     return new Promise(function(res){ setTimeout(function(){
       if(b.action==='safe_warm') return res({ ok:true });
-      if(b.action==='safe_open') return res(b.k==='zzzzzzzzzzzz' ? { ok:false } : { ok:true, kind:FOR, mom:QS.get('mom')==='1' });
+      if(b.action==='safe_open') return res(b.k==='zzzzzzzzzzzz' ? { ok:false } : { ok:true, kind:FOR, mom:QS.get('mom')==='1', counsel:QS.get('cs')==='1' });
       if(b.k) return res(b.k==='zzzzzzzzzzzz' ? { ok:false, code:'nokey' } : { ok:true });
       var p=(b.people||[])[0]||{};
       if(p.name!=='홍길동' || String(p.birth).slice(-6)!=='210315') return res({ ok:false, code:'nomatch', message:'등록된 정보를 찾지 못했어요.\n이름과 생년월일을 다시 확인해 주세요.' });
@@ -821,6 +823,7 @@
   if(QS.get('at')){ show('sMain'); deck.i=Math.min(EC.length-1, Math.max(0, +QS.get('at')-1)); render(0); }   // 확인용: 바로 그 장
   else (function(){ var o=memGet(); if(!o) return;   // 보던 곳 기억(C4)
     if(o.scr==='sDone'){ doneAgain(o); return; }
+    if(o.cs && FOR==='child' && !CS){ CS=true; buildDeck(); buildSegs(); }
     picked=o.picked||{}; show('sMain'); deck.i=Math.min(EC.length-1, Math.max(0, o.i||0)); render(0);
     if(o.scr==='sEnd') toEnd();
   })();
