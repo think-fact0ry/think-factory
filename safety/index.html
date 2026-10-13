@@ -41,6 +41,7 @@
     --sh2:0 2px 8px rgba(47,111,77,.08), 0 12px 30px rgba(47,111,77,.12);
     --sh-btn:0 1px 2px rgba(47,111,77,.10), 0 6px 16px rgba(47,111,77,.12);
     --red:#f04452;   /* 에러 상태(§3.1) — 끝 이름 칸 */
+    --ox-o:#3b8ee0; --ox-x:#ec6464;   /* O/X 기호(docs/1 §5.7-7, 유성 10-13) — 오류 빨강 아님, 이 기호에만 */
     /* 스크롤 그라디언트 §4.13-6(§3.1 정본 값) — 아래쪽만(위쪽 띠는 14, 16처럼 뺌: 글자 위에 얹히면 막으로 읽힘) */
     --sf-bot:linear-gradient(to bottom,rgba(22,104,65,0) 0%,rgba(22,104,65,.055) 100%),
              linear-gradient(to bottom,rgba(22,104,65,0) 58%,rgba(22,104,65,.115) 100%);
@@ -116,7 +117,8 @@
   .ox button{ height:84px; border:none; border-radius:var(--r-lg); background:#fff; color:var(--g800); box-shadow:var(--sh-btn); cursor:pointer; font-family:inherit;
     display:flex; align-items:center; justify-content:center; position:relative; transition:transform .1s, background .2s, color .2s, box-shadow .2s, opacity .2s; }
   .ox button:active{ transform:scale(.96); box-shadow:var(--sh1); }
-  .ox button svg{ width:40px; height:40px; fill:none; stroke:currentColor; stroke-width:3.4; stroke-linecap:round; }
+  .ox button svg{ width:40px; height:40px; fill:none; stroke:currentColor; stroke-width:4.2; stroke-linecap:round; }   /* 4.2 = 색 대비가 3.2~3.4라 한 단 굵게(§5.7-7) */
+  .ox button[data-v="o"]{ color:var(--ox-o); } .ox button[data-v="x"]{ color:var(--ox-x); }
   .ox.answered button{ pointer-events:none; }
   /* 퀴즈 장 아래 칸 = O/X와 「다음」이 같은 칸에 겹친다(유성 10-12 B1 「잘 모르겠어요와 다음 버튼이 없어졌으니 카드를 더 키우고 O/X를 내려」).
      답하기 전 = O/X만 맨 아래, 답하면 O/X가 사라지고 같은 칸 바닥에 「다음」 → 칸 높이 = O/X 84px 그대로라 카드가 1px도 안 움직인다.
