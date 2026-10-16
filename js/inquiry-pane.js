@@ -7,6 +7,8 @@
  *   - 창이 열려 있고 화면이 보일 때만 묻는다(3초 → 2분 조용하면 10초 → 15분이면 멈춤). GAS 동시 실행 30개는 계정 전체가 나눠 쓴다
  *   - 글은 글자로만 넣고, 행정 답장 속 웹 주소만 링크로(전화번호는 링크 아님 — 유성 10-08)
  *   - PC에서 홈, 서비스, 이야기 페이지의 휠과 방향키 가로채기가 창 안까지 오지 않게
+ *   - 행정이 거둔 답장(10-12 26 s_recall)은 흔적 없이 사라진다(유성 「거둔 답장이라고 남기지 말것. 아예 없어지게」): 묻기에 rv(아는 거둔 줄 수)를 싣고,
+ *     서버가 rc(거둔 줄 번호 목록)를 주면 이미 그린 줄도 지운다. upto = 방 마지막 줄 번호(거둔 줄이 끝이면 그 번호까지 받은 것으로)
  */
 (function () {
   'use strict';
@@ -86,7 +88,7 @@
 
   // ── 상태 ──
   var R = null, P, TH, TA;
-  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '', saidMail: false };
+  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, rv: 0, hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '', saidMail: false };
   var known = {};          // 화면에 그린 줄 번호
   var queue = [], sending = null;
   var pollT = 0, polling = false, lastChange = Date.now();
@@ -491,6 +493,27 @@
     if (m.file) attach(r, m);
     if (m.who !== 'v') lastChange = Date.now();
   }
+  // 거둔 답장(10-12) = 흔적 없이 뺀다. 이웃 말풍선 묶음(이어 말함, 「생각공작소」 이름, 시각이 붙는 마지막 말풍선)과 날짜 줄만 고친다
+  function dropRecalled(list) {
+    S.rv = list.length;
+    list.forEach(function (seq) {
+      known[seq] = 1;   // 늦게 온 응답이 다시 그리지 않게
+      var r = TH.querySelector('.ti-row[data-seq="' + (+seq) + '"]'); if (!r) return;
+      var prev = r.previousElementSibling, next = r.nextElementSibling, side = sideOf(r), wasLast = r.classList.contains('last'), wasCont = r.classList.contains('cont');
+      r.remove();
+      var p = prev && prev.classList.contains('ti-row') && sideOf(prev) === side ? prev : null;
+      var n = next && next.classList.contains('ti-row') && sideOf(next) === side ? next : null;
+      if (wasLast && p) p.classList.add('last');
+      if (!wasCont && n && n.classList.contains('cont')) {
+        n.classList.remove('cont');
+        if (side === 'them' && !n.querySelector('.ti-who')) { var box = n.firstElementChild; box.insertBefore(el('<div class="ti-who">생각공작소</div>'), box.firstChild); }
+      }
+      if (prev && prev.classList.contains('ti-day') && (!next || next.classList.contains('ti-day'))) {   // 그날 줄이 그것뿐이었다
+        prev.remove();
+        if (!next) { var ds = TH.querySelectorAll('.ti-day'); lastDay = ds.length ? ds[ds.length - 1].dataset.k || '' : ''; }
+      }
+    });
+  }
   // ── 첨부(10-11 유성 「사진 첨부 가능하게」 — 행정 → 학부모) ──
   //   받기 = v_file(그 방 열쇠 + 줄 번호)뿐, 드라이브 링크 0. 받은 건 이 창 메모리에만(사진 = data 주소, PDF = blob 주소) — 열쇠+줄 번호로 기억
   var FILES = {};
@@ -592,7 +615,7 @@
     lastDay = ''; showChatLine();
   }
   function freshView() {
-    TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.read = 0; S.more = false; S.noteMode = '';
+    TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.rv = 0; S.read = 0; S.more = false; S.noteMode = '';
     dayIf(new Date().toISOString());
     var g = rowEl('them', GREET[S.mode === 'chat' ? 'chat' : 'mail'], '', false); g.classList.add('greet');
     S.saidMail = S.mode !== 'chat';
@@ -747,8 +770,9 @@
     read({ action: 'v_load', key: S.key }).then(function (r) {
       if (!r || !r.ok) { if (r && r.code === 'gone') return gone(); return loadFail(); }
       TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = ''; S.saidMail = false;   // 이어보기엔 첫 화면 말풍선이 없음
-      S.hasPhone = !!r.hasPhone; S.more = !!r.more; S.read = r.read || 0; S.loaded = S.key;
+      S.hasPhone = !!r.hasPhone; S.more = !!r.more; S.read = r.read || 0; S.loaded = S.key; S.rv = +r.rcn || 0;
       (r.msgs || []).forEach(function (m) { addMsg(m, false); });
+      if (+r.upto > S.lastSeq) S.lastSeq = +r.upto;   // 마지막 줄이 거둔 줄이면(10-12) 그 번호까지 받은 것으로
       markRead(); setMode(r.mode || S.mode || 'mail'); noteForMode(); scrollEnd();
       lastChange = Date.now(); schedule(true);
     }, loadFail);
@@ -797,13 +821,15 @@
   function poll() {
     if (polling || !S.open || !S.key || document.hidden) return;
     polling = true;
-    once({ action: 'v_poll', key: S.key, after: S.lastSeq }).then(function (r) {
+    once({ action: 'v_poll', key: S.key, after: S.lastSeq, rv: S.rv }).then(function (r) {
       if (!r) return;
       if (r.code === 'gone') { gone(); return; }
       if (!r.ok) return;
       if (r.mode && r.mode !== S.mode) setMode(r.mode);
       var atEnd = TH.scrollTop + TH.clientHeight >= TH.scrollHeight - 40;
       if (r.msgs && r.msgs.length) { r.msgs.forEach(function (m) { addMsg(m, true); }); if (atEnd) scrollEnd(); }
+      if (r.rc && r.rc.length) dropRecalled(r.rc);   // 거둔 답장(10-12) — 이미 그린 줄도
+      if (+r.upto > S.lastSeq) S.lastSeq = +r.upto;
       if (typeof r.read === 'number' && r.read !== S.read) { S.read = r.read; markRead(); }
     }, function () {}).then(function () { polling = false; schedule(); });
   }
