@@ -17,7 +17,7 @@
   var TEL = '032-277-2007';
   var T_LIVE = 3000, T_SLOW = 10000, SLOW_AFTER = 120000, STOP_AFTER = 900000;
   var MAX_LEN = 1000;
-  var GAS = '', DEMO = false, PAGE = false;
+  var GAS = '', DEMO = false, PAGE = false, SRC = '';   // SRC = 첫 문의가 어디서 왔나(대화 탭 출처 칸) — 페이지 모드는 'c'(문자 링크), /ask는 '/ask'(10-18)
 
   // ── 작은 도구 ──
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
@@ -83,6 +83,21 @@
       };
       go();
       timer = setTimeout(function () { if (!done && started < 2) go(); }, hedgeMs || 4000);
+    });
+  }
+  // 먼저 보낸 첫 읽기(10-18 — /ask, 문자 링크 /c/ 페이지는 창 코드를 받는 동안 같은 요청을 먼저 보낸다, open({ pre })).
+  //   같은 요청이면 그 답을 쓴다. 그 답이 없으면(null = 구글 HTML·끊김) 보통 읽기로, 보낸 지 4초가 지나도 안 오면 보통 읽기를 하나 더(먼저 온 것)
+  var PRE = null;
+  function first(body) {
+    var pre = PRE; PRE = null;
+    if (!pre || pre.id !== body.action + '|' + (body.key || '')) return read(body);
+    return new Promise(function (res, rej) {
+      var settled = false, preDone = false, alt = null, altErr = null, t = 0;
+      var win = function (r) { if (settled) return; settled = true; clearTimeout(t); res(r); };
+      var lose = function () { if (!settled && preDone && altErr) { settled = true; rej(altErr); } };   // 둘 다 못 받았을 때만 실패
+      var other = function () { if (!alt) alt = read(body).then(win, function (x) { altErr = x; lose(); }); };
+      t = setTimeout(other, Math.max(0, 4000 - (Date.now() - pre.at)));
+      Promise.resolve(pre.p).then(function (r) { preDone = true; if (r) win(r); else { other(); lose(); } }, function () { preDone = true; other(); lose(); });
     });
   }
 
@@ -715,7 +730,7 @@
     if (sending || !queue.length) return;
     if (!S.key && !consentAt()) { openSheet(); return; }   // 동의 없이는 첫 줄을 안 보낸다(동의하면 이어서)
     var job = sending = queue.shift(), done = false, t0 = Date.now(), blank = 0, timer = 0;
-    var body = { action: 'v_send', text: job.text, cid: job.cid, src: PAGE ? 'c' : (location.pathname || '/') };
+    var body = { action: 'v_send', text: job.text, cid: job.cid, src: SRC || (PAGE ? 'c' : (location.pathname || '/')) };
     if (S.key) body.key = S.key;
     else { body.consent = { ver: CONSENT_VER, at: consentAt() }; if (job.phone || S.phonePending) body.phone = job.phone || S.phonePending; }
     var hp = $('.ti-hpx'); if (hp && hp.value) body.hp = hp.value;
@@ -767,7 +782,7 @@
   function loadRoom() {
     TH.innerHTML = '<div class="ti-sk" style="width:62%"></div><div class="ti-sk" style="width:48%;align-self:flex-end"></div><div class="ti-sk" style="width:70%"></div>';
     showChatLine();
-    read({ action: 'v_load', key: S.key }).then(function (r) {
+    first({ action: 'v_load', key: S.key }).then(function (r) {
       if (!r || !r.ok) { if (r && r.code === 'gone') return gone(); return loadFail(); }
       TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = ''; S.saidMail = false;   // 이어보기엔 첫 화면 말풍선이 없음
       S.hasPhone = !!r.hasPhone; S.more = !!r.more; S.read = r.read || 0; S.loaded = S.key; S.rv = +r.rcn || 0;
@@ -851,7 +866,7 @@
     if (c && Date.now() - c.at < 180000) { S.mode = c.m; applyMode(c.m, true); freshView(); }
     else {   // 모드를 모르면 뼈대 → 답이 오면 그 모드로 한 번만 그린다(메일 칸이 떴다가 채팅 칸으로 바뀌는 깜빡임 없게). 못 받으면 메일(안전한 쪽)
       S.mode = ''; skel();
-      read({ action: 'v_mode' }).then(function (r) { return r && r.mode; }, function () { return ''; }).then(function (m) {
+      first({ action: 'v_mode' }).then(function (r) { return r && r.mode; }, function () { return ''; }).then(function (m) {
         if (S.key || S.sentFresh || S.mode) return;
         S.mode = m || 'mail'; applyMode(S.mode, !m); freshView();
       });
@@ -870,7 +885,7 @@
   }
   function open(opts) {
     opts = opts || {};
-    GAS = opts.gas || GAS; DEMO = !!opts.demo; PAGE = !!opts.page;
+    GAS = opts.gas || GAS; DEMO = !!opts.demo; PAGE = !!opts.page; SRC = opts.src || '';
     if (!R) { build(); if (DEMO) demoPanel(); }
     if (S.open) return;
     originToBtn();
@@ -880,9 +895,11 @@
     ev('inq_open');
     if (opts.key && opts.key !== ls(K('tf_inq_key'))) { ls(K('tf_inq_key'), opts.key); S.loaded = ''; }   // 문자 링크 열쇠가 이 기기 열쇠보다 우선
     S.key = opts.key || ls(K('tf_inq_key')) || S.key || '';   // 저장이 막힌 브라우저(사생활 보호)는 이 창 안에서만 기억
+    PRE = opts.pre || null;   // 아래 첫 읽기만 쓴다(못 쓰면 버림 — 다음 열기·다시 불러오기는 보통 읽기)
     if (S.key && S.loaded === S.key) { lastChange = Date.now(); schedule(true); }
     else if (S.key) loadRoom();
     else if (!S.sentFresh) { fresh(); recover(); }
+    PRE = null;
     requestAnimationFrame(fitVV);
     autosize(TA, 120); $('.ti-send').classList.toggle('off', !TA.value.trim());
     if (!coarse && consentAt()) setTimeout(function () { if (S.open) (R.classList.contains('mailnew') ? $('#tiTa2') : TA).focus({ preventScroll: true }); }, 380);   // PC = 바로 칠 수 있게(폰은 키보드가 화면을 덮으니 안 함)

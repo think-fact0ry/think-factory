@@ -34,9 +34,13 @@
   function fail() {   // 창 코드를 못 받음(연결 끊김) = 빈 화면 대신 다시 불러오기(§4.5 — 빨강 없음, 주액션 하나)
     document.body.insertAdjacentHTML('beforeend', '<div class="c-fb"><b>대화를 아직 못 불러왔어요</b><p>인터넷이 느리면 조금 더 걸려요</p><button type="button" onclick="location.reload()">다시 불러오기</button></div>');
   }
+  // 대화 읽기(v_load)를 창 코드와 같이 보낸다(10-18 — 창 코드 받기 0.7초를 서버 1초와 겹침). 창이 같은 요청이면 이 답을 쓰고, 못 받았으면 다시 읽는다
+  var key = k; if (!key) { try { key = localStorage.getItem('tf_inq_key') || ''; } catch (e) {} }
+  var pre = !key ? null : { id: 'v_load|' + key, at: Date.now(), p: fetch(GAS, { method: 'POST', body: JSON.stringify({ action: 'v_load', key: key }) })
+    .then(function (r) { return r.text(); }).then(function (t) { return JSON.parse(t); }).catch(function () { return null; }) };
   var s = document.createElement('script');
-  s.src = '/js/inquiry-pane.js?v=10';
-  s.onload = function () { window.tfInqPane.open({ gas: GAS, page: true, key: k }); };
+  s.src = '/js/inquiry-pane.js?v=11';
+  s.onload = function () { window.tfInqPane.open({ gas: GAS, page: true, key: k, pre: pre }); };
   s.onerror = fail;
   document.head.appendChild(s);
 })();
