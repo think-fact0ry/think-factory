@@ -32,13 +32,13 @@
   var coarse = window.matchMedia && matchMedia('(pointer:coarse)').matches;
   var mqPhone = window.matchMedia ? matchMedia('(max-width:760px)') : { matches: true };
 
-  // 시간 표시 = 이용자 언어(§2.1-8): 「오후 2:03」, 날 구분 「오늘」 「어제」 「10월 15일」
+  // 시간 표시 = 이용자 언어(§2.1-8): 「오후 2:03」, 날 구분 「오늘」 「어제」, 그저께부터 「2026년 10월 15일 목요일」(유성 10-18 — 받은함 날짜 줄 B와 같은 선)
   function kst(iso) { var d = iso ? new Date(iso) : new Date(); return new Date(d.getTime() + (d.getTimezoneOffset() + 540) * 60000); }
   function hm(iso) { var d = kst(iso), h = d.getHours(), m = d.getMinutes(); return (h < 12 ? '오전 ' : '오후 ') + ((h % 12) || 12) + ':' + (m < 10 ? '0' : '') + m; }
   function dayKey(iso) { var d = kst(iso); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
   function dayLabel(iso) {
     var k = dayKey(iso), t = dayKey(), y = kst(new Date(Date.now() - 86400000).toISOString()), yk = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate();
-    if (k === t) return '오늘'; if (k === yk) return '어제'; var d = kst(iso); return (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+    if (k === t) return '오늘'; if (k === yk) return '어제'; var d = kst(iso); return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + '일월화수목금토'.charAt(d.getDay()) + '요일';
   }
 
   // 웹 주소만 링크로(글자로 넣은 뒤 주소 조각만 a로) — 메일 주소 안의 도메인은 건드리지 않는다
@@ -139,10 +139,14 @@
     // 대화
     '#tfInq .ti-th{flex:1 1 0;min-height:0;overflow-y:auto;padding:18px 16px 12px;display:flex;flex-direction:column;scrollbar-width:none;position:relative;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}',
     '#tfInq .ti-th::-webkit-scrollbar{width:0}',
-    '#tfInq .ti-day,#tfInq .ti-sys{align-self:center;font-size:12px;color:var(--g600);margin:16px 0 0;text-align:center;line-height:1.5}',
+    '#tfInq .ti-sys{align-self:center;font-size:12px;color:var(--g600);margin:16px 0 0;text-align:center;line-height:1.5}',
+    // 날짜 줄 = 대화 폭 전체 가로 선 + 가운데 달력 + 날짜(유성 10-18 「b」 — 받은함 attend .day와 같은 값). 말풍선 옆 시각과 같은 회색 글자라 날 바뀜이 안 읽히던 것
+    '#tfInq .ti-day{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--g700);margin:24px 0 16px;white-space:nowrap;line-height:1.5}',
+    '#tfInq .ti-day::before,#tfInq .ti-day::after{content:"";flex:1;height:1px;background:var(--g200)}',
+    '#tfInq .ti-day svg{width:13px;height:13px;flex:none;color:var(--g600);margin-right:-5px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}',
     '#tfInq .ti-sys{white-space:pre-line}',   // 안내 두 줄(메일 모드 + 번호)
     '#tfInq .ti-th>.ti-day:first-child{margin-top:0}',
-    '#tfInq .ti-day+.ti-row{margin-top:12px}',
+    '#tfInq .ti-day+.ti-row,#tfInq .ti-day+.ti-sys{margin-top:0}',   // 날짜 줄 아래 16px이 간격(받은함과 같이)
     '#tfInq .ti-row{display:flex;gap:6px;align-items:flex-end;max-width:100%;margin-top:16px}',
     '#tfInq .ti-row.cont{margin-top:4px}',
     '#tfInq .ti-row.me{justify-content:flex-end}',
@@ -482,7 +486,8 @@
 
   // ── 그리기 ──
   var lastDay = '', HOST = null;   // HOST = 지금 그리는 곳(평소 대화 칸, 이전 줄을 불러올 땐 따로 만든 상자)
-  function dayIf(iso) { var k = dayKey(iso); if (k !== lastDay) { lastDay = k; var d = el('<div class="ti-day">' + dayLabel(iso) + '</div>'); d.dataset.k = k; HOST.appendChild(d); } }
+  var DAY_CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><line x1="3.5" y1="10" x2="20.5" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>';   // 날짜 줄 달력(10-18)
+  function dayIf(iso) { var k = dayKey(iso); if (k !== lastDay) { lastDay = k; var d = el('<div class="ti-day">' + DAY_CAL + '<span>' + dayLabel(iso) + '</span></div>'); d.dataset.k = k; HOST.appendChild(d); } }
   function sideOf(r) { return r && r.classList.contains('me') ? 'me' : r ? 'them' : ''; }
   function rowEl(side, text, at, anim) {
     var prev = HOST.lastElementChild, cont = prev && prev.classList.contains('ti-row') && sideOf(prev) === side;
