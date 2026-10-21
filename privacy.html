@@ -21,6 +21,21 @@
 <link rel="apple-touch-icon" href="assets/android-icon-192x192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="css/site.css">
+<style>
+/* 처리방침 변경 안내 — 최근 것만 보이고 ∨로 지난 안내 펼침(10-21). 펼침 모션 = 사이트 FAQ와 같은 grid 0fr→1fr */
+.pp-note{background:var(--g100,#f2f4f6);border-radius:12px;margin:0 0 16px}
+.pp-note-hd{display:flex;align-items:flex-start;gap:10px;width:100%;padding:12px 14px;border:0;background:none;font:inherit;font-size:16.5px;color:var(--g700,#4e5968);line-height:1.95;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pp-note-hd span{flex:1;min-width:0}
+.pp-chev{flex:none;width:20px;height:20px;margin-top:6px;color:var(--g600,#6b7684);transition:transform .28s ease}
+.pp-chev svg{display:block;width:20px;height:20px}
+.pp-note.open .pp-chev{transform:rotate(180deg)}
+.pp-old{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s cubic-bezier(.4,0,.2,1)}
+.pp-note.open .pp-old{grid-template-rows:1fr}
+.pp-old-in{overflow:hidden;min-height:0}
+.pp-old-in p{margin:0 14px;padding:10px 0;border-top:1px solid var(--g200,#e5e8eb);font-size:.94em;color:var(--g700,#4e5968)}
+.pp-old-in p:last-child{padding-bottom:12px}
+@media (prefers-reduced-motion:reduce){.pp-chev,.pp-old{transition:none}}
+</style>
 </head>
 <body>
 
@@ -43,12 +58,17 @@
 <section class="sec tight-top">
   <div class="inner inner-prose prose">
     <p>생각공작소(이하 ‘회사’)는 「개인정보 보호법」 등 관련 법령을 준수하며, 개인정보를 다음과 같이 처리합니다. 이 처리방침은 회사가 운영하는 본 웹사이트(think-factory.kr)의 <b>상담 신청 기능</b>, <b>추천서 신청 기능</b>, <b>문의 창</b>, <b>방문 통계 수집</b>과, 회사가 <b>네이버 톡톡, 카카오톡 채널</b>로 받은 문의를 회사 문의함에서 함께 보는 일, <b>회사 전화</b>로 받은 문의에 적용됩니다.</p>
-    <p style="background:var(--g100,#f2f4f6);border-radius:12px;padding:12px 14px;"><b>변경 안내</b> (2026년 10월 8일 공지, <b>2026년 10월 12일 시행</b>): 홈페이지 문의 창이 생기면서 제1조 ④(문의 정보), 제2조 목적, 제4조 보유 기간, 제6조 위탁(문자 발송), 제9조 로컬 저장소에 내용이 더해집니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
-    <p style="background:var(--g100,#f2f4f6);border-radius:12px;padding:12px 14px;"><b>변경 안내</b> (2026년 10월 11일 공지, <b>2026년 10월 12일 시행</b>): 네이버 톡톡과 카카오톡 채널로 받은 문의를 회사 문의함에서 함께 보게 되면서 제1조 ⑤(톡톡, 카카오톡 채널 문의), 제1조 ④의 담당자가 붙이는 이름, 제2조 목적, 제4조 보유 기간, 제7조 국외 이전 항목에 내용이 더해집니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
-    <p style="background:var(--g100,#f2f4f6);border-radius:12px;padding:12px 14px;"><b>변경 안내</b> (2026년 10월 13일 공지, <b>2026년 10월 15일 시행</b>): 제1조, 제2조, 제4조, 제6조, 제7조의 일부 내용이 바뀝니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
-    <p style="background:var(--g100,#f2f4f6);border-radius:12px;padding:12px 14px;"><b>변경 안내</b> (2026년 10월 15일 공지, <b>2026년 10월 15일 시행</b>): 제2조의 일부 내용이 바뀝니다. 자세한 내용은 아래 제2조와 제15조를 확인해 주세요.</p>
-    <p style="background:var(--g100,#f2f4f6);border-radius:12px;padding:12px 14px;"><b>변경 안내</b> (2026년 10월 16일 공지, <b>2026년 10월 16일 시행</b>): 제1조, 제2조, 제4조, 제6조, 제7조의 일부 내용이 바뀝니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
-    <p style="background:var(--g100,#f2f4f6);border-radius:12px;padding:12px 14px;"><b>변경 안내</b> (2026년 10월 21일 공지, <b>2026년 10월 21일 시행</b>): 제7조의 일부 내용이 바뀝니다. 자세한 내용은 아래 제7조와 제15조를 확인해 주세요.</p>
+    <!-- 변경 안내: 보이는 상자 = 가장 최근 하나. 새로 개정할 때 = 지금 상자 글을 아래 pp-old 맨 앞 <p>로 옮기고, 상자에 새 글(유성 10-21 「계속 아래로 내려갈 것 같아 방지」) -->
+    <div class="pp-note">
+      <button type="button" class="pp-note-hd" aria-expanded="false" aria-controls="ppOld"><span><b>변경 안내</b> (2026년 10월 21일 공지, <b>2026년 10월 21일 시행</b>): 제7조의 일부 내용이 바뀝니다. 자세한 내용은 아래 제7조와 제15조를 확인해 주세요.</span><i class="pp-chev" title="지난 변경 안내"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></i></button>
+      <div class="pp-old" id="ppOld"><div class="pp-old-in">
+        <p><b>변경 안내</b> (2026년 10월 16일 공지, <b>2026년 10월 16일 시행</b>): 제1조, 제2조, 제4조, 제6조, 제7조의 일부 내용이 바뀝니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
+        <p><b>변경 안내</b> (2026년 10월 15일 공지, <b>2026년 10월 15일 시행</b>): 제2조의 일부 내용이 바뀝니다. 자세한 내용은 아래 제2조와 제15조를 확인해 주세요.</p>
+        <p><b>변경 안내</b> (2026년 10월 13일 공지, <b>2026년 10월 15일 시행</b>): 제1조, 제2조, 제4조, 제6조, 제7조의 일부 내용이 바뀝니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
+        <p><b>변경 안내</b> (2026년 10월 11일 공지, <b>2026년 10월 12일 시행</b>): 네이버 톡톡과 카카오톡 채널로 받은 문의를 회사 문의함에서 함께 보게 되면서 제1조 ⑤(톡톡, 카카오톡 채널 문의), 제1조 ④의 담당자가 붙이는 이름, 제2조 목적, 제4조 보유 기간, 제7조 국외 이전 항목에 내용이 더해집니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
+        <p><b>변경 안내</b> (2026년 10월 8일 공지, <b>2026년 10월 12일 시행</b>): 홈페이지 문의 창이 생기면서 제1조 ④(문의 정보), 제2조 목적, 제4조 보유 기간, 제6조 위탁(문자 발송), 제9조 로컬 저장소에 내용이 더해집니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
+      </div></div>
+    </div>
 
     <h2>1. 수집하는 개인정보 항목</h2>
     <p><b>① 신청자가 직접 입력하는 정보</b> — 상담 신청을 받기 위해 신청자(보호자)가 입력합니다.</p>
@@ -262,6 +282,12 @@
   </div>
 </div>
 
+<script>
+(function () {   // 변경 안내 ∨ — 지난 안내 펼치고 접기
+  var b = document.querySelector('.pp-note-hd'); if (!b) return;
+  b.addEventListener('click', function () { var n = b.parentNode, o = !n.classList.contains('open'); n.classList.toggle('open', o); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+})();
+</script>
 <script>
 (function () {
   var d = document.getElementById('drawer'), b = document.getElementById('hbBtn');
