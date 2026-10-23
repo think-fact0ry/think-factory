@@ -208,6 +208,20 @@
     '#tfInq .ti-nc .t1{font-size:15px;font-weight:700;margin-bottom:6px}',
     '#tfInq .ti-nc .t2{font-size:13.5px;color:var(--g700);margin-bottom:10px}',
     '#tfInq .ti-nc.ti-info{padding:16px 14px}#tfInq .ti-nc.ti-info .t2{margin-bottom:0}',   // 메일 모드 첫 화면 안내 상자 = 번호 카드의 글만(칸·남기기 없음, 유성 10-10)
+    // 첫 화면 자주 묻는 질문(⑦ 10-15 유성 확정 — 생각공작소 prototype/26_문의채팅_자주쓰는답변_첫화면질문_사전계획_프리뷰.html k12·k13): 번호 카드와 같은 상자,
+    //   제목 = 작은 회색 이름표(밑 선 없음), 질문 사이 선, 열고 닫기 = /contact .faq와 같은 grid-rows 0.3초 + 같은 +/− 아이콘(site.css 362행)
+    '#tfInq .ti-faq{align-self:stretch;background:#fff;border:1px solid var(--g200);border-radius:16px;padding:12px 14px 0;margin-top:8px;box-shadow:0 1px 3px rgba(25,31,40,.06)}',
+    '#tfInq .ti-fh{font-size:12.5px;color:var(--g600);line-height:1.4}',
+    '#tfInq .ti-fq+.ti-fq{border-top:1px solid var(--g100)}',
+    '#tfInq .ti-fqb{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;background:none;border:0;padding:13px 0;font-size:15px;font-weight:700;letter-spacing:-.3px;line-height:1.45;color:var(--g900);cursor:pointer}',
+    '#tfInq .ti-fqb .ic{position:relative;flex:none;width:14px;height:14px;pointer-events:none}',
+    '#tfInq .ti-fqb .ic::before,#tfInq .ti-fqb .ic::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;border-radius:2px;background:var(--g400);transition:transform .28s ease}',
+    '#tfInq .ti-fqb .ic::after{transform:rotate(90deg)}#tfInq .ti-fq.open .ti-fqb .ic::after{transform:rotate(90deg) scaleX(0)}',
+    '#tfInq .ti-fa{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s cubic-bezier(.4,0,.2,1)}#tfInq .ti-fq.open .ti-fa{grid-template-rows:1fr}',
+    '#tfInq .ti-fai{overflow:hidden;min-height:0}',
+    '#tfInq .ti-fai p{margin:0;font-size:14.5px;color:var(--g700);line-height:1.7;white-space:pre-line}#tfInq .ti-fai p+p{margin-top:1.7em}#tfInq .ti-fai>:last-child{margin-bottom:14px}',
+    '#tfInq .ti-fai p a{color:var(--green700);text-decoration:underline;text-underline-offset:2px}',
+    '#tfInq .ti-fbtn{display:inline-block;margin-top:14px;background:var(--green600);color:#fff;text-decoration:none;font-size:14px;font-weight:700;border-radius:10px;padding:9px 14px;transition:transform .12s,background .15s}#tfInq .ti-fbtn:active{transform:scale(.96);background:var(--green700)}',
     '#tfInq .ti-line{display:flex;gap:8px;align-items:flex-end}',
     '#tfInq .ti-inp{flex:1;min-width:0;background:var(--g100);border:1.5px solid transparent;border-radius:12px;padding:11px 12px;font-size:16px;font-family:inherit;color:var(--g900);outline:none;caret-color:var(--green600);transition:background .15s,border-color .15s;-webkit-user-select:text;user-select:text}',
     '#tfInq .ti-inp::placeholder{color:var(--g500)}',
@@ -387,7 +401,10 @@
       e.preventDefault(); tz = { el: t, x: e.touches[0].clientX, y: e.touches[0].clientY };
     }, { passive: false });
     R.addEventListener('touchmove', function (e) { if (tz && Math.hypot(e.touches[0].clientX - tz.x, e.touches[0].clientY - tz.y) > 10) tz = null; }, { passive: true });
-    R.addEventListener('touchend', function (e) { if (!tz) return; var el = tz.el; tz = null; e.preventDefault(); el.focus(); }, { passive: false });
+    R.addEventListener('touchend', function (e) { if (!tz) return; var el = tz.el; tz = null; e.preventDefault(); if (csGate(el)) return; el.focus(); }, { passive: false });
+    // 동의 전 새 문의 = 입력 칸, 번호 칸을 누르면 키보드 대신 동의 시트(⑦ 10-15 3차 A). 마우스는 누르는 순간 포커스를 막고, 탭 키 같은 다른 길은 포커스가 들어온 뒤 뺀다
+    R.addEventListener('mousedown', function (e) { if (needCs(e.target)) { e.preventDefault(); csGate(e.target); } }, true);
+    R.addEventListener('focusin', function (e) { if (needCs(e.target)) { e.target.blur(); csGate(e.target); } });
     var send = $('.ti-send'), fTa = fadeWatch(TA);
     TA.value = ss(K('tf_inq_draft')) || '';
     var sync = function () { send.classList.toggle('off', !TA.value.trim()); autosize(TA, 120); fTa(); ss(K('tf_inq_draft'), TA.value); };
@@ -421,9 +438,10 @@
     $('#tiAgree').addEventListener('click', function () {
       ls(K('tf_inq_cs'), JSON.stringify({ ver: CONSENT_VER, at: new Date().toISOString() })); ev('inq_consent');
       closeSheet(); pump();   // 동의 전에 막혀 있던 첫 줄이 있으면 이어서
-      if (!coarse) setTimeout(function () { (R.classList.contains('mailnew') ? ta2 : TA).focus(); }, 320);
+      var back = S.csEl; S.csEl = null;
+      if (!coarse) setTimeout(function () { (back && R.contains(back) && back.offsetParent ? back : R.classList.contains('mailnew') ? ta2 : TA).focus(); }, 320);
     });
-    $('#tiLater').addEventListener('click', function () { ev('inq_later'); closeSheet(); setTimeout(function () { if (PAGE) location.href = '/'; else requestClose(); }, 180); });
+    $('#tiLater').addEventListener('click', function () { ev('inq_later'); closeSheet(); S.csEl = null; });
     $('.ti-dim').addEventListener('click', function () { $('#tiLater').click(); });
     (function (sheet) {   // §4.3-5 위쪽(핸들+제목 72px)을 아래로 80px 넘게 끌면 닫힘 = 다음에 하기(태블릿 상담일지 initSheetDrag 그대로)
       var y0 = 0, dy = 0, on = false, GRAB = 72;
@@ -628,8 +646,12 @@
   function sys(text, cls) { var n = el('<div class="ti-sys ti-new' + (cls ? ' ' + cls : '') + '"></div>'); n.textContent = text; TH.appendChild(n); return n; }
 
   // ── 인사, 번호 카드, 모드 ──
-  var GREET = { chat: '안녕하세요, 생각공작소예요.\n궁금한 점을 편하게 남겨 주세요 ☺️', mail: '안녕하세요,\n생각공작소예요 ☺️' };
-  var MAIL_NOTE = '지금은 채팅 시간이 아니에요\n문의를 남겨 주시면\n문자로 답해 드릴게요 :)';   // 메일 모드 첫 화면 둘째 말풍선(세 줄 = 말풍선 폭에서 「답해/드릴게요」로 끊기지 않게)(유성 10-10 — 「:)」 = 위 ☺️와 안 겹치게)
+  // 메일 모드 인사 = 한 말풍선 4줄(⑦ 10-15 유성 「메일 모드 = 인사 한 말풍선 4줄 + 안내 상자 그대로」 — 10-10의 두 말풍선을 합침. 줄 = 말풍선 폭에서 「답해/드릴게요」로 안 끊기게, 「:)」 = 첫 줄 ☺️와 안 겹치게)
+  var GREET = { chat: '안녕하세요, 생각공작소예요.\n궁금한 점을 편하게 남겨 주세요 ☺️', mail: '안녕하세요, 생각공작소예요 ☺️\n지금은 채팅 시간이 아니에요\n문의를 남겨 주시면,\n문자로 답해 드릴게요 :)' };
+  // 첫 화면 자주 묻는 질문 넷(⑦) — q = 질문, p = 문단(조각: 글자 = 문자열, 링크 = [글자, 주소]), btn = 답 끝 「신청폼 열기」. 글은 /contact, 받은함 자주 쓰는 답변과 같은 정본에서 나온다
+  /* 문의답변 first 시작 (tools/문의답변/동기.js가 씀 — 글은 생각공작소 tools/문의답변/정본.js에서 고칠 것) */
+  var FAQ = [{"q":"본인부담금은 얼마인가요?","p":[["소득 등급에 따라 달라져요. 등급은 바우처를 신청할 때 가구원 수와 건강보험료로 정해지고, 결과 문자나 통지서에 같이 나와요."],["서비스별, 등급별 금액은 홈페이지 ",["바우처 안내","/services"],"에 표로 정리해 두었어요. 등급이 나오면 알려 주세요 :) 한 달에 얼마인지 바로 말씀드릴게요."]],"btn":0},{"q":"선생님이 집으로 오는 건가요?","p":[["서비스마다 달라요. 오감쑥쑥과 정신건강 토탈케어는 선생님이 집으로 찾아가요. 아동청소년 심리지원은 센터에서 상담해요. 어떤 서비스를 알아보시는지 알려 주시면 횟수와 시간까지 같이 안내드릴게요."]],"btn":0},{"q":"바우처가 처음인데 어떻게 신청하나요?","p":[["거주하시는 동네 행정복지센터에서 신청하실 수 있어요. 필요한 서류는 서비스마다 달라서, 가시기 전에 행정복지센터에 전화로 한 번 물어보시면 좋아요."],["신청하시면 14일 안에 문자나 통지서로 결과가 오니, 결과 받으시면 저희에게 연락 주세요. :)"]],"btn":0},{"q":"신청하면 어떻게 진행되나요?","p":[["서비스와 거주하시는 동네, 가능한 요일과 시간에 따라 자리가 달라서, 신청폼에 넉넉히 적어 주시면 선생님 일정을 보고 접수 순서대로 연락드려요."],["신청하시는 분이 많아서 맞는 자리가 생길 때만 연락드리고 있어요. 현재 대기 상황은 신청폼에서 보실 수 있어요."]],"btn":1}];
+  /* 문의답변 first 끝 */
   function skel() {   // 모드·대화를 아직 모를 때 = 훑는 뼈대(§5.4)
     TH.innerHTML = '<div class="ti-sk" style="width:62%"></div><div class="ti-sk" style="width:48%;align-self:flex-end"></div><div class="ti-sk" style="width:70%"></div>';
     lastDay = ''; showChatLine();
@@ -638,15 +660,51 @@
     TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.rv = 0; S.read = 0; S.more = false; S.noteMode = '';
     dayIf(new Date().toISOString());
     var g = rowEl('them', GREET[S.mode === 'chat' ? 'chat' : 'mail'], '', false); g.classList.add('greet');
+    var step = 0, rise = function (n) { if (!n) return; n.classList.add('ti-new'); n.style.animationDelay = (step++ * 0.1) + 's'; };   // 인사, 상자, 질문이 0.1초 간격(⑦ 10-15 — 합쳐 0.7초 안)
+    rise(g);
     S.saidMail = S.mode !== 'chat';
-    if (S.saidMail) {   // 메일 모드 = 처음 보이는 것 말풍선 2 + 상자 1(유성 10-10 「전화번호를 넣어야하는 설명문구 같은게 없어서」)
-      rowEl('them', MAIL_NOTE, '', false).classList.add('greet');
+    if (S.saidMail) {   // 메일 모드 = 인사 말풍선 1 + 안내 상자 1(유성 10-10 「전화번호를 넣어야하는 설명문구 같은게 없어서」, 10-15 말풍선 하나로)
       TH.appendChild(el('<div class="ti-nc ti-info"><div class="t1">창을 닫아도 답을 받을 수 있어요</div><div class="t2">휴대폰 번호를 남겨 주시면 문자로 답해 드려요.</div></div>'));
+      rise(TH.lastElementChild);
     }
+    rise(faqBox());
     if (S.mode !== 'chat') R.classList.add('mailnew'); else showChatLine();
     if (S.mode !== 'chat' && TA.value.trim() && !$('#tiTa2').value) { $('#tiTa2').value = TA.value; TA.value = ''; }   // 뼈대 동안 채팅 칸에 쓴 글은 메일 칸으로 옮겨 준다
-    if (S.mode === 'chat' && !S.hasPhone && !S.phonePending) numCard();
+    if (S.mode === 'chat' && !S.hasPhone && !S.phonePending) { var nc = numCard(); nc.classList.remove('ti-new'); rise(nc); }
     if (S.phonePending && S.mode === 'chat') phoneDone(S.phonePending);
+  }
+  // 첫 화면 자주 묻는 질문 상자(⑦) — 하나를 열면 열려 있던 것은 닫힘(/contact와 같은 규칙). 연 질문 번호만 Clarity에(글 0 — inq_faq1~4)
+  function faqBox() {
+    if (!FAQ.length) return null;
+    var box = el('<div class="ti-faq"><div class="ti-fh">자주 묻는 질문</div></div>');
+    FAQ.forEach(function (f, i) {
+      var qa = el('<div class="ti-fq"><button class="ti-fqb" type="button" aria-expanded="false"><span></span><i class="ic"></i></button><div class="ti-fa"><div class="ti-fai"></div></div></div>');
+      qa.querySelector('.ti-fqb span').textContent = f.q;
+      var body = qa.querySelector('.ti-fai');
+      f.p.forEach(function (segs) {
+        var p = document.createElement('p');
+        segs.forEach(function (sg) {
+          if (typeof sg === 'string') { p.appendChild(document.createTextNode(sg)); return; }
+          var a = document.createElement('a'); a.href = sg[1]; a.textContent = sg[0]; p.appendChild(a);
+        });
+        body.appendChild(p);
+      });
+      if (f.btn) {
+        var b = el('<a class="ti-fbtn" href="/contact">신청폼 열기</a>');
+        b.addEventListener('click', function (e) {   // /contact 위에 뜬 창이면 창만 닫고 신청폼(맨 위)으로 — 같은 페이지를 다시 열지 않게
+          ev('inq_faq_form');
+          if (!PAGE && /^\/contact(\.html)?$/.test(location.pathname)) { e.preventDefault(); requestClose(); try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (x) { window.scrollTo(0, 0); } }
+        });
+        body.appendChild(b);
+      }
+      qa.querySelector('.ti-fqb').addEventListener('click', function () {
+        var open = qa.classList.contains('open');
+        [].forEach.call(box.querySelectorAll('.ti-fq'), function (o) { o.classList.remove('open'); o.querySelector('.ti-fqb').setAttribute('aria-expanded', 'false'); });
+        if (!open) { qa.classList.add('open'); this.setAttribute('aria-expanded', 'true'); ev('inq_faq' + (i + 1)); }
+      });
+      box.appendChild(qa);
+    });
+    TH.appendChild(box); return box;
   }
   function applyMode(m, noStore) {   // 머리 ON 표시 + 버튼 초록 점 + 3분 기억
     R.classList.toggle('chat', m === 'chat');
@@ -864,6 +922,10 @@
 
   // ── 창 열기·닫기 ──
   function openSheet() { if (mqPhone.matches && !PAGE) vpCover(true); var d = $('.ti-dim'), s = $('.ti-sheet'); d.classList.add('on'); s.classList.remove('on'); void s.offsetWidth; s.classList.add('on'); }
+  function needCs(t) {   // 동의 전 새 문의의 입력 칸, 번호 칸인가(열쇠 있는 대화 = 이미 동의함)
+    return !!t && !S.key && !consentAt() && /^(TEXTAREA|INPUT)$/.test(t.tagName) && !t.classList.contains('ti-hpx') && R.contains(t);
+  }
+  function csGate(t) { if (!needCs(t)) return false; S.csEl = t; if (!$('.ti-sheet.on')) openSheet(); return true; }
   function closeSheet() { vpCover(false); $('.ti-dim').classList.remove('on'); $('.ti-sheet').classList.remove('on'); }
   function fresh() {
     S.key = ''; S.sentFresh = false; S.hasPhone = false;
@@ -876,7 +938,6 @@
         S.mode = m || 'mail'; applyMode(S.mode, !m); freshView();
       });
     }
-    if (!consentAt()) setTimeout(openSheet, PAGE ? 0 : 420);
   }
   function recover() {   // 첫 줄을 보냈는데 결과를 못 받고 창을 닫았다 = 그 작업 번호로 방 열쇠를 찾아 본다(서버가 10분 기억)
     var pc = (ss(K('tf_inq_pcid')) || '').split('|');

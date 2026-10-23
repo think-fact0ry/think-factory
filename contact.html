@@ -26,25 +26,89 @@
 <link rel="apple-touch-icon" href="assets/android-icon-192x192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="css/site.css">
-<!-- FAQPage 스키마 (GEO — AI 검색이 Q&A를 기계로 읽는 층. 2026-08-17)
-     ⚠️ 아래 본문 .faq 문항과 1:1 동기 — 화면 FAQ를 고치면 이 스키마도 같은 커밋에서 고칠 것(0-9) -->
+<!-- FAQPage 스키마 (GEO — AI 검색이 Q&A를 기계로 읽는 층. 2026-08-17). 아래 화면 .faq와 같은 글이 생각공작소 tools/문의답변/정본.js 하나에서 나온다(10-23 — 둘이 어긋날 일 없음) -->
+<!-- 문의답변 ld 시작 (tools/문의답변/동기.js가 씀 — 글은 정본.js에서 고칠 것) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type": "Question", "name": "바우처가 처음인데 어떻게 신청하나요?", "acceptedAnswer": {"@type": "Answer", "text": "거주지 행정복지센터에 방문해서 신청하시면 돼요. 신분증만 챙겨 가시면, 신청서, 동의서 같은 서류는 센터에서 안내해드려요."}},
-    {"@type": "Question", "name": "추천서가 필요하다는데, 어떻게 하나요?", "acceptedAnswer": {"@type": "Answer", "text": "아동청소년 심리지원은 신청할 때 의사 소견서나 추천서가 필요해요. 추천서가 없으면 저희 임상심리사 선생님이 작성해드려요."}},
-    {"@type": "Question", "name": "몇 세부터 이용할 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "오감쑥쑥 바우처 서비스는 만 4~6세, 아동청소년 심리지원 서비스는 18세 이하예요."}},
-    {"@type": "Question", "name": "본인부담금은 얼마인가요?", "acceptedAnswer": {"@type": "Answer", "text": "오감쑥쑥 서비스는 소득 등급에 따라 달라져요. 등급은 바우처를 신청하실 때 소득 기준으로 정해져요."}},
-    {"@type": "Question", "name": "바우처 없이도 받을 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "오감쑥쑥은 바우처 없이도 월 13만 원에 이용할 수 있어요."}},
-    {"@type": "Question", "name": "선생님이 집으로 오는 건가요?", "acceptedAnswer": {"@type": "Answer", "text": "맞아요. 아이가 늘 지내는 익숙한 공간에서, 선생님이 아이 한 명에게 온전히 집중해요. 낯선 곳이 아니라 더 빨리 편해지고, 부모님이 오가거나 기다릴 필요도 없어요."}},
-    {"@type": "Question", "name": "어느 지역까지 찾아오나요?", "acceptedAnswer": {"@type": "Answer", "text": "재가방문은 인천 전 지역으로, 선생님이 아이의 가정으로 직접 찾아가요."}},
-    {"@type": "Question", "name": "형제도 같이 받을 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "둘이 함께하면 60분으로 진행하고, 아이마다 각각 바우처를 신청하시면 돼요."}},
-    {"@type": "Question", "name": "체험해볼 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "따로 체험은 진행하고 있지 않아요. 첫 회기는 선생님과 친해지고, 부모님이 사전 검사를 하는 시간이에요. 혹시 잘 맞지 않으면 중간에 멈추실 수 있고, 그동안 받은 회기의 본인부담금만 내시면 돼요."}}
+    {
+      "@type": "Question",
+      "name": "바우처가 처음인데 어떻게 신청하나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "거주하시는 동네 행정복지센터에서 신청하실 수 있어요. 필요한 서류는 서비스마다 달라서, 가시기 전에 행정복지센터에 전화로 한 번 물어보시면 좋아요. 신청하시면 14일 안에 문자나 통지서로 결과가 오니, 결과 받으시면 저희에게 연락 주세요. :)"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "추천서가 필요하다는데, 어떻게 하나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "아동청소년 심리지원은 신청할 때 의사 소견서나 추천서가 필요해요. 추천서가 없으면 저희 임상심리사 선생님이 작성해드려요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "몇 세부터 이용할 수 있나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "오감쑥쑥 바우처 서비스는 만 4~6세, 아동청소년 심리지원 서비스는 18세 이하예요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "본인부담금은 얼마인가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "소득 등급에 따라 달라져요. 등급은 바우처를 신청할 때 가구원 수와 건강보험료로 정해지고, 결과 문자나 통지서에 같이 나와요. 서비스별, 등급별 금액은 홈페이지 바우처 안내에 표로 정리해 두었어요. 등급이 나오면 알려 주세요 :) 한 달에 얼마인지 바로 말씀드릴게요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "바우처 없이도 받을 수 있나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "오감쑥쑥은 바우처 없이도 월 13만 원에 이용할 수 있어요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "선생님이 집으로 오는 건가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "서비스마다 달라요. 오감쑥쑥과 정신건강 토탈케어는 선생님이 집으로 찾아가요. 아동청소년 심리지원은 센터에서 상담해요. 어떤 서비스를 알아보시는지 알려 주시면 횟수와 시간까지 같이 안내드릴게요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "어느 지역까지 찾아오나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "가정방문 서비스는 인천 전 지역으로 찾아가요. 동네와 시간마다 갈 수 있는 선생님 일정이 달라서, 거주하시는 동네와 가능한 요일, 시간을 신청폼에 넉넉히 적어 주시면 맞는 선생님을 찾아서 연락드릴게요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "형제도 같이 받을 수 있나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "둘이 함께하면 60분으로 진행하고, 아이마다 각각 바우처를 신청하시면 돼요."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "체험해볼 수 있나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "체험은 따로 진행하고 있지 않아요. 첫 회기는 선생님이 아이와 친해지고 부모님이 사전 검사를 하는 시간이라, 한 번으로는 맞는지 판단하기 어렵기 때문이에요. 미리 경험해 보고 싶으셨을 텐데, 양해 부탁드려요."
+      }
+    }
   ]
 }
 </script>
+<!-- 문의답변 ld 끝 -->
 </head>
 <body class="apply-page">
 
@@ -118,15 +182,17 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     <h2 style="margin-bottom:8px;">자주 묻는 질문</h2>
     <p class="sub" style="margin-bottom:24px;">바우처가 처음이어도 괜찮아요.</p>
     <div class="faq">
-      <div class="qa"><button class="q" type="button" aria-expanded="false">바우처가 처음인데 어떻게 신청하나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>거주지 행정복지센터에 방문해서 신청하시면 돼요. 신분증만 챙겨 가시면, 신청서, 동의서 같은 서류는 센터에서 안내해드려요.</p></div></div></div>
+      <!-- 문의답변 faq 시작 (tools/문의답변/동기.js가 씀 — 글은 정본.js에서 고칠 것) -->
+      <div class="qa"><button class="q" type="button" aria-expanded="false">바우처가 처음인데 어떻게 신청하나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>거주하시는 동네 행정복지센터에서 신청하실 수 있어요. 필요한 서류는 서비스마다 달라서, 가시기 전에 행정복지센터에 전화로 한 번 물어보시면 좋아요.</p><p>신청하시면 14일 안에 문자나 통지서로 결과가 오니, 결과 받으시면 저희에게 연락 주세요. :)</p></div></div></div>
       <div class="qa"><button class="q" type="button" aria-expanded="false">추천서가 필요하다는데, 어떻게 하나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>아동청소년 심리지원은 신청할 때 의사 소견서나 추천서가 필요해요. 추천서가 없으면 저희 임상심리사 선생님이 작성해드려요.</p></div></div></div>
       <div class="qa"><button class="q" type="button" aria-expanded="false">몇 세부터 이용할 수 있나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>오감쑥쑥 바우처 서비스는 만 4~6세, 아동청소년 심리지원 서비스는 18세 이하예요.</p></div></div></div>
-      <div class="qa"><button class="q" type="button" aria-expanded="false">본인부담금은 얼마인가요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>오감쑥쑥 서비스는 소득 등급에 따라 달라져요. 등급은 바우처를 신청하실 때 소득 기준으로 정해져요.</p></div></div></div>
+      <div class="qa"><button class="q" type="button" aria-expanded="false">본인부담금은 얼마인가요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>소득 등급에 따라 달라져요. 등급은 바우처를 신청할 때 가구원 수와 건강보험료로 정해지고, 결과 문자나 통지서에 같이 나와요.</p><p>서비스별, 등급별 금액은 홈페이지 <a href="/services">바우처 안내</a>에 표로 정리해 두었어요. 등급이 나오면 알려 주세요 :) 한 달에 얼마인지 바로 말씀드릴게요.</p></div></div></div>
       <div class="qa"><button class="q" type="button" aria-expanded="false">바우처 없이도 받을 수 있나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>오감쑥쑥은 바우처 없이도 월 13만 원에 이용할 수 있어요.</p></div></div></div>
-      <div class="qa"><button class="q" type="button" aria-expanded="false">선생님이 집으로 오는 건가요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>맞아요. 아이가 늘 지내는 익숙한 공간에서, 선생님이 아이 한 명에게 온전히 집중해요. 낯선 곳이 아니라 더 빨리 편해지고, 부모님이 오가거나 기다릴 필요도 없어요.</p></div></div></div>
-      <div class="qa"><button class="q" type="button" aria-expanded="false">어느 지역까지 찾아오나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>재가방문은 인천 전 지역으로, 선생님이 아이의 가정으로 직접 찾아가요.</p></div></div></div>
+      <div class="qa"><button class="q" type="button" aria-expanded="false">선생님이 집으로 오는 건가요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>서비스마다 달라요. 오감쑥쑥과 정신건강 토탈케어는 선생님이 집으로 찾아가요. 아동청소년 심리지원은 센터에서 상담해요. 어떤 서비스를 알아보시는지 알려 주시면 횟수와 시간까지 같이 안내드릴게요.</p></div></div></div>
+      <div class="qa"><button class="q" type="button" aria-expanded="false">어느 지역까지 찾아오나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>가정방문 서비스는 인천 전 지역으로 찾아가요.</p><p>동네와 시간마다 갈 수 있는 선생님 일정이 달라서, 거주하시는 동네와 가능한 요일, 시간을 신청폼에 넉넉히 적어 주시면 맞는 선생님을 찾아서 연락드릴게요.</p></div></div></div>
       <div class="qa"><button class="q" type="button" aria-expanded="false">형제도 같이 받을 수 있나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>둘이 함께하면 60분으로 진행하고, 아이마다 각각 바우처를 신청하시면 돼요.</p></div></div></div>
-      <div class="qa"><button class="q" type="button" aria-expanded="false">체험해볼 수 있나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>따로 체험은 진행하고 있지 않아요. 첫 회기는 선생님과 친해지고, 부모님이 사전 검사를 하는 시간이에요. 혹시 잘 맞지 않으면 중간에 멈추실 수 있고, 그동안 받은 회기의 본인부담금만 내시면 돼요.</p></div></div></div>
+      <div class="qa"><button class="q" type="button" aria-expanded="false">체험해볼 수 있나요?<span class="ic"></span></button><div class="a"><div class="a-in"><p>체험은 따로 진행하고 있지 않아요. 첫 회기는 선생님이 아이와 친해지고 부모님이 사전 검사를 하는 시간이라, 한 번으로는 맞는지 판단하기 어렵기 때문이에요.</p><p>미리 경험해 보고 싶으셨을 텐데, 양해 부탁드려요.</p></div></div></div>
+      <!-- 문의답변 faq 끝 -->
     </div>
   </div>
 </section>
