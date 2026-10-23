@@ -35,6 +35,7 @@
 .pp-old-in p{margin:0 14px;padding:10px 0;border-top:1px solid var(--g200,#e5e8eb);font-size:.94em;color:var(--g700,#4e5968)}
 .pp-old-in p:last-child{padding-bottom:12px}
 @media (prefers-reduced-motion:reduce){.pp-chev,.pp-old{transition:none}}
+.pp-tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
 </style>
 </head>
 <body>
@@ -61,8 +62,9 @@
     <!-- 변경 안내: 보이는 상자 = 가장 최근 하나. 새로 개정할 때 = 지금 상자 글을 아래 pp-old 맨 앞 <p>로 옮기고, 상자에 새 글(유성 10-21 「계속 아래로 내려갈 것 같아 방지」).
          문장은 범주 말로만(유성 10-21 「너무 구체적이지 않을까 … 시스템 구동 방식을 타 경쟁업체에게 알려주는 꼴」 — 메모리 binding-docs-line-riding) -->
     <div class="pp-note">
-      <button type="button" class="pp-note-hd" aria-expanded="false" aria-controls="ppOld"><span><b>변경 안내</b> (2026년 10월 21일 공지, <b>2026년 10월 21일 시행</b>): 여러 조의 일부 내용이 바뀝니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</span><i class="pp-chev" title="지난 변경 안내"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></i></button>
+      <button type="button" class="pp-note-hd" aria-expanded="false" aria-controls="ppOld"><span><b>변경 안내</b> (2026년 10월 23일 공지, <b>2026년 10월 23일 시행</b>): 제6조, 제7조의 일부 내용이 바뀝니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</span><i class="pp-chev" title="지난 변경 안내"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></i></button>
       <div class="pp-old" id="ppOld"><div class="pp-old-in">
+        <p><b>변경 안내</b> (2026년 10월 21일 공지, <b>2026년 10월 21일 시행</b>): 여러 조의 일부 내용이 바뀝니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
         <p><b>변경 안내</b> (2026년 10월 16일 공지, <b>2026년 10월 16일 시행</b>): 제1조, 제2조, 제4조, 제6조, 제7조의 일부 내용이 바뀝니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
         <p><b>변경 안내</b> (2026년 10월 15일 공지, <b>2026년 10월 15일 시행</b>): 제2조의 일부 내용이 바뀝니다. 자세한 내용은 아래 제2조와 제15조를 확인해 주세요.</p>
         <p><b>변경 안내</b> (2026년 10월 13일 공지, <b>2026년 10월 15일 시행</b>): 제1조, 제2조, 제4조, 제6조, 제7조의 일부 내용이 바뀝니다. 자세한 내용은 아래 각 조와 제15조를 확인해 주세요.</p>
@@ -148,23 +150,23 @@
       <li>Google LLC — 자료 저장과 처리</li>
       <li>카카오(Kakao) — 주소 확인(지도 서비스)</li>
       <li>Microsoft Corporation — 홈페이지 방문 통계, 자료 보관</li>
-      <li>Anthropic, PBC — 문서 작성 보조, 문의 내용 정리</li>
+      <li>Anthropic, PBC — 문서 작성 보조, 문의와 의견 정리</li>
       <li>주식회사 솔라피(SOLAPI) — 문자와 알림톡 발송</li>
       <li>Cloudflare, Inc. — 네이버 톡톡 문의 전달</li>
     </ul>
 
     <h2>7. 개인정보의 국외 이전</h2>
     <p>위 위탁 업무 중 일부는 국외에 있는 서버에서 처리됩니다. 「개인정보 보호법」 제28조의8에 따라 다음 사항을 알려 드립니다.</p>
-    <table class="ptable" style="text-align:left; margin:8px 0 16px;">
+    <div class="pp-tw"><table class="ptable" style="text-align:left; margin:8px 0 16px;">
       <tr><th style="text-align:left;">구분</th><th style="text-align:left;">Google LLC</th><th style="text-align:left;">Microsoft Corporation</th><th style="text-align:left;">Anthropic, PBC</th></tr>
-      <tr><td>이전되는 항목</td><td>제1조 ①, ③, ④, ⑤의 정보 전부와 ⑥의 일부</td><td>제1조 ②의 방문 통계, ⑥의 일부</td><td>제1조 ③ 중 아이의 나이, 성별, 학년, 가족 형태와 마음과 행동에 관한 내용, ④, ⑤의 문의 내용, ⑥의 통화 정리 기록</td></tr>
+      <tr><td>이전되는 항목</td><td>제1조 ①, ③, ④, ⑤의 정보 전부와 ⑥의 일부</td><td>제1조 ②의 방문 통계, ⑥의 일부</td><td>제1조 ① 중 서비스를 이용하며 보호자가 남긴 의견, ③ 중 아이의 나이, 성별, 학년, 가족 형태와 마음과 행동에 관한 내용, ④, ⑤의 문의 내용, ⑥의 통화 정리 기록</td></tr>
       <tr><td>이전 국가</td><td>미국</td><td>미국 등 Microsoft 데이터센터 소재국</td><td>미국</td></tr>
       <tr><td>이전 시기와 방법</td><td>정보를 받거나 기록할 때, 암호화 전송</td><td>홈페이지를 볼 때와 자료를 보관할 때, 암호화 전송</td><td>해당 업무를 처리할 때, 암호화 전송</td></tr>
       <tr><td>이전받는 자</td><td>Google LLC (privacy.google.com)</td><td>Microsoft Corporation (privacy.microsoft.com)</td><td>Anthropic, PBC (privacy.claude.com)</td></tr>
-      <tr><td>목적과 보유 기간</td><td>자료 저장과 처리, 제4조의 기간</td><td>방문 통계 분석, 30일(표본 최대 9개월), 자료 보관은 제4조의 기간</td><td>문서 작성 보조와 문의 내용 정리, 받은 날부터 30일 이내 삭제(학습에 쓰이지 않음)</td></tr>
+      <tr><td>목적과 보유 기간</td><td>자료 저장과 처리, 제4조의 기간</td><td>방문 통계 분석, 30일(표본 최대 9개월), 자료 보관은 제4조의 기간</td><td>문서 작성 보조와 문의, 의견 정리, 받은 날부터 30일 이내 삭제(학습에 쓰이지 않음)</td></tr>
       <tr><td>거부 방법</td><td>온라인 신청 대신 전화(032-277-2007)로 신청</td><td>브라우저에서 쿠키 차단, ⑥은 전화가 아닌 방법으로 문의</td><td>개인정보 보호책임자(제13조)에게 말씀해 주시면 그 뒤로 보내지 않음(추천서는 담당 선생님이 직접 작성), ⑥은 전화가 아닌 방법으로 문의</td></tr>
-    </table>
-    <table class="ptable" style="text-align:left; margin:8px 0 16px;">
+    </table></div>
+    <div class="pp-tw"><table class="ptable" style="text-align:left; margin:8px 0 16px;">
       <tr><th style="text-align:left;">구분</th><th style="text-align:left;">Cloudflare, Inc.</th></tr>
       <tr><td>이전되는 항목</td><td>제1조 ⑤ 중 네이버 톡톡 문의</td></tr>
       <tr><td>이전 국가</td><td>미국 등 Cloudflare 데이터센터 소재국</td></tr>
@@ -172,7 +174,7 @@
       <tr><td>이전받는 자</td><td>Cloudflare, Inc. (cloudflare.com/privacypolicy)</td></tr>
       <tr><td>목적과 보유 기간</td><td>문의 전달, 전달에 필요한 동안</td></tr>
       <tr><td>거부 방법</td><td>홈페이지 문의 창이나 전화(032-277-2007)로 문의</td></tr>
-    </table>
+    </table></div>
     <p>국외 이전을 거부하시면 온라인 상담 신청이나 일부 홈페이지 기능을 이용하기 어려울 수 있습니다.</p>
 
     <h2>8. 개인정보의 제3자 제공</h2>
@@ -183,10 +185,10 @@
     <p><b>거부 방법</b>: 브라우저 설정에서 쿠키 저장을 막거나 지울 수 있습니다(Chrome: 설정 → 개인정보 보호 및 보안 → 쿠키 / Safari: 설정 → Safari → 모든 쿠키 차단 / 삼성 인터넷: 설정 → 개인정보 보호 → 쿠키 차단). 거부하면 일부 기능을 이용하기 어려울 수 있습니다.</p>
 
     <h2>10. 제3자의 행태정보 수집</h2>
-    <table class="ptable" style="text-align:left; margin:8px 0 16px;">
+    <div class="pp-tw"><table class="ptable" style="text-align:left; margin:8px 0 16px;">
       <tr><th style="text-align:left;">수집하는 자</th><th style="text-align:left;">수집 항목과 방법</th><th style="text-align:left;">목적</th><th style="text-align:left;">보유와 거부</th></tr>
       <tr><td>Microsoft Corporation</td><td>제1조 ②의 방문 통계, 홈페이지에 넣은 스크립트로 수집</td><td>홈페이지 이용 분석(회사), Microsoft 서비스 운영(Microsoft)</td><td>30일(표본 최대 9개월), 제9조의 거부 방법</td></tr>
-    </table>
+    </table></div>
 
     <h2>11. 개인정보의 안전성 확보 조치</h2>
     <ul>
@@ -231,9 +233,10 @@
       <li>2026년 10월 15일: 개정, 문의 답변을 위한 확인 목적(제2조) 추가</li>
       <li>2026년 10월 16일: 개정, 네이버 톡톡 문의 정보와 관련 위탁, 국외 이전 추가</li>
       <li>2026년 10월 21일: 개정, 문의 내용 국외 이전 항목(제7조) 추가, 전체 문장 정리</li>
+      <li>2026년 10월 23일: 개정, 보호자 의견 정리와 관련 위탁, 국외 이전 추가</li>
     </ul>
 
-    <p style="font-size:14px; color:var(--g500);">시행일: 2026년 10월 21일</p>
+    <p style="font-size:14px; color:var(--g500);">시행일: 2026년 10월 23일</p>
   </div>
 </section>
 
