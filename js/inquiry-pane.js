@@ -141,6 +141,12 @@
     // 대화
     '#tfInq .ti-th{flex:1 1 0;min-height:0;overflow-y:auto;padding:18px 16px 12px;display:flex;flex-direction:column;scrollbar-width:none;position:relative;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}',
     '#tfInq .ti-th::-webkit-scrollbar{width:0}',
+    // 대화 칸 위아래 흐림(§4.13-6 — 문의 창만 회색 예외, 유성 10-24 「회색 4안은 권장대로, 회색 어디까지도 권장대로」 = 원칙 두 겹 모양 그대로, 색만 g900 + 진하기 절반)
+    //   넘칠 때만, 맨 위 = 아래만 / 가운데 = 둘 다 / 맨 끝 = 위만. 띠 = 창(.ti-pane) 안 절대 위치, 자리는 thFadeWatch가 실측. 입력 칸(.ti-taw)은 초록 그대로
+    '#tfInq .ti-thf{position:absolute;left:0;right:0;height:24px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:3}',
+    '#tfInq .ti-thf.t{background:linear-gradient(to top,rgba(25,31,40,0) 0%,rgba(25,31,40,.028) 100%),linear-gradient(to top,rgba(25,31,40,0) 58%,rgba(25,31,40,.058) 100%)}',
+    '#tfInq .ti-thf.b{background:linear-gradient(to bottom,rgba(25,31,40,0) 0%,rgba(25,31,40,.028) 100%),linear-gradient(to bottom,rgba(25,31,40,0) 58%,rgba(25,31,40,.058) 100%)}',
+    '#tfInq .ti-pane.thMore .ti-thf.b,#tfInq .ti-pane.thTop .ti-thf.t{opacity:1}',
     '#tfInq .ti-sys{align-self:center;font-size:12px;color:var(--g600);margin:16px 0 0;text-align:center;line-height:1.5}',
     // 날짜 줄 = 대화 폭 전체 가로 선 + 가운데 달력 + 날짜(유성 10-18 「b」 — 받은함 attend .day와 같은 값). 말풍선 옆 시각과 같은 회색 글자라 날 바뀜이 안 읽히던 것
     '#tfInq .ti-day{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--g700);margin:24px 0 16px;white-space:nowrap;line-height:1.5}',
@@ -359,6 +365,7 @@
       + '</div>';
     document.body.appendChild(R);
     P = $('.ti-pane'); TH = HOST = $('.ti-th'); TA = $('#tiTa');
+    thFadeWatch();
     wire();
   }
 
@@ -380,6 +387,25 @@
       host.classList.toggle('more', over && ta.scrollTop + ta.clientHeight < ta.scrollHeight - 1);
       host.classList.toggle('moreTop', over && ta.scrollTop > 1); };
     ta.addEventListener('scroll', f); ta.addEventListener('input', f); return f;
+  }
+  // 대화 칸 흐림 띠 둘(위 .t / 아래 .b) = 창(P)에 붙이고 대화 칸 위아래 끝에 실측으로 맞춘다. 켜는 클래스는 P에, 감시는 내용이 바뀌는 TH에
+  //   (§4.13-6 함정 — 띠 클래스를 붙이는 요소를 감시하면 자기 토글이 자기를 깨운다 / 다시 그림·사진 늦게 옴·질문 펼침 0.3초 = 스크롤 없이 길이가 바뀜)
+  function thFadeWatch() {
+    var t = document.createElement('div'), b = document.createElement('div'), q = 0;
+    t.className = 'ti-thf t'; b.className = 'ti-thf b'; P.appendChild(t); P.appendChild(b);
+    var f = function () {
+      q = 0; var h = TH.clientHeight; if (!h) return;   // 높이 0 = 아직 안 그려짐, 재지 않는다
+      t.style.top = TH.offsetTop + 'px'; b.style.top = (TH.offsetTop + h - b.offsetHeight) + 'px';
+      var over = TH.scrollHeight > h + 1;
+      P.classList.toggle('thMore', over && TH.scrollTop + h < TH.scrollHeight - 1);
+      P.classList.toggle('thTop', over && TH.scrollTop > 1);
+    };
+    var later = function () { if (!q) q = requestAnimationFrame(f); };
+    TH.addEventListener('scroll', later, { passive: true });
+    TH.addEventListener('transitionend', later);   // 질문 펼침·접힘이 끝난 뒤
+    TH.addEventListener('load', later, true);       // 사진이 늦게 들어와 길어질 때
+    if (window.ResizeObserver) new ResizeObserver(later).observe(TH);   // 입력 칸이 커지거나 메일 칸으로 바뀌어 대화 칸 높이가 바뀔 때
+    if (window.MutationObserver) new MutationObserver(later).observe(TH, { childList: true, subtree: true, attributes: true, characterData: true });
   }
   function autosize(ta, max) { ta.style.height = 'auto'; ta.style.height = Math.min(max, ta.scrollHeight + 3) + 'px'; }
   // 메일 칸이 떠 있는 동안 채팅 칸은 숨어 있어 autosize가 0을 재 3px로 굳는다 → 보이게 되는 자리마다 다시 잰다(유성 10-11 「인풋이 갑자기 쪼그라들었어」 — 실측 22px, 정상 46)
