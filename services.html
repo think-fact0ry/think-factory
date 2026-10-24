@@ -322,6 +322,17 @@ var svcShow;
   });
   var h = (location.hash || '').replace('#', '');
   if (h) show(h);
+  // #price = 지금 보이는 서비스의 이용 안내(월 이용료 표) 칸 맨 위로(문의 창 「바우처 안내」 링크, 유성 10-23 「'표'가 위치 될 수 있도록」)
+  //   사진이 늦게 들어와도 자리가 안 밀리게 다 읽힌 뒤 한 번 더. 창이 이미 이 페이지에 떠 있으면 창이 window.tfGoHash('#price')를 부른다
+  function toPrice() {
+    var m = [].slice.call(document.querySelectorAll('.sp-money')).filter(function (s) { return s.offsetParent !== null; })[0];
+    if (!m) return;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo(0, m.getBoundingClientRect().top + window.pageYOffset - 60);
+    document.documentElement.style.scrollBehavior = '';
+  }
+  window.tfGoHash = function (hash) { if (hash === '#price') { toPrice(); try { history.replaceState(null, '', '#price'); } catch (e) {} } };
+  if (h === 'price') { toPrice(); if (document.readyState === 'complete') setTimeout(toPrice, 50); else addEventListener('load', function () { setTimeout(toPrice, 50); }); }
 })();
 
 // ── 차별점 활동사진 크로스페이드 — 활동글(오감쑥쑥) 최근 10개 썸네일을 셔플해 5초마다 교체 ──

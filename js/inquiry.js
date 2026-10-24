@@ -7,12 +7,14 @@
  * 시각 비교로 둔 이유 = 켠 때가 코드에 남고, 창.test가 「켜기 전 / 켠 뒤」 경계를 그대로 잰다. ?inq=1·?inq=0·?inq=demo는 그대로. 끄기 = OPEN = false 한 줄.
  * ?inq=demo = 서버 없이 상태를 넘겨 보는 미리보기(연습 데이터, 수집 0).
  * ?inq=open = 화면을 다 그린 뒤 창을 바로 연다(「문의하기」를 한 번 더 누르지 않게). 입구 = /ask(25 부재중 알림톡 「그 밖의 문의」 주소, 10-13 유성).
+ * tf_inq_back(이 탭 저장 칸) = 창 안 답의 홈페이지 링크(「바우처 안내」)로 이 페이지에 왔다 → PC면 창을 다시 연다(유성 10-23 「이동 되어도 문의 채팅이 내려가지 않게」).
+ *   폰은 창이 화면 전체라 다시 열면 그 페이지를 가린다 = 창 쪽이 칸을 안 남긴다(js/inquiry-pane.js faqGo). 30초 넘은 칸은 버린다(뒤로가기로 늦게 온 페이지).
  *   여는 즉시 주소에서 inq=open을 지운다 — 새로고침이나 뒤로가기로 창이 다시 튀어나오지 않게.
  */
 (function () {
   'use strict';
   var OPEN = Date.now() >= Date.UTC(2026, 9, 11, 14, 0, 0);   // ← 모두에게 켜는 스위치 = 2026-10-11 23:00 한국(= 14:00 UTC, 월은 0부터). 끄기 = false
-  var PANE_SRC = '/js/inquiry-pane.js?v=13';   // 창 코드를 고치면 ?v= 올리기 — 여기 + c/index.html + ask/index.html 세 곳(Pages 캐시 10분)
+  var PANE_SRC = '/js/inquiry-pane.js?v=14';   // 창 코드를 고치면 ?v= 올리기 — 여기 + c/index.html + ask/index.html 세 곳(Pages 캐시 10분)
   var GAS = 'https://script.google.com/macros/s/AKfycbwUdo5pLFvgVxu_3EjspA6U6U196Hu-RzKcC0ucVwRPGMBP3oIQT2fKMK_7fvLmeOx9Gg/exec';
 
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
@@ -24,6 +26,8 @@
   if (q === 'demo') ss('tf_inq_demo', '1');
   var demo = ss('tf_inq_demo') === '1';
   var autoOpen = q === 'open';
+  var back = +(ss('tf_inq_back') || 0); if (back) { try { sessionStorage.removeItem('tf_inq_back'); } catch (e) {} }
+  if (back && Date.now() - back < 30000 && !(window.matchMedia && matchMedia('(max-width:760px)').matches)) autoOpen = true;
   if (!OPEN && ls('tf_inq') !== '1' && !demo) return;   // 켜기 전 = 아무것도 안 함(서버도 안 부름)
 
   var fab = document.querySelector('.fab');

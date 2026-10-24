@@ -9,6 +9,8 @@
  *   - PC에서 홈, 서비스, 이야기 페이지의 휠과 방향키 가로채기가 창 안까지 오지 않게
  *   - 행정이 거둔 답장(10-12 26 s_recall)은 흔적 없이 사라진다(유성 「거둔 답장이라고 남기지 말것. 아예 없어지게」): 묻기에 rv(아는 거둔 줄 수)를 싣고,
  *     서버가 rc(거둔 줄 번호 목록)를 주면 이미 그린 줄도 지운다. upto = 방 마지막 줄 번호(거둔 줄이 끝이면 그 번호까지 받은 것으로)
+ *   - 관리자가 고친 답장(10-23 26 s_edit)은 「수정됨」 없이 글만 바뀐다(유성 「수정됨 이라는 표시는 넣지 않을것」): 묻기에 ev(아는 고침 표)를 싣고,
+ *     표가 다르면 서버가 ev(새 표) + ed(최근 줄 중 고친 줄 {seq, text})를 준다. 열기(v_load)도 ev를 준다
  */
 (function () {
   'use strict';
@@ -103,7 +105,7 @@
 
   // ── 상태 ──
   var R = null, P, TH, TA;
-  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, rv: 0, hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '', saidMail: false };
+  var S = { open: false, key: '', mode: '', read: 0, lastSeq: 0, rv: 0, ev: '', hasPhone: false, more: false, loaded: '', sentFresh: false, noteMode: '', phonePending: '', saidMail: false };
   var known = {};          // 화면에 그린 줄 번호
   var queue = [], sending = null;
   var pollT = 0, polling = false, lastChange = Date.now();
@@ -126,7 +128,7 @@
     '#tfInq .ti-hd{display:flex;align-items:center;gap:10px;padding:16px 16px 12px;border-bottom:1px solid var(--g100);flex:none}',
     '#tfInq .ti-x{width:38px;height:38px;border:0;background:none;border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--g700);cursor:pointer;transition:transform .16s;padding:0}',
     '#tfInq .ti-x:active{transform:scale(.82)}',
-    '#tfInq .ti-x svg{width:22px;height:22px}',
+    '#tfInq .ti-x svg{width:22px;height:22px}',   // 창 = −(내리기, 유성 10-23 「x 버튼이 아닌 - 버튼으로 … 부정적인 느낌」 — 대화는 그대로 남는다) / 문자 링크·/ask 페이지 = X(홈으로 가기)
     '#tfInq .ti-av{width:38px;height:38px;flex:none;display:flex}',
     '#tfInq .ti-av img{width:100%;height:100%;display:block}',   // 생각공작소 로고(말풍선 모양 그대로 — 「생」 글자는 AI 같다, 유성 10-10)
     '#tfInq .ti-tt{flex:1;min-width:0}',
@@ -221,7 +223,7 @@
     '#tfInq .ti-fai{overflow:hidden;min-height:0}',
     '#tfInq .ti-fai p{margin:0;font-size:14.5px;color:var(--g700);line-height:1.7;white-space:pre-line}#tfInq .ti-fai p+p{margin-top:1.7em}#tfInq .ti-fai>:last-child{margin-bottom:14px}',
     '#tfInq .ti-fai p a{color:var(--green700);text-decoration:underline;text-underline-offset:2px}',
-    '#tfInq .ti-fbtn{display:inline-block;margin-top:14px;background:var(--green600);color:#fff;text-decoration:none;font-size:14px;font-weight:700;border-radius:10px;padding:9px 14px;transition:transform .12s,background .15s}#tfInq .ti-fbtn:active{transform:scale(.96);background:var(--green700)}',
+    '#tfInq .ti-fbtn{display:table;margin-top:14px;margin-left:auto;background:var(--green600);color:#fff;text-decoration:none;font-size:14px;font-weight:700;border-radius:10px;padding:9px 14px;transition:transform .12s,background .15s}#tfInq .ti-fbtn:active{transform:scale(.96);background:var(--green700)}',
     '#tfInq .ti-line{display:flex;gap:8px;align-items:flex-end}',
     '#tfInq .ti-inp{flex:1;min-width:0;background:var(--g100);border:1.5px solid transparent;border-radius:12px;padding:11px 12px;font-size:16px;font-family:inherit;color:var(--g900);outline:none;caret-color:var(--green600);transition:background .15s,border-color .15s;-webkit-user-select:text;user-select:text}',
     '#tfInq .ti-inp::placeholder{color:var(--g500)}',
@@ -261,7 +263,7 @@
     '#tfInq.mailnew .ti-mailf{display:flex}',
     '#tfInq.mailnew .ti-chatline{display:none}',
     '#tfInq .ti-mailf .ti-taw{border-radius:14px}',
-    '#tfInq .ti-mailf .ti-ta{border-radius:14px;min-height:96px;max-height:150px}',
+    '#tfInq .ti-mailf .ti-ta{border-radius:14px;min-height:70px;max-height:150px}',   // 2줄(유성 10-23 「한 줄 줄여줘. 너무 높이가 크다」 — 전엔 3줄 96px)
     '#tfInq .ti-mailf .ti-inp{flex:none}',
     '#tfInq .ti-fl{font-size:13.5px;font-weight:600;color:var(--g600);margin:2px 0 -2px 4px}',
     '#tfInq .ti-fl.on{color:var(--green600)}',
@@ -320,6 +322,7 @@
 
   var ICO = {
     x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    min: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 12h12"/></svg>',
     up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
     check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
     chev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>',
@@ -333,7 +336,7 @@
     R.innerHTML =
       '<div class="ti-pane">'
       + '<div class="ti-hd"><div class="ti-av"><img src="/assets/favicon-96x96.png" alt="" width="38" height="38"></div><div class="ti-tt"><div class="ti-nm">생각공작소 <span class="ti-onp">ON</span></div><div class="ti-tel"><i></i>' + TEL + '</div></div>'
-      + '<button class="ti-x" type="button" aria-label="닫기">' + ICO.x + '</button></div>'
+      + '<button class="ti-x" type="button" aria-label="' + (PAGE ? '홈페이지로 가기' : '창 내리기') + '">' + (PAGE ? ICO.x : ICO.min) + '</button></div>'
       + '<div class="ti-th" aria-live="polite"></div>'
       + '<div class="ti-comp">'
       + '<div class="ti-line ti-chatline"><div class="ti-taw"><textarea class="ti-ta" id="tiTa" rows="1" maxlength="' + MAX_LEN + '" placeholder="어떤 점이 궁금하세요?" autocomplete="off"></textarea></div>'
@@ -419,7 +422,8 @@
     var ta2 = $('#tiTa2'), ph2 = $('#tiPh2'), ms = $('#tiMail'), fTa2 = fadeWatch(ta2);
     var mailOk = function () { return { t: !!ta2.value.trim(), p: ph2.value.replace(/\D/g, '').length === 11 }; };
     var gate = function () { var o = mailOk(); ms.classList.toggle('gate', !(o.t && o.p)); if (o.t) ta2.classList.remove('err'); if (o.p) ph2.classList.remove('err'); };
-    ta2.addEventListener('input', function () { gate(); autosize(ta2, 150); fTa2(); });
+    ta2.value = ss(K('tf_inq_draft2')) || ''; gate();   // 「바우처 안내」처럼 다른 페이지로 갔다 와도 쓰던 글 그대로(채팅 칸과 같은 규칙 — 번호는 안 남긴다)
+    ta2.addEventListener('input', function () { gate(); autosize(ta2, 150); fTa2(); ss(K('tf_inq_draft2'), ta2.value); });
     [[ta2, '.f1'], [ph2, '.f2']].forEach(function (p) {   // 칸에 들어가면 그 칸 이름이 초록(§4.1)
       var lb = $('.ti-fl' + p[1]);
       p[0].addEventListener('focus', function () { lb.classList.add('on'); });
@@ -530,6 +534,14 @@
     r.dataset.seq = m.seq;
     if (m.file) attach(r, m);
     if (m.who !== 'v') lastChange = Date.now();
+  }
+  // 고친 답장(10-23) = 그 말풍선 글만 바꾼다(움직임·표시 없음 — 유성 「수정됨 이라는 표시는 넣지 않을것」). 학부모 줄은 안 바뀐다(관리자 답장만 고친다)
+  function editedLines(list) {
+    list.forEach(function (x) {
+      var r = TH.querySelector('.ti-row.them[data-seq="' + (+x.seq) + '"]'), b = r && r.querySelector('.ti-bub');
+      if (!b || typeof x.text !== 'string' || b.textContent === x.text) return;
+      b.textContent = ''; linkify(b, x.text);
+    });
   }
   // 거둔 답장(10-12) = 흔적 없이 뺀다. 이웃 말풍선 묶음(이어 말함, 「생각공작소」 이름, 시각이 붙는 마지막 말풍선)과 날짜 줄만 고친다
   function dropRecalled(list) {
@@ -650,7 +662,7 @@
   var GREET = { chat: '안녕하세요, 생각공작소예요.\n궁금한 점을 편하게 남겨 주세요 ☺️', mail: '안녕하세요, 생각공작소예요 ☺️\n지금은 채팅 시간이 아니에요\n문의를 남겨 주시면,\n문자로 답해 드릴게요 :)' };
   // 첫 화면 자주 묻는 질문 넷(⑦) — q = 질문, p = 문단(조각: 글자 = 문자열, 링크 = [글자, 주소]), btn = 답 끝 「신청폼 열기」. 글은 /contact, 받은함 자주 쓰는 답변과 같은 정본에서 나온다
   /* 문의답변 first 시작 (tools/문의답변/동기.js가 씀 — 글은 생각공작소 tools/문의답변/정본.js에서 고칠 것) */
-  var FAQ = [{"q":"본인부담금은 얼마인가요?","p":[["소득 등급에 따라 달라져요. 등급은 바우처를 신청할 때 가구원 수와 건강보험료로 정해지고, 결과 문자나 통지서에 같이 나와요."],["서비스별, 등급별 금액은 홈페이지 ",["바우처 안내","/services"],"에 표로 정리해 두었어요. 등급이 나오면 알려 주세요 :) 한 달에 얼마인지 바로 말씀드릴게요."]],"btn":0},{"q":"선생님이 집으로 오는 건가요?","p":[["서비스마다 달라요. 오감쑥쑥과 정신건강 토탈케어는 선생님이 집으로 찾아가요. 아동청소년 심리지원은 센터에서 상담해요. 어떤 서비스를 알아보시는지 알려 주시면 횟수와 시간까지 같이 안내드릴게요."]],"btn":0},{"q":"바우처가 처음인데 어떻게 신청하나요?","p":[["거주하시는 동네 행정복지센터에서 신청하실 수 있어요. 필요한 서류는 서비스마다 달라서, 가시기 전에 행정복지센터에 전화로 한 번 물어보시면 좋아요."],["신청하시면 14일 안에 문자나 통지서로 결과가 오니, 결과 받으시면 저희에게 연락 주세요. :)"]],"btn":0},{"q":"신청하면 어떻게 진행되나요?","p":[["서비스와 거주하시는 동네, 가능한 요일과 시간에 따라 자리가 달라서, 신청폼에 넉넉히 적어 주시면 선생님 일정을 보고 접수 순서대로 연락드려요."],["신청하시는 분이 많아서 맞는 자리가 생길 때만 연락드리고 있어요. 현재 대기 상황은 신청폼에서 보실 수 있어요."]],"btn":1}];
+  var FAQ = [{"q":"본인부담금은 얼마인가요?","p":[["소득 등급에 따라 달라져요. 등급은 바우처를 신청할 때 가구원 수와 건강보험료로 정해지고, 결과 문자나 통지서에 같이 나와요."],["서비스별, 등급별 금액은 홈페이지 ",["바우처 안내","/services#price"],"에 표로 정리해 두었어요. 등급이 나오면 알려 주세요. 한 달에 얼마인지 바로 안내드릴게요 :)"]],"btn":0},{"q":"선생님이 집으로 오는 건가요?","p":[["서비스마다 달라요. 오감쑥쑥과 정신건강 토탈케어는 선생님이 집으로 찾아가고, 아동청소년 심리지원은 센터에서 상담해요."],["어떤 서비스를 알아보시는지 알려 주시면, 횟수와 시간까지 함께 안내해 드릴게요."]],"btn":0},{"q":"바우처가 처음인데 어떻게 신청하나요?","p":[["거주하시는 동네 행정복지센터에서 신청하실 수 있어요. 필요한 서류는 서비스마다 달라서, 가시기 전에 행정복지센터에 전화로 한 번 물어보시면 좋아요."],["신청하시면 14일 안에 문자나 통지서로 결과가 오니, 결과 받으시면 저희에게 연락 주세요 ☺️"]],"btn":0},{"q":"신청하면 어떻게 진행되나요?","p":[["어떤 서비스인지, 거주하시는 동네 주변에 방문 가능하신 선생님이 계신지, 요일과 시간이 가능한지에 따라 달라서, 아래 신청폼에 일정과 시간을 넉넉히 적어 주시면 선생님 스케줄을 보고 접수 순서대로 연락드려요."],["신청하시는 분이 많아서 맞는 자리가 생길 때만 연락드리고 있어요. 양해 부탁드려요 🙏🏻"]],"btn":1}];
   /* 문의답변 first 끝 */
   function skel() {   // 모드·대화를 아직 모를 때 = 훑는 뼈대(§5.4)
     TH.innerHTML = '<div class="ti-sk" style="width:62%"></div><div class="ti-sk" style="width:48%;align-self:flex-end"></div><div class="ti-sk" style="width:70%"></div>';
@@ -667,7 +679,7 @@
       TH.appendChild(el('<div class="ti-nc ti-info"><div class="t1">창을 닫아도 답을 받을 수 있어요</div><div class="t2">휴대폰 번호를 남겨 주시면 문자로 답해 드려요.</div></div>'));
       rise(TH.lastElementChild);
     }
-    rise(faqBox());
+    rise(faqBox()); faqReopen();
     if (S.mode !== 'chat') R.classList.add('mailnew'); else showChatLine();
     if (S.mode !== 'chat' && TA.value.trim() && !$('#tiTa2').value) { $('#tiTa2').value = TA.value; TA.value = ''; }   // 뼈대 동안 채팅 칸에 쓴 글은 메일 칸으로 옮겨 준다
     if (S.mode === 'chat' && !S.hasPhone && !S.phonePending) { var nc = numCard(); nc.classList.remove('ti-new'); rise(nc); }
@@ -686,6 +698,7 @@
         segs.forEach(function (sg) {
           if (typeof sg === 'string') { p.appendChild(document.createTextNode(sg)); return; }
           var a = document.createElement('a'); a.href = sg[1]; a.textContent = sg[0]; p.appendChild(a);
+          a.addEventListener('click', function (e) { faqGo(e, a, i); });
         });
         body.appendChild(p);
       });
@@ -705,6 +718,28 @@
       box.appendChild(qa);
     });
     TH.appendChild(box); return box;
+  }
+  // 답 속 홈페이지 링크(유성 10-23 「바우처 안내 페이지로 이동 되어도 문의 채팅이 내려가지 않게 … '표'가 위치 될 수 있도록」)
+  //   PC = 창이 오른쪽 아래 작은 칸이라 표와 같이 보인다 → 도착한 페이지가 창을 다시 연다(js/inquiry.js tf_inq_back, 열었던 질문도 열린 채)
+  //   폰 = 창이 화면 전체라 다시 열면 표를 가린다 → 표만 보여 주고, 「문의하기」를 누르면 같은 질문이 열린 채로 돌아온다(10분)
+  //   문자 링크·/ask 페이지 = 새 탭(그 페이지가 곧 대화라 떠나지 않게) / 이미 그 페이지 = 창은 그대로(폰은 내림) 두고 표로만
+  function faqGo(e, a, i) {
+    ev('inq_faq_link');
+    if (PAGE) { a.target = '_blank'; a.rel = 'noopener'; return; }
+    ss(K('tf_inq_faq'), JSON.stringify({ i: i, at: Date.now() }));
+    var u = new URL(a.href, location.href);
+    if (u.origin === location.origin && u.pathname.replace(/\.html$/, '') === location.pathname.replace(/\.html$/, '') && window.tfGoHash) {
+      e.preventDefault(); if (mqPhone.matches) requestClose(); window.tfGoHash(u.hash); return;
+    }
+    if (!mqPhone.matches) ss('tf_inq_back', String(Date.now()));   // 저장 칸 이름 = js/inquiry.js와 같이(연습 화면도 같은 칸 — 그쪽이 demo를 따로 안다)
+  }
+  function faqReopen() {   // 링크로 떠났던 질문을 다시 열어 둔다(창을 새로 그릴 때 한 번)
+    var f = null; try { f = JSON.parse(ss(K('tf_inq_faq')) || 'null'); } catch (x) {}
+    ss(K('tf_inq_faq'), null);
+    if (!f || !(Date.now() - f.at < 600000)) return;
+    var q = TH.querySelectorAll('.ti-faq .ti-fq')[f.i]; if (!q) return;
+    q.classList.add('open'); q.querySelector('.ti-fqb').setAttribute('aria-expanded', 'true');
+    setTimeout(function () { if (q.isConnected) TH.scrollTop = Math.max(0, q.offsetTop - TH.offsetTop - 12); }, 360);   // 열림(0.3초) 뒤 그 질문이 위로 오게
   }
   function applyMode(m, noStore) {   // 머리 ON 표시 + 버튼 초록 점 + 3분 기억
     R.classList.toggle('chat', m === 'chat');
@@ -780,7 +815,7 @@
   function sendMail(text, phone) {   // 메일 모드 첫 문의(내용+번호) = 채팅과 똑같이 그 자리 말풍선, 입력은 바로 채팅 칸(유성 10-10 「별 다른 페이지로 이동되지 않게」)
     if (!consentAt()) { openSheet(); return; }
     S.sentFresh = true; S.phonePending = phone;
-    var ta2 = $('#tiTa2'); ta2.value = ''; $('#tiPh2').value = ''; $('#tiMail').classList.add('gate'); autosize(ta2, 150);
+    var ta2 = $('#tiTa2'); ta2.value = ''; ss(K('tf_inq_draft2'), null); $('#tiPh2').value = ''; $('#tiMail').classList.add('gate'); autosize(ta2, 150);
     showChatLine();
     hideResume(); dayIf(new Date().toISOString());
     var r = rowEl('me', text, '', true); r.classList.add('pend');
@@ -848,7 +883,7 @@
     first({ action: 'v_load', key: S.key }).then(function (r) {
       if (!r || !r.ok) { if (r && r.code === 'gone') return gone(); return loadFail(); }
       TH.innerHTML = ''; lastDay = ''; known = {}; S.lastSeq = 0; S.noteMode = ''; S.saidMail = false;   // 이어보기엔 첫 화면 말풍선이 없음
-      S.hasPhone = !!r.hasPhone; S.more = !!r.more; S.read = r.read || 0; S.loaded = S.key; S.rv = +r.rcn || 0;
+      S.hasPhone = !!r.hasPhone; S.more = !!r.more; S.read = r.read || 0; S.loaded = S.key; S.rv = +r.rcn || 0; S.ev = typeof r.ev === 'string' ? r.ev : '';
       (r.msgs || []).forEach(function (m) { addMsg(m, false); });
       if (+r.upto > S.lastSeq) S.lastSeq = +r.upto;   // 마지막 줄이 거둔 줄이면(10-12) 그 번호까지 받은 것으로
       markRead(); setMode(r.mode || S.mode || 'mail'); noteForMode(); scrollEnd();
@@ -899,7 +934,7 @@
   function poll() {
     if (polling || !S.open || !S.key || document.hidden) return;
     polling = true;
-    once({ action: 'v_poll', key: S.key, after: S.lastSeq, rv: S.rv }).then(function (r) {
+    once({ action: 'v_poll', key: S.key, after: S.lastSeq, rv: S.rv, ev: S.ev }).then(function (r) {
       if (!r) return;
       if (r.code === 'gone') { gone(); return; }
       if (!r.ok) return;
@@ -907,6 +942,8 @@
       var atEnd = TH.scrollTop + TH.clientHeight >= TH.scrollHeight - 40;
       if (r.msgs && r.msgs.length) { r.msgs.forEach(function (m) { addMsg(m, true); }); if (atEnd) scrollEnd(); }
       if (r.rc && r.rc.length) dropRecalled(r.rc);   // 거둔 답장(10-12) — 이미 그린 줄도
+      if (r.ed && r.ed.length) editedLines(r.ed);   // 고친 답장(10-23) — 글만 바꾼다
+      if (typeof r.ev === 'string') S.ev = r.ev;
       if (+r.upto > S.lastSeq) S.lastSeq = +r.upto;
       if (typeof r.read === 'number' && r.read !== S.read) { S.read = r.read; markRead(); }
     }, function () {}).then(function () { polling = false; schedule(); });
