@@ -1,0 +1,49 @@
+name: 월 계획안 받기
+
+# 07 공개 창구(pub)에서 이번 달, 다음 달 포스터 + 안내문을 받아 month/plan.js + month/p/*.jpg로 넣는다 → /month가 바로 읽음(불러오는 중 화면 없음).
+# 바뀐 게 있을 때만 커밋 → GitHub Pages 재배포. 07 1일 발송은 이 파일이 원드라이브 판과 같아야 나간다(tools/month-plan.mjs 머리 주석).
+on:
+  schedule:
+    - cron: '17,47 * 24-31,1-2 * *'   # 달이 바뀌는 무렵(UTC 24일~2일 = 한국 24일 9시~3일 9시) 30분마다 — 28일 미리보기, 1일 발송 전에 맞춰 두기
+    - cron: '7 */3 * * *'               # 그 밖엔 3시간마다(달 중간에 안내문을 고쳐도 따라감). GitHub 부하로 수십 분 늦을 수 있음
+  workflow_dispatch:                   # 수동 실행 버튼(Actions 탭)
+
+permissions:
+  contents: write
+
+concurrency:
+  group: month-plan
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 그림 줄이는 도구(sharp)
+        run: npm install --no-save --no-package-lock sharp@0.33.5
+
+      - name: 07에서 받기
+        run: node tools/month-plan.mjs
+
+      - name: 바뀐 것만 커밋, 푸시
+        run: |
+          git config user.name "think-factory-bot"
+          git config user.email "noreply@think-factory.kr"
+          git add --all -- month/plan.js month/p
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+            exit 0
+          fi
+          git commit -m "chore: 월 계획안 자동 반영 ($(date -u +%Y-%m-%dT%H:%MZ))"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            sleep 10
+          done
+          exit 1
