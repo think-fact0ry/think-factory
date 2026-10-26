@@ -75,6 +75,9 @@ async function main() {
   const before = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8') : '';
   if (before !== body) { fs.writeFileSync(OUT, body); console.log('plan.js 바뀜'); } else console.log('plan.js 그대로');
   if (fs.existsSync(PDIR)) for (const f of fs.readdirSync(PDIR)) if (!keep.has(f)) { fs.unlinkSync(path.join(PDIR, f)); console.log('지움', f); }
+  // /month/h(행복마음 아청 가정 판) = month/index.html 그대로 — 화면이 주소를 보고 아청 통장만 바꾼다. 누가 index.html만 고쳐도 여기서 맞춘다
+  const src = fs.readFileSync(path.join(DIR, 'index.html')), hp = path.join(DIR, 'h', 'index.html');
+  if (!fs.existsSync(hp) || !fs.readFileSync(hp).equals(src)) { fs.mkdirSync(path.dirname(hp), { recursive: true }); fs.writeFileSync(hp, src); console.log('month/h/index.html 맞춤'); }
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

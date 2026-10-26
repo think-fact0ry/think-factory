@@ -36,7 +36,7 @@ jobs:
         run: |
           git config user.name "think-factory-bot"
           git config user.email "noreply@think-factory.kr"
-          git add --all -- month/plan.js month/p
+          git add --all -- month/plan.js month/p month/h
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
             exit 0

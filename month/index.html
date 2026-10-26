@@ -83,7 +83,8 @@
 <body>
 <main class="wrap">
   <div id="plan"></div>
-  <script src="plan.js"></script>
+  <!-- /month/h/index.html = 이 파일 그대로(tools/month-plan.mjs가 맞춰 둠) → 경로는 절대로 -->
+  <script src="/month/plan.js"></script>
   <script>
   // plan.js가 채운 MONTH_PLANS에서 고른다: ?m=YYMM → 그 달 / 아니면 이번 달, 없으면 다음 달(07 _maPublicMonth_와 같은 규칙, 한국 시각).
   // 동기 실행 = 첫 화면이 그려지기 전에 끝난다(불러오는 중 화면 없음).
@@ -114,7 +115,7 @@
       // 안내문 속 전화번호 = 누르면 전화. 안내문이 이미 문의 번호를 말하면 아래 같은 문장은 숨긴다(docs/1 §2.1-7)
       // 맨 위 「[11월 계획안]」 한 줄 + 빈 줄(유성 10-26)
       var body = esc('[' + (p.m | 0) + '월 계획안]\n\n' + p.text).replace(/(0\d{1,2})-(\d{3,4})-(\d{4})/g, function (s, a, b, c) { return '<a href="tel:' + a + b + c + '">' + s + '</a>'; });
-      box.innerHTML = '<img class="poster" src="' + esc(p.img) + '" width="' + (p.w | 0) + '" height="' + (p.h | 0) + '" alt="' + (p.m | 0) + '월 계획안" fetchpriority="high">'
+      box.innerHTML = '<img class="poster" src="/month/' + esc(p.img) + '" width="' + (p.w | 0) + '" height="' + (p.h | 0) + '" alt="' + (p.m | 0) + '월 계획안" fetchpriority="high">'
         + '<div class="sec"><div class="notice">' + body + '</div>'
         + (/277-?2007/.test(p.text) ? '' : '<p class="ask">궁금하신 사항은 담당 선생님 또는 생각공작소(<a href="tel:0322772007">032-277-2007</a>)로 편하게 연락주세요.</p>')
         + '</div>';
@@ -141,14 +142,22 @@
       </div>
       <div class="box">
         <p class="svc">아동청소년 심리지원</p>
-        <p class="no">301-0380-1370-41</p>
+        <p class="no" id="acNo">301-0380-1370-41</p>
         <p class="bank">농협, 예금주 한유성</p>
-        <button class="cp" type="button" data-copy="농협 301-0380-1370-41">
+        <button class="cp" id="acCp" type="button" data-copy="농협 301-0380-1370-41">
           <span class="a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>복사</span><span class="b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>복사했어요</span>
         </button>
       </div>
     </div>
   </section>
+  <script>
+  // /month/h = 행복마음상담센터 아청 가정(07이 집마다 판을 골라 다른 알림톡 틀 = 다른 버튼 주소로 보냄, 유성 10-26 「알림톡 자체에서 다르게」).
+  //  오감 칸은 늘 같은 통장(대장 9~10월 오감 238명 전부 미추). 화면이 그려지기 전에 바꾼다.
+  if (/^\/month\/h(\/|\/index\.html)?$/.test(location.pathname)) {
+    document.getElementById('acNo').textContent = '302-2035-0507-31';
+    document.getElementById('acCp').setAttribute('data-copy', '농협 302-2035-0507-31');
+  }
+  </script>
 </main>
 <div class="toast" role="status" aria-live="polite"></div>
 <script>

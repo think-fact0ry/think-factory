@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>월 계획안 — 생각공작소</title>
+<meta name="robots" content="noindex">
+<meta property="og:title" content="생각공작소 월 계획안">
+<meta property="og:description" content="이번 달 계획안과 안내문이에요.">
+<meta property="og:type" content="website">
+<!--
+  think-factory.kr/month — 월 계획안 알림톡 버튼 「이번 달 계획안 보기」가 여는 곳(주소는 템플릿 심사본에 박힘 → 바꾸면 재심사).
+  설계 정본 = 부모 레포 docs/4_설계_2026-09-29_월안내_센터발송.md §3·§6.
+  3판(10-26 라이브 — 유성 「로딩이 아예 있어선 안돼」): 07에 묻지 않는다. 같은 폴더 plan.js(이번 달·다음 달 포스터 주소 + 안내문)를
+  .github/workflows/month-plan.yml이 07 공개 창구 pub에서 받아 커밋해 둔다 → 이 페이지는 그 파일을 바로 읽어 첫 화면부터 그린다(불러오는 중 화면 없음).
+  위 글자(생각공작소, N월 계획안) 없음 = 포스터가 첫 화면(유성 10-26). 맨 아래 = 본인부담금 계좌 두 칸, 누르면 복사.
+  계좌 = 포스터 아래 칸과 같은 두 통장(생각미추 오감, 생각미추 아청심 — 08 ACCOUNTS·가계부 「사업 계좌 관리」). 통장이 바뀌면 포스터와 이 파일을 같이.
+  noindex = 이용 가정만 보는 글. 방문 통계(js/analytics.js)는 싣지 않음. ⚠️ 사용자 문구에 가운뎃점(U+00B7) 금지.
+-->
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --g100:#f2f4f6; --g200:#e5e8eb; --g500:#8b95a1; --g600:#6b7684; --g700:#4e5968; --g800:#333d4b; --g900:#191f28;
+    --green100:#e9f8ee; --green200:#cef2db; --green600:#3a8a5f; --green700:#166841;
+    --beige:#f7f5f1;
+    --r-md:clamp(10px,2.6vw,14px); --r-lg:clamp(13px,3.2vw,20px);
+    --sh1:0 1px 2px rgba(47,111,77,.05), 0 4px 14px rgba(47,111,77,.06);
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; background:var(--beige); }
+  body{ font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif; color:var(--g900); line-height:1.6;
+    -webkit-text-size-adjust:100%; word-break:keep-all; overflow-wrap:anywhere; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 0 calc(40px + env(safe-area-inset-bottom)); }
+  /* 포스터 = 첫 화면 맨 위(위 여백 16px — 유성 10-26 「이미지 상단 마진이 있어야 할 듯」), 폰에선 양옆 끝까지. 넓은 화면에선 둥근 카드 */
+  .poster{ display:block; width:100%; height:auto; background:#fff; }
+  @media (min-width:492px){ .wrap{ padding-top:24px; } .poster{ border-radius:var(--r-lg); } }
+  .sec{ margin:14px 16px 0; }
+  @media (min-width:492px){ .sec{ margin-left:0; margin-right:0; } }
+  .notice{ background:#fff; border-radius:var(--r-lg); box-shadow:var(--sh1); padding:20px; white-space:pre-line; font-size:15px; }
+  .card{ background:#fff; border-radius:var(--r-lg); box-shadow:var(--sh1); padding:28px 22px; text-align:center; }
+  .card svg{ width:88px; height:88px; display:block; margin:0 auto 14px; }
+  .card .t{ font-size:19px; font-weight:700; letter-spacing:-.4px; line-height:1.4; margin:0 0 8px; }
+  .card .s{ font-size:15px; color:var(--g700); margin:0; }
+  .ask{ font-size:13px; color:var(--g700); margin-top:18px; padding:0 4px; }   /* 베이지 위 보조 글자 = g700(§3.6-7) */
+  .ask a, .notice a{ color:var(--green700); font-weight:700; text-decoration:none; }
+
+  /* 본인부담금 계좌 = 좌우 두 칸(유성 10-26). 계좌번호 = 옮겨 적는 값이라 선택 가능(§3.7 예외) */
+  .acc-h{ font-size:17px; font-weight:700; letter-spacing:-.3px; line-height:1.5; margin:28px 4px 10px; }
+  .acc{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .box{ background:#fff; border-radius:var(--r-lg); box-shadow:var(--sh1); padding:16px 12px 14px; display:flex; flex-direction:column; min-width:0; }
+  /* 두 칸의 서비스 이름이 한 줄/두 줄로 갈려도 번호와 단추 줄이 나란히 = subgrid(없는 브라우저는 위 flex 그대로) */
+  @supports (grid-template-rows:subgrid){
+    .acc{ grid-template-rows:auto auto auto 1fr; }
+    .box{ display:grid; grid-row:span 4; grid-template-rows:subgrid; row-gap:0; }
+    .box .cp{ align-self:end; }
+  }
+  .svc{ font-size:13.5px; font-weight:600; color:var(--g700); line-height:1.45; margin:0 0 4px; }
+  /* 번호 = 칸 폭에 맞춰 한 줄(실측 10-26: 비례 숫자 -0.2px에서 넓은 쪽 번호 폭 ≈ 9 × 글자 크기 - 4, 칸 안 폭 = 화면 폭 / 2 - 45)
+     → 여유 4px 이상 남게 360 폭 14.6px, 390 폭 16.2px, 404 폭부터 17px. 340 폭 아래는 칸 여백을 줄여 13px */
+  .no{ font-size:clamp(13px, calc((100vw - 98px) / 18), 17px); font-weight:700; letter-spacing:-.2px; white-space:nowrap; margin:0;
+    -webkit-user-select:text; user-select:text; -webkit-touch-callout:default; }
+  .bank{ font-size:12px; color:var(--g600); line-height:1.45; margin:2px 0 14px; }
+  /* 복사 단추 = 초록 채움 + 흰 글자, 누르면 진한 초록(유성 10-26 「백그라운드 그린600, 컬러 화이트 … 누르면 어두워지는 거」, §4.14 fill + §5.3) */
+  .cp{ margin-top:auto; height:44px; border:0; border-radius:15px; background:var(--green600); color:#fff;
+    font:inherit; font-size:15px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer;
+    transition:transform .12s, background-color .12s; }
+  .cp:active{ transform:scale(.97); background:var(--green700); }
+  @media (max-width:340px){ .acc{ gap:8px; } .box{ padding-left:10px; padding-right:10px; } }
+  .cp .a, .cp .b{ display:flex; align-items:center; gap:6px; }
+  .cp .b, .cp.done .a{ display:none; }
+  .cp.done .b{ display:flex; }
+  .cp svg{ width:17px; height:17px; flex:none; }
+
+  /* 복사 성공 = 단추 글자가 「✓ 복사했어요」로 2초(현아쌤 화면 .cb 복사됨과 같은 결 — 토스트를 띄우면 방금 복사한 번호를 덮는다, 10-26 실측).
+     토스트는 복사가 안 될 때만, 계좌 칸 위 12px(스크롤 문서 — §5.5 09-06 개정, JS가 bottom을 줌). 오류라 아이콘 없음 */
+  .toast{ position:fixed; left:50%; bottom:calc(28px + env(safe-area-inset-bottom)); transform:translate(-50%,8px); background:var(--g800); color:#fff;
+    border-radius:14px; padding:11px 16px; font-size:14.5px; font-weight:600; line-height:1.45;
+    width:max-content; max-width:calc(100% - 32px); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:40; }
+  .toast.on{ opacity:1; transform:translate(-50%,0); }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div id="plan"></div>
+  <!-- /month/h/index.html = 이 파일 그대로(tools/month-plan.mjs가 맞춰 둠) → 경로는 절대로 -->
+  <script src="/month/plan.js"></script>
+  <script>
+  // plan.js가 채운 MONTH_PLANS에서 고른다: ?m=YYMM → 그 달 / 아니면 이번 달, 없으면 다음 달(07 _maPublicMonth_와 같은 규칙, 한국 시각).
+  // 동기 실행 = 첫 화면이 그려지기 전에 끝난다(불러오는 중 화면 없음).
+  (function () {
+    var P = window.MONTH_PLANS || [];
+    function two(n) { return ('0' + n).slice(-2); }
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function find(k) { for (var i = 0; i < P.length; i++) if (P[i].ym === k) return P[i]; return null; }
+    var d = new Date(Date.now() + 9 * 3600 * 1000), y = d.getUTCFullYear() % 100, m = d.getUTCMonth() + 1;
+    var cur = two(y) + two(m), nm = m === 12 ? 1 : m + 1, nx = two(m === 12 ? y + 1 : y) + two(nm);
+    var want = (location.search.match(/[?&]m=(\d{4})(?:&|$)/) || [])[1];
+    var p = want ? find(want) : (find(cur) || find(nx));
+    var box = document.getElementById('plan');
+    var CAL = '<svg viewBox="0 0 160 160" aria-hidden="true"><defs>'
+  + '<linearGradient id="lt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c5f4d8"/><stop offset="1" stop-color="#8fcaa9"/></linearGradient>'
+  + '<linearGradient id="dk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fcaa9"/><stop offset="1" stop-color="#5fa880"/></linearGradient>'
+  + '<linearGradient id="bd" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7ebe9b"/><stop offset=".5" stop-color="#7ebe9b"/><stop offset=".5" stop-color="#519e72"/><stop offset="1" stop-color="#519e72"/></linearGradient></defs>'
+  + '<rect x="22" y="30" width="116" height="112" rx="18" fill="url(#lt)"/>'
+  + '<path d="M80 30 H120 Q138 30 138 48 V124 Q138 142 120 142 H80 Z" fill="url(#dk)"/>'
+  + '<path d="M40 30 H120 Q138 30 138 48 V60 H22 V48 Q22 30 40 30 Z" fill="url(#bd)"/>'
+  + '<rect x="47" y="17" width="13" height="27" rx="6.5" fill="#F9FBFA"/><rect x="100" y="17" width="13" height="27" rx="6.5" fill="#F9FBFA"/>'
+  + '<g fill="#F9FBFA" fill-opacity=".92"><rect x="36" y="72" width="16" height="16" rx="5"/><rect x="60" y="72" width="16" height="16" rx="5"/><rect x="84" y="72" width="16" height="16" rx="5"/><rect x="108" y="72" width="16" height="16" rx="5"/>'
+  + '<rect x="36" y="96" width="16" height="16" rx="5"/><rect x="60" y="96" width="16" height="16" rx="5"/><rect x="108" y="96" width="16" height="16" rx="5"/>'
+  + '<rect x="36" y="120" width="16" height="12" rx="5"/><rect x="60" y="120" width="16" height="12" rx="5"/><rect x="84" y="120" width="16" height="12" rx="5"/></g>'
+  + '<circle cx="92" cy="104" r="12" fill="#F9FBFA"/><circle cx="92" cy="104" r="6" fill="#519e72"/></svg>';
+    if (p) {
+      document.title = p.m + '월 계획안 — 생각공작소';
+      // 안내문 속 전화번호 = 누르면 전화. 안내문이 이미 문의 번호를 말하면 아래 같은 문장은 숨긴다(docs/1 §2.1-7)
+      // 맨 위 「[11월 계획안]」 한 줄 + 빈 줄(유성 10-26)
+      var body = esc('[' + (p.m | 0) + '월 계획안]\n\n' + p.text).replace(/(0\d{1,2})-(\d{3,4})-(\d{4})/g, function (s, a, b, c) { return '<a href="tel:' + a + b + c + '">' + s + '</a>'; });
+      box.innerHTML = '<img class="poster" src="/month/' + esc(p.img) + '" width="' + (p.w | 0) + '" height="' + (p.h | 0) + '" alt="' + (p.m | 0) + '월 계획안" fetchpriority="high">'
+        + '<div class="sec"><div class="notice">' + body + '</div>'
+        + (/277-?2007/.test(p.text) ? '' : '<p class="ask">궁금하신 사항은 담당 선생님 또는 생각공작소(<a href="tel:0322772007">032-277-2007</a>)로 편하게 연락주세요.</p>')
+        + '</div>';
+      return;
+    }
+    box.innerHTML = '<div class="sec" style="margin-top:28px"><div class="card">'
+      + CAL
+      + '<p class="t">' + nm + '월 계획안은 ' + nm + '월 1일에 올라와요</p>'
+      + '<p class="s">매달 1일, 그 달 계획안과 안내문을 여기서 볼 수 있어요.</p></div>'
+      + '<p class="ask">궁금하신 사항은 담당 선생님 또는 생각공작소(<a href="tel:0322772007">032-277-2007</a>)로 편하게 연락주세요.</p></div>';
+  })();
+  </script>
+
+  <section class="sec" aria-labelledby="accH">
+    <h2 class="acc-h" id="accH">본인부담금 계좌</h2>
+    <div class="acc">
+      <div class="box">
+        <p class="svc">오감쑥쑥</p>
+        <p class="no">301-0378-1551-11</p>
+        <p class="bank">농협, 예금주 한유성</p>
+        <button class="cp" type="button" data-copy="농협 301-0378-1551-11">
+          <span class="a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>복사</span><span class="b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>복사했어요</span>
+        </button>
+      </div>
+      <div class="box">
+        <p class="svc">아동청소년 심리지원</p>
+        <p class="no" id="acNo">301-0380-1370-41</p>
+        <p class="bank">농협, 예금주 한유성</p>
+        <button class="cp" id="acCp" type="button" data-copy="농협 301-0380-1370-41">
+          <span class="a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>복사</span><span class="b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>복사했어요</span>
+        </button>
+      </div>
+    </div>
+  </section>
+  <script>
+  // /month/h = 행복마음상담센터 아청 가정(07이 집마다 판을 골라 다른 알림톡 틀 = 다른 버튼 주소로 보냄, 유성 10-26 「알림톡 자체에서 다르게」).
+  //  오감 칸은 늘 같은 통장(대장 9~10월 오감 238명 전부 미추). 화면이 그려지기 전에 바꾼다.
+  if (/^\/month\/h(\/|\/index\.html)?$/.test(location.pathname)) {
+    document.getElementById('acNo').textContent = '302-2035-0507-31';
+    document.getElementById('acCp').setAttribute('data-copy', '농협 302-2035-0507-31');
+  }
+  </script>
+</main>
+<div class="toast" role="status" aria-live="polite"></div>
+<script>
+// 계좌 복사: 클립보드 API → 안 되면 숨은 textarea(카톡 안 창 등). 성공 = 단추 글자, 실패 = 토스트
+(function () {
+  var t = document.querySelector('.toast'), timer = 0;
+  // 글자를 먼저 넣고(줄 수가 정해진 뒤) 계좌 칸 위 12px에 둔다 — 화면 아래 30px ~ 위 8px 안으로(§5.5)
+  function toast(msg, box) {
+    t.textContent = msg;
+    var h = window.innerHeight, b = h - box.getBoundingClientRect().top + 12;
+    t.style.bottom = Math.max(30, Math.min(b, h - t.offsetHeight - 8)) + 'px';
+    t.classList.add('on'); clearTimeout(timer); timer = setTimeout(function () { t.classList.remove('on'); }, 2600);
+  }
+  function fallback(s) { var a = document.createElement('textarea'); a.value = s; a.setAttribute('readonly', ''); a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} a.remove(); return ok; }
+  function copy(s) { try { return navigator.clipboard.writeText(s).then(function () { return true; }, function () { return fallback(s); }); } catch (e) { return Promise.resolve(fallback(s)); } }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.cp'); if (!b) return;
+    copy(b.getAttribute('data-copy')).then(function (ok) {
+      if (!ok) { toast('번호를 길게 누르면 복사할 수 있어요', b.parentNode); return; }
+      [].forEach.call(document.querySelectorAll('.cp.done'), function (x) { x.classList.remove('done'); });
+      b.classList.add('done'); clearTimeout(b._t); b._t = setTimeout(function () { b.classList.remove('done'); }, 2000);
+    });
+  });
+})();
+</script>
+</body>
+</html>
