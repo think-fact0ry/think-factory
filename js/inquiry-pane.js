@@ -159,7 +159,7 @@
     '#tfInq .ti-row.cont{margin-top:4px}',
     '#tfInq .ti-row.me{justify-content:flex-end}',
     '#tfInq .ti-who{font-size:12px;color:var(--g600);margin:0 0 4px 2px}',
-    '#tfInq .ti-bub{max-width:258px;padding:10px 13px;border-radius:18px;font-size:15px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-user-select:text;user-select:text}',
+    '#tfInq .ti-bub{max-width:258px;padding:10px 13px;border-radius:18px;font-size:16px;font-weight:500;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-user-select:text;user-select:text}',   // 글자 16 / 500(유성 10-28 4방향 중 「b」 = 색은 그대로, 글자로 — 카톡 사진 실측: 글자 12% 큼, 굵기 = Pretendard 500쯤. 옛 15 / 400, 프리뷰 = 생각공작소 git e7ed469e prototype/26_문의창_가독성_4방향_프리뷰.html)
     '#tfInq .them .ti-bub{background:var(--g100);color:var(--g900)}',
     '#tfInq .them:not(.cont) .ti-bub{border-top-left-radius:6px}',
     '#tfInq .them .ti-bub a{color:var(--green700);text-decoration:underline;text-underline-offset:2px}',
