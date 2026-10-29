@@ -44,7 +44,8 @@
   }
 
   // 웹 주소만 링크로(글자로 넣은 뒤 주소 조각만 a로) — 메일 주소 안의 도메인은 건드리지 않는다
-  var URL_RE = /(^|[^@\w.\-\/])((?:https?:\/\/|www\.)[!#-&*-;=?-~]+|[a-z0-9][a-z0-9\-]*(?:\.[a-z0-9\-]+)*\.(?:kr|com|net|org)(?![a-z0-9\-])(?:\/[!#-&*-;=?-~]*)?)/gi;
+  //   맨 주소 끝 .io = think-fact0ry.github.io(유성 10-29 「깃헙 주소도 마찬가지」). 받은함(attend inbox/index.html URL_RE)도 같은 모양
+  var URL_RE = /(^|[^@\w.\-\/])((?:https?:\/\/|www\.)[!#-&*-;=?-~]+|[a-z0-9][a-z0-9\-]*(?:\.[a-z0-9\-]+)*\.(?:kr|com|net|org|io)(?![a-z0-9\-])(?:\/[!#-&*-;=?-~]*)?)/gi;
   function linkify(node, text) {
     var last = 0, m; URL_RE.lastIndex = 0;
     while ((m = URL_RE.exec(text))) {

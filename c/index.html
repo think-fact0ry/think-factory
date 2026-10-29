@@ -39,7 +39,7 @@
   var pre = !key ? null : { id: 'v_load|' + key, at: Date.now(), p: fetch(GAS, { method: 'POST', body: JSON.stringify({ action: 'v_load', key: key }) })
     .then(function (r) { return r.text(); }).then(function (t) { return JSON.parse(t); }).catch(function () { return null; }) };
   var s = document.createElement('script');
-  s.src = '/js/inquiry-pane.js?v=16';
+  s.src = '/js/inquiry-pane.js?v=17';
   s.onload = function () { window.tfInqPane.open({ gas: GAS, page: true, key: k, pre: pre }); };
   s.onerror = fail;
   document.head.appendChild(s);

@@ -14,7 +14,7 @@
 (function () {
   'use strict';
   var OPEN = Date.now() >= Date.UTC(2026, 9, 11, 14, 0, 0);   // ← 모두에게 켜는 스위치 = 2026-10-11 23:00 한국(= 14:00 UTC, 월은 0부터). 끄기 = false
-  var PANE_SRC = '/js/inquiry-pane.js?v=16';   // 창 코드를 고치면 ?v= 올리기 — 여기 + c/index.html + ask/index.html 세 곳(Pages 캐시 10분)
+  var PANE_SRC = '/js/inquiry-pane.js?v=17';   // 창 코드를 고치면 ?v= 올리기 — 여기 + c/index.html + ask/index.html 세 곳(Pages 캐시 10분)
   var GAS = 'https://script.google.com/macros/s/AKfycbwUdo5pLFvgVxu_3EjspA6U6U196Hu-RzKcC0ucVwRPGMBP3oIQT2fKMK_7fvLmeOx9Gg/exec';
 
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
