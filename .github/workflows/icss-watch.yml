@@ -39,6 +39,7 @@ jobs:
           node-version: '20'
 
       - name: 지원단 게시판 읽기
+        id: watch
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ARGS: ${{ inputs.args }}
@@ -69,3 +70,10 @@ jobs:
             sleep 10
           done
           exit 1
+
+      # 유성 카톡(10 notify) — 새 공고, 공고 바뀜, 확인 필요만. 옛 글 채우기(--backfill)는 안 보냄. 비밀 NOTIFY_KEY가 없으면 조용히 건너뜀
+      - name: 카톡
+        if: always() && steps.watch.outcome == 'success' && !contains(inputs.args, '--backfill')
+        env:
+          NOTIFY_KEY: ${{ secrets.NOTIFY_KEY }}
+        run: node tools/icss-notify.mjs "$RUNNER_TEMP/icss-events.json"

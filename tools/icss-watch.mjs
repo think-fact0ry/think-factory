@@ -110,7 +110,7 @@ function pickPeriod(bp, ap) {
   const dd = `본문 ${bp.start}~${bp.end}, 첨부 ${ap.start}~${ap.end}`;
   if (bp.wd === false && ap.wd !== false) return { apply: ap, why: '', note: dd + ' — 본문 요일이 날짜와 안 맞아 첨부를 씀' };
   if (ap.wd === false && bp.wd !== false) return { apply: bp, why: '', note: dd + ' — 첨부 요일이 날짜와 안 맞아 본문을 씀' };
-  return { apply: bp.end <= ap.end ? bp : ap, why: '접수기간 다름: ' + dd };
+  return { apply: bp.end <= ap.end ? bp : ap, why: '접수기간이 ' + dd + '로 다름' };
 }
 const periodOk = (p, posted) => {
   if (!p || !/^\d{4}-\d{2}-\d{2}$/.test(p.start) || !/^\d{4}-\d{2}-\d{2}$/.test(p.end)) return false;
@@ -216,9 +216,9 @@ function verify(ai, post) {
   if (ai.found && !periodOk(ai.apply, post.posted) && !post.apply) why.push('접수기간 못 읽음');
   if (ai.statedTotal != null && ai.rows.length && ai.rows.every(r => r.total != null || r.newCount != null)) {   // 본문에 사업 이름만 있으면(남동 재판정) 합계를 못 대 본다
     const s1 = ai.rows.reduce((a, r) => a + (r.total ?? r.newCount ?? 0), 0), s2 = ai.rows.reduce((a, r) => a + (r.newCount ?? r.total ?? 0), 0);
-    if (ai.statedTotal !== s1 && ai.statedTotal !== s2) why.push(`합계 ${ai.statedTotal} ≠ 줄 합 ${s1}`);
+    if (ai.statedTotal !== s1 && ai.statedTotal !== s2) why.push(`합계 ${ai.statedTotal}명인데 표를 더하면 ${s1}명`);
   }
-  for (const r of ai.rows) if (r.total != null && r.waiting != null && r.newCount != null && r.total !== r.waiting + r.newCount) why.push(`${r.name} 계 ${r.total} ≠ 대기 ${r.waiting} + 신규 ${r.newCount}`);
+  for (const r of ai.rows) if (r.total != null && r.waiting != null && r.newCount != null && r.total !== r.waiting + r.newCount) why.push(`${r.name} 계 ${r.total}명이 대기 ${r.waiting}명 + 신규 ${r.newCount}명과 안 맞음`);
   return why.join(' / ');
 }
 
@@ -303,7 +303,7 @@ async function main() {
       console.log(`#${post.num} ${post.posted} ${post.title.slice(0, 50)} — 첨부 ${v.files.length}개 읽는 중`);
       const docs = await readAttachments({ ...post, files: v.files });
       const ai = await askClaude({ ...post, body: v.body }, docs);
-      if (!ai) { post.read = 'fail'; post.tries = ((prev && prev.read === 'fail' && prev.tries) || 0) + 1; post.check = 'Claude가 표를 못 옮김'; }
+      if (!ai) { post.read = 'fail'; post.tries = ((prev && prev.read === 'fail' && prev.tries) || 0) + 1; post.check = '첨부의 표를 못 옮김'; }
       else {
         post.read = 'ai';
         const ap = periodOk(ai.apply, post.posted) ? { start: ai.apply.start, end: ai.apply.end, wd: wdCheck(ai.apply, ai.apply.startWd, ai.apply.endWd) } : null;
