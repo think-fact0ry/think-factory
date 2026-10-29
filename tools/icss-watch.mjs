@@ -84,17 +84,33 @@ function kindOf(title) {
 const AI_KINDS = new Set(['모집', '추가모집', '재판정']);
 
 // 본문 「모집기간/접수기간/신청기간」 줄의 첫 날짜 ~ 둘째 날짜(10-23 실측 145건 중 133건 판독, 나머지는 원문 오타 포함)
+// 날짜 뒤 (요일)도 읽어 둔다 — 공고가 스스로 틀릴 때가 있다(제물포 26-07: 본문 「8.6.(수)」 = 실제 목요일, 첨부 「8. 5.(수)」가 맞음)
+const WD = '일월화수목금토';
+const wdOf = iso => WD[new Date(iso + 'T00:00:00Z').getUTCDay()];
+// 적힌 요일이 날짜와 맞나: 하나라도 틀리면 false, 적힌 게 다 맞으면 true, 요일이 없으면 null
+const wdCheck = (p, w1, w2) => { const ws = [[p.start, w1], [p.end, w2]].filter(([, w]) => w); return ws.length ? ws.every(([d, w]) => wdOf(d) === w) : null; };
 function bodyPeriod(body, posted) {
   const line = body.split('\n').find(l => /(모집|접수|신청)\s*기간|기\s*간\s*:/.test(l));
   if (!line) return null;
   const y0 = +(posted || TODAY).slice(0, 4);
-  const ds = [...line.matchAll(/(?:(\d{4})\s*[.\-년]\s*)?(\d{1,2})\s*[.\-월]\s*(\d{1,2})\s*[.일]?/g)]
-    .map(m => ({ y: m[1] ? +m[1] : null, m: +m[2], d: +m[3] })).filter(x => x.m >= 1 && x.m <= 12 && x.d >= 1 && x.d <= 31);
+  const ds = [...line.matchAll(/(?:(\d{4})\s*[.\-년]\s*)?(\d{1,2})\s*[.\-월]\s*(\d{1,2})\s*[.일]?\s*(?:\(\s*([월화수목금토일])\s*\))?/g)]
+    .map(m => ({ y: m[1] ? +m[1] : null, m: +m[2], d: +m[3], w: m[4] || '' })).filter(x => x.m >= 1 && x.m <= 12 && x.d >= 1 && x.d <= 31);
   if (ds.length < 2) return null;
   const a = ds[0], b = ds[1];
   a.y = a.y || y0; b.y = b.y || a.y;
   const iso = x => `${x.y}-${String(x.m).padStart(2, '0')}-${String(x.d).padStart(2, '0')}`;
-  return { start: iso(a), end: iso(b) };
+  const p = { start: iso(a), end: iso(b) };
+  p.wd = wdCheck(p, a.w, b.w);
+  return p;
+}
+// 본문 날짜와 첨부 날짜가 다르면: 요일이 맞는 쪽 하나만 있으면 그쪽(note에 남김), 아니면 사람 확인 + 끝날이 이른 쪽(늦게 알려 주는 것보다 안전)
+function pickPeriod(bp, ap) {
+  if (!ap) return { apply: bp, why: '' };
+  if (!bp || (bp.start === ap.start && bp.end === ap.end)) return { apply: ap, why: '' };
+  const dd = `본문 ${bp.start}~${bp.end}, 첨부 ${ap.start}~${ap.end}`;
+  if (bp.wd === false && ap.wd !== false) return { apply: ap, why: '', note: dd + ' — 본문 요일이 날짜와 안 맞아 첨부를 씀' };
+  if (ap.wd === false && bp.wd !== false) return { apply: bp, why: '', note: dd + ' — 첨부 요일이 날짜와 안 맞아 본문을 씀' };
+  return { apply: bp.end <= ap.end ? bp : ap, why: '접수기간 다름: ' + dd };
 }
 const periodOk = (p, posted) => {
   if (!p || !/^\d{4}-\d{2}-\d{2}$/.test(p.start) || !/^\d{4}-\d{2}-\d{2}$/.test(p.end)) return false;
@@ -114,7 +130,8 @@ const SCHEMA = {
     found: { type: 'boolean' },
     fileUsed: { type: 'string' },
     reassessOnly: { type: 'boolean' },
-    apply: { type: 'object', additionalProperties: false, required: ['start', 'end'], properties: { start: { type: 'string' }, end: { type: 'string' } } },
+    apply: { type: 'object', additionalProperties: false, required: ['start', 'end', 'startWd', 'endWd'],
+      properties: { start: { type: 'string' }, end: { type: 'string' }, startWd: { type: 'string' }, endWd: { type: 'string' } } },
     statedTotal: N,
     rows: { type: 'array', items: { type: 'object', additionalProperties: false,
       required: ['gu', 'name', 'svc', 'total', 'waiting', 'newCount', 'newClosed', 'note'],
@@ -128,7 +145,7 @@ const SCHEMA = {
 const SYSTEM = `너는 인천 지역사회서비스투자사업 「이용자 모집 공고」의 첨부 파일을 읽어 모집 표를 그대로 옮긴다. 문서에 적힌 것만 옮기고 추측하지 않는다.
 - 첨부 여러 개 중 「접수(신청, 모집)기간」과 「사업(서비스)별 인원 표」가 있는 모집 안내를 찾는다. 인천시 전체 사업 안내문, 이용자 안내문, 신청서식처럼 이번 회차 인원 표가 없는 파일은 무시한다. 찾으면 found=true, 그 파일 이름을 fileUsed에.
   첨부에 표가 없어도 게시글 본문에 이번 회차 사업 목록(인원이 있든 없든)이 적혀 있으면 그걸 쓰고 fileUsed="본문". 둘 다 없으면 found=false, rows=[].
-- apply: 이번 회차 접수기간을 YYYY-MM-DD로. 연도가 안 적혀 있으면 공고 게시일의 연도. 못 찾으면 둘 다 "".
+- apply: 이번 회차 접수기간을 YYYY-MM-DD로. 연도가 안 적혀 있으면 공고 게시일의 연도. 못 찾으면 둘 다 "". startWd, endWd = 문서에 날짜 옆 괄호로 적힌 요일 글자 그대로(예: "화"), 안 적혀 있으면 "". 요일이 날짜와 안 맞아도 고치지 말고 적힌 대로.
 - statedTotal: 문서에 적힌 모집 인원 합계(예: 「12개 사업 500명」, 표의 계/합계 줄). 없으면 null.
 - rows: 표의 사업 줄을 빠짐없이 한 줄씩(우리 서비스만이 아니라 전부).
   · gu: 표가 구별 칸으로 나뉘어 있으면(예: 서해구, 검단구 칸) 칸마다 한 줄씩 그 구 이름, 아니면 "".
@@ -196,10 +213,7 @@ function summarize(ai, post) {
 function verify(ai, post) {
   const why = [];
   if (!ai.found) why.push('모집 표 못 찾음');
-  if (ai.found && !periodOk(ai.apply, post.posted)) why.push('첨부 접수기간 이상');
-  const bp = bodyPeriod(post.body, post.posted);
-  if (bp && periodOk(bp, post.posted) && periodOk(ai.apply, post.posted) && (bp.start !== ai.apply.start || bp.end !== ai.apply.end))
-    why.push(`접수기간 본문 ${bp.start}~${bp.end} ≠ 첨부 ${ai.apply.start}~${ai.apply.end}`);
+  if (ai.found && !periodOk(ai.apply, post.posted) && !post.apply) why.push('접수기간 못 읽음');
   if (ai.statedTotal != null && ai.rows.length && ai.rows.every(r => r.total != null || r.newCount != null)) {   // 본문에 사업 이름만 있으면(남동 재판정) 합계를 못 대 본다
     const s1 = ai.rows.reduce((a, r) => a + (r.total ?? r.newCount ?? 0), 0), s2 = ai.rows.reduce((a, r) => a + (r.newCount ?? r.total ?? 0), 0);
     if (ai.statedTotal !== s1 && ai.statedTotal !== s2) why.push(`합계 ${ai.statedTotal} ≠ 줄 합 ${s1}`);
@@ -228,7 +242,32 @@ async function readAttachments(post) {
 // ── 본체 ─────────────────────────────────────────────────────
 function readOld() { try { return JSON.parse(fs.readFileSync(OUT, 'utf8')); } catch (e) { return { posts: [] }; } }
 
+// --selftest: 날짜, 요일 고르기만 시험(지원단, Claude 안 부름). 틀리면 exit 1
+function selftest() {
+  let bad = 0;
+  const eq = (name, got, want) => { const g = JSON.stringify(got), w = JSON.stringify(want); if (g !== w) { bad++; console.log('✗', name, '\n   받음', g, '\n   기대', w); } else console.log('✓', name); };
+  const b177 = bodyPeriod('○ 모집기간 : 2026.8.3.(월) ~ 2026.8.6.(수)', '2026-07-24');
+  eq('제물포 본문 = 8/6(수)는 목요일이라 요일 틀림', b177, { start: '2026-08-03', end: '2026-08-06', wd: false });
+  const a177 = { start: '2026-08-03', end: '2026-08-05', wd: wdCheck({ start: '2026-08-03', end: '2026-08-05' }, '월', '수') };
+  eq('제물포 첨부 8/5(수) 요일 맞음', a177.wd, true);
+  const p177 = pickPeriod(b177, a177);
+  eq('제물포 = 첨부를 쓰고 확인 요청 없음', [p177.apply.end, p177.why, !!p177.note], ['2026-08-05', '', true]);
+  eq('검단 본문 요일 맞음', bodyPeriod('□ 모집기간: 2026. 10. 13.(화) ~ 2026. 10. 19.(월)(7일간)', '2026-10-08'), { start: '2026-10-13', end: '2026-10-19', wd: true });
+  eq('요일 없는 본문', bodyPeriod('○ 접수기간 : 2026. 9. 4. ~ 9. 11.', '2026-09-03'), { start: '2026-09-04', end: '2026-09-11', wd: null });
+  const both = pickPeriod({ start: '2026-03-04', end: '2026-03-11', wd: null }, { start: '2026-03-04', end: '2026-03-12', wd: null });
+  eq('둘 다 요일 없고 다름 = 사람 확인 + 이른 끝날', [both.apply.end, !!both.why], ['2026-03-11', true]);
+  eq('같으면 그대로', pickPeriod({ start: '2026-03-04', end: '2026-03-11', wd: true }, { start: '2026-03-04', end: '2026-03-11', wd: true }).why, '');
+  eq('첨부 못 읽으면 본문', pickPeriod({ start: '2026-03-04', end: '2026-03-11', wd: null }, null).apply.end, '2026-03-11');
+  // 검사기가 틀린 걸 틀렸다고 하는지(✗를 낼 줄 아는지) — 일부러 틀린 기대
+  const before = bad; eq('(일부러 틀림 — 이 줄은 ✗여야 정상)', wdOf('2026-08-06'), '수'); const caught = bad > before; bad = before;
+  console.log(caught ? '✓ 검사기가 틀린 기대를 잡음' : '✗ 검사기가 틀린 기대를 못 잡음');
+  if (!caught) bad++;
+  console.log(bad ? `실패 ${bad}` : '전부 통과');
+  process.exit(bad ? 1 : 0);
+}
+
 async function main() {
+  if (ARG.selftest) return selftest();
   const old = readOld(), byNum = new Map((old.posts || []).map(p => [p.num, p]));
   const events = [];
   // 목록: 평소 1쪽(새 글은 맨 위). 1쪽이 전부 처음 보는 글이면 2쪽도. --backfill = 끝까지
@@ -258,7 +297,7 @@ async function main() {
     const changed = prev && prev.bodyHash !== post.bodyHash;
     if (prev && !changed && !ARG.reread && !(prev.read === 'fail') && !(prev.read === 'skip' && post.posted >= SINCE && AI_KINDS.has(post.kind) && KEY && !ARG['no-ai'])) continue;
     const bp = bodyPeriod(v.body, v.posted);
-    post.apply = bp && periodOk(bp, v.posted) ? bp : null;
+    post.apply = bp && periodOk(bp, v.posted) ? { start: bp.start, end: bp.end } : null;
     post.read = 'skip';
     if (AI_KINDS.has(post.kind) && post.posted >= SINCE && KEY && !ARG['no-ai']) {
       console.log(`#${post.num} ${post.posted} ${post.title.slice(0, 50)} — 첨부 ${v.files.length}개 읽는 중`);
@@ -267,12 +306,15 @@ async function main() {
       if (!ai) { post.read = 'fail'; post.tries = ((prev && prev.read === 'fail' && prev.tries) || 0) + 1; post.check = 'Claude가 표를 못 옮김'; }
       else {
         post.read = 'ai';
-        if (periodOk(ai.apply, post.posted)) post.apply = { start: ai.apply.start, end: ai.apply.end };
+        const ap = periodOk(ai.apply, post.posted) ? { start: ai.apply.start, end: ai.apply.end, wd: wdCheck(ai.apply, ai.apply.startWd, ai.apply.endWd) } : null;
+        const pick = pickPeriod(post.apply && bp, ap);
+        post.apply = pick.apply ? { start: pick.apply.start, end: pick.apply.end } : null;
+        if (pick.note) post.note = pick.note;
         post.gus = summarize(ai, post);
         post.rows = ai.rows.map(r => [r.gu, r.name, r.svc, r.total, r.waiting, r.newCount, r.newClosed ? 1 : 0, r.note].map(x => x === null ? '' : x));
         post.planned = ai.planned;
         post.fileUsed = ai.fileUsed;
-        post.check = verify(ai, { ...post, body: v.body });
+        post.check = [pick.why, verify(ai, post)].filter(Boolean).join(' / ');
         if (!post.gu && Object.keys(post.gus).length === 0) post.check = (post.check ? post.check + ' / ' : '') + '구를 모름';
       }
     }
