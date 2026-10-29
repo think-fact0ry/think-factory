@@ -42,32 +42,39 @@ async function pub(ym) {
   return null;
 }
 
+// data URL → month/p/<name> JPEG(1240 폭). 그림이 없으면 null
+async function jpg(dataUrl, name) {
+  const dm = /^data:image\/[\w.+-]+;base64,(.+)$/.exec(dataUrl || '');
+  if (!dm) return null;
+  const { data, info } = await sharp(Buffer.from(dm[1], 'base64')).rotate()
+    .resize({ width: WIDTH, withoutEnlargement: true })
+    .flatten({ background: '#ffffff' })
+    .jpeg({ quality: QUALITY, progressive: true, mozjpeg: true })
+    .toBuffer({ resolveWithObject: true });
+  fs.mkdirSync(PDIR, { recursive: true });
+  fs.writeFileSync(path.join(PDIR, name), data);
+  return { name, w: info.width, h: info.height, log: name + ' ' + info.width + 'x' + info.height + ' ' + Math.round(data.length / 1024) + 'KB' };
+}
+
 async function main() {
   const old = readOld(), next = [], keep = new Set();
   for (const ym of WANT) {
     const prev = old.find(x => x.ym === ym);
     const o = await pub(ym);
-    if (!o) { if (prev) { next.push(prev); if (prev.img) keep.add(path.basename(prev.img)); } console.log(ym, '못 받음 — 있던 판 유지'); continue; }
+    if (!o) { if (prev) { next.push(prev); for (const f of [prev.img, prev.imgH]) if (f) keep.add(path.basename(f)); } console.log(ym, '못 받음 — 있던 판 유지'); continue; }
     if (o.none) { console.log(ym, '안내문 없음'); continue; }
-    if (!o.sig) { console.log(ym, 'sig 없음(07이 옛 판?) — 건너뜀'); if (prev) { next.push(prev); if (prev.img) keep.add(path.basename(prev.img)); } continue; }
-    if (prev && prev.sig === o.sig && (!prev.img || fs.existsSync(path.join(DIR, prev.img)))) {   // 같은 판 = 그림 다시 안 만듦
-      next.push(prev); if (prev.img) keep.add(path.basename(prev.img)); console.log(ym, '그대로', o.sig); continue;
+    if (!o.sig) { console.log(ym, 'sig 없음(07이 옛 판?) — 건너뜀'); if (prev) { next.push(prev); for (const f of [prev.img, prev.imgH]) if (f) keep.add(path.basename(f)); } continue; }
+    const has = (f) => !f || fs.existsSync(path.join(DIR, f));
+    if (prev && prev.sig === o.sig && has(prev.img) && has(prev.imgH)) {   // 같은 판 = 그림 다시 안 만듦
+      next.push(prev); for (const f of [prev.img, prev.imgH]) if (f) keep.add(path.basename(f)); console.log(ym, '그대로', o.sig); continue;
     }
     const e = { ym, m: o.m, img: '', w: 0, h: 0, text: o.text, sig: o.sig };
-    const dm = /^data:image\/[\w.+-]+;base64,(.+)$/.exec(o.poster || '');
-    if (dm) {
-      const name = ym + '-' + o.sig.slice(0, 8) + '.jpg';
-      const { data, info } = await sharp(Buffer.from(dm[1], 'base64')).rotate()
-        .resize({ width: WIDTH, withoutEnlargement: true })
-        .flatten({ background: '#ffffff' })
-        .jpeg({ quality: QUALITY, progressive: true, mozjpeg: true })
-        .toBuffer({ resolveWithObject: true });
-      fs.mkdirSync(PDIR, { recursive: true });
-      fs.writeFileSync(path.join(PDIR, name), data);
-      Object.assign(e, { img: 'p/' + name, w: info.width, h: info.height });
-      keep.add(name);
-      console.log(ym, '새 판', o.sig, name, info.width + 'x' + info.height, Math.round(data.length / 1024) + 'KB');
-    } else console.log(ym, '새 판(그림 없음)', o.sig);
+    const a = await jpg(o.poster, ym + '-' + o.sig.slice(0, 8) + '.jpg');
+    if (a) { Object.assign(e, { img: 'p/' + a.name, w: a.w, h: a.h }); keep.add(a.name); }
+    // 행복마음 판 그림(07 「(행복)」 파일, 10-28) = /month/h만 이 그림. 없는 달은 칸 자체가 없다(옛 plan.js와 같은 모양)
+    const b = await jpg(o.posterH, ym + '-h-' + o.sig.slice(0, 8) + '.jpg');
+    if (b) { Object.assign(e, { imgH: 'p/' + b.name, wH: b.w, hH: b.h }); keep.add(b.name); }
+    console.log(ym, '새 판', o.sig, a ? a.log : '(그림 없음)', b ? '행복 ' + b.log : '');
     next.push(e);
   }
   const body = '// 자동 생성 — .github/workflows/month-plan.yml(tools/month-plan.mjs)이 07 공개 창구에서 받아 씀. 손으로 고치지 말 것(다음 실행이 덮어씀)\n'

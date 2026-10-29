@@ -98,6 +98,9 @@
     var want = (location.search.match(/[?&]m=(\d{4})(?:&|$)/) || [])[1];
     var p = want ? find(want) : (find(cur) || find(nx));
     var box = document.getElementById('plan');
+    // /month/h = 행복마음 아청 가정 — 그 달에 행복마음 판 그림(imgH, 07 「(행복)」 파일)이 있으면 그 그림(10-28: 11월 포스터 아래 칸 아청 계좌가 미추)
+    var isH = /^\/month\/h(\/|\/index\.html)?$/.test(location.pathname);
+    var img = p && isH && p.imgH ? { src: p.imgH, w: p.wH, h: p.hH } : p ? { src: p.img, w: p.w, h: p.h } : null;
     var CAL = '<svg viewBox="0 0 160 160" aria-hidden="true"><defs>'
   + '<linearGradient id="lt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c5f4d8"/><stop offset="1" stop-color="#8fcaa9"/></linearGradient>'
   + '<linearGradient id="dk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fcaa9"/><stop offset="1" stop-color="#5fa880"/></linearGradient>'
@@ -115,7 +118,7 @@
       // 안내문 속 전화번호 = 누르면 전화. 안내문이 이미 문의 번호를 말하면 아래 같은 문장은 숨긴다(docs/1 §2.1-7)
       // 맨 위 「[11월 계획안]」 한 줄 + 빈 줄(유성 10-26)
       var body = esc('[' + (p.m | 0) + '월 계획안]\n\n' + p.text).replace(/(0\d{1,2})-(\d{3,4})-(\d{4})/g, function (s, a, b, c) { return '<a href="tel:' + a + b + c + '">' + s + '</a>'; });
-      box.innerHTML = '<img class="poster" src="/month/' + esc(p.img) + '" width="' + (p.w | 0) + '" height="' + (p.h | 0) + '" alt="' + (p.m | 0) + '월 계획안" fetchpriority="high">'
+      box.innerHTML = '<img class="poster" src="/month/' + esc(img.src) + '" width="' + (img.w | 0) + '" height="' + (img.h | 0) + '" alt="' + (p.m | 0) + '월 계획안" fetchpriority="high">'
         + '<div class="sec"><div class="notice">' + body + '</div>'
         + (/277-?2007/.test(p.text) ? '' : '<p class="ask">궁금하신 사항은 담당 선생님 또는 생각공작소(<a href="tel:0322772007">032-277-2007</a>)로 편하게 연락주세요.</p>')
         + '</div>';
