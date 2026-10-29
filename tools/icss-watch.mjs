@@ -346,4 +346,9 @@ async function main() {
   }
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+// 멈춤 카톡(icss-notify.mjs --stopped)이 까닭으로 쓴다
+main().catch(e => {
+  console.error(e);
+  if (process.env.RUNNER_TEMP) fs.writeFileSync(path.join(process.env.RUNNER_TEMP, 'icss-error.txt'), String(e && e.message || e));
+  process.exit(1);
+});

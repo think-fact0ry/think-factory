@@ -5,7 +5,9 @@
 //  10-23 만들기 전 미리보기의 카톡 꼴(구 회차 접수기간 / 오감, 아청심). 한 번 돌 때 생긴 것은 한 통으로(900자 넘으면 공고 단위로 나눔).
 // 보내는 것 = 새 공고, 공고 바뀜(본문이나 첨부), 사람 확인이 필요한 공고, 3번 다 못 읽은 공고. 그 밖(다시 읽음, 30일 넘은 옛 글)은 안 보낸다.
 // 열쇠 = GitHub 비밀 NOTIFY_KEY(10 Script Properties NOTIFY_KEY와 같은 값). 없으면 아무것도 안 보내고 끝(실패 아님).
+// 멈춤 카톡 = --stopped(아래 stopped 머리 주석). 검사 = node tools/icss-notify.mjs --selftest
 import fs from 'node:fs';
+import path from 'node:path';
 
 const NOTIFY_URL = process.env.NOTIFY_URL || 'https://script.google.com/macros/s/AKfycbyWrNRO9a_TWr_xIO5owMNpVcaiKKdWyl_g2VlpPahvaJ2ks4ciQBpEfvDYc5rayEPiZw/exec';   // 10 웹훅 배포(@4, 고정)
 const KEY = process.env.NOTIFY_KEY || '';
@@ -70,7 +72,61 @@ async function send(text) {
   return false;
 }
 
+// ── 멈춤 카톡(--stopped): 워크플로 「멈춤 카톡」 단계가 예약 실행에서 읽기나 올리기가 실패했을 때 부른다.
+// 한 번 실패는 지원단 사이트가 잠깐 안 열린 것일 수 있어 안 보낸다. 예약 실행이 3번 잇달아 실패한 그 순간에만, 한국 날짜로 하루 한 통.
+// 상태는 따로 안 둔다 — 지난 실행 목록(GitHub)을 보고 「오늘 이미 3번째 잇단 실패가 있었나」로 판정한다.
+const kstDay = iso => new Date(Date.parse(iso) + 9 * 3600 * 1000).toISOString().slice(0, 10);
+// runs = 최신 먼저, 지금 실행은 뺀 끝난 실행. 취소된 실행(동시 실행 대기 교체)은 줄에서 뺀다
+function shouldAlert(runs, today) {
+  const done = runs.filter(r => r.conclusion === 'success' || r.conclusion === 'failure');
+  const f = i => done[i] && done[i].conclusion === 'failure';
+  if (!(f(0) && f(1))) return { send: false, why: '잇단 실패 3번 전' };
+  for (let i = 0; i < done.length; i++) {
+    if (kstDay(done[i].created_at) !== today) break;
+    if (f(i) && f(i + 1) && f(i + 2)) return { send: false, why: '오늘 이미 보냄' };
+  }
+  return { send: true };
+}
+async function stopped() {
+  const repo = process.env.GITHUB_REPOSITORY, runId = Number(process.env.GITHUB_RUN_ID || 0);
+  const r = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/icss-watch.yml/runs?event=schedule&per_page=100`,
+    { headers: { Authorization: `Bearer ${process.env.GH_TOKEN}`, Accept: 'application/vnd.github+json' }, signal: AbortSignal.timeout(30000) });
+  if (!r.ok) { console.log('실행 목록 못 읽음', r.status); process.exit(1); }
+  const runs = (await r.json()).workflow_runs.filter(x => x.id !== runId && x.status === 'completed');
+  const d = shouldAlert(runs, TODAY);
+  if (!d.send) { console.log('안 보냄:', d.why); return; }
+  const errFile = path.join(process.env.RUNNER_TEMP || '.', 'icss-error.txt');
+  const err = fs.existsSync(errFile) ? fs.readFileSync(errFile, 'utf8').trim() : '';
+  const reason = process.env.WHY === 'commit' ? '읽은 결과를 홈페이지에 못 올림' : /[가-힣]/.test(err) ? err : '프로그램 오류';   // 영어 오류 글은 카톡에 안 넣는다
+  const text = `[지원단 공고] ${md(TODAY)}\n- 공고 감시가 3번 잇달아 실패: ${reason}\n- 고치기 전까지 새 공고 카톡이 안 옴`;
+  console.log(text);
+  if (DRY) { console.log('--dry: 안 보냄'); return; }
+  if (!KEY) { console.log('NOTIFY_KEY 없음 — 안 보냄'); return; }
+  if (!(await send(text))) process.exit(1);
+}
+
+function selftest() {
+  let bad = 0;
+  const eq = (name, got, want) => { const ok = JSON.stringify(got) === JSON.stringify(want); if (!ok) bad++; console.log(ok ? '✓' : '✗', name, ok ? '' : `→ ${JSON.stringify(got)} (기대 ${JSON.stringify(want)})`); };
+  const R = (h, c) => ({ conclusion: c, created_at: `2026-10-29T${String(h).padStart(2, '0')}:00:00Z` });   // h = UTC 시(한국 = +9)
+  eq('지난 둘 다 실패 = 보냄', shouldAlert([R(5, 'failure'), R(4, 'failure'), R(3, 'success')], '2026-10-29').send, true);
+  eq('지난 하나만 실패 = 안 보냄', shouldAlert([R(5, 'failure'), R(4, 'success')], '2026-10-29').send, false);
+  eq('4번째 잇단 실패 = 오늘 이미 보냄', shouldAlert([R(6, 'failure'), R(5, 'failure'), R(4, 'failure'), R(3, 'success')], '2026-10-29').why, '오늘 이미 보냄');
+  eq('취소된 실행은 건너뜀', shouldAlert([R(6, 'failure'), R(5, 'cancelled'), R(4, 'failure'), R(3, 'success')], '2026-10-29').send, true);
+  const Y = h => ({ conclusion: 'failure', created_at: `2026-10-28T${h}:00:00Z` });   // 어제(한국) 실패
+  eq('어제부터 멈춤 = 오늘 첫 실패에 한 통 더', shouldAlert([Y(13), Y(12), Y(11)], '2026-10-29').send, true);
+  eq('어제부터 멈춤, 오늘 두 번째 실패 = 안 보냄', shouldAlert([R(1, 'failure'), Y(13), Y(12), Y(11)], '2026-10-29').send, false);
+  eq('오늘 오전에 보내고 낫다가 다시 3번 = 안 보냄', shouldAlert([R(9, 'failure'), R(8, 'failure'), R(7, 'success'), R(3, 'failure'), R(2, 'failure'), R(1, 'failure')], '2026-10-29').send, false);
+  const before = bad; eq('(일부러 틀림 — 이 줄은 ✗여야 정상)', shouldAlert([R(5, 'failure')], '2026-10-29').send, true); const caught = bad > before; bad = before;
+  console.log(caught ? '✓ 검사기가 틀린 기대를 잡음' : '✗ 검사기가 틀린 기대를 못 잡음');
+  if (!caught) bad++;
+  console.log(bad ? `실패 ${bad}` : '전부 통과');
+  process.exit(bad ? 1 : 0);
+}
+
 async function main() {
+  if (process.argv.includes('--selftest')) return selftest();
+  if (process.argv.includes('--stopped')) return stopped();
   if (!file || !fs.existsSync(file)) { console.log('사건 파일 없음 — 보낼 것 없음'); return; }
   const events = JSON.parse(fs.readFileSync(file, 'utf8'));
   const bs = blocks(events);
