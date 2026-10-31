@@ -247,7 +247,7 @@ var WD = ['일', '월', '화', '수', '목', '금', '토'];
 var NOW_GU = ['미추홀구', '연수구', '남동구', '부평구', '계양구', '서해구', '검단구', '제물포구', '영종구'];   // 강화군, 옹진군 = 안 넣음(유성 10-28)
 var SVC = ['오감', '아청심', '정신토탈', '성인'];
 var TAKE = { 신규: 1, 재판정: 1 };
-var ASK = '신청 일정은 거주하시는 <span class="nw">군구 행정복지센터에</span> <span class="nw">전화하시면 돼요.</span>';   // 유성 11-01(전엔 지원단 032-721-6986) — 빈 화면, 못 불러옴, 기다리는 구 i 툴팁이 같이 씀
+var ASK = '신청 일정은 거주하시는 <span class="nw">동 행정복지센터에</span> 전화하시면 <span class="nw">더욱 빠르게</span> <span class="nw">확인할 수 있어요.</span>';   // 유성 11-01(전엔 지원단 032-721-6986) — 빈 화면, 못 불러옴, 기다리는 구 i 툴팁이 같이 씀
 var HINT = '구를 누르면 지원단 공고 원문이 열려요';
 var CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
 var POSTERS = [['poster-1.jpg', '오감쑥쑥 바우처 서비스 포스터 앞면'], ['poster-2.jpg', '오감쑥쑥 서비스 안내 포스터 뒷면'], ['poster-3.jpg', '생각공작소 오감쑥쑥 포스터 앞면'], ['poster-4.jpg', '왜 생각공작소인가요 포스터 뒷면']];
@@ -329,7 +329,7 @@ function render(m, animate) {
         var TIPW = '<span class="tipw"><button class="tip-i" type="button" aria-label="안내" aria-describedby="aTip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg></button><span class="tip" id="aTip" role="tooltip">아직 공고가 올라오지 않았어요.<br>' + ASK + '</span></span>';
         h += '<p class="wl a-wl stg" style="--i:' + (o.length + 3) + '"><span class="sr-only">다음 공고를 기다리는 구: </span><span class="ns">' + m.wait.map(function (g, k) { return k === m.wait.length - 1 ? '<span class="nl"><span class="n">' + g + '</span>' + TIPW + '</span>' : '<span class="n">' + g + '</span>'; }).join(', ') + '</span></p>';
       }
-    } else h += '<p class="wl alone stg" style="--i:3">' + ASK + '<br>공고가 나오는 대로 안내해 드릴게요.</p>';
+    } else h += '<p class="wl alone stg" style="--i:3">' + ASK + '<br><br>공고가 나오는 대로 이곳에 올려드릴게요. <span class="nw">감사합니다 ☺️</span></p>';   // 줄바꿈 두 번 = 유성 11-01
   }
   h += '<a class="golink a-btn stg" style="--i:' + (o.length + 4) + '" href="activities">오감쑥쑥 활동사진 보러가기' + CHEV + '</a></div>';
   aR.innerHTML = h;
