@@ -238,12 +238,15 @@ a.r{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
 <script>
 /* ═══ 신청 기간 1페이지 ═══
    데이터 = /data/icss.json posts[] (감시기가 지원단 게시판에서 공개 글만 읽어 씀): apply{start,end} = 신청 기간, gus[구][서비스].st = 신규/대기자만/재판정/예정/없음.
-   목록 = 오늘이 신청 기간 안인 공고의 구(강화·옹진 안 넣음), 우리 서비스 넷(오감, 아청심, 정신토탈, 성인) 중 하나라도 받는 구만(넷 다 없으면 = 서구 4월 안마만 = 안 올림).
-   서비스 표를 못 읽은 공고(gus 없음)나 사람 확인 전(check) = 예외 글 없이 목록에만 */
+   목록 = 오늘이 신청 기간 안인 공고의 구(강화·옹진 안 넣음), 우리 서비스 넷(오감, 아청심, 정신토탈, 성인) 중 하나라도 새로 받는 구만(넷 다 없으면 = 서구 4월 안마만 = 안 올림).
+   받는다 = 신규, 재판정(이용 중인 분 다시 신청). 대기자만 = 「3월 신청 대기자 중 선정 예정」(부평 26-08, 서구 25-10 표 실측) = 새 신청을 안 받으니 안 셈.
+   서비스 표를 못 읽은 공고(gus 없음)나 사람 확인 전(check — 표를 못 찾으면 감시기가 넷 다 「없음」으로 적고 check를 단다) = 빼지 않고 예외 글 없이 목록에.
+   청년 사업 공고(종류 기타, 제목에 지역사회서비스 없음) = 바우처 아님 → 안 올림. 같은 구 공고가 둘 열려 있으면 한 줄(늦게 끝나는 쪽, 같으면 나중 글 — 2021-08 동구 같은 글 두 번).
+   규칙을 바꾸면 js/period-band.js count()도 같이(리뷰 11-01: 둘이 달라 띠 「2개 구」인데 목록 3줄이 날 수 있었다) */
 var WD = ['일', '월', '화', '수', '목', '금', '토'];
 var NOW_GU = ['미추홀구', '연수구', '남동구', '부평구', '계양구', '서해구', '검단구', '제물포구', '영종구'];   // 강화군, 옹진군 = 안 넣음(유성 10-28)
 var SVC = ['오감', '아청심', '정신토탈', '성인'];
-var TAKE = { 신규: 1, 재판정: 1, 대기자만: 1 };
+var TAKE = { 신규: 1, 재판정: 1 };
 var ICSS_TEL = '032-721-6986';   // 지원단 홈페이지 바닥줄 첫 번호(10-29 실측)
 var ASK = '일정은 지원단(<a href="tel:' + ICSS_TEL.replace(/-/g, '') + '">' + ICSS_TEL + '</a>)에 물어보시면 돼요.';
 var HINT = '구를 누르면 지원단 공고 원문이 열려요';
@@ -267,29 +270,33 @@ function headline(m) {
 }
 /* 기간 뒤 글(유성 10-31) — 아이 서비스 둘(오감쑥쑥, 아동청소년 심리지원)만 본다 */
 function tagText(st) {
-  var n0 = st[0] === '신규', n1 = st[1] === '신규';
+  var n0 = st[0] === '신규', n1 = st[1] === '신규', w = function (x) { return x === '재판정' ? '이용 중인 분만' : '없음'; };
   if (n0 && n1) return '';
-  if (!n0 && n1) return '오감쑥쑥 없음';
-  if (n0 && !n1) return '심리지원 없음';
+  if (!n0 && n1) return '오감쑥쑥 ' + w(st[0]);
+  if (n0 && !n1) return '심리지원 ' + w(st[1]);
   if (st[0] === '재판정' || st[1] === '재판정') return '이용 중인 분만';
   return '오감쑥쑥, 심리지원 없음';
 }
 function build(posts, today) {
   var open = [];
+  var one = {};
   posts.forEach(function (p) {
     if (!p.apply || !(p.apply.start <= today && today <= p.apply.end)) return;
+    if (p.kind === '기타' && !/지역사회서비스/.test(p.title || '')) return;
     var gus = p.gus ? Object.keys(p.gus) : [p.gu];
     gus.forEach(function (gu) {
       if (NOW_GU.indexOf(gu) < 0) return;
       var g = p.gus && p.gus[gu], tag = '';
-      if (g) {
+      if (g && !p.check && !g.check) {
         var s4 = SVC.map(function (k) { return (g[k] && g[k].st) || '없음'; });
         if (!s4.some(function (x) { return TAKE[x]; })) return;
-        if (!p.check && !g.check) tag = tagText(s4);
+        tag = tagText(s4);
       }
-      open.push({ gu: gu, s: p.apply.start, e: p.apply.end, url: p.url, tag: tag, d1: md(p.apply.start), d2: md(p.apply.end), left: daysBetween(today, p.apply.end) });
+      var row = { gu: gu, s: p.apply.start, e: p.apply.end, url: p.url, num: p.num || 0, tag: tag, d1: md(p.apply.start), d2: md(p.apply.end), left: daysBetween(today, p.apply.end) }, was = one[gu];
+      if (!was || row.e > was.e || (row.e === was.e && row.num > was.num)) one[gu] = row;
     });
   });
+  for (var k in one) open.push(one[k]);
   open.sort(function (a, b) { return a.e.localeCompare(b.e) || a.gu.localeCompare(b.gu, 'ko'); });
   var wait = NOW_GU.filter(function (g) { return !open.some(function (o) { return o.gu === g; }); }).sort(function (a, b) { return a.localeCompare(b, 'ko'); });
   return { today: today, open: open, wait: wait };

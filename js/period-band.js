@@ -1,7 +1,8 @@
 /* 신청 기간 띠(입구 ② — 2026-10-24 8차 유성 「권장대로」, 10-31 라이브 준비): 인천 어느 구든 바우처 신청을 받고 있는 날에만
    모든 페이지 메뉴 밑에 연한 초록 한 줄 「지금 N개 구에서 바우처 신청 중  기간 보기 →」 → /period.
    공고 없는 날(1년의 약 80%)엔 아무것도 안 그린다. 모달은 안 씀(진입 즉시 본문을 가리는 창 = docs/1 §1.4-1, 10-24 보류).
-   셈 = /period 페이지 build()와 같은 규칙: 오늘이 신청 기간 안 + 강화·옹진 뺀 9개 구 + 우리 서비스 넷 중 하나라도 받는 구(표를 못 읽은 공고는 셈). 규칙을 바꾸면 period.html도 같이.
+   셈 = /period 페이지 build()와 같은 규칙(구 수 = 그 페이지 줄 수): 오늘이 신청 기간 안 + 청년 사업 공고 뺌 + 강화·옹진 뺀 9개 구 + 우리 서비스 넷 중 하나라도
+   새로 받는 구(신규, 재판정 — 대기자만은 안 셈) + 표를 못 읽었거나 사람 확인 전(check)인 공고는 셈. 규칙을 바꾸면 period.html build()도 같이.
    굵기 = docs/1 §3.2 사다리(강조어 600, 링크 500), 누르면 링크 글자 .93(§5.3-2).
    자리(실측): 첫 화면이 메뉴 바로 밑 꽉 찬 한 화면(홈 .fold, 이야기 .st-hero, 바우처 .sp)이고 띠 자리 아래에 글, 버튼, 칸이 없으면
    → 첫 화면 위에 겹쳐 띄운다(ov). 한 화면 = 한 휠 페이지가 그대로고, 첫 화면 아래 화살표·실시간 띠가 안 잘리고, 띠가 늦게 와도 화면이 안 밀린다.
@@ -12,16 +13,17 @@
 (function () {
   if (/^\/period(\.html)?\/?$/.test(location.pathname)) return;   // 신청 기간 페이지 자신엔 안 그림
   var NOW_GU = ['미추홀구', '연수구', '남동구', '부평구', '계양구', '서해구', '검단구', '제물포구', '영종구'];
-  var SVC = ['오감', '아청심', '정신토탈', '성인'], TAKE = { 신규: 1, 재판정: 1, 대기자만: 1 }, KEY = 'tf-period-band-v1';
+  var SVC = ['오감', '아청심', '정신토탈', '성인'], TAKE = { 신규: 1, 재판정: 1 }, KEY = 'tf-period-band-v1';
   function todayIso() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
   function count(posts, today) {
     var on = {};
     posts.forEach(function (p) {
       if (!p.apply || !(p.apply.start <= today && today <= p.apply.end)) return;
+      if (p.kind === '기타' && !/지역사회서비스/.test(p.title || '')) return;
       (p.gus ? Object.keys(p.gus) : [p.gu]).forEach(function (gu) {
         if (NOW_GU.indexOf(gu) < 0) return;
         var g = p.gus && p.gus[gu];
-        if (g && !SVC.some(function (k) { return g[k] && TAKE[g[k].st]; })) return;
+        if (g && !p.check && !g.check && !SVC.some(function (k) { return g[k] && TAKE[g[k].st]; })) return;
         on[gu] = 1;
       });
     });
