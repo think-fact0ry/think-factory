@@ -105,6 +105,7 @@ export function renderPost(post, blocks, desc, ogImage) {
 <script src="/js/analytics.js" async></script>
 <script src="/js/photo-viewer.js" defer></script>
 <script src="/js/inquiry.js?v=1" defer></script>
+<script src="/js/period-band.js" defer></script>
 </head>
 <body>
 
