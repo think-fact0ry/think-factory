@@ -35,7 +35,8 @@
 /* ── 글 조각(site.css 토큰만) ── */
 .eyebrow{font-size:var(--fs-sm);font-weight:600;color:var(--green700);margin:0 0 8px;letter-spacing:-.2px}
 .stt{font-size:var(--fs-h1);font-weight:700;line-height:1.3;letter-spacing:-.6px;color:var(--g900);margin:0;word-break:keep-all}
-.stt .nw,.wl .nw,.tip .nw{white-space:nowrap}   /* 「9월 16일부터 / 차례로 마감돼요」 — 뜻 덩어리 사이에서만 꺾임 */
+.stt .nw,.wl .nw,.tip .nw{white-space:nowrap}
+@media (min-width:761px){.wl .pnw,.tip .pnw{white-space:nowrap}}   /* PC = 「…전화하시면」 뒤 줄바꿈(br.pc, 유성 11-01) — 좁은 PC 창(761)에서 「전화하시면」 혼자 줄 안 생기게 덩어리 */   /* 「9월 16일부터 / 차례로 마감돼요」 — 뜻 덩어리 사이에서만 꺾임 */
 .hint{font-size:14px;font-weight:400;color:var(--g600);margin:6px 0 0;line-height:1.5}
 .wl{font-size:13px;font-weight:400;color:var(--g600);line-height:1.6;margin:12px 0 0;word-break:keep-all}
 .wl .n{white-space:nowrap}
@@ -76,7 +77,7 @@ a.r{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
 .a-dots button:focus-visible{outline:2px solid var(--g800);outline-offset:4px}
 .a-right{display:flex;align-items:center;justify-content:center;padding:28px clamp(24px,5vw,96px)}
 .a-in{width:100%;max-width:540px;--ax:clamp(18px,4vh,36px)}
-.a-in .eyebrow{margin-bottom:5px}
+.a-in .eyebrow{margin-bottom:10px}   /* 유성 11-01 5 → 10 */
 .a-in .hint{margin-top:10px}
 .a-list{margin:calc(8px + var(--ax)) 0 0;border-bottom:1px solid var(--g100)}
 .a-row{display:grid;grid-template-columns:minmax(0,1fr) auto 18px;align-items:center;gap:10px;padding:clamp(9px,1.4vh,14px) 4px;border-top:1px solid var(--g100);transition:background .12s}
@@ -168,8 +169,6 @@ a.r{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
   <button class="sp-next" aria-label="다음으로"><svg viewBox="0 0 48 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3 L24 11 L46 3"/></svg></button>
 </section>
 
-<hr class="mdiv">   <!-- 페이지 경계(모바일 전용, 바우처 페이지와 같은 선 — 유성 11-01): 활동사진 보러가기 ↔ 바우처, 이렇게 이용해요(폰에선 둘 다 흰 바탕) -->
-
 <!-- ── 페이지 2: 바우처 이용 절차(바우처 페이지 4번 칸 그대로 — 고치면 services.html도 같이) ── -->
 <section class="sp sp-mid tint">
   <div class="inner">
@@ -249,7 +248,7 @@ var WD = ['일', '월', '화', '수', '목', '금', '토'];
 var NOW_GU = ['미추홀구', '연수구', '남동구', '부평구', '계양구', '서해구', '검단구', '제물포구', '영종구'];   // 강화군, 옹진군 = 안 넣음(유성 10-28)
 var SVC = ['오감', '아청심', '정신토탈', '성인'];
 var TAKE = { 신규: 1, 재판정: 1 };
-var ASK = '신청 일정은 거주하시는 <span class="nw">동 행정복지센터에</span> 전화하시면 <span class="nw">더욱 빠르게</span> <span class="nw">확인할 수 있어요.</span>';   // 유성 11-01(전엔 지원단 032-721-6986) — 빈 화면, 못 불러옴, 기다리는 구 i 툴팁이 같이 씀
+var ASK = '신청 일정은 거주하시는 <span class="pnw"><span class="nw">동 행정복지센터에</span> 전화하시면</span><br class="pc"> <span class="nw">더욱 빠르게</span> <span class="nw">확인할 수 있어요.</span>';   // 유성 11-01(전엔 지원단 032-721-6986) — 빈 화면, 못 불러옴, 기다리는 구 i 툴팁이 같이 씀
 var HINT = '구를 누르면 지원단 공고 원문이 열려요';
 var CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
 var POSTERS = [['poster-1.jpg', '오감쑥쑥 바우처 서비스 포스터 앞면'], ['poster-2.jpg', '오감쑥쑥 서비스 안내 포스터 뒷면'], ['poster-3.jpg', '생각공작소 오감쑥쑥 포스터 앞면'], ['poster-4.jpg', '왜 생각공작소인가요 포스터 뒷면']];
