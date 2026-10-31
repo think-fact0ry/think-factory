@@ -12,6 +12,11 @@
    첫 페이지에서만 데이터를 받고(약 15KB), 같은 날 다음 페이지는 탭 저장소에 둔 수로 바로 그린다. */
 (function () {
   if (/^\/period(\.html)?\/?$/.test(location.pathname)) return;   // 신청 기간 페이지 자신엔 안 그림
+  // 효과 확인(RB-014): 띠나 바우처 1번 칸 링크를 누르면 탭 저장소에 표시만 → /period가 도착해서 Clarity 이벤트로 보냄
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('.pband, .step .plink'); if (!t) return;
+    try { sessionStorage.setItem('tf_pfrom', t.classList.contains('pband') ? 'band' : 'step'); } catch (x) {}
+  });
   var NOW_GU = ['미추홀구', '연수구', '남동구', '부평구', '계양구', '서해구', '검단구', '제물포구', '영종구'];
   var SVC = ['오감', '아청심', '정신토탈', '성인'], TAKE = { 신규: 1, 재판정: 1 }, KEY = 'tf-period-band-v1';
   function todayIso() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }

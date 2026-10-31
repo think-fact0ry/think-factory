@@ -7,7 +7,7 @@
 //  ② 제외 플래그 켜진 기기 → 작은 "집계 제외 중" 표시만(캐시 삭제로 조용히 풀리는 걸 눈으로 알게).
 //  ③ 자동화(webdriver 등)·think-factory.kr 외 호스트(로컬·프리뷰·github.io 래퍼)·iframe 안·프리렌더 → 미로드.
 //  ④ CLARITY_ID 비어 있으면 미로드 (유성이 clarity.microsoft.com 프로젝트 만든 뒤 ID만 채움).
-// 성능: 이 파일 <2KB·async, Clarity 태그도 async — 렌더 차단 0. 집계 대상 페이지=홈·이야기·바우처·활동·상담·활동 글 미러
+// 성능: 이 파일 <2KB·async, Clarity 태그도 async — 렌더 차단 0. 집계 대상 페이지=홈·이야기·바우처·신청 기간(/period, 11-01)·활동·상담·활동 글 미러
 // (설문 /monitoring·/feedback, 영수증 /receipt, QR /q 는 이용자 개인 맥락이라 싣지 않음).
 // 첫 진입 출처 버킷(문자 vs 검색 vs 블로그 — 백로그 §🏠 #37): 세션당 1회 sessionStorage에만 저장(외부 전송 0),
 // /contact 가 신청폼(06)에 넘겨 시트 X열 유입버킷에 범주값으로 기록. 문자 링크=무태그 /contact 유지(유성 확정 08-24 — 기발송 링크와 일관성 우선, /apply 입구는 폐기) → direct 버킷≈문자 경유 상한으로 해석(RB-004에 규칙). ?s=·utm_source= 태그는 지원만 유지.
