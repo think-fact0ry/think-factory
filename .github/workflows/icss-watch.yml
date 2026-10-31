@@ -1,9 +1,12 @@
 name: 지원단 공고 감시
+run-name: ${{ github.event_name == 'workflow_dispatch' && !inputs.kick && '지원단 공고 감시 (손 실행)' || '지원단 공고 감시' }}   # 멈춤 카톡이 손 실행(시험)을 안 센다
 
 # 인천 지원단(icss.kr) 이용자 모집 게시판을 읽어 data/icss.json에 쌓는다(공개 공고만). 머리 주석 = tools/icss-watch.mjs.
 # 소비자(다음 단계): 22 추천서 신청 기간, 홈페이지 신청 기간 페이지, 카톡 알림, 블로그 초안.
 # 2026-10-29 수동 실행으로 2026년 공고 23건을 첨부 실측표와 대조(오감, 아청심 48/48 같음) → 예약 실행 켬.
-# 주기(유성 10-29 「달 단위 아니지? 올라오면 바로?」): 평일 한국 8~19시 15분마다, 그 밖 1시간마다. GitHub 부하로 몇~십몇 분 늦을 수 있음.
+# 주기(유성 10-29 「달 단위 아니지? 올라오면 바로?」): 평일 한국 8~19시 15분마다, 그 밖 1시간마다.
+# ⚠️ 아래 예약(cron)은 깃허브가 바쁠 때 버린다 — 10-29~31 실측 38시간에 11번, 간격 최대 7시간. 그래서 부모 레포 10 브리핑의
+#  5분 폴링(scripts/10_일일카톡브리핑/지원단깨우기.js)이 같은 주기로 workflow_dispatch(kick=true)를 부른다. 예약은 예비로 둔다.
 on:
   schedule:
     - cron: '37 * * * *'            # 늘 1시간마다(매시 37분)
@@ -17,6 +20,10 @@ on:
         default: ''
       commit:
         description: '결과를 data/icss.json에 커밋'
+        type: boolean
+        default: false
+      kick:
+        description: '10 브리핑 5분 폴링이 깨운 실행(예약 실행과 똑같이 커밋, 카톡, 멈춤 카톡)'
         type: boolean
         default: false
 
@@ -57,7 +64,7 @@ jobs:
 
       - name: 바뀐 것만 커밋, 푸시
         id: commit
-        if: github.event_name != 'workflow_dispatch' || inputs.commit
+        if: github.event_name != 'workflow_dispatch' || inputs.commit || inputs.kick
         run: |
           git config user.name "think-factory-bot"
           git config user.email "noreply@think-factory.kr"
@@ -80,12 +87,13 @@ jobs:
         if: always() && steps.watch.outcome == 'success' && steps.commit.outcome != 'failure' && !contains(inputs.args, '--backfill')
         env:
           NOTIFY_KEY: ${{ secrets.NOTIFY_KEY }}
+          CHECK_KEY: ${{ github.event_name == 'workflow_dispatch' && !inputs.kick && '1' || '' }}   # 손 실행 = 보낼 게 없으면 열쇠만 확인
         run: node tools/icss-notify.mjs "$RUNNER_TEMP/icss-events.json"
 
-      # 멈춤 카톡 — 예약 실행이 3번 잇달아 실패한 순간에만, 하루 한 통(판정 = icss-notify.mjs stopped 머리 주석). 손 실행 시험은 안 셈
+      # 멈춤 카톡 — 예약 실행·깨운 실행이 3번 잇달아 실패한 순간에만, 하루 한 통(판정 = icss-notify.mjs stopped 머리 주석). 손 실행 시험은 안 셈
       # 못 막는 것: 저장소에 60일 동안 커밋이 없으면 GitHub가 예약 실행을 조용히 끈다(공개 저장소 규칙). 홈페이지 저장소는 거의 날마다 커밋돼 지금은 해당 없음
       - name: 멈춤 카톡
-        if: failure() && github.event_name == 'schedule' && (steps.watch.outcome == 'failure' || steps.commit.outcome == 'failure')
+        if: failure() && (github.event_name == 'schedule' || inputs.kick) && (steps.watch.outcome == 'failure' || steps.commit.outcome == 'failure')
         env:
           NOTIFY_KEY: ${{ secrets.NOTIFY_KEY }}
           GH_TOKEN: ${{ github.token }}

@@ -72,8 +72,9 @@ async function send(text) {
   return false;
 }
 
-// ── 멈춤 카톡(--stopped): 워크플로 「멈춤 카톡」 단계가 예약 실행에서 읽기나 올리기가 실패했을 때 부른다.
-// 한 번 실패는 지원단 사이트가 잠깐 안 열린 것일 수 있어 안 보낸다. 예약 실행이 3번 잇달아 실패한 그 순간에만, 한국 날짜로 하루 한 통.
+// ── 멈춤 카톡(--stopped): 워크플로 「멈춤 카톡」 단계가 예약 실행이나 10이 깨운 실행(kick)에서 읽기나 올리기가 실패했을 때 부른다.
+// 한 번 실패는 지원단 사이트가 잠깐 안 열린 것일 수 있어 안 보낸다. 3번 잇달아 실패한 그 순간에만, 한국 날짜로 하루 한 통.
+// 손 실행(run-name 「(손 실행)」 = 시험)은 줄에서 뺀다.
 // 상태는 따로 안 둔다 — 지난 실행 목록(GitHub)을 보고 「오늘 이미 3번째 잇단 실패가 있었나」로 판정한다.
 const kstDay = iso => new Date(Date.parse(iso) + 9 * 3600 * 1000).toISOString().slice(0, 10);
 // runs = 최신 먼저, 지금 실행은 뺀 끝난 실행. 취소된 실행(동시 실행 대기 교체)은 줄에서 뺀다
@@ -89,10 +90,10 @@ function shouldAlert(runs, today) {
 }
 async function stopped() {
   const repo = process.env.GITHUB_REPOSITORY, runId = Number(process.env.GITHUB_RUN_ID || 0);
-  const r = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/icss-watch.yml/runs?event=schedule&per_page=100`,
+  const r = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/icss-watch.yml/runs?per_page=100`,
     { headers: { Authorization: `Bearer ${process.env.GH_TOKEN}`, Accept: 'application/vnd.github+json' }, signal: AbortSignal.timeout(30000) });
   if (!r.ok) { console.log('실행 목록 못 읽음', r.status); process.exit(1); }
-  const runs = (await r.json()).workflow_runs.filter(x => x.id !== runId && x.status === 'completed');
+  const runs = (await r.json()).workflow_runs.filter(x => x.id !== runId && x.status === 'completed' && !/손 실행/.test(x.display_title || ''));
   const d = shouldAlert(runs, TODAY);
   if (!d.send) { console.log('안 보냄:', d.why); return; }
   const errFile = path.join(process.env.RUNNER_TEMP || '.', 'icss-error.txt');
@@ -103,6 +104,26 @@ async function stopped() {
   if (DRY) { console.log('--dry: 안 보냄'); return; }
   if (!KEY) { console.log('NOTIFY_KEY 없음 — 안 보냄'); return; }
   if (!(await send(text))) process.exit(1);
+}
+
+// 열쇠 확인(손 실행 = 워크플로 env CHECK_KEY): 10 notify는 빈 글이면 열쇠만 보고 {ok:true, sent:0}(카톡 안 보냄), 틀리면 {error:'Unauthorized'}.
+// 열쇠를 넣거나 바꾼 뒤 Actions에서 「Run workflow」 한 번이면 카톡 없이 맞는지 안다
+async function checkKey() {
+  if (!KEY) { console.log('열쇠 확인: 비밀 NOTIFY_KEY 없음'); process.exit(1); }
+  for (let i = 1; i <= 3; i++) {
+    try {
+      const r = await fetch(NOTIFY_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ token: KEY, action: 'notify', text: '' }), redirect: 'follow', signal: AbortSignal.timeout(60000) });
+      const t = await r.text();
+      let o = null;
+      try { o = JSON.parse(t); } catch (e) { /* 구글 화면(HTML)으로 올 때가 있다 */ }
+      if (o && o.ok === true && o.sent === 0) { console.log('열쇠 확인: 맞음(카톡 안 보냄)'); return; }
+      if (o && o.error === 'Unauthorized') { console.log('열쇠 확인: 틀림 — 10 Script Properties NOTIFY_KEY와 같은 값인지'); process.exit(1); }
+      console.log(i + '번째: 답을 못 읽음', (o && o.error) || t.slice(0, 80));
+    } catch (e) { console.log(i + '번째 실패:', e.message); }
+    await new Promise(res => setTimeout(res, 10000 * i));
+  }
+  process.exit(1);
 }
 
 function selftest() {
@@ -130,7 +151,11 @@ async function main() {
   if (!file || !fs.existsSync(file)) { console.log('사건 파일 없음 — 보낼 것 없음'); return; }
   const events = JSON.parse(fs.readFileSync(file, 'utf8'));
   const bs = blocks(events);
-  if (!bs.length) { console.log('보낼 것 없음(사건', events.length, '건)'); return; }
+  if (!bs.length) {
+    console.log('보낼 것 없음(사건', events.length, '건)');
+    if (process.env.CHECK_KEY) await checkKey();   // 손 실행이면 열쇠만 확인(카톡 0)
+    return;
+  }
   const head = `[지원단 공고] ${md(TODAY)}`, texts = [];
   let cur = [head];
   for (const b of bs) {
