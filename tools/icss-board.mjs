@@ -54,12 +54,14 @@ function jar() {
   const c = new Map();
   const take = r => { for (const s of r.headers.getSetCookie ? r.headers.getSetCookie() : []) { const [kv] = s.split(';'); const i = kv.indexOf('='); if (i > 0) c.set(kv.slice(0, i).trim(), kv.slice(i + 1)); } };
   const header = () => [...c].map(([k, v]) => `${k}=${v}`).join('; ');
+  let last = HOST + '/main/';   // 앞 화면 주소 = Referer. 없으면 로그인이 「정상적인 접근이 아닙니다」로 거절됨(11-02 Actions 첫 시험 실측)
   return async (url, opt = {}) => {
     let u = url.startsWith('http') ? url : HOST + url, method = opt.method || 'GET', body = opt.body;
     for (let hop = 0; hop < 5; hop++) {
       const r = await fetch(u, { method, body, redirect: 'manual', signal: AbortSignal.timeout(30000),
-        headers: { 'User-Agent': 'Mozilla/5.0', Cookie: header(), ...(body ? { 'Content-Type': 'application/x-www-form-urlencoded' } : {}) } });
+        headers: { 'User-Agent': 'Mozilla/5.0', Cookie: header(), Referer: last, ...(body ? { 'Content-Type': 'application/x-www-form-urlencoded', Origin: HOST } : {}) } });
       take(r);
+      if (method === 'GET') last = u;
       const loc = r.headers.get('location');
       if (r.status >= 300 && r.status < 400 && loc) {
         if (opt.noFollow) return { status: r.status, location: new URL(loc, u).href, html: '' };
