@@ -26,6 +26,10 @@ on:
         description: '10 브리핑 5분 폴링이 깨운 실행(예약 실행과 똑같이 커밋, 카톡, 멈춤 카톡)'
         type: boolean
         default: false
+      board:
+        description: 'tools/icss-board.mjs에 넘길 것(예: --probe = 계정 넷 로그인 시험 + 공지 화면 모양만, 글 안 찍음)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -53,6 +57,26 @@ jobs:
           ARGS: ${{ inputs.args }}
         run: node tools/icss-watch.mjs $ARGS
 
+      # 소식란(공개, 매번) + 등록제공기관 공지사항(로그인, 평일 9, 13, 17시대 첫 20분만) 새 글 → 카톡 파일($RUNNER_TEMP, 아래 「카톡」 단계가 보냄)
+      # ⛔ 로그인 글은 제목도 기록에 안 찍는다(tools/icss-board.mjs 머리 주석). 실패해도 공고 감시, 커밋, 공고 카톡은 그대로
+      - name: 소식, 공지
+        id: board
+        if: ${{ !contains(inputs.args, '--backfill') }}
+        continue-on-error: true
+        env:
+          NOTIFY_KEY: ${{ secrets.NOTIFY_KEY }}
+          ICSS_HAPPY_ID: ${{ secrets.ICSS_HAPPY_ID }}
+          ICSS_HAPPY_PW: ${{ secrets.ICSS_HAPPY_PW }}
+          ICSS_MICHU_ID: ${{ secrets.ICSS_MICHU_ID }}
+          ICSS_MICHU_PW: ${{ secrets.ICSS_MICHU_PW }}
+          ICSS_SEOHAE_ID: ${{ secrets.ICSS_SEOHAE_ID }}
+          ICSS_SEOHAE_PW: ${{ secrets.ICSS_SEOHAE_PW }}
+          ICSS_YEONSU_ID: ${{ secrets.ICSS_YEONSU_ID }}
+          ICSS_YEONSU_PW: ${{ secrets.ICSS_YEONSU_PW }}
+          WILL_COMMIT: ${{ (github.event_name != 'workflow_dispatch' || inputs.commit || inputs.kick) && '1' || '' }}   # 커밋 안 하는 손 실행 = 카톡 안 남김(다음 실행이 같은 글을 또 새 글로 봄)
+          BOARD_ARGS: ${{ inputs.board }}
+        run: node tools/icss-board.mjs $BOARD_ARGS
+
       - name: 결과 파일 남기기(확인용)
         if: always()
         uses: actions/upload-artifact@v4
@@ -68,7 +92,7 @@ jobs:
         run: |
           git config user.name "think-factory-bot"
           git config user.email "noreply@think-factory.kr"
-          git add -- data/icss.json
+          git add -- data/icss.json data/icss-seen.json
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
             exit 0

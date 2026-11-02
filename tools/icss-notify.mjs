@@ -148,26 +148,31 @@ function selftest() {
 async function main() {
   if (process.argv.includes('--selftest')) return selftest();
   if (process.argv.includes('--stopped')) return stopped();
-  if (!file || !fs.existsSync(file)) { console.log('사건 파일 없음 — 보낼 것 없음'); return; }
-  const events = JSON.parse(fs.readFileSync(file, 'utf8'));
+  // 소식란, 공지사항 카톡(tools/icss-board.mjs가 같은 실행에서 남김). ⛔ 공지 글은 로그인 글이라 기록에 찍지 않는다 — 통 수만
+  const boardFile = path.join(process.env.RUNNER_TEMP || '.', 'icss-board.json');
+  const boardTexts = process.env.RUNNER_TEMP && fs.existsSync(boardFile) ? JSON.parse(fs.readFileSync(boardFile, 'utf8')) : [];
+  const events = file && fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : [];
   const bs = blocks(events);
-  if (!bs.length) {
+  if (!bs.length && !boardTexts.length) {
     console.log('보낼 것 없음(사건', events.length, '건)');
     if (process.env.CHECK_KEY) await checkKey();   // 손 실행이면 열쇠만 확인(카톡 0)
     return;
   }
   const head = `[지원단 공고] ${md(TODAY)}`, texts = [];
-  let cur = [head];
-  for (const b of bs) {
-    if (cur.length > 1 && [...cur, ...b].join('\n').length > 880) { texts.push(cur.join('\n')); cur = [head]; }
-    cur.push(...b);
+  if (bs.length) {
+    let cur = [head];
+    for (const b of bs) {
+      if (cur.length > 1 && [...cur, ...b].join('\n').length > 880) { texts.push(cur.join('\n')); cur = [head]; }
+      cur.push(...b);
+    }
+    texts.push(cur.join('\n'));
+    texts.forEach((t, i) => console.log(`── ${i + 1}통 (${t.length}자)\n${t}`));
   }
-  texts.push(cur.join('\n'));
-  texts.forEach((t, i) => console.log(`── ${i + 1}통 (${t.length}자)\n${t}`));
+  if (boardTexts.length) console.log(`── 소식, 공지 ${boardTexts.length}통(글은 안 찍음)`);
   if (DRY) { console.log('--dry: 안 보냄'); return; }
   if (!KEY) { console.log('NOTIFY_KEY 없음 — 안 보냄'); return; }
   let fail = 0;
-  for (const text of texts) if (!(await send(text))) fail++;
+  for (const text of [...texts, ...boardTexts]) if (!(await send(text))) fail++;
   if (fail) process.exit(1);
 }
 
