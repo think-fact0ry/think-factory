@@ -3,6 +3,7 @@
 // 왜(유성 10-26 「로딩이 아예 있어선 안돼」): /month가 열 때마다 07(GAS)에 물으면 원드라이브를 읽느라 3~7초.
 //  → 여기서 미리 07 공개 창구(pub)의 이번 달, 다음 달 포스터 + 안내문을 받아 month/plan.js + month/p/<YYMM>-<sig8>.jpg로 넣어 두고,
 //    /month는 그 파일을 바로 읽어 첫 화면부터 그린다(불러오는 중 화면 없음).
+// 다른 계획안(틀 C, 11-04) = 07 pub의 vs 코드마다 v로 그 판 글 + 그림을 받아 그 달 칸 v에 싣는다(/month/?v=코드). 한 번 실린 코드는 그 달 동안 유지.
 // 지문 sig = 07 _maPubSig_(안내문 + 포스터 파일) 그대로 싣는다. 07 1일 발송은 이 파일의 그 달 sig가 원드라이브 판과 같아야 보낸다
 //  (부모 레포 scripts/07_아동서류화일관리/월안내발송.js _maPageCheck_) → 여기가 멈추면 발송도 기다린다(카톡으로 알림).
 // 못 받은 달(07 오류)은 있던 판을 그대로 둔다. 그 달 안내문이 없으면(none) 뺀다. 바뀐 게 없으면 파일을 안 건드린다(커밋 0).
@@ -27,12 +28,12 @@ function readOld() {
   } catch (e) { return []; }
 }
 
-// GAS 답은 가끔 늦거나 구글 화면(HTML)으로 온다 → 글로 받아 JSON으로, 네 번까지
-async function pub(ym) {
+// GAS 답은 가끔 늦거나 구글 화면(HTML)으로 온다 → 글로 받아 JSON으로, 네 번까지. v = 다른 계획안 판 코드(틀 C, 11-04)
+async function pub(ym, v) {
   for (let i = 1; i <= 4; i++) {
     try {
       const r = await fetch(GAS07, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'pub', ym }), redirect: 'follow', signal: AbortSignal.timeout(90000) });
+        body: JSON.stringify(v ? { action: 'pub', ym, v } : { action: 'pub', ym }), redirect: 'follow', signal: AbortSignal.timeout(90000) });
       const o = JSON.parse(await r.text());
       if (o && o.ok === true) return o;
       console.log(ym, i + '번째: ok 아님', JSON.stringify(o).slice(0, 120));
@@ -56,25 +57,59 @@ async function jpg(dataUrl, name) {
   return { name, w: info.width, h: info.height, log: name + ' ' + info.width + 'x' + info.height + ' ' + Math.round(data.length / 1024) + 'KB' };
 }
 
+const has = (f) => !f || fs.existsSync(path.join(DIR, f));
+const keepAll = (e, keep) => { for (const f of [e.img, e.imgH, ...(e.v || []).map(x => x.img)]) if (f) keep.add(path.basename(f)); };
+
+// 다른 계획안 판 화면(틀 C, 11-04) — 07 pub의 vs = [{c 코드, acc, sig}]. 코드마다 그 판 글 + 그림을 v로 받는다(한 응답에 그림을 다 싣지 않게).
+//  같은 sig면 그림 다시 안 만듦, 못 받으면 있던 판 유지. 07 1일 발송은 틀 C를 쓸 때 이 v의 sig까지 대조한다(월안내발송.js _maPageCompare_ wantV)
+async function variants(ym, o, prev, keep) {
+  const out = [];
+  for (const x of (Array.isArray(o.vs) ? o.vs : [])) {
+    if (!x || !/^[0-9a-z]{6}$/.test(x.c)) continue;
+    const pv = prev && Array.isArray(prev.v) ? prev.v.find(y => y.c === x.c) : null;
+    if (pv && pv.sig === x.sig && has(pv.img)) { out.push(pv); if (pv.img) keep.add(path.basename(pv.img)); continue; }
+    const r = await pub(ym, x.c);
+    if (!r || r.none || !r.sig) { if (pv) { out.push(pv); if (pv.img) keep.add(path.basename(pv.img)); } console.log(ym, x.c, '판 화면 못 받음' + (pv ? ' — 있던 판 유지' : '')); continue; }
+    const e = { c: x.c, acc: x.acc === 'h' ? 'h' : '', img: '', w: 0, h: 0, text: r.text, sig: r.sig };
+    const a = await jpg(r.poster, ym + '-v-' + x.c + '-' + r.sig.slice(0, 8) + '.jpg');
+    if (a) { Object.assign(e, { img: 'p/' + a.name, w: a.w, h: a.h }); keep.add(a.name); }
+    console.log(ym, '다른 계획안', x.c, e.acc || '-', r.sig, a ? a.log : '(그림 없음)');
+    out.push(e);
+  }
+  // 그 달 안에선 한 번 실린 코드를 지우지 않는다(11-04 리뷰 1) — 07이 판 글을 잠깐 못 읽어 목록에서 빠졌거나, 판 이름을 고쳐 코드가 바뀌어도
+  //  이미 그 코드로 보낸 버튼은 그 판을 열어야 한다(지우면 기본 판, 행복마음 집은 미추 통장이 나온다). 그 달 칸이 plan.js에서 빠질 때 같이 빠진다.
+  for (const pv of (prev && Array.isArray(prev.v) ? prev.v : [])) {
+    if (!pv || out.some(y => y.c === pv.c) || !has(pv.img)) continue;
+    out.push(pv); if (pv.img) keep.add(path.basename(pv.img));
+    console.log(ym, '다른 계획안', pv.c, '07 목록에 없음 — 있던 판 유지');
+  }
+  return out;
+}
+
 async function main() {
   const old = readOld(), next = [], keep = new Set();
   for (const ym of WANT) {
     const prev = old.find(x => x.ym === ym);
     const o = await pub(ym);
-    if (!o) { if (prev) { next.push(prev); for (const f of [prev.img, prev.imgH]) if (f) keep.add(path.basename(f)); } console.log(ym, '못 받음 — 있던 판 유지'); continue; }
+    if (!o) { if (prev) { next.push(prev); keepAll(prev, keep); } console.log(ym, '못 받음 — 있던 판 유지'); continue; }
     if (o.none) { console.log(ym, '안내문 없음'); continue; }
-    if (!o.sig) { console.log(ym, 'sig 없음(07이 옛 판?) — 건너뜀'); if (prev) { next.push(prev); for (const f of [prev.img, prev.imgH]) if (f) keep.add(path.basename(f)); } continue; }
-    const has = (f) => !f || fs.existsSync(path.join(DIR, f));
+    if (!o.sig) { console.log(ym, 'sig 없음(07이 옛 판?) — 건너뜀'); if (prev) { next.push(prev); keepAll(prev, keep); } continue; }
+    let e;
     if (prev && prev.sig === o.sig && has(prev.img) && has(prev.imgH)) {   // 같은 판 = 그림 다시 안 만듦
-      next.push(prev); for (const f of [prev.img, prev.imgH]) if (f) keep.add(path.basename(f)); console.log(ym, '그대로', o.sig); continue;
+      e = Object.assign({}, prev); delete e.v;
+      for (const f of [prev.img, prev.imgH]) if (f) keep.add(path.basename(f));
+      console.log(ym, '그대로', o.sig);
+    } else {
+      e = { ym, m: o.m, img: '', w: 0, h: 0, text: o.text, sig: o.sig };
+      const a = await jpg(o.poster, ym + '-' + o.sig.slice(0, 8) + '.jpg');
+      if (a) { Object.assign(e, { img: 'p/' + a.name, w: a.w, h: a.h }); keep.add(a.name); }
+      // 행복마음 판 그림(07 「(행복)」 파일, 10-28) = /month/h만 이 그림. 없는 달은 칸 자체가 없다(옛 plan.js와 같은 모양)
+      const b = await jpg(o.posterH, ym + '-h-' + o.sig.slice(0, 8) + '.jpg');
+      if (b) { Object.assign(e, { imgH: 'p/' + b.name, wH: b.w, hH: b.h }); keep.add(b.name); }
+      console.log(ym, '새 판', o.sig, a ? a.log : '(그림 없음)', b ? '행복 ' + b.log : '');
     }
-    const e = { ym, m: o.m, img: '', w: 0, h: 0, text: o.text, sig: o.sig };
-    const a = await jpg(o.poster, ym + '-' + o.sig.slice(0, 8) + '.jpg');
-    if (a) { Object.assign(e, { img: 'p/' + a.name, w: a.w, h: a.h }); keep.add(a.name); }
-    // 행복마음 판 그림(07 「(행복)」 파일, 10-28) = /month/h만 이 그림. 없는 달은 칸 자체가 없다(옛 plan.js와 같은 모양)
-    const b = await jpg(o.posterH, ym + '-h-' + o.sig.slice(0, 8) + '.jpg');
-    if (b) { Object.assign(e, { imgH: 'p/' + b.name, wH: b.w, hH: b.h }); keep.add(b.name); }
-    console.log(ym, '새 판', o.sig, a ? a.log : '(그림 없음)', b ? '행복 ' + b.log : '');
+    const vs = await variants(ym, o, prev, keep);
+    if (vs.length) e.v = vs;   // 다른 계획안이 없는 달 = 칸 자체가 없다(옛 plan.js 모양)
     next.push(e);
   }
   const body = '// 자동 생성 — .github/workflows/month-plan.yml(tools/month-plan.mjs)이 07 공개 창구에서 받아 씀. 손으로 고치지 말 것(다음 실행이 덮어씀)\n'
