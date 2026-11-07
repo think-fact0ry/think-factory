@@ -74,7 +74,7 @@
     var nav = document.querySelector('nav.nav'); if (!nav) return;
     if (!document.getElementById('pbandCss')) {
       var st = document.createElement('style'); st.id = 'pbandCss';
-      st.textContent = '.pband{display:flex;align-items:center;justify-content:center;gap:10px;min-height:40px;padding:8px 16px;background:var(--green100,#e9f8ee);color:var(--g800,#333d4b);font-size:14px;line-height:1.4;text-decoration:none;word-break:keep-all;text-align:center;-webkit-tap-highlight-color:transparent}' +
+      st.textContent = '.pband{display:flex;align-items:center;justify-content:center;gap:10px;min-height:40px;padding:8px 16px;background:var(--green100,#f0f8f3);color:var(--g800,#333d4b);font-size:14px;line-height:1.4;text-decoration:none;word-break:keep-all;text-align:center;-webkit-tap-highlight-color:transparent}' +
         '.pband.ov{position:absolute;left:0;right:0;z-index:8}' +
         '.pband b{font-weight:600;color:var(--g900,#191f28)}.pband .go{font-weight:500;color:var(--green700,#166841);white-space:nowrap;display:inline-block;transition:transform .12s}' +
         '.pband:active .go{transform:scale(.93)}@media (hover:hover){.pband:hover .go{text-decoration:underline;text-underline-offset:2px}}';
