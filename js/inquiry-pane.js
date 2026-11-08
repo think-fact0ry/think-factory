@@ -288,7 +288,7 @@
     '#tfInq .ti-rip.go{transform:translate(-50%,-50%) scale(var(--rs,16));transition:transform .46s cubic-bezier(.25,.6,.3,1)}',
     '#tfInq .ti-rip.fade{opacity:0;transition:opacity .3s}',
     // 토스트(§5.5: 성공만 초록 원 체크, 그 밖엔 글자만 · 입력 칸 위 12px)
-    '#tfInq .ti-toast{position:absolute;left:50%;transform:translate(-50%,8px);bottom:80px;z-index:15;background:#191f28;color:#F9FBFA;font-size:14px;font-weight:600;line-height:1.45;padding:10px 16px;border-radius:12px;max-width:calc(100% - 32px);width:max-content;text-align:center;white-space:pre-line;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}',
+    '#tfInq .ti-toast{position:absolute;left:50%;transform:translate(-50%,8px);bottom:80px;z-index:15;background:var(--toast-bg,#333d4b);color:var(--toast-fg,#F9FBFA);font-size:14.5px;font-weight:600;line-height:1.5;padding:12px 19px;border-radius:var(--toast-r,23px);max-width:calc(100% - 32px);width:max-content;text-align:center;white-space:pre-line;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}',
     '#tfInq .ti-toast.on{opacity:1;transform:translate(-50%,0)}',
     // 동의 시트(태블릿 #consentSheet 실값 · §4.3 · §4.16)
     '#tfInq .ti-dim{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:20;opacity:0;pointer-events:none;transition:opacity .25s}',

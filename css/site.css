@@ -25,6 +25,8 @@
   --p-disabled:#b7e0c8; --dark-disabled:#c8ccd0; --danger-disabled:#f2cdce;   /* disabled = variant 흐린 버전+흰폰트(회색 아님) */
   /* 라운드 — §3.3 */
   --r-sm:clamp(7px,1.8vw,10px); --r-md:clamp(10px,2.6vw,14px); --r-lg:clamp(13px,3.2vw,20px);
+  /* 토스트 — §5.5 (2026-11-07~08 유성: 알약, g800, 원 18px. 반지름 23 = 14.5px 글자 한 줄 높이 46의 절반 → 한 줄이면 알약, 여러 줄이면 같은 굽이) */
+  --toast-bg:var(--g800); --toast-fg:#F9FBFA; --toast-r:23px; --toast-ck:18px;
   /* 타입 스케일 — §3.2 (큰 제목 clamp 유동 / 본문 고정) */
   --fs-display:clamp(28px,6vw,42px); --fs-h1:clamp(23px,3.4vw,30px); --fs-h2:clamp(20px,2.6vw,26px); --fs-h3:20px;
   --fs-title:17px; --fs-body:15px; --fs-sm:13.5px; --fs-caption:12px;
@@ -768,16 +770,16 @@ body.apply-page{ background:#fff; }   /* 흰색 — FAQ가 흰색 되며 옛 베
 body.form-dark .faqsec{ background:#16171a; }
 
 /* 폼 검증 안내 토스트 (임베드 폼이 요청) — 화면 하단 고정, 태블릿 앱 패턴 */
-.form-toast{ position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(10px); max-width:calc(100% - 32px); background:#191f28; color:#F9FBFA; font-size:14px; font-weight:600; line-height:1.5; text-align:center; padding:12px 18px; border-radius:var(--r-sm); box-shadow:0 6px 24px rgba(0,0,0,.22); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:1000; }
+.form-toast{ position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(10px); max-width:calc(100% - 32px); background:var(--toast-bg); color:var(--toast-fg); font-size:14.5px; font-weight:600; line-height:1.5; text-align:center; padding:12px 19px; border-radius:var(--toast-r); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:1000; width:max-content; }
 .form-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-.form-toast.err{ background:var(--red); color:#fff; }   /* 토큰 밖 #842029 → --red(#f04452, 상태 알림 시맨틱). §3.1 운영규칙2 */
+/* .form-toast.err = 오류도 같은 진회색(§5.5, 2026-11-08 유성) — 클래스는 JS가 붙이지만 모양은 같다. 옛 빨강 --red는 흰 글자 대비 3.56 */
 body.form-dark .form-toast{ background:#2c2c33; color:#F5F5F5; }
 
 /* 종료 확인 안내(더블백) — 토스 ex18 패턴: 다크 알약 + 초록 원 체크 + 문구. 우리 초록(#3a8a5f). */
-.exithint{ position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(10px); display:flex; align-items:center; gap:10px; max-width:calc(100% - 32px); background:#191f28; color:#F9FBFA; font-size:14.5px; font-weight:600; padding:9px 20px 9px 9px; border-radius:99px; box-shadow:0 6px 24px rgba(0,0,0,.28); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:1001; white-space:nowrap; }
+.exithint{ position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(10px); display:flex; align-items:center; gap:11px; max-width:calc(100% - 32px); background:var(--toast-bg); color:var(--toast-fg); font-size:14.5px; font-weight:600; padding:12px 19px 12px 15px; border-radius:var(--toast-r); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:1001; white-space:nowrap; line-height:1.5; }
 .exithint.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-.exithint .ck{ width:28px; height:28px; border-radius:50%; background:#3a8a5f; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.exithint .ck svg{ width:15px; height:15px; }
+.exithint .ck{ width:var(--toast-ck); height:var(--toast-ck); border-radius:50%; background:#3a8a5f; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.exithint .ck svg{ width:11px; height:11px; }
 body.form-dark .exithint{ background:#2c2c33; color:#F5F5F5; }
 
 /* 폼이 다크모드일 때 페이지 크롬(nav·FAQ·푸터·리모콘)도 다크 동기화 — 이 페이지 한정(원칙 §8 예외) */

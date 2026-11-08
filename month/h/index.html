@@ -26,6 +26,7 @@
     --beige:#f7f5f1;
     --r-md:clamp(10px,2.6vw,14px); --r-lg:clamp(13px,3.2vw,20px);
     --sh1:0 1px 2px rgba(47,111,77,.05), 0 4px 14px rgba(47,111,77,.06);
+    --toast-bg:var(--g800); --toast-fg:#F9FBFA; --toast-r:23px; --toast-ck:18px; /* §5.5 토스트 — docs/1 §3.1 정본 사본(이 파일은 토큰동기 마커 밖, 정본 바꿀 땐 같이) */
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ margin:0; background:var(--beige); }
@@ -74,8 +75,8 @@
 
   /* 복사 성공 = 단추 글자가 「✓ 복사했어요」로 2초(현아쌤 화면 .cb 복사됨과 같은 결 — 토스트를 띄우면 방금 복사한 번호를 덮는다, 10-26 실측).
      토스트는 복사가 안 될 때만, 계좌 칸 위 12px(스크롤 문서 — §5.5 09-06 개정, JS가 bottom을 줌). 오류라 아이콘 없음 */
-  .toast{ position:fixed; left:50%; bottom:calc(28px + env(safe-area-inset-bottom)); transform:translate(-50%,8px); background:var(--g800); color:#fff;
-    border-radius:14px; padding:11px 16px; font-size:14.5px; font-weight:600; line-height:1.45;
+  .toast{ position:fixed; left:50%; bottom:calc(28px + env(safe-area-inset-bottom)); transform:translate(-50%,8px); background:var(--toast-bg); color:var(--toast-fg);
+    border-radius:var(--toast-r); padding:12px 19px; font-size:14.5px; font-weight:600; line-height:1.5;
     width:max-content; max-width:calc(100% - 32px); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; z-index:40; }
   .toast.on{ opacity:1; transform:translate(-50%,0); }
 </style>

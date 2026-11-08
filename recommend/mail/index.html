@@ -27,6 +27,7 @@
     --red:#f04452; --ink-on-dark:#F9FBFA; --p-disabled:#b7e0c8;
     --r-sm:clamp(7px,1.8vw,10px); --r-md:clamp(10px,2.6vw,14px);
     --fs-h1:clamp(23px,3.4vw,30px);
+    --toast-bg:#333d4b; --toast-fg:#F9FBFA; --toast-r:23px; --toast-ck:18px; /* §5.5 토스트 — docs/1 §3.1 정본 사본(이 파일은 토큰동기 마커 밖, 정본 바꿀 땐 같이) */
   }
   *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; background:#fff; }
@@ -112,9 +113,9 @@
   .spinner{ width:42px; height:42px; border:3px solid var(--g100); border-top-color:var(--green); border-radius:50%; animation:spin .7s linear infinite; }
   @keyframes spin{ to{ transform:rotate(360deg); } }
   .loading p{ font-size:14.5px; font-weight:600; color:var(--g600); }
-  .toast{ position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); background:var(--g900); color:var(--ink-on-dark);
-          font-size:14px; font-weight:600; padding:12px 18px; border-radius:12px; max-width:90%; text-align:center; white-space:pre-line; opacity:0;
-          transition:opacity .2s,transform .2s; pointer-events:none; z-index:1300; line-height:1.5; }
+  .toast{ position:fixed; left:50%; bottom:90px; transform:translateX(-50%) translateY(20px); background:var(--toast-bg); color:var(--toast-fg);
+          font-size:14.5px; font-weight:600; padding:12px 19px; border-radius:var(--toast-r); max-width:90%; text-align:center; white-space:pre-line; opacity:0;
+          transition:opacity .2s,transform .2s; pointer-events:none; z-index:1300; line-height:1.5; width:max-content; }
   .toast.on{ opacity:1; transform:translateX(-50%) translateY(0); }
   .dim{ position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:1400; display:none; align-items:center; justify-content:center; }
   .dim.on{ display:flex; }
