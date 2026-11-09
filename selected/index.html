@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="ko"><head>
+<script src="/js/kakao-escape.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>생각공작소</title>
+<meta name="robots" content="noindex">
+<meta name="referrer" content="strict-origin">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/assets/android-icon-192x192.png">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<!--
+  think-factory.kr/selected — 06 선정 소식 알림톡 버튼 뒤 화면(바우처 결과를 알려 주는 보호자).
+  ?a=yes&k=<열쇠> = 「선정됐어요 →」 / ?a=no&k=<열쇠> = 「선정되지 못했어요」 / ?k=<열쇠> = 대체문자(결과 다시 고르기부터).
+  서버 = 06 웹앱 sel_get, sel_yes, sel_no, sel_wait, sel_nov(/continue와 같은 배포 — 새 배포 금지). 열쇠가 게이트라 틀린 열쇠는 어느 쪽인지 안 알려 준다.
+  방문 통계 없음(주소에 열쇠가 있어서). 공개 레포라 아이 이름 0 — 화면 이름은 서버가 가려서 준다(김하○).
+  설계 = 부모 레포 prototype/06_선정소식_제출화면_7차_프리뷰.html(3, 4, 5번, 확인 창, 완료 화면) + 06_선정소식_제출화면_8차_등급화면_프리뷰.html(등급 화면 = 나 + 글 1,
+  서비스별 등급표) + 06_선정소식_원칙과다른곳_프리뷰.html(11-09 정함 12칸). CSS 값은 프리뷰 그대로 — ⚠️디자인을 고칠 땐 그 프리뷰와 같이.
+  홍보지 = flyer-front.jpg, flyer-back.jpg(원본 1264x1772를 760 폭으로 줄인 판, 오감쑥쑥 집에만).
+-->
+<style>
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:#f7f5f1;overscroll-behavior-y:none}
+body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;background:#f7f5f1;color:#191f28;font-family:'Pretendard Variable',Pretendard,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;font-size:15px;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
+#app{position:relative;flex:1 1 auto;min-height:0;width:100%;max-width:430px;margin:0 auto;overflow:hidden;background:#f7f5f1}
+
+/* ===== 화면 (프리뷰 「우리 화면 = 가 프레임」 그대로 — 폰 틀의 위아래 막대 자리 80/46 대신 화면 끝까지) ===== */
+.pg,.ov{position:absolute;inset:0;font-family:'Pretendard Variable',Pretendard,system-ui,sans-serif;color:#191f28}
+.pg{overflow:hidden;background:#f7f5f1;-webkit-user-select:none;user-select:none}
+.scrn{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;background:#f7f5f1;scrollbar-width:none}
+.scrn::-webkit-scrollbar{width:0}
+.ov{pointer-events:none;z-index:20;overflow:hidden;-webkit-user-select:none;user-select:none}
+.ov.live{pointer-events:auto}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
+@keyframes fd{from{opacity:0}to{opacity:1}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(58,138,95,.55)}70%{box-shadow:0 0 0 7px rgba(58,138,95,0)}100%{box-shadow:0 0 0 0 rgba(58,138,95,0)}}
+@keyframes ringIn{from{transform:scale(.7)}to{transform:none}}
+@keyframes ckDraw{from{stroke-dashoffset:22}to{stroke-dashoffset:0}}
+@keyframes slInR{from{transform:translateX(100%)}to{transform:none}}
+@keyframes slInL{from{transform:translateX(-100%)}to{transform:none}}
+@keyframes slOutL{to{transform:translateX(-28%);opacity:0}}
+@keyframes slOutR{to{transform:translateX(28%);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes illIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+/* 파도 한 바퀴 5.5초 = 한 줄 지나가는 1.5초(27.27%), 가운데 머묾 45~60%(12.27~16.36%), 나머지는 쉼 */
+@keyframes amtLoop{0%,27.27%,100%{color:#4e5968;font-weight:400}12.27%,16.36%{color:#166841;font-weight:700}}
+@keyframes chevLoop{0%,27.27%,100%{color:#8b95a1;stroke-width:2}12.27%,16.36%{color:#3a8a5f;stroke-width:3.2}}
+@keyframes hlDraw{from{clip-path:inset(0 100% 0 0 round 2px)}to{clip-path:inset(0 0 0 0 round 2px)}}
+.in1{animation:fu .4s ease backwards}
+.in3{animation:fu .4s ease .26s backwards}
+.in4{animation:fu .4s ease .36s backwards}
+
+.ft{position:sticky;bottom:0;margin-top:auto;padding:12px 16px 6px;background:linear-gradient(to bottom,rgba(247,245,241,0),#f7f5f1 18px);display:flex;flex-direction:column;align-items:stretch;z-index:2}
+.cta{position:relative;overflow:hidden;height:56px;border:0;border-radius:14px;background:#3a8a5f;color:#fff;font:600 17px 'Pretendard Variable',Pretendard,system-ui,sans-serif;cursor:pointer;transition:background .2s,transform .1s;display:flex;align-items:center;justify-content:center;width:100%}
+.cta:active,.cta.press{transform:scale(.97);background:#166841}
+.bl{position:relative;z-index:1}
+.rip{position:absolute;z-index:0;top:50%;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.16);transform:translate(-50%,-50%) scale(0);pointer-events:none}
+.rip.go{transform:translate(-50%,-50%) scale(var(--rs,16));transition:transform .46s cubic-bezier(.25,.6,.3,1)}
+.rip.fade{opacity:0;transition:opacity .3s}
+.qlink{border:0;background:none;color:#6b7684;font:500 15px 'Pretendard Variable',Pretendard,system-ui,sans-serif;min-height:44px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;align-self:center;padding:0 10px;transition:transform .12s}
+.qlink:active,.qlink.press{transform:scale(.93)}
+.weak{height:52px;border:0;border-radius:14px;background:#f2f4f6;color:#4e5968;font:600 16px 'Pretendard Variable',Pretendard,system-ui,sans-serif;cursor:pointer;transition:background .15s}
+.weak:active{background:#e5e8eb}
+.nob{border:0;background:none;color:#6b7684;font:500 14.5px 'Pretendard Variable',Pretendard,system-ui,sans-serif;min-height:44px;cursor:pointer;align-self:center;padding:0 12px;transition:transform .12s}
+.nob:active{transform:scale(.93)}
+.chev{width:18px;height:18px;color:#8b95a1;flex:0 0 auto}
+.eb3{font-size:13.5px;font-weight:600;color:#166841;margin:0 0 4px}
+.card{margin:18px 16px 0;background:#fff;border-radius:20px;box-shadow:0 1px 2px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.03)}
+
+/* 세로 칸 */
+.tl{padding:20px 20px 4px}
+.st{display:grid;grid-template-columns:24px 1fr;column-gap:14px;position:relative;padding-bottom:18px}
+.nd{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #d1d6db;background:#fff;transition:background-color .3s,border-color .3s,border-width .3s;position:relative;z-index:1}
+.nd .dot{display:none;width:8px;height:8px;border-radius:50%;background:#3a8a5f}
+.nd svg{display:none;width:13px;height:13px;fill:none;stroke:#fff;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.nd svg path{stroke-dasharray:22}
+.st.sd .nd{background:#3a8a5f;border-color:#3a8a5f}
+.st.sd .nd .ck{display:block}
+.st.nt .nd{background:#b0b8c1;border-color:#b0b8c1}
+.st.nt .nd .ds{display:block}
+.st.cur .nd{border:3px solid #3a8a5f}
+.st.cur .nd .dot{display:block}
+.st .tx b{display:block;font-size:16px;font-weight:600;color:#191f28;line-height:24px;transition:color .3s;transform-origin:left center;animation:illIn .32s cubic-bezier(.34,1.56,.64,1) var(--td,0s) backwards}   /* 11-09 유성: 흰 박스 글자 먼저 하나씩(4번과 같은 등장), 왼쪽 동그라미는 이어서 */
+.scrn.in-r .st .tx b,.scrn.in-l .st .tx b{animation-delay:calc(var(--td,0s) + .38s)}
+.st.td .tx b{color:#6b7684;font-weight:500}
+.st.cur .tx b{color:#166841}
+.ln{position:absolute;left:11px;top:28px;bottom:4px;width:2px;border-radius:1px;background:#e5e8eb;overflow:hidden;transform-origin:top}
+.lf{position:absolute;inset:0;background:#3a8a5f;transform-origin:top;transition:transform .42s cubic-bezier(.22,.85,.25,1)}
+.ln .lf.off,.ln .lf.pre{transform:scaleY(0)}
+/* 한 칸 나아감(모션 3)의 「전」 모양 */
+.st.nt.pre .nd{background:#fff;border:3px solid #3a8a5f}
+.st.nt.pre .nd .ds{display:none}
+.st.nt.pre .nd .dot{display:block}
+.st.nt.pre .tx b{color:#166841}
+.st.cur.pre .nd{border:2px solid #d1d6db}
+.st.cur.pre .nd .dot{display:none}
+.st.cur.pre .tx b{color:#6b7684;font-weight:500}
+.st.nt.chg .nd .ds path{animation:ckDraw .3s ease .08s backwards}
+.st.cur.arr .nd{animation:ringIn .3s cubic-bezier(.34,1.56,.64,1),ring 1.8s ease-out .3s 1}
+.st.cur.arr .nd .dot{animation:pop .3s ease-out .08s backwards}
+/* 가로 세 칸 (4번 화면) */
+.trk{display:grid;grid-template-columns:repeat(3,1fr);margin:18px 22px 4px;position:relative}
+.tln{position:absolute;left:16.6%;right:16.6%;top:9px;height:2px;background:#e5e8eb}
+.tn{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;font-size:12.5px;color:#6b7684;transition:color .3s}
+.tn i{width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid #d1d6db;display:flex;align-items:center;justify-content:center;transition:border-color .3s,border-width .3s}
+.tn i svg{width:11px;height:11px;fill:none;stroke:#fff;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.tn i b{width:6px;height:6px;border-radius:50%;background:#3a8a5f}
+.tn.sd i{background:#3a8a5f;border-color:#3a8a5f}
+.tn.cur{color:#166841;font-weight:600}
+.tn.cur i{border:3px solid #3a8a5f}
+.tn.cur.pre{color:#6b7684;font-weight:400}
+.tn.cur.pre i{border:2px solid #d1d6db}
+.tn.cur.pre i b{display:none}
+.tn.cur.arr i{animation:ringIn .3s cubic-bezier(.34,1.56,.64,1),ring 1.8s ease-out .3s 1}
+/* 4번 화면 줄 = 글 왼쪽, 그림 오른쪽(› 자리). 고르면 체크팝 후 넘어감 (§4.9, 06 _confirmSelect_ 복제) */
+.lst3{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px}
+.r3{position:relative;overflow:hidden;display:flex;align-items:center;gap:12px;width:100%;min-height:82px;padding:12px 14px 12px 18px;border:0;border-radius:16px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.03);font-family:inherit;text-align:left;cursor:pointer;transition:transform .08s}
+.r3:active{transform:scale(.96)}
+.r3 span.t{flex:1;min-width:0}
+.r3 b{display:block;font-size:17px;font-weight:600;color:#191f28}
+.r3 em{display:block;font-style:normal;font-size:13.5px;color:#6b7684;margin-top:3px}
+.r3 .ill{flex:0 0 auto;width:50px;height:50px;display:block;animation:illIn .32s cubic-bezier(.34,1.56,.64,1) var(--id,0s) backwards}
+/* 11-09 유성: 그림만 말고 버튼 안 글자도 같은 등장(글자는 왼쪽 기준으로 커짐) */
+.r3 .t b,.r3 .t em{transform-origin:left center;animation:illIn .32s cubic-bezier(.34,1.56,.64,1) var(--id,0s) backwards}
+.scrn.in-r .r3 .ill,.scrn.in-l .r3 .ill,.scrn.in-r .r3 .t b,.scrn.in-l .r3 .t b,.scrn.in-r .r3 .t em,.scrn.in-l .r3 .t em{animation-delay:calc(var(--id,0s) + .38s)}
+.r3 .ill svg{width:100%;height:100%;display:block}
+.card-chk{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.5);opacity:0;pointer-events:none;transition:opacity .1s}
+.confirming .card-chk{opacity:1}
+.card-chk b{width:34px;height:34px;border-radius:50%;background:#3a8a5f;display:flex;align-items:center;justify-content:center;transform:scale(0)}
+.confirming .card-chk b{animation:cardcpop .3s cubic-bezier(.34,1.56,.64,1) forwards}
+.card-chk svg{width:18px;height:18px;stroke-dasharray:22;stroke-dashoffset:22}
+.confirming .card-chk svg{animation:cardcdraw .25s .12s ease forwards}
+@keyframes cardcpop{to{transform:scale(1)}}
+@keyframes cardcdraw{to{stroke-dashoffset:0}}
+
+/* ===== 모션 (화면마다 정함) ===== */
+/* 1 블록 등장 = 5번 화면 */
+.m1 .b1{animation:fu .4s ease backwards}
+.m1 .b2{animation:fu .4s ease .26s backwards}
+.m1 .b3{animation:fu .4s ease .36s backwards}
+.m1 .st.cur.arr .nd{animation:ringIn .3s cubic-bezier(.34,1.56,.64,1),ring 1.8s ease-out .3s infinite}
+/* 3 한 칸 나아감 = 3번, 4번, 등급 화면 (지난 칸이 바뀌고, 선이 차고, 다음 칸이 켜짐 + 화면은 옆으로 밀림) */
+.m3 .b1,.m3 .b2,.m3 .b3{animation:fu .3s ease backwards}
+.m3.in-r .b1,.m3.in-r .b2,.m3.in-r .b3,.m3.in-l .b1,.m3.in-l .b2,.m3.in-l .b3{animation:none}
+.scrn.in-r{animation:slInR .36s cubic-bezier(.22,.85,.25,1) backwards}
+.scrn.in-l{animation:slInL .36s cubic-bezier(.22,.85,.25,1) backwards}
+.scrn.out-l{animation:slOutL .36s cubic-bezier(.22,.85,.25,1) forwards;pointer-events:none}
+.scrn.out-r{animation:slOutR .36s cubic-bezier(.22,.85,.25,1) forwards;pointer-events:none}
+
+/* ===== 등급 고르기 + 확인 창 + 알려준 뒤 ===== */
+.hd{padding:22px 22px 0}
+/* 11-09 유성 「기준을 등으로」: 머리 줄 높이 = 뱃지 높이 24.75(12.5 × 1.5 + 위아래 3), 뱃지 없는 3번(「알려주셔서 감사해요」)도 같은 줄에 넣어 제목 자리가 58.75로 같다 */
+.who{display:flex;align-items:center;gap:8px;margin:0 0 12px;min-height:24.75px}
+.who .eb3{font-size:13.5px;font-weight:600;color:#166841;margin:0}
+.who .bdg{font-size:12.5px;font-weight:600;color:#ffffff;background:#3a8a5f;border-radius:999px;padding:3px 10px;line-height:1.5}   /* 유성 11-09 = 원칙 §4.15 fill. 이 화면은 늘 밝은 판이라 hex */
+.who span{font-size:13.5px;color:#4e5968}
+.q{font-size:24px;line-height:1.36;font-weight:700;letter-spacing:-.5px;margin:0}
+.qs{font-size:15px;color:#6b7684;margin:8px 0 0;line-height:1.5}
+.lst{padding:16px 16px 4px;display:flex;flex-direction:column;gap:8px}
+.lh{display:flex;justify-content:space-between;padding:0 46px 0 16px;font-size:12.5px;color:#6b7684;margin:0 0 -2px}
+.row{display:flex;align-items:center;gap:12px;width:100%;min-height:60px;padding:9px 18px 9px 16px;border:0;border-radius:14px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.03);font-family:inherit;color:#191f28;cursor:pointer;text-align:left;transition:transform .08s}
+.row:active,.row.press{transform:scale(.96)}
+.gl{flex:1;min-width:0;font-size:17px;font-weight:500;letter-spacing:-.2px}
+.am3{font-size:15px;color:#4e5968;font-variant-numeric:tabular-nums;white-space:nowrap}
+/* › 물결 = 위에서부터 하나씩 초록 굵게 (유성 11-07). 11-09 「월 본인부담금액에도 … 폰트웨이트 + 그린컬러」, 「딜레이 추가하여 계속 반복」. 창이 열려 있는 동안은 끔 */
+.lst.wave .row .chev{animation:chevLoop 5.5s ease-in-out calc(var(--i) * .5s) infinite backwards}
+.lst.wave .row .am3{animation:amtLoop 5.5s ease-in-out calc(var(--i) * .5s) infinite backwards}
+.dim{position:absolute;inset:0;background:rgba(0,0,0,.42);opacity:0;transition:opacity .22s}
+.dim.on{opacity:1}
+.bs{position:absolute;left:8px;right:8px;bottom:8px;background:#fff;border-radius:24px;padding:10px 20px 12px;transform:translateY(calc(100% + 16px));transition:transform .32s cubic-bezier(.2,.8,.2,1);touch-action:none}
+.bs.on{transform:none}
+.bs.grab{transition:none}
+.bs.press{scale:.97;transition:scale .12s}
+.bs .hdl{width:40px;height:4px;border-radius:2px;background:#e5e8eb;margin:0 auto 18px}
+.bs.on>*{animation:fu .6s cubic-bezier(.22,.7,.25,1) backwards;will-change:transform,opacity}   /* 11-09 유성 = 원칙 §4.3-6 */
+.bs.on>*:nth-child(1){animation-delay:.06s}.bs.on>*:nth-child(2){animation-delay:.16s}.bs.on>*:nth-child(3){animation-delay:.26s}.bs.on>*:nth-child(4){animation-delay:.36s}.bs.on>*:nth-child(5){animation-delay:.46s}.bs.on>*:nth-child(6){animation-delay:.56s}
+.bs h4{font-size:22px;line-height:1.36;font-weight:700;letter-spacing:-.4px;margin:0}
+.bs .bsub{font-size:15px;color:#6b7684;margin:6px 0 16px}
+.rcpt{background:#f9fafb;border-radius:14px;padding:6px 16px}
+.rcpt div{display:flex;justify-content:space-between;align-items:center;min-height:42px;font-size:15px;color:#4e5968}
+.rcpt div+div{border-top:1px solid #eef0f2}
+.rcpt b{font-size:18px;font-weight:600;color:#191f28;font-variant-numeric:tabular-nums}
+.rcpt span.v{font-variant-numeric:tabular-nums;color:#333d4b;font-weight:500}
+/* 금액 하이라이트 = 11-09 유성 캡처 실측(글자 잉크 높이 기준 윗변 41.7%, 아랫변 잉크 아래 8.3%). 금액 18px 600: 윗변 12.65, 아랫변 상자 아래에서 7.2, 양옆 -1/-.4, 모서리 2. 값 = 정본 green200 */
+.rcpt b.hl{position:relative;isolation:isolate}
+.rcpt b.hl::before{content:"";position:absolute;left:-1px;right:-.4px;top:12.65px;bottom:7.2px;z-index:-1;border-radius:2px;background:#d5efde}
+.bs.on .rcpt b.hl::before{animation:hlDraw .5s cubic-bezier(.22,.7,.25,1) 1.2s backwards}   /* 11-09 유성 「다 켜지고 나서」: 마지막 칸 .56 + .6 = 1.16초 뒤 */
+.bs .btns{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.ldr{position:absolute;inset:0;z-index:6;background:rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .18s}
+.ldr.on{opacity:1}
+.ldr .lc{display:flex;flex-direction:column;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:20px 26px;box-shadow:0 2px 6px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.10)}
+.ldr .spn{width:32px;height:32px;border-radius:50%;border:3px solid #e9f8ee;border-top-color:#3a8a5f;animation:spin .8s linear infinite}
+.ldr p{font:500 15px 'Pretendard Variable',Pretendard,system-ui,sans-serif;color:#333d4b;margin:0}
+.dn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 22px 28px;text-align:center}
+.fls{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:330px}
+.fl{border:0;padding:0;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.09);cursor:zoom-in;aspect-ratio:1264/1772;display:block;transition:transform .12s}
+.fl:active{transform:scale(.96)}
+.fl img{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none}
+.ty{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 8px}
+.fls+.ty{margin-top:28px}
+/* 11-09 유성: 오감쑥쑥 말고는 체크를 글 옆이 아니라 위에 크게(09, 22 완료 화면 .done-icon 80px) */
+.dn.big .ty{flex-direction:column;gap:20px;margin-bottom:10px}
+.dn.big .oka{width:80px;height:80px}
+.ty h3{font-size:21px;line-height:1.4;font-weight:700;letter-spacing:-.4px;margin:0}
+.oka{width:24px;height:24px;flex:0 0 auto;overflow:visible}
+.oka circle{fill:#3a8a5f;transform-box:fill-box;transform-origin:center;animation:pop .34s cubic-bezier(.34,1.56,.64,1) .15s backwards}
+.oka path{fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:16;animation:okDraw .28s ease .4s backwards}
+@keyframes okDraw{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
+.dd{font-size:15.5px;line-height:1.62;color:#4e5968;margin:0}
+.mv{margin-top:14px;display:inline-flex;align-items:center;gap:2px;border:0;background:none;color:#166841;font:600 15px 'Pretendard Variable',Pretendard,system-ui,sans-serif;min-height:44px;padding:0 8px;cursor:pointer;border-radius:10px;transition:transform .12s;text-decoration:none}
+.mv:active,.mv.press{transform:scale(.93)}
+.mv svg{width:17px;height:17px}
+.zm{position:absolute;inset:0;background:rgba(10,12,14,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;animation:fd .2s ease}
+.zm img{width:86%;max-width:330px;border-radius:8px;display:block}
+.zm .zx{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.zm .zx svg{width:24px;height:24px}
+.zm .zn{display:flex;gap:8px}
+.zm .zn button{border:0;border-radius:999px;min-height:44px;padding:0 18px;font:600 14px 'Pretendard Variable',Pretendard,system-ui,sans-serif;background:rgba(255,255,255,.14);color:#F9FBFA;cursor:pointer}
+.zm .zn button.on{background:#F9FBFA;color:#191f28}
+
+/* ===== 7차 더한 것 ===== */
+/* 지금 칸으로 들어오는 점선 = 위에서부터 초록으로 차오름, 반복 (유성 11-07). 점 굵기 = 옆 실선과 같은 2px */
+.ln.dl{top:27px;bottom:1px;left:11px;width:2px;background:none;overflow:visible;display:flex;flex-direction:column;justify-content:space-between;align-items:center}
+.ln.dl b{display:block;width:2px;height:2px;border-radius:50%;background:#d1d6db;animation:dotGo 1.6s ease-in-out calc(var(--d0,0s) + var(--k) * .18s) infinite}
+.ln.dl.pre b{animation:none}
+@keyframes dotGo{0%{background:#d1d6db}18%,60%{background:#3a8a5f}80%,100%{background:#d1d6db}}
+/* 가운데 모달 = docs/1 §4.4, 07 종료 안내 .cmodal 실코드(라운드 §4.4 값 20) */
+.cmodal{position:absolute;left:50%;top:50%;width:calc(100% - 84px);max-width:320px;background:#fff;border-radius:20px;padding:24px 22px 18px;text-align:left;opacity:0;transform:translate(-50%,-46%) scale(.96);transition:opacity .2s,transform .2s}
+.cmodal.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.cmodal h3{font-size:17px;font-weight:700;line-height:1.45;margin:0 0 8px}
+.cmodal p{font-size:14px;line-height:1.5;color:#6b7684;margin:0 0 16px}
+.cmodal .row2{display:flex;gap:8px}
+.cm-btn{position:relative;overflow:hidden;flex:1;min-height:44px;padding:13px 6px;border:0;border-radius:14px;font:700 15px 'Pretendard Variable',Pretendard,system-ui,sans-serif;background:#f2f4f6;color:#4e5968;cursor:pointer;white-space:nowrap}
+.cm-btn:active{background:#e5e8eb}
+.cm-btn.primary{background:#3a8a5f;color:#fff}
+.cm-btn.primary:active{background:#166841}
+/* 4번 가로 칸: 신청 → 바우처 결과 = 점선(점 13개, 2px = 오른쪽 회색 실선 굵기), 왼쪽부터 초록, 반복 */
+.tln.half{left:50%}
+.tdl{position:absolute;left:calc(16.667% + 14px);right:calc(50% + 14px);top:9px;height:2px;display:flex;justify-content:space-between;align-items:center}
+.tdl b{display:block;width:2px;height:2px;border-radius:50%;background:#d1d6db;animation:dotGo 1.6s ease-in-out calc(var(--d0,0s) + var(--k) * .03s) infinite}
+.tdl.pre b{animation:none}
+
+/* ===== 8차: 등급 화면 = 나(여섯째 줄) + 글 1 (11-09 유성) ===== */
+.d-b .lst{gap:6px;padding-top:12px}
+.d-b .row{min-height:54px}
+.row.unk{background:#efede7;box-shadow:none}
+.row.unk .gl b{display:block;font-size:16px;font-weight:600;color:#333d4b;line-height:1.3}
+.row.unk .gl em{display:block;font-style:normal;font-size:12.5px;font-weight:400;color:#6b7684;line-height:1.3;margin-top:1px}
+.d-b .ft{align-items:center;padding-top:8px}
+.pill{display:inline-flex;align-items:center;gap:4px;min-height:44px;padding:0 18px 0 12px;border:0;border-radius:22px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.03);color:#4e5968;font:600 14.5px 'Pretendard Variable',Pretendard,system-ui,sans-serif;cursor:pointer;transition:transform .08s}
+.pill:active,.pill.press{transform:scale(.96)}
+.pill svg{width:17px;height:17px}
+
+/* ===== 이 페이지에서 더한 것 ===== */
+/* 불러오는 동안 = 올 화면과 같은 자리의 뼈대(§5.4, 훑기 하나) */
+.sk{pointer-events:none}
+.skb{display:block;background-color:#e5e8eb;border-radius:6px;background-image:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.7),rgba(255,255,255,0));background-size:60% 100%;background-repeat:no-repeat;animation:sksh 1.5s ease-in-out infinite}
+@keyframes sksh{0%{background-position:-150% 0}70%,100%{background-position:250% 0}}
+.sk .row,.sk .r3{cursor:default}
+/* 링크가 맞지 않을 때 = /continue .bad 그대로 */
+.bad{display:none;position:absolute;inset:0;flex-direction:column;justify-content:center;padding:24px;text-align:center;font-family:'Pretendard Variable',Pretendard,system-ui,sans-serif}
+.bad h2{font-size:21px;font-weight:700;letter-spacing:-.5px;line-height:1.4;margin:0 0 8px}
+.bad p{font-size:16px;color:#4e5968;line-height:1.6;margin:0}
+#app.isbad .pg,#app.isbad .ov{display:none}
+#app.isbad .bad{display:flex}
+@media (prefers-reduced-motion:reduce){.scrn *,.scrn,.ov *,.ov *::after,.ov *::before{animation:none!important;transition:none!important}}
+/* PC = 폰 목업(docs/1 §3.8, /continue와 같은 값) */
+.outdim{display:none}
+@media (min-width:480px) and (hover:hover) and (pointer:fine){
+  html,body{background:#e5e8eb}
+  body{padding-top:19px}
+  .outdim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.42);opacity:0;pointer-events:none;transition:opacity .25s}
+  .outdim.on{opacity:1}
+  #app{max-width:min(430px,calc(100% - 38px));height:100%;border-radius:40px 40px 0 0;box-shadow:0 8px 20px rgba(25,31,40,.15);transform:translateZ(0)}
+}
+</style></head>
+<body>
+<div class="outdim" id="outdim"></div>
+<div id="app">
+  <div class="pg" id="pg"></div>
+  <div class="ov" id="ov"></div>
+  <div class="bad" id="bad"><h2>링크가 맞지 않아요</h2><p>받으신 링크를 다시 눌러 주세요.</p></div>
+</div>
+<script>
+(function () {
+  'use strict';
+  var GAS06 = 'https://script.google.com/macros/s/AKfycbyDLm7VCcRNmPrK08waOFx3JHt9lvxP22coImDfK9xfWNheiS11My2xcJJrqrE6GVRPSw/exec';
+  var KEY = (location.search.match(/[?&]k=([A-Za-z0-9_-]{16,40})(?:&|$)/) || [])[1] || '';
+  var A = (location.search.match(/[?&]a=(yes|no)(?:&|$)/) || [])[1] || '';   // yes = 「선정됐어요 →」, no = 「선정되지 못했어요」, 없음 = 대체문자
+  var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── 정한 글. ⚠️바꿀 땐 프리뷰(7차, 8차)와 같이
+  // 5번 제목: 서버가 again === false(처음 포함 3번째라 더 여쭙지 않음)를 주면 「다시 여쭤볼게요」가 거짓이 되므로 아래 제목
+  var WAIT_T = '결과가 나올 때쯤<br>다시 여쭤볼게요';
+  var WAIT_T_LAST = '결과를 기다리고<br>있을게요';
+  var NOTYET_LAST = '결과를 받으시면 여기서 알려주세요';   // 4번 셋째 줄 아래 글, again === false 때(옛 「결과가 나올 때쯤 다시 여쭤볼게요」)
+  var WAIT_SUB = '이제 창을 닫아도 돼요.';            // 11-09 원칙과 다른 곳 8번 = 원칙대로(옛 판 「지금은 하실 일이 없어요.」)
+  // 선생님이 이미 정해진 아이가 「선정되지 못했어요」(sel_no → st 'check') = 5번과 같은 머리, 칸 없음
+  var CHECK_T = '확인하고<br>연락드릴게요';
+  var CHECK_SUB = '이제 창을 닫아도 돼요.';
+  // 보내다 실패(다시 시도까지) = 사전계획 6판 「인터넷이 끊김」 화면 글
+  var FAIL_T = '아직 전해지지 않았어요';
+  var FAIL_SUB = '인터넷 연결을 확인하고 다시 보내주세요.';
+  var FAIL_BTN = '다시 보내기';
+  // 처음 불러오기 실패 = kr js/form-wait.js 「다시 불러오기」 카드 글
+  var LFAIL_T = '아직 못 불러왔어요';
+  var LFAIL_SUB = '와이파이나 데이터를 확인하고 다시 불러와 주세요';
+  var LFAIL_BTN = '다시 불러오기';
+  var THANKS = '적어주신 시간에 맞는 선생님을 찾아볼게요.<br>가능한 선생님이 생기면 연락드려요.';
+
+  var BADGE = { '오감': '오감쑥쑥', '아청심': '아동청소년심리', '성인': '성인심리', '정신토탈': '정신토탈' };
+  // 등급표 = 8차 「서비스별 등급표」. 금액 = 2026 단가(11월 고시로 바뀌면 여기도 — 부모 레포 단가 미러 목록에 이 파일)
+  // 오감 = 월 본인부담금, 아청심 = 월 정부지원금(본인부담금이 선생님마다 달라 통지서와 안 맞음), 성인 = 2줄, 정신토탈 = 묻지 않음(표 없음)
+  var GRADES = {
+    '오감': { head: '월 본인부담금', amt: { 1: 26000, 2: 39000, 3: 52000, 4: 65000, 5: 104000 }, gov: { 1: 104000, 2: 91000, 3: 78000, 4: 65000, 5: 26000 } },
+    '아청심': { head: '월 정부지원금', amt: { 1: 162000, 2: 144000, 3: 126000, 4: 108000, 5: 36000 } },
+    '성인': { head: '월 본인부담금', amt: { 1: 20000, 2: 40000 }, gov: { 1: 180000, 2: 160000 } }
+  };
+  var IMG = { L: '/selected/flyer-front.jpg', R: '/selected/flyer-back.jpg' };
+
+  var app = document.getElementById('app'), pg = document.getElementById('pg'), ov = document.getElementById('ov'), outdim = document.getElementById('outdim');
+  var S = { step: 'loading', g: '', timers: [], busy: false, req: false, info: {}, pending: null, hasEntry: false };
+  var hLayer = false, skipPop = 0;
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function won(n) { return Number(n).toLocaleString('ko-KR') + '원'; }
+  function noGrade() { return !GRADES[S.info.svc]; }   // 정신토탈(과 모르는 서비스) = 등급을 묻지 않는다
+  function WHO() {
+    var i = S.info;
+    if (!i.svc) return '<div class="who"></div>';
+    return '<div class="who"><span class="bdg">' + esc(BADGE[i.svc] || i.svc) + '</span><span>' + esc(i.who ? i.who + ' 보호자님' : '보호자님') + '</span></div>';
+  }
+
+  var SV = {
+    okA: '<svg class="oka" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12"/><path d="M7 12.4l3.3 3.2L17 8.9"/></svg>',
+    ck: '<svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.3 4.2L19 7.5"/></svg>',
+    ds: '<svg class="ds" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10"/></svg>',
+    chev: '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
+    arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="#F9FBFA" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    pick: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>'
+  };
+  // 4번 화면 줄 그림 ② (48 격자 — 7차와 같음)
+  function PAPER(fill, line) { return '<g transform="rotate(-7 21 22)"><rect x="8" y="5" width="27" height="33" rx="4.5" fill="' + fill + '"/><rect x="13" y="12" width="13" height="3" rx="1.5" fill="' + line + '"/><rect x="13" y="18.5" width="17" height="3" rx="1.5" fill="' + line + '"/><rect x="13" y="25" width="10" height="3" rx="1.5" fill="' + line + '"/></g>'; }
+  function BADGEC(fill, inner) { return '<circle cx="34.5" cy="34.5" r="11.5" fill="#fff"/><circle cx="34.5" cy="34.5" r="9.5" fill="' + fill + '"/>' + inner; }
+  var ILL = {
+    ok: '<svg viewBox="0 0 48 48" aria-hidden="true">' + PAPER('#d6efe0', '#93cba9') + BADGEC('#3a8a5f', '<path d="M30.2 34.6l3 2.9 5.6-5.9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>') + '</svg>',
+    blocks: '<svg viewBox="0 0 48 48" aria-hidden="true">' +
+      '<rect x="5" y="26" width="18" height="18" rx="4" fill="#f2bf4b"/><rect x="8.5" y="29.5" width="7" height="2.6" rx="1.3" fill="#fff" fill-opacity=".55"/>' +
+      '<rect x="25" y="26" width="18" height="18" rx="4" fill="#ee9476"/><rect x="28.5" y="29.5" width="7" height="2.6" rx="1.3" fill="#fff" fill-opacity=".55"/>' +
+      '<g transform="rotate(10 24 15.5)"><rect x="15" y="6.5" width="18" height="18" rx="4" fill="#5fb585"/><rect x="18.5" y="10" width="7" height="2.6" rx="1.3" fill="#fff" fill-opacity=".55"/></g></svg>',
+    wait: '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="4" y="10" width="32" height="24" rx="4" fill="#d9e2ec"/><path d="M6.8 12.8L20 23.6l13.2-10.8" fill="none" stroke="#a4b4c5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<circle cx="34.5" cy="34.5" r="11.5" fill="#fff"/><circle cx="34.5" cy="34.5" r="9.2" fill="#fff" stroke="#8b95a1" stroke-width="2.2"/><path d="M34.5 29.6v5l3.2 2.2" fill="none" stroke="#6b7684" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  };
+
+  // ── 칸 = [상태, 이름] (sd 지남 / nt 지남(회색) / cur 지금 / td 아직). 꼬리표, 칸 아래 글 없음 (11-07 유성 6차 뒤)
+  var BASE = {
+    no: { eb: '알려주셔서 감사해요', t: '바우처 없이도<br>신청할 수 있어요',
+      steps: [['sd', '신청서를 냈어요'], ['nt', '결과를 받았어요'], ['cur', '바우처 없이 신청해요'], ['td', '선생님 연락을 받아요'], ['td', '첫 수업을 시작해요']] },
+    choice: { t: '바우처 결과를<br>다시 골라주세요',
+      rows: [['yes', '선정됐어요', '등급만 알려주시면 돼요', 'ok'], ['no', '선정되지 못했어요', '바우처 없는 수업을 알려드려요', 'blocks'], ['notyet', '아직 결과를 받지 못했어요', '결과가 나올 때쯤 다시 여쭤볼게요', 'wait']] },
+    wait: { t: WAIT_T, sub: WAIT_SUB,
+      steps: [['sd', '신청서를 냈어요'], ['cur', '결과를 기다려요'], ['td', '선생님 연락을 받아요'], ['td', '첫 수업을 시작해요']] }
+  };
+  var TRKL = ['신청', '바우처 결과', '선생님 찾기'];
+  // 화면마다 모션 (11-07 유성: 3번 = 3, 5번 = 1 / 4번, 등급 = 3)
+  var MOT = { loading: '0', no: '3', choice: '3', wait: '1', grade: '3', done: '3', nv: '3', check: '1', fail: '1', lfail: '1' };
+  var STEPS = { no: 1, choice: 1, wait: 1, grade: 1, done: 1, nv: 1, check: 1, fail: 1, lfail: 1 };
+
+  function headHTML(eb, t, sub) {
+    return '<div class="hd b1">' + (eb ? '<div class="who"><span class="eb3">' + eb + '</span></div>' : WHO()) + '<h3 class="q">' + t + '</h3>' + (sub ? '<p class="qs">' + sub + '</p>' : '') + '</div>';
+  }
+  function build(step) {
+    if (step === 'loading') return skelHTML();
+    if (step === 'grade') return gradeHTML();
+    if (step === 'done') return END('');
+    if (step === 'nv') return END(' nv');
+    if (step === 'check') return headHTML('', CHECK_T, CHECK_SUB);
+    if (step === 'fail') return headHTML('', FAIL_T, FAIL_SUB) + '<div class="ft b3"><button type="button" class="cta" data-act="retry">' + FAIL_BTN + '</button></div>';
+    if (step === 'lfail') return headHTML('', LFAIL_T, LFAIL_SUB) + '<div class="ft b3"><button type="button" class="cta" data-act="reload">' + LFAIL_BTN + '</button></div>';
+    var c = BASE[step], p3 = MOT[step] === '3' && !RM;
+    var t = step === 'wait' && S.info.again === false ? WAIT_T_LAST : c.t;
+    var head = headHTML(c.eb, t, c.sub);
+    if (step === 'no') return head + stepCard(c.steps, p3, 0, 0.18) +
+      '<div class="ft b3"><button type="button" class="cta" data-act="nvsheet">바우처 없이 신청하기</button><button type="button" class="qlink" data-act="redo">결과 다시 고르기</button></div>';
+    if (step === 'wait') return head + stepCard(c.steps, !RM, 0, 0.32) +
+      '<div class="ft b3"><button type="button" class="qlink" data-act="redo">결과 다시 고르기</button></div>';
+    // choice
+    return head + trk(p3) + '<div class="lst3 b3">' + c.rows.map(function (r, i) {
+      // 세 번째 알림을 받은 집(again === false)엔 더 안 여쭙는다 = 「다시 여쭤볼게요」가 거짓이 되므로 바꿈
+      var em = r[0] === 'notyet' && S.info.again === false ? NOTYET_LAST : r[2];
+      return '<button type="button" class="r3" style="--id:' + (0.18 + 0.1 * i).toFixed(2) + 's" data-act="pick" data-v="' + r[0] + '"><span class="t"><b>' + r[1] + '</b><em>' + em + '</em></span><i class="ill">' + ILL[r[3]] + '</i></button>';
+    }).join('') + '</div>';
+  }
+  // 세로 칸. 지금 칸으로 들어오는 선 = 점선(점 3개, 위에서부터 초록, 반복). tb = 첫 글자가 나오는 때(초), 글자는 .1초 간격, 마지막 글자 뒤 동그라미 차례(T0)
+  function stepCard(list, p3, d0, tb) {
+    var ci = -1; list.forEach(function (x, i) { if (ci < 0 && x[0] === 'cur') ci = i; });
+    var viaNt = ci > 0 && list[ci - 1][0] === 'nt';
+    var T0 = Math.round((tb + 0.1 * (list.length - 1) + 0.32) * 1000) + 40;
+    var A2 = viaNt ? { n: T0, l: T0, c: T0 + 300 } : { l: T0, c: T0 + 250 };
+    var h = '<div class="card tl b2">';
+    list.forEach(function (x, i) {
+      var cls = x[0], b = x[1], nx = list[i + 1];
+      var stc = 'st ' + cls, at = '';
+      if (p3 && viaNt && i === ci - 1) { stc += ' pre'; at = ' data-at="' + A2.n + '" data-chg="1"'; }
+      if (p3 && i === ci) { stc += ' pre'; at = ' data-at="' + A2.c + '" data-arr="1"'; }
+      var ln = '';
+      if (nx && i === ci - 1) {
+        ln = '<i class="ln dl' + (p3 ? ' pre" data-at="' + A2.l : '') + '" style="--d0:' + d0 + 's"><b style="--k:0"></b><b style="--k:1"></b><b style="--k:2"></b></i>';
+      } else if (nx) {
+        ln = '<i class="ln"><i class="lf' + (nx[0] !== 'td' ? '' : ' off') + '"></i></i>';
+      }
+      h += '<div class="' + stc + '"' + at + ' style="--td:' + (tb + 0.1 * i).toFixed(2) + 's"><span class="nd"><i class="dot"></i>' + SV.ck + SV.ds + '</span><div class="tx"><b>' + b + '</b></div>' + ln + '</div>';
+    });
+    return h + '</div>';
+  }
+  // 가로 칸: 신청 → 지금 칸(바우처 결과) = 점선 반복, 지금 칸 → 선생님 찾기 = 회색 실선
+  function trk(p3) {
+    var dots = ''; for (var k = 0; k < 13; k++) dots += '<b style="--k:' + k + '"></b>';
+    return '<div class="trk b2"><i class="tln half"></i><i class="tdl' + (p3 ? ' pre" data-at="400' : '') + '">' + dots + '</i>' +
+      '<div class="tn sd"><i>' + SV.ck + '</i>' + TRKL[0] + '</div>' +
+      '<div class="tn cur' + (p3 ? ' pre' : '') + '"' + (p3 ? ' data-at="650" data-arr="1"' : '') + '><i><b></b></i>' + TRKL[1] + '</div>' +
+      '<div class="tn"><i></i>' + TRKL[2] + '</div></div>';
+  }
+  // 등급 화면 = 8차 나 + 글 1(정한 판): 여섯째 줄 「아직 몰라요」 → 가운데 모달, 아래 알약 「선정 문자를 못 받았어요」 → 4번
+  function gradeHTML() {
+    var T = GRADES[S.info.svc], gs = Object.keys(T.amt);
+    return '<div class="hd">' + WHO() + '<h3 class="q">몇 등급으로<br>선정되셨나요?</h3><p class="qs">선정 문자 또는 통지서를 확인해주세요.</p></div>' +
+      '<div class="lst"' + (RM ? '' : ' data-at="450" data-wave="1"') + '><div class="lh"><span>등급</span><span>' + T.head + '</span></div>' +
+      gs.map(function (g, i) { return '<button type="button" class="row" style="--i:' + i + '" data-act="open" data-g="' + g + '"><span class="gl">' + g + '등급</span><span class="am3">' + won(T.amt[g]) + '</span>' + SV.chev + '</button>'; }).join('') +
+      '<button type="button" class="row unk" style="--i:' + gs.length + '" data-act="gate"><span class="gl"><b>아직 몰라요</b><em>선정 문자에 등급이 적혀있지 않아요</em></span>' + SV.chev + '</button></div>' +
+      '<div class="ft"><button type="button" class="pill" data-act="back">' + SV.back + '선정 문자를 못 받았어요</button></div>';
+  }
+  // 알려준 뒤: 오감쑥쑥 = 홍보지 + 작은 체크 + 활동사진 / 그 밖 = 큰 체크만 (유성 11-09)
+  function END(cls) {
+    var og = S.info.svc === '오감';
+    var fls = og ? '<div class="fls in1"><button type="button" class="fl" data-act="zoom" data-p="L" aria-label="홍보지 앞면 크게 보기"><img src="' + IMG.L + '" alt="" draggable="false" decoding="async"></button><button type="button" class="fl" data-act="zoom" data-p="R" aria-label="홍보지 뒷면 크게 보기"><img src="' + IMG.R + '" alt="" draggable="false" decoding="async"></button></div>' : '';
+    return '<div class="dn' + cls + (og ? '' : ' big') + '">' + fls + '<div class="ty">' + SV.okA + '<h3 class="in3">알려주셔서 감사해요!</h3></div><p class="dd in3">' + THANKS + '</p>' +
+      (og ? '<a class="mv in4" href="/activities" data-act="more">활동사진 보러가기' + SV.arrow + '</a>' : '') + '</div>';
+  }
+  // 불러오는 동안 뼈대 = 올 화면(a)의 머리와 몸 자리
+  function skelHTML() {
+    function bar(w, h, r, m) { return '<i class="skb" style="width:' + w + ';height:' + h + 'px' + (r ? ';border-radius:' + r : '') + (m ? ';margin:' + m : '') + '"></i>'; }
+    var h = '<div class="hd"><div class="who">' + bar('78px', 24.75, '999px') + bar('96px', 14) + '</div>' + bar('62%', 26, '', '3px 0 0') + bar('44%', 26, '', '6.6px 0 0') + (A === 'yes' ? bar('72%', 15, '', '15px 0 4px') : '') + '</div>';
+    if (A === 'yes') { h += '<div class="lst"><div class="lh" style="height:20.6px"></div>'; for (var i = 0; i < 6; i++) h += '<div class="row"></div>'; h += '</div>'; }
+    else if (A === 'no') h += '<div class="card tl" style="height:234px"></div>';
+    else { h += '<div class="trk" style="height:45px"></div><div class="lst3">'; for (var j = 0; j < 3; j++) h += '<div class="r3"></div>'; h += '</div>'; }
+    return h;
+  }
+
+  // ── 그리기. dir = none(제자리) | fwd(앞으로) | back(되돌아감). 넘김은 들어오는 화면의 모션대로(3 = 밀림, 1 = 바로)
+  function render(dir) {
+    S.timers.forEach(clearTimeout); S.timers = []; S.busy = false;
+    app.classList.remove('isbad');
+    pg.querySelectorAll('.scrn.leaving').forEach(function (x) { x.remove(); });
+    var old = pg.querySelector('.scrn');
+    var sc = document.createElement('div');
+    var m = MOT[S.step] || '3';
+    sc.className = 'scrn m' + m + (S.step === 'grade' || (S.step === 'loading' && A === 'yes') ? ' d-b' : '') + (S.step === 'loading' ? ' sk' : '');
+    var slide = m === '3' && dir && dir !== 'none' && !RM && old && !old.classList.contains('sk');
+    if (slide) sc.classList.add(dir === 'back' ? 'in-l' : 'in-r');
+    sc.innerHTML = build(S.step);
+    pg.appendChild(sc);
+    if (old) {
+      if (slide) { old.classList.add('leaving', dir === 'back' ? 'out-r' : 'out-l'); S.timers.push(setTimeout(function () { old.remove(); }, 420)); }
+      else old.remove();
+    }
+    closeOv(true);
+    var base = slide ? 380 : 0;
+    sc.querySelectorAll('[data-at]').forEach(function (el) {
+      S.timers.push(setTimeout(function () {
+        el.classList.remove('pre');
+        if (el.dataset.chg) el.classList.add('chg');
+        if (el.dataset.arr) el.classList.add('arr');
+        if (el.dataset.wave && !ov.classList.contains('live')) el.classList.add('wave');
+      }, base + +el.dataset.at));
+    });
+  }
+  function curScrn() { return pg.querySelector('.scrn:not(.leaving)'); }
+  function hold(el, fn) { el.classList.add('press'); S.timers.push(setTimeout(function () { el.classList.remove('press'); fn(); }, 170)); }
+  function waveOff() { pg.querySelectorAll('.lst.wave').forEach(function (x) { x.classList.remove('wave'); }); }
+  function odSync() { outdim.classList.toggle('on', !!ov.querySelector('.dim.on, .zm')); }
+
+  // ── 뒤로(docs/1 §4.11): 창, 모달, 크게 보기 = 히스토리 1칸(뒤로 = 그것만 닫음) / 화면 넘김 = 1칸(뒤로 = 앞 화면)
+  function layerIn() { if (hLayer) return; try { history.pushState({ tf: 'layer' }, ''); hLayer = true; } catch (_) {} }
+  function layerDrop() { if (!hLayer) return; hLayer = false; skipPop++; try { history.back(); } catch (_) { skipPop--; } }
+  function nav(step, dir) {
+    var st = { tf: 'scr', step: step };
+    try {
+      // 창 위에서 넘어가면 그 창 칸을 새 화면 칸으로 바꾼다(뒤로 + 넣기를 잇달아 하면 순서가 꼬인다)
+      if (hLayer || !S.hasEntry || S.step === 'fail' || S.step === 'lfail' || S.step === 'loading') history.replaceState(st, '');
+      else history.pushState(st, '');
+    } catch (_) {}
+    hLayer = false; S.hasEntry = true;
+    S.step = step; render(dir);
+  }
+  window.addEventListener('popstate', function (e) {
+    if (skipPop > 0) { skipPop--; return; }
+    if (hLayer) { hLayer = false; if (!S.req) closeOv(); return; }
+    if (S.req) return;   // 보내는 중 = 결과가 화면을 정한다
+    var st = e.state;
+    if (!st || st.tf !== 'scr' || !STEPS[st.step]) return;
+    var step = st.step;
+    if (step === 'fail' && !S.pending) step = 'choice';
+    if (step === 'grade' && noGrade()) step = 'choice';
+    S.step = step; render('back');
+  });
+
+  // ── 창, 모달, 로더
+  function liftSheet() {
+    ov.classList.add('live'); layerIn();
+    requestAnimationFrame(function () { requestAnimationFrame(function () { ov.querySelector('.dim').classList.add('on'); ov.querySelector('.bs,.cmodal').classList.add('on'); odSync(); }); });
+  }
+  function openSheet(g) {
+    waveOff();
+    S.g = String(g);
+    var T = GRADES[S.info.svc];
+    var rows = '<div><span>' + T.head + '</span><b class="hl">' + won(T.amt[g]) + '</b></div>' + (T.gov ? '<div><span>월 정부지원금</span><span class="v">' + won(T.gov[g]) + '</span></div>' : '');
+    ov.innerHTML = '<div class="dim" data-act="close"></div><div class="bs" role="dialog" aria-modal="true" aria-label="등급 확인"><div class="hdl"></div>' + WHO() + '<h4>' + g + '등급이 맞을까요?</h4><p class="bsub">통지서의 금액과 같은지 확인해주세요.</p><div class="rcpt">' + rows + '</div><div class="btns"><button type="button" class="cta" data-act="submit">' + g + '등급으로 알려주기</button><button type="button" class="weak" data-act="close">다시 고르기</button></div></div>';
+    liftSheet();
+  }
+  // 「아직 몰라요」 → 가운데 모달(§4.4) = 게이트. 「아니요」 = 5번, 「네, 받았어요」 = 바로 신청된 걸로(등급 모름, 유성 11-09)
+  function openGate() {
+    waveOff();
+    ov.innerHTML = '<div class="dim" data-act="close"></div><div class="cmodal" role="alertdialog" aria-modal="true" aria-label="선정 문자 확인"><h3>선정 문자는 받으셨나요?</h3><p>등급은 계약할 때 확인해 드릴게요 ☺️</p><div class="row2"><button type="button" class="cm-btn" data-act="gateNo">아니요</button><button type="button" class="cm-btn primary" data-act="gateYes">네, 받았어요</button></div></div>';
+    liftSheet();
+  }
+  function openNvSheet() {
+    ov.innerHTML = '<div class="dim" data-act="close"></div><div class="bs" role="dialog" aria-modal="true" aria-label="바우처 없이 신청"><div class="hdl"></div><h4>선생님 일정부터<br>알아볼까요?</h4><div class="btns"><button type="button" class="cta" data-act="nvok">네, 알아봐주세요</button><button type="button" class="nob" data-act="close">조금 더 생각해 볼게요</button></div></div>';
+    liftSheet();
+  }
+  function zoom(p) {
+    ov.innerHTML = '<div class="zm"><button type="button" class="zx" data-act="close" aria-label="닫기">' + SV.x + '</button><img src="' + IMG[p] + '" alt="홍보지 ' + (p === 'L' ? '앞면' : '뒷면') + '" draggable="false"><div class="zn"><button type="button" data-act="zoom" data-p="L" class="' + (p === 'L' ? 'on' : '') + '">앞면</button><button type="button" data-act="zoom" data-p="R" class="' + (p === 'R' ? 'on' : '') + '">뒷면</button></div></div>';
+    ov.classList.add('live'); layerIn(); odSync();
+  }
+  function closeOv(now) {
+    if (!ov.innerHTML) return;
+    if (now) { ov.innerHTML = ''; ov.classList.remove('live'); odSync(); return; }
+    if (S.step === 'grade' && !RM) { var l = curScrn() && curScrn().querySelector('.lst'); if (l) l.classList.add('wave'); }
+    var dim = ov.querySelector('.dim'), bs = ov.querySelector('.bs,.cmodal');
+    if (dim) dim.classList.remove('on');
+    if (bs) { bs.classList.remove('on', 'grab', 'press'); bs.style.transform = ''; }
+    if (ov.querySelector('.zm')) ov.innerHTML = '';
+    ov.classList.remove('live'); odSync();
+    setTimeout(function () { if (!ov.classList.contains('live')) ov.innerHTML = ''; }, 330);
+  }
+  function userClose() { if (S.req) return; closeOv(); layerDrop(); }
+  // 보내기 = 화면을 흐리고 그 위에 로더(§5.2 ①)
+  function loader() {
+    var l = document.createElement('div');
+    l.className = 'ldr'; l.innerHTML = '<div class="lc"><span class="spn"></span><p>잠시만 기다려 주세요</p></div>';
+    ov.appendChild(l); ov.classList.add('live');
+    requestAnimationFrame(function () { l.classList.add('on'); });
+  }
+
+  // ── 서버(06 웹앱). 읽기 3번, 쓰기 2번(서버 쓰기는 같은 값이면 그대로라 한 번 더 보내도 됨). busy, error = 다시
+  function call06(action, tries, extra) {
+    return new Promise(function (res, rej) {
+      var left = tries;
+      (function one() {
+        var ac = window.AbortController ? new AbortController() : null, t = ac ? setTimeout(function () { ac.abort(); }, 15000) : 0;
+        fetch(GAS06 + '?action=' + action + '&k=' + encodeURIComponent(KEY) + (extra || ''), { signal: ac ? ac.signal : undefined, cache: 'no-store' })
+          .then(function (r) { return r.text(); })
+          .then(function (tx) { clearTimeout(t); var j = JSON.parse(tx); if (!j || j.busy || j.error || j.bad) throw 0; res(j); })
+          .catch(function () { clearTimeout(t); if (--left > 0) setTimeout(one, 900); else rej(); });
+      })();
+    });
+  }
+  function setInfo(r) {
+    ['svc', 'who', 'st', 'g', 'again'].forEach(function (k) { if (r && r[k] !== undefined) S.info[k] = r[k]; });
+    if (S.info.svc === '오감' && !setInfo.pre) { setInfo.pre = 1; setTimeout(function () { [IMG.L, IMG.R].forEach(function (u) { var i = new Image(); i.src = u; }); }, 800); }
+  }
+  function showBad() { S.req = false; S.timers.forEach(clearTimeout); closeOv(true); pg.innerHTML = ''; app.classList.add('isbad'); }
+  var ACT = { yes: 'sel_yes', no: 'sel_no', wait: 'sel_wait', nov: 'sel_nov' };
+  // 「선정되지 못했어요」 = 서버 st로 갈림: check(선생님이 이미 정해짐), nov(이미 바우처 없이 신청 — 서버가 그대로 둠), 그 밖 3번
+  function noStep(r) { return r.st === 'check' ? 'check' : r.st === 'nov' ? 'nv' : 'no'; }
+  function resultStep(kind, r) { return kind === 'yes' ? 'done' : kind === 'nov' ? 'nv' : kind === 'wait' ? 'wait' : noStep(r); }
+  // 응답만 놓친 경우(작업은 됨)를 가르려고 실패 뒤 한 번 지금 상태를 묻는다
+  function landed(kind, g, r) {
+    var want = { yes: ['yes'], no: ['no', 'check', 'nov'], wait: ['wait'], nov: ['nov'] }[kind];
+    return want.indexOf(r.st) >= 0 && (kind !== 'yes' || String(r.g == null ? '' : r.g) === String(g));
+  }
+  function send(kind, g) {
+    if (S.req) return;
+    S.req = true; S.pending = { kind: kind, g: g == null ? '' : String(g) };
+    var p = S.pending;
+    waveOff(); loader();
+    function ok(r) {
+      S.req = false;
+      if (r.none) { showBad(); return; }
+      setInfo(r); S.pending = null;
+      nav(resultStep(kind, r), 'fwd');
+    }
+    function bad() { S.req = false; nav('fail', 'fwd'); }
+    call06(ACT[kind], 2, kind === 'yes' ? '&g=' + encodeURIComponent(p.g) : '').then(ok).catch(function () {
+      call06('sel_get', 1).then(function (r) {
+        if (r.none) { S.req = false; showBad(); return; }
+        if (landed(kind, p.g, r)) ok(r); else bad();
+      }).catch(bad);
+    });
+  }
+
+  // ── 처음: 열쇠 확인(sel_get). a=no = 누른 것을 바로 보냄(sel_no, 같이 보냄 — 기다림 한 번)
+  function boot() {
+    S.req = false; S.pending = null; S.step = 'loading'; render('none');
+    if (!KEY) { showBad(); return; }
+    var get = call06('sel_get', 3);
+    if (A === 'no') {
+      var w = call06('sel_no', 2).then(function (r) { return { r: r }; }, function () { return { r: null }; });
+      get.then(function (r) {
+        if (r.none) { showBad(); return; }
+        setInfo(r);
+        w.then(function (x) {
+          if (x.r && x.r.none) { showBad(); return; }
+          if (x.r) { setInfo(x.r); nav(noStep(x.r), 'none'); }
+          else { S.pending = { kind: 'no', g: '' }; nav('fail', 'none'); }
+        });
+      }).catch(function () { nav('lfail', 'none'); });
+      return;
+    }
+    get.then(function (r) {
+      if (r.none) { showBad(); return; }
+      setInfo(r);
+      if (A === 'yes') { if (noGrade()) send('yes', ''); else nav('grade', 'none'); }
+      else nav('choice', 'none');
+    }).catch(function () { nav('lfail', 'none'); });
+  }
+
+  // ── 누르기
+  // 4번 화면 줄 = 체크팝 후 0.6초(§4.9)
+  function pickRow(el) {
+    if (S.busy || S.req) return; S.busy = true;
+    var ck = document.createElement('span'); ck.className = 'card-chk'; ck.innerHTML = '<b>' + SV.pick + '</b>';
+    el.appendChild(ck);
+    requestAnimationFrame(function () { el.classList.add('confirming'); });
+    S.timers.push(setTimeout(function () {
+      S.busy = false;
+      var v = el.dataset.v;
+      if (v === 'yes') { if (noGrade()) send('yes', ''); else nav('grade', 'fwd'); }
+      else if (v === 'no') send('no');
+      else send('wait');
+    }, 600));
+  }
+  function act(a, el) {
+    if (S.req && a !== 'zoom') return;
+    if (a === 'pick') { pickRow(el); return; }
+    if (a === 'open') { hold(el, function () { openSheet(el.dataset.g); }); return; }
+    if (a === 'close') { userClose(); return; }
+    if (a === 'submit') { send('yes', S.g); return; }
+    if (a === 'nvsheet') { hold(el, openNvSheet); return; }
+    if (a === 'nvok') { send('nov'); return; }
+    if (a === 'gate') { hold(el, openGate); return; }
+    if (a === 'gateNo') { send('wait'); return; }
+    if (a === 'gateYes') { send('yes', 'u'); return; }
+    if (a === 'redo' || a === 'back') { hold(el, function () { nav('choice', 'back'); }); return; }
+    if (a === 'more') { var href = el.getAttribute('href'); hold(el, function () { location.href = href; }); return; }
+    if (a === 'zoom') { zoom(el.dataset.p); return; }
+    if (a === 'retry') { if (S.pending) send(S.pending.kind, S.pending.g); return; }
+    if (a === 'reload') { boot(); return; }
+  }
+  app.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-act]'); if (!el || !app.contains(el)) return;
+    if (el.tagName === 'A') e.preventDefault();
+    act(el.dataset.act, el);
+  });
+  // 초록 버튼 누름 = 누른 자리에서 퍼지는 어두움(§5.3)
+  function ripple(btn, e) {
+    if (!btn.querySelector(':scope>.bl')) { var bl = document.createElement('span'); bl.className = 'bl'; while (btn.firstChild) bl.appendChild(btn.firstChild); btn.appendChild(bl); }
+    var r = btn.getBoundingClientRect(), x = e.clientX - r.left;
+    var sp = document.createElement('span'); sp.className = 'rip'; sp.style.left = x + 'px';
+    sp.style.setProperty('--rs', Math.ceil(Math.hypot(Math.max(x, r.width - x), r.height / 2) / 15) + 1);
+    btn.appendChild(sp); requestAnimationFrame(function () { sp.classList.add('go'); });
+    function end() { sp.classList.add('fade'); setTimeout(function () { sp.remove(); }, 340); btn.removeEventListener('pointerup', end); btn.removeEventListener('pointerleave', end); }
+    btn.addEventListener('pointerup', end); btn.addEventListener('pointerleave', end);
+  }
+  app.addEventListener('pointerdown', function (e) { var b = e.target.closest('.cta,.cm-btn.primary'); if (b && !S.req) ripple(b, e); });
+  // 창 아래로 끌어 닫기(§4.3-5): 손잡이 줄과 빈 곳을 잡으면 따라 내려가고, 80px 넘게 내리면 닫힘
+  var dragY = null, dragDy = 0, dragEl = null;
+  ov.addEventListener('pointerdown', function (e) {
+    var bs = e.target.closest('.bs.on'); if (!bs || e.target.closest('button') || S.req) return;
+    dragEl = bs; dragY = e.clientY; dragDy = 0; bs.classList.add('grab', 'press');
+    try { bs.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  ov.addEventListener('pointermove', function (e) { if (dragY === null) return; dragDy = Math.max(0, e.clientY - dragY); dragEl.style.transform = 'translateY(' + dragDy + 'px)'; });
+  function dragEnd() {
+    if (dragY === null) return;
+    var bs = dragEl; dragY = null; bs.classList.remove('grab', 'press');
+    if (dragDy > 80) userClose(); else bs.style.transform = '';
+  }
+  ov.addEventListener('pointerup', dragEnd); ov.addEventListener('pointercancel', dragEnd);
+
+  boot();
+})();
+</script>
+</body></html>
