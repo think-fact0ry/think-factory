@@ -16,6 +16,8 @@
   11-10 리허설 뒤(유성): 누르면 결과 화면이 바로(서버는 뒤에서, 차례대로 — 나중에 누른 것이 이김), 완료 화면마다 「← 잘못 눌렀어요」,
   새로고침 = 그 화면 그대로(히스토리 칸 + 보내던 누름은 sessionStorage), 뼈대 = 올 화면 마크업 그대로(글자만 회색 막대),
   파도 굵기는 가변 글꼴을 받은 뒤에만(못 받으면 색만 — 기본 글꼴은 굵기가 몇 단계뿐이라 다닥다닥 튄다). 이 판부터는 이 파일이 정본(프리뷰 7차, 8차는 그 전 판).
+  11-10 2차(유성): 처음 뼈대 = 덩어리만, 끝 화면(done, nv) 「잘못 눌렀어요」 = 좌상단 ← + 글, 아래 = 사라지지 않는 토스트 「이제 창을 닫아도 돼요.」(체크 없음, 5번과 확인 화면은 부제 그대로),
+  처음 들어온 화면이 등급, 결과 고르기면 두 번 밀어야 나감(docs/1 §4.11-4 — 다른 화면에서 넘어온 등급, 「선정되지 못했어요」는 뒤로 = 앞 화면).
   방문 통계 없음(주소에 열쇠가 있어서). 공개 레포라 아이 이름 0 — 화면 이름은 서버가 가려서 준다(김하○).
   설계 = 부모 레포 prototype/06_선정소식_제출화면_7차_프리뷰.html(3, 4, 5번, 확인 창, 완료 화면) + 06_선정소식_제출화면_8차_등급화면_프리뷰.html(등급 화면 = 나 + 글 1,
   서비스별 등급표) + 06_선정소식_원칙과다른곳_프리뷰.html(11-09 정함 12칸). CSS 값은 프리뷰 그대로 — ⚠️디자인을 고칠 땐 그 프리뷰와 같이.
@@ -256,6 +258,23 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
 .pill:active,.pill.press{transform:scale(.96)}
 .pill svg{width:17px;height:17px}
 
+/* ===== 11-10 리허설 2차(유성): 끝 화면 「잘못 눌렀어요」 = 좌상단 ← + 글(아래 알약은 끝내는 버튼처럼 보였다), 아래 = 사라지지 않는 기본 토스트 「이제 창을 닫아도 돼요.」 ===== */
+:root{--toast-bg:#333d4b;--toast-fg:#F9FBFA;--toast-r:23px;--toast-ck:18px}   /* §3.1 정본 사본(docs/1 §5.5 — 정본을 바꾸면 --toast-로 grep해 같이) */
+/* ← = docs/1 §4.10 화살표, 자리 = §4.10-4(링크로 들어온 화면 — 고정 줄 없이 스크롤 칸 안, 위 4 왼쪽 12, 내리면 같이 올라감) */
+.bk{position:absolute;top:4px;left:12px;z-index:3;display:inline-flex;align-items:center;gap:4px;min-height:44px;padding:0 10px 0 4px;border:0;background:none;color:#4e5968;font:600 15px 'Pretendard Variable',Pretendard,system-ui,sans-serif;cursor:pointer;transition:transform .12s}
+.bk svg{width:24px;height:24px;flex:0 0 auto}
+.bk:active,.bk.press{transform:scale(.93)}
+.bk~.dn{padding-top:56px;padding-bottom:86px}   /* 위 = ← 줄 52 + 4, 아래 = 토스트 46 + 24 + 16 */
+/* 토스트 = docs/1 §5.5(진회색 알약, 14.5px 600, 여백 12px 19px, 그림자 없음). 체크 = 두 번 밀어 나가기 안내만(§4.11-4), 끝 화면 토스트는 글자만 */
+.tst{position:absolute;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));z-index:15;display:flex;align-items:center;gap:11px;width:max-content;max-width:calc(100% - 32px);background:var(--toast-bg);color:var(--toast-fg);font:600 14.5px/1.5 'Pretendard Variable',Pretendard,system-ui,sans-serif;border-radius:var(--toast-r);padding:12px 19px;white-space:pre-line;text-align:left;opacity:0;transform:translate(-50%,8px);pointer-events:none;transition:opacity .25s,transform .25s}
+.tst.on{opacity:1;transform:translate(-50%,0)}
+.tst.okk{padding-left:15px}
+.tst .tk{display:none;width:var(--toast-ck);height:var(--toast-ck);border-radius:50%;background:#3a8a5f;flex:none;align-items:center;justify-content:center}
+.tst.okk .tk{display:inline-flex}
+.tst .tk svg{width:11px;height:11px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+#app.isbad .tst{display:none}
+@media (prefers-reduced-motion:reduce){.tst{transition:none}}
+
 /* ===== 이 페이지에서 더한 것 ===== */
 /* 불러오는 동안 = 올 화면 마크업 그대로 그리고(자리가 뜬 화면과 같게 — 11-10 유성 「선정되지 못했어요 뼈대와 뜬 화면이 아예 달라」),
    보이는 건 덩어리만(11-10 유성 2차 「스켈레톤이 너무 과해. 흰색 박스 안에 텍스트당 스켈레톤이 들어가지 않아도돼. 나머지도 적당히」):
@@ -292,6 +311,7 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
   <div class="pg" id="pg"></div>
   <div class="ov" id="ov"></div>
   <div class="bad" id="bad"><h2>링크가 맞지 않아요</h2><p>받으신 링크를 다시 눌러 주세요.</p></div>
+  <div class="tst" id="tst" role="status" aria-live="polite"><span class="tk"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12.5 10 17 19 7.5"/></svg></span><span class="tm"></span></div>
 </div>
 <script>
 (function () {
@@ -320,7 +340,11 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
   var LFAIL_BTN = '다시 불러오기';
   var THANKS = '적어주신 시간에 맞는 선생님을 찾아볼게요.<br>가능한 선생님이 생기면 연락드려요.';
   // 11-10 리허설 뒤(유성)
-  var UNDO = '잘못 눌렀어요';                         // 완료 화면마다 아래 알약 = 앞 화면으로(「선정 문자를 못 받았어요」 알약과 같은 꼴, 보호자 말투)
+  var UNDO = '잘못 눌렀어요';                         // 완료 화면마다 = 앞 화면으로(보호자 말투). 끝 화면(done, nv) = 좌상단 ← + 글(11-10 2차 「완료 버튼으로 보여져」), 5번, 확인 화면 = 아래 알약 그대로
+  var CLOSE_OK = '이제 창을 닫아도 돼요.';             // 끝 화면(done, nv) 아래 = 사라지지 않는 기본 토스트, 체크 없음(11-10 2차). 5번, 확인 화면은 부제 그대로(「지금처럼 유지해」)
+  // 두 번 밀어 나가기(docs/1 §4.11-4) 안내 = 첫째 줄 그 화면에 남을 이유(07 /continue와 같은 꼴) + 둘째 줄 원칙 글 그대로
+  var EXIT = { grade: '등급만 알려주시면 돼요.', choice: '결과만 알려주시면 돼요.' };
+  var EXIT2 = '한 번 더 뒤로 가면 나가요.';
   var NO_SUB = '원하지 않으시면 창을 닫아도 돼요.';     // 3번 부제 = 바우처 없는 수업으로 미는 느낌을 덜어 줌
   var NV_BTN = '바우처 없이 이어가기';                 // 옛 「바우처 없이 신청하기」
 
@@ -354,6 +378,7 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
     chev: '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
     arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
+    arrL: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>',
     x: '<svg viewBox="0 0 24 24" fill="none" stroke="#F9FBFA" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     pick: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>'
   };
@@ -388,11 +413,12 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
     return '<div class="hd b1">' + (eb ? '<div class="who"><span class="eb3">' + eb + '</span></div>' : WHO()) + '<h3 class="q">' + t + '</h3>' + (sub ? '<p class="qs">' + sub + '</p>' : '') + '</div>';
   }
   function undoFt() { return '<div class="ft ftc b3"><button type="button" class="pill" data-act="undo">' + SV.back + UNDO + '</button></div>'; }
+  function undoBk() { return '<button type="button" class="bk" data-act="undo">' + SV.arrL + UNDO + '</button>'; }
   function build(step) {
     if (step === 'loading') return skelHTML();
     if (step === 'grade') return gradeHTML();
-    if (step === 'done') return END('') + undoFt();
-    if (step === 'nv') return END(' nv') + undoFt();
+    if (step === 'done') return undoBk() + END('');
+    if (step === 'nv') return undoBk() + END(' nv');
     if (step === 'check') return headHTML('', CHECK_T, CHECK_SUB) + undoFt();
     if (step === 'fail') return headHTML('', FAIL_T, FAIL_SUB) + '<div class="ft b3"><button type="button" class="cta" data-act="retry">' + FAIL_BTN + '</button></div>';
     if (step === 'lfail') return headHTML('', LFAIL_T, LFAIL_SUB) + '<div class="ft b3"><button type="button" class="cta" data-act="reload">' + LFAIL_BTN + '</button></div>';
@@ -492,8 +518,12 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
       else old.remove();
     }
     closeOv(true);
+    if (G.armed) { G.armed = false; clearTimeout(G.t); }
+    tstHide();
     if (sk) return;
     var base = slide ? 380 : 0;
+    // 끝 화면 = 글이 다 나온 뒤 아래에 「이제 창을 닫아도 돼요.」(사라지지 않음)
+    if (S.step === 'done' || S.step === 'nv') S.timers.push(setTimeout(function () { if (curScrn() === sc) tst(CLOSE_OK, false, 0); }, base + 560));
     sc.querySelectorAll('[data-at]').forEach(function (el) {
       S.timers.push(setTimeout(function () {
         el.classList.remove('pre');
@@ -517,24 +547,58 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
   function nav(step, dir, rep) {
     try {
       // 창 위에서 넘어가면 그 창 칸을 새 화면 칸으로 바꾼다(뒤로 + 넣기를 잇달아 하면 순서가 꼬인다)
-      if (hLayer) { history.replaceState({ tf: 'scr', step: step, d: S.d + 1 }, ''); S.d++; }
-      else if (rep || !S.hasEntry || S.step === 'fail' || S.step === 'lfail' || S.step === 'loading') history.replaceState({ tf: 'scr', step: step, d: S.d }, '');
-      else { history.pushState({ tf: 'scr', step: step, d: S.d + 1 }, ''); S.d++; }
+      if (hLayer) { history.replaceState({ tf: 'scr', step: step, d: S.d + 1 }, ''); S.d++; G.on = false; }
+      else if (rep || !S.hasEntry || S.step === 'fail' || S.step === 'lfail' || S.step === 'loading') history.replaceState({ tf: G.on ? 'guard' : 'scr', step: step, d: S.d }, '');
+      else { history.pushState({ tf: 'scr', step: step, d: S.d + 1 }, ''); S.d++; G.on = false; }
     } catch (_) {}
     hLayer = false; S.hasEntry = true;
     S.step = step; render(dir);
+    guardSync();
   }
+  // ── 두 번 밀어 나가기(docs/1 §4.11-4, 11-10 유성 2차 「몇등급으로 선정되셨나요 페이지에서 스와이프 두번 … 바우처 결과를 다시 골라주세요 에도」)
+  //    처음 들어온 화면(d = 0)이 등급 화면, 결과 고르기 화면이면 그 칸 위에 가드 1칸. 첫 뒤로 = 가드가 걷히고 안내 2초만(가드를 다시 쌓지 않음 —
+  //    그래야 두 번째 뒤로를 브라우저가 받아 나간다), 2초 뒤나 화면을 만지면 가드를 다시 쌓는다.
+  //    다른 화면에서 넘어온 등급, 「선정되지 못했어요」 화면(d > 0)은 가드 없이 뒤로 = 앞 화면(「바우처 결과를 다시 골라주세요를 들렀다가 … 그 페이지로 와야겠지」)
+  var G = { on: false, armed: false, t: 0 };   // on = 가드 칸 위에 있음(그 위에 창 칸이 열려 있어도), armed = 안내가 떠 있는 2초
+  function guardSync() {
+    if (G.on || G.armed || S.d !== 0 || !EXIT[S.step]) return;
+    try { history.pushState({ tf: 'guard', step: S.step, d: 0 }, ''); G.on = true; } catch (_) {}
+  }
+  function disarm() { clearTimeout(G.t); if (!G.armed) return; G.armed = false; tstHide(); guardSync(); }
+  document.addEventListener('pointerdown', function () { if (G.armed) disarm(); }, true);
   window.addEventListener('popstate', function (e) {
     if (skipPop > 0) { skipPop--; return; }
     if (hLayer) { hLayer = false; closeOv(); return; }
     var st = e.state;
-    if (!st || st.tf !== 'scr' || !STEPS[st.step]) return;
+    // 가드가 걷힌 첫 뒤로(가드 바로 아래 = 처음 화면 칸) = 화면은 그대로, 안내만
+    if (G.on && st && st.tf === 'scr' && !(st.d > 0)) {
+      G.on = false;
+      try { history.replaceState({ tf: 'scr', step: S.step, d: 0 }, ''); } catch (_) {}
+      if (!EXIT[S.step]) { try { history.back(); } catch (_) {} return; }   // 가드 위 화면이 나가는 화면이 아니게 바뀐 드문 경우 = 한 번에 나감
+      G.armed = true; tst(EXIT[S.step] + '\n' + EXIT2, true, 2000);
+      clearTimeout(G.t); G.t = setTimeout(disarm, 2000);
+      return;
+    }
+    if (!st || (st.tf !== 'scr' && st.tf !== 'guard') || !STEPS[st.step]) return;
+    G.on = st.tf === 'guard';
     S.d = st.d || 0;
     var step = st.step;
     if (step === 'fail' && !S.pending) step = 'choice';
     if (step === 'grade' && noGrade()) step = 'choice';
     S.step = step; render('back');
+    guardSync();
   });
+  // ── 토스트(docs/1 §5.5). ms 0 = 사라지지 않음(끝 화면). 화면 아래 고정 줄(.ft)이 있으면 그 위 12px(§5.5 「하단 버튼을 가리지 않게」)
+  var tstEl = document.getElementById('tst'), tstM = tstEl.querySelector('.tm'), tstT = 0;
+  function tst(msg, ok, ms) {
+    clearTimeout(tstT);
+    var sc = curScrn(), f = sc && sc.querySelector('.ft > *'), b = '';
+    if (f) { var r = f.getBoundingClientRect(); if (r.height) b = Math.round(app.getBoundingClientRect().bottom - r.top + 12) + 'px'; }
+    tstEl.style.bottom = b;
+    tstM.textContent = msg; tstEl.classList.toggle('okk', !!ok); tstEl.classList.add('on');
+    if (ms) tstT = setTimeout(tstHide, ms);
+  }
+  function tstHide() { clearTimeout(tstT); tstEl.classList.remove('on'); }
   // 「← 잘못 눌렀어요」 = 앞 화면. 아직 안 보낸 다음 누름은 버리고(보내는 중인 것은 서버에 닿는다 — 다시 고르면 그 값이 이긴다), 새로고침 때 다시 보낼 기록도 지운다
   function parentOf(step) { return step === 'done' ? (noGrade() ? 'choice' : 'grade') : step === 'nv' ? 'no' : 'choice'; }
   function undo() {
@@ -622,7 +686,7 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
     ['svc', 'who', 'st', 'g', 'again'].forEach(function (k) { if (r && r[k] !== undefined) S.info[k] = r[k]; });
     if (S.info.svc === '오감' && !setInfo.pre) { setInfo.pre = 1; setTimeout(function () { [IMG.L, IMG.R].forEach(function (u) { var i = new Image(); i.src = u; }); }, 800); }
   }
-  function showBad() { S.timers.forEach(clearTimeout); closeOv(true); pg.innerHTML = ''; app.classList.add('isbad'); }
+  function showBad() { S.timers.forEach(clearTimeout); closeOv(true); tstHide(); pg.innerHTML = ''; app.classList.add('isbad'); }
   var ACT = { yes: 'sel_yes', no: 'sel_no', wait: 'sel_wait', nov: 'sel_nov' };
   // 「선정되지 못했어요」 = 서버 st로 갈림: check(선생님이 이미 정해짐), nov(이미 바우처 없이 신청 — 서버가 그대로 둠), 그 밖 3번
   function noStep(r) { return r.st === 'check' ? 'check' : r.st === 'nov' ? 'nv' : 'no'; }
@@ -677,7 +741,8 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
   var NT = (function () { try { return performance.getEntriesByType('navigation')[0].type || ''; } catch (_) { return ''; } })();
   function boot() {
     var hs0 = NT === 'reload' || NT === 'back_forward' ? history.state : null;
-    var hs = hs0 && (hs0.tf === 'scr' || hs0.tf === 'layer') && STEPS[hs0.step] && hs0.step !== 'lfail' ? hs0.step : '';
+    var hs = hs0 && (hs0.tf === 'scr' || hs0.tf === 'layer' || hs0.tf === 'guard') && STEPS[hs0.step] && hs0.step !== 'lfail' ? hs0.step : '';
+    G.on = !!(hs0 && hs0.tf === 'guard');   // 가드 칸에서 새로고침 = 그 칸을 그대로 가드로(또 쌓지 않음)
     var pend = hs ? ssGet() : null;
     if (!hs) ssClear();
     if (hs === 'fail' && !pend) hs = '';   // 실패 화면에서 새로고침 = 보내던 것이 없으면 처음처럼
