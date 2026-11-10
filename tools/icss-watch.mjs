@@ -103,6 +103,20 @@ function bodyPeriod(body, posted) {
   p.wd = wdCheck(p, a.w, b.w);
   return p;
 }
+// 본문 「서비스 기간/이용 기간/서비스 개시」 줄의 첫 날짜 = 이용 시작(11-10 유성 「11월 2일~, 9월 4일~ 이렇게 적혔던 구도 있던 것 같아」).
+//  거의 늘 1일인데 1일이 아닌 회차(전수 159건 중 서구 25-10 → 11.5, 부평 24-11 추가 → 11.11)는 그 회차 아이 계약서 시작일이 그 날이다.
+//  소비자 = 부모 레포 07 `계약기간.js`(_cpOddStarts_ — 이용내역 이미지, 선생님 앱 계약기간) + 아래 카톡 한 줄(icss-notify.mjs).
+//  접수·모집·신청 기간 줄, 재신청 안내 줄은 안 읽는다. 끝 날짜는 원문 오타가 있어(2024. 4. 1. ~ 2024. 3. 31.) 시작만 믿는다.
+function usePeriod(body, posted) {
+  const line = body.split('\n').find(l => /(서비스|이용|제공)\s*(이용\s*|제공\s*)?기\s*간|서비스\s*(개시|시작)|이용\s*시작/.test(l) && !/(모집|접수|신청)\s*기\s*간|재\s*신\s*청|경과/.test(l));
+  if (!line) return null;
+  const y0 = +(posted || TODAY).slice(0, 4);
+  const m = line.match(/(?:(\d{4})\s*[.\-년]\s*)?(\d{1,2})\s*[.\-월]\s*(\d{1,2})\s*[.일]?/);
+  if (!m) return null;
+  const y = m[1] ? +m[1] : y0, mo = +m[2], d = +m[3];
+  if (mo < 1 || mo > 12 || d < 1 || d > 31 || ![y0, y0 + 1].includes(y)) return null;
+  return { start: `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}` };
+}
 // 본문 날짜와 첨부 날짜가 다르면: 요일이 맞는 쪽 하나만 있으면 그쪽(note에 남김), 아니면 사람 확인 + 끝날이 이른 쪽(늦게 알려 주는 것보다 안전)
 function pickPeriod(bp, ap) {
   if (!ap) return { apply: bp, why: '' };
@@ -258,6 +272,13 @@ function selftest() {
   eq('둘 다 요일 없고 다름 = 사람 확인 + 이른 끝날', [both.apply.end, !!both.why], ['2026-03-11', true]);
   eq('같으면 그대로', pickPeriod({ start: '2026-03-04', end: '2026-03-11', wd: true }, { start: '2026-03-04', end: '2026-03-11', wd: true }).why, '');
   eq('첨부 못 읽으면 본문', pickPeriod({ start: '2026-03-04', end: '2026-03-11', wd: null }, null).apply.end, '2026-03-11');
+  // 이용 시작(11-10) — 실제 공고 본문 줄 꼴
+  eq('서구 25-10 이용기간 11.5', usePeriod('□ 모집기간 : 2025. 10. 20.(월) ~ 10. 24.(금)\n□ 이용기간 : 2025. 11. 5. ~ 2026. 10. 31.', '2025-10-17'), { start: '2025-11-05' });
+  eq('서비스기간 줄(∼)', usePeriod('○ 서비스기간 : 2019. 5. 1. ∼ 2020. 4. 30. (사업에 따라 상이)', '2019-04-02'), { start: '2019-05-01' });
+  eq('서비스 개시 줄', usePeriod('★서비스 개시 : 2019. 2. 1.', '2019-01-07'), { start: '2019-02-01' });
+  eq('재신청 안내 줄은 안 읽음', usePeriod('재 신 청 : 서비스 기간 종료 후 이용기간 만큼 기간 경과 후 신청 가능', '2019-08-09'), null);
+  eq('접수기간만 있는 글 = 없음', usePeriod('○ 접수기간 : 2026. 9. 4. ~ 9. 11.', '2026-09-03'), null);
+  eq('연도 없이 월일 = 게시 연도', usePeriod('- 서비스 이용기간: 11월 2일부터 12개월', '2026-10-08'), { start: '2026-11-02' });
   // 검사기가 틀린 걸 틀렸다고 하는지(✗를 낼 줄 아는지) — 일부러 틀린 기대
   const before = bad; eq('(일부러 틀림 — 이 줄은 ✗여야 정상)', wdOf('2026-08-06'), '수'); const caught = bad > before; bad = before;
   console.log(caught ? '✓ 검사기가 틀린 기대를 잡음' : '✗ 검사기가 틀린 기대를 못 잡음');
@@ -298,6 +319,9 @@ async function main() {
     if (prev && !changed && !ARG.reread && !(prev.read === 'fail') && !(prev.read === 'skip' && post.posted >= SINCE && AI_KINDS.has(post.kind) && KEY && !ARG['no-ai'])) continue;
     const bp = bodyPeriod(v.body, v.posted);
     post.apply = bp && periodOk(bp, v.posted) ? { start: bp.start, end: bp.end } : null;
+    const up = usePeriod(v.body, v.posted);
+    if (up) post.use = up;
+    else if (prev && prev.use) post.use = prev.use;   // 본문에 줄이 없는 글 = 첨부에서 한 번 채운 값(11-10 백필)을 지킨다
     post.read = 'skip';
     if (AI_KINDS.has(post.kind) && post.posted >= SINCE && KEY && !ARG['no-ai']) {
       console.log(`#${post.num} ${post.posted} ${post.title.slice(0, 50)} — 첨부 ${v.files.length}개 읽는 중`);

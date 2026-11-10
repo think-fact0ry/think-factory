@@ -48,6 +48,8 @@ function blocks(events) {
       const w = [svcWord('오감', s.오감), svcWord('아청심', s.아청심)].filter(Boolean).join(' / ');
       if (w) b.push(`- ${many ? gu + ' ' : ''}${w}`);
     }
+    // 이용 시작이 1일이 아닌 회차(11-10) — 그 회차 아이 계약서 시작일이 그 날이라 첫 계약 전에 알아야 한다(계약서는 고쳐 쓸 수 없음)
+    if (p.use && /^\d{4}-\d{2}-\d{2}$/.test(p.use.start) && p.use.start.slice(8) !== '01' && p.kind !== '재판정') b.push(`- 이용 시작 ${md(p.use.start)}, 1일 아님`);
     if (p.check) b.push(`- 확인 필요: ${isoToMd(p.check)}`);
     out.push(b);
   }
