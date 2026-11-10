@@ -106,17 +106,39 @@ function bodyPeriod(body, posted) {
 // 본문 「서비스 기간/이용 기간/서비스 개시」 줄의 첫 날짜 = 이용 시작(11-10 유성 「11월 2일~, 9월 4일~ 이렇게 적혔던 구도 있던 것 같아」).
 //  거의 늘 1일인데 1일이 아닌 회차(전수 159건 중 서구 25-10 → 11.5, 부평 24-11 추가 → 11.11)는 그 회차 아이 계약서 시작일이 그 날이다.
 //  소비자 = 부모 레포 07 `계약기간.js`(_cpOddStarts_ — 이용내역 이미지 계약기간) + 아래 카톡 한 줄(icss-notify.mjs).
-//  ⚠️본문에서만 읽는다 — 2024~ 모집 49건 중 7건(계양 4, 남동 2, 연수 1)은 첨부에만 적어 못 읽음(11-10 실측, 부모 레포 백로그 32줄).
+//  본문이 먼저. 본문에 없으면 첨부 한글 글자(useFromDocs) — 2024~ 모집 49건 중 7건(계양 4, 남동 2, 연수 1)은 첨부에만 적혀 있었다(11-10 실측, 유성 「권장대로」).
 //  접수·모집·신청 기간 줄, 재신청 안내 줄은 안 읽는다. 끝 날짜는 원문 오타가 있어(2024. 4. 1. ~ 2024. 3. 31.) 시작만 믿는다.
+const USE_KEY = /(서비스|이용|제공)\s*(이용\s*|제공\s*)?기\s*간|서비스\s*(개시|시작)|이용\s*시작/;
+const USE_NOT = /(모집|접수|신청)\s*기\s*간|재\s*신\s*청|경과/;
 function usePeriod(body, posted) {
-  const line = body.split('\n').find(l => /(서비스|이용|제공)\s*(이용\s*|제공\s*)?기\s*간|서비스\s*(개시|시작)|이용\s*시작/.test(l) && !/(모집|접수|신청)\s*기\s*간|재\s*신\s*청|경과/.test(l));
+  const line = body.split('\n').find(l => USE_KEY.test(l) && !USE_NOT.test(l));
   if (!line) return null;
+  return useDate(line, posted);
+}
+function useDate(line, posted) {
   const y0 = +(posted || TODAY).slice(0, 4);
   const m = line.match(/(?:(\d{4})\s*[.\-년]\s*)?(\d{1,2})\s*[.\-월]\s*(\d{1,2})\s*[.일]?/);
   if (!m) return null;
   const y = m[1] ? +m[1] : y0, mo = +m[2], d = +m[3];
   if (mo < 1 || mo > 12 || d < 1 || d > 31 || ![y0, y0 + 1].includes(y)) return null;
   return { start: `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}` };
+}
+// 첨부 한글 글자(hwp-text = 표 칸마다 한 줄)에서 이용 시작. 「이용기간」 칸과 날짜 칸이 다른 줄일 수 있어 그 줄 + 다음 두 줄을 붙여 본다(남동 150).
+//  첨부는 다른 회차 파일을 다시 올린 글이 있다(미추 136 = 4월 공고에 8월 회차 파일) → 게시일 ~ 게시일 + 100일 안 시작만 믿는다. PDF는 글자가 없어 못 읽는다.
+function useFromDocs(docs, posted) {
+  const p0 = Date.parse((posted || TODAY) + 'T00:00:00Z');
+  for (const d of docs || []) {
+    if (!d || typeof d.text !== 'string') continue;
+    const ls = d.text.split('\n');
+    for (let i = 0; i < ls.length; i++) {
+      if (!USE_KEY.test(ls[i]) || USE_NOT.test(ls[i])) continue;
+      const r = useDate(ls.slice(i, i + 3).join(' '), posted);
+      if (!r) continue;
+      const days = (Date.parse(r.start + 'T00:00:00Z') - p0) / 864e5;
+      if (days >= 0 && days <= 100) return r;
+    }
+  }
+  return null;
 }
 // 본문 날짜와 첨부 날짜가 다르면: 요일이 맞는 쪽 하나만 있으면 그쪽(note에 남김), 아니면 사람 확인 + 끝날이 이른 쪽(늦게 알려 주는 것보다 안전)
 function pickPeriod(bp, ap) {
@@ -280,6 +302,14 @@ function selftest() {
   eq('재신청 안내 줄은 안 읽음', usePeriod('재 신 청 : 서비스 기간 종료 후 이용기간 만큼 기간 경과 후 신청 가능', '2019-08-09'), null);
   eq('접수기간만 있는 글 = 없음', usePeriod('○ 접수기간 : 2026. 9. 4. ~ 9. 11.', '2026-09-03'), null);
   eq('연도 없이 월일 = 게시 연도', usePeriod('- 서비스 이용기간: 11월 2일부터 12개월', '2026-10-08'), { start: '2026-11-02' });
+  // 첨부 한글 글자(11-10) — 표 칸마다 한 줄, 다른 회차 파일, PDF
+  eq('첨부: 이용기간 칸과 날짜 칸이 다른 줄', useFromDocs([{ name: 'a.hwp', text: '사업명\n서비스 이용기간\n2025. 11. 5. ~ 2026. 10. 31.\n모집인원' }], '2025-10-17'), { start: '2025-11-05' });
+  eq('첨부: 같은 줄', useFromDocs([{ name: 'a.hwp', text: '  서비스 이용기간 : 2026. 04. 01. ~ 2027. 03. 31. (12개월)' }], '2026-02-27'), { start: '2026-04-01' });
+  eq('첨부: 다른 회차 파일(게시 뒤 100일 넘음) = 안 믿음', useFromDocs([{ name: 'a.hwp', text: '  서비스 이용기간 : 2024. 08. 01. ~ 2025. 07. 31.' }], '2024-02-29'), null);
+  eq('첨부: 게시일보다 앞 = 안 믿음', useFromDocs([{ name: 'a.hwp', text: '서비스 이용기간 : 2025. 4. 1. ~ 2026. 3. 31.' }], '2025-08-27'), null);
+  eq('첨부: 재신청 줄 넘기고 다음 이용기간 줄', useFromDocs([{ name: 'a.hwp', text: '재  신  청 : 서비스 기간 종료 후 서비스 이용기간 만큼 기간 경과 후 신청 가능\n이용 기간 : 2026. 9. 1. ~ 2027. 8. 31.' }], '2026-08-11'), { start: '2026-09-01' });
+  eq('첨부: PDF(글자 없음) = 없음', useFromDocs([{ name: 'a.pdf', pdf: 'AAAA' }], '2026-08-11'), null);
+  eq('첨부: 접수기간만 = 없음', useFromDocs([{ name: 'a.hwp', text: '접수기간 : 2026. 9. 4. ~ 9. 11.' }], '2026-09-03'), null);
   // 검사기가 틀린 걸 틀렸다고 하는지(✗를 낼 줄 아는지) — 일부러 틀린 기대
   const before = bad; eq('(일부러 틀림 — 이 줄은 ✗여야 정상)', wdOf('2026-08-06'), '수'); const caught = bad > before; bad = before;
   console.log(caught ? '✓ 검사기가 틀린 기대를 잡음' : '✗ 검사기가 틀린 기대를 못 잡음');
@@ -327,6 +357,7 @@ async function main() {
     if (AI_KINDS.has(post.kind) && post.posted >= SINCE && KEY && !ARG['no-ai']) {
       console.log(`#${post.num} ${post.posted} ${post.title.slice(0, 50)} — 첨부 ${v.files.length}개 읽는 중`);
       const docs = await readAttachments({ ...post, files: v.files });
+      if (!up) { const ua = useFromDocs(docs, post.posted); if (ua) post.use = ua; }   // 본문에 이용기간 줄이 없으면 첨부 한글 글자에서
       const ai = await askClaude({ ...post, body: v.body }, docs);
       if (!ai) { post.read = 'fail'; post.tries = ((prev && prev.read === 'fail' && prev.tries) || 0) + 1; post.check = '첨부의 표를 못 옮김'; }
       else {
