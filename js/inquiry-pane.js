@@ -899,19 +899,18 @@
     // 보내기 = 한 번만. 화면 쪽 오류(끊김, 시한, 구글 HTML)로는 「못 보냈어요」라 하지 않는다 = 서버가 받았는지 모름 → 끝은 결과 묻기가 낸다(감사 F-04, F-05).
     //   「못 보냈어요」(새 번호로 다시)는 서버가 낸 거절에서만 — 화면 쪽 오류는 「결과를 아직 못 받았어요」(같은 번호로 다시 = 두 번 안 감)
     once(body).then(function (r) { if (r && r.code === 'run') return; finish(r); }, function (x) { sendErr = String(x && x.message) === 'BAD_REPLY' ? 'html' : 'net'; });
-    // 결과 묻기 = 5초마다 한 번에 하나. 전체 상한(4분)은 매 차례 맨 앞에서 = 묻기가 계속 실패해도(망 끊김) 끝난다(받은함 askJob과 같은 약속)
+    // 결과 묻기 = 5초마다 한 번에 하나. 전체 상한(4분)은 매 차례 맨 앞에서 재되 끝내기 전에 한 번은 묻는다
+    //   = 묻기가 계속 실패해도(망 끊김) 끝나고(받은함 askJob과 같은 약속), 보내는 중 앱을 바꿨다 돌아와도 닿은 글은 성공으로
     timer = setInterval(function () {
-      if (done) return;
-      if (Date.now() - t0 > lim.total) return finish(null, true);
-      if (asking) return;
+      if (done || asking) return;
+      var over = Date.now() - t0 > lim.total;
       asking = true;
       once({ action: 'v_job', cid: job.cid }).then(function (r) {
-        asking = false; if (done || !r) return;
-        if (r.state === 'done') return finish(r.result);
-        blank = r.state === 'none' ? blank + 1 : 0;
-        quiet = r.state === 'run' ? 0 : quiet + 1;
-        if (blank >= lim.blank || gaveUp()) finish(null, true);
-      }, function () { asking = false; if (done) return; quiet++; if (gaveUp()) finish(null, true); });
+        asking = false; if (done) return;
+        if (r && r.state === 'done') return finish(r.result);
+        if (r) { blank = r.state === 'none' ? blank + 1 : 0; quiet = r.state === 'run' ? 0 : quiet + 1; }
+        if (over || blank >= lim.blank || gaveUp()) finish(null, true);
+      }, function () { asking = false; if (done) return; quiet++; if (over || gaveUp()) finish(null, true); });
     }, DEMO ? 1500 : 5000);
     // 보내기가 화면 쪽 오류로 끝났고 서버에도 「하는 중」이 안 보인다 = 못 나갔을 가능성이 크다 → 1분(기록 없음 12번)을 다 기다리지 않는다.
     //   구글 HTML = 그 요청은 구글에서 끝났다 → 기록 없음 두 번이면 / 끊김, 시한 = 아직 길 위일 수 있다(구글 응답 최대 43초 실측) → 보낸 지 45초 뒤.
