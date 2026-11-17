@@ -64,19 +64,28 @@
   // ── 서버 부르기(22 rec run()과 같은 결) ──
   //   읽기 = 4초 안에 안 오면 같은 요청을 하나 더(먼저 온 것). 구글이 JSON 대신 HTML을 줄 때가 있다(BAD_REPLY = 일시적)
   //   쓰기 = 한 번만. 응답을 못 받으면 v_job으로 결과를 묻는다
-  function once(body) {
+  //   모든 요청에 시한(11-18 감사 F-05): 시한 없는 대기 하나가 묻기를 영영 멈춘다(근태 알약 07-31 사고 — attend REQ_TIMEOUT_MS와 같은 15초, 첨부 받기만 2분).
+  //   시한이 지나면 이 약속이 직접 TIMEOUT으로 끝난다(AbortController가 없는 브라우저, 본문 읽기에서 매달림까지) = 일시 오류
+  var REQ_MS = 15000, FILE_MS = 120000;
+  function once(body, ms) {
     if (DEMO) return fake(body);
-    return fetch(GAS, { method: 'POST', body: JSON.stringify(body) })
-      .then(function (r) { return r.text(); })
-      .then(function (t) { try { return JSON.parse(t); } catch (x) { throw new Error('BAD_REPLY'); } });
+    return new Promise(function (res, rej) {
+      var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null, opt = { method: 'POST', body: JSON.stringify(body) };
+      if (ctl) opt.signal = ctl.signal;
+      var tm = setTimeout(function () { rej(new Error('TIMEOUT')); if (ctl) ctl.abort(); }, ms || REQ_MS);
+      fetch(GAS, opt)
+        .then(function (r) { return r.text(); })
+        .then(function (t) { try { return JSON.parse(t); } catch (x) { throw new Error('BAD_REPLY'); } })
+        .then(function (d) { clearTimeout(tm); res(d); }, function (x) { clearTimeout(tm); rej(x); });
+    });
   }
-  function transient(x) { return x instanceof TypeError || String(x && x.message) === 'BAD_REPLY'; }
-  function read(body, hedgeMs) {   // hedgeMs = 두 번째 요청까지 기다릴 시간(기본 4초 — 첨부처럼 큰 응답은 길게 줘서 같은 파일을 두 번 받지 않게)
+  function transient(x) { var m = String(x && x.message); return x instanceof TypeError || m === 'BAD_REPLY' || m === 'TIMEOUT'; }
+  function read(body, hedgeMs, ms) {   // hedgeMs = 두 번째 요청까지 기다릴 시간(기본 4초 — 첨부처럼 큰 응답은 길게 줘서 같은 파일을 두 번 받지 않게) · ms = 요청마다 시한(기본 15초)
     return new Promise(function (res, rej) {
       var started = 0, inflight = 0, done = false, timer = 0;
       var go = function () {
         started++; inflight++;
-        once(body).then(function (d) { inflight--; if (done) return; done = true; clearTimeout(timer); res(d); },
+        once(body, ms).then(function (d) { inflight--; if (done) return; done = true; clearTimeout(timer); res(d); },
           function (x) {
             inflight--; if (done) return;
             if (!transient(x)) { done = true; clearTimeout(timer); return rej(x); }
@@ -100,6 +109,7 @@
       var lose = function () { if (!settled && preDone && altErr) { settled = true; rej(altErr); } };   // 둘 다 못 받았을 때만 실패
       var other = function () { if (!alt) alt = read(body).then(win, function (x) { altErr = x; lose(); }); };
       t = setTimeout(other, Math.max(0, 4000 - (Date.now() - pre.at)));
+      setTimeout(function () { if (!preDone) { preDone = true; other(); lose(); } }, Math.max(0, REQ_MS - (Date.now() - pre.at)));   // 먼저 보낸 요청(페이지가 따로 만든 fetch)이 매달려도 시한 = 못 받은 것으로(감사 F-05 — 전엔 뼈대가 영영 남았다)
       Promise.resolve(pre.p).then(function (r) { preDone = true; if (r) win(r); else { other(); lose(); } }, function () { preDone = true; other(); lose(); });
     });
   }
@@ -111,7 +121,11 @@
   var queue = [], sending = null;
   var pollT = 0, polling = false, lastChange = Date.now();
 
-  function consentAt() { try { var c = JSON.parse(ls(K('tf_inq_cs')) || 'null'); return c && c.ver === CONSENT_VER ? c.at : ''; } catch (e) { return ''; } }
+  // 동의 = 저장소 + 이 창 안 기억(11-18 감사 F-02 — 저장이 막힌 브라우저는 동의 시트가 계속 다시 떠서 첫 문의를 못 보냈다. 방 열쇠 S.key와 같은 결).
+  //   칸 이름(K)별로 따로 = 연습 화면 동의가 실제 동의로 안 샌다. 지울 땐 setConsent('')
+  var CSM = {};
+  function consentAt() { var m = CSM[K('tf_inq_cs')]; if (m) return m; try { var c = JSON.parse(ls(K('tf_inq_cs')) || 'null'); return c && c.ver === CONSENT_VER ? c.at : ''; } catch (e) { return ''; } }
+  function setConsent(at) { CSM[K('tf_inq_cs')] = at || ''; ls(K('tf_inq_cs'), at ? JSON.stringify({ ver: CONSENT_VER, at: at }) : null); }
 
   // ── 모양(5차 실값, 이 창 안에만 — site.css 클래스와 안 겹치게 ti- 접두) ──
   var CSS = [
@@ -467,7 +481,7 @@
     // 동의 시트
     $('.ti-agi').addEventListener('click', function () { $('.ti-agi').classList.toggle('open'); });
     $('#tiAgree').addEventListener('click', function () {
-      ls(K('tf_inq_cs'), JSON.stringify({ ver: CONSENT_VER, at: new Date().toISOString() })); ev('inq_consent');
+      setConsent(new Date().toISOString()); ev('inq_consent');
       closeSheet(); pump();   // 동의 전에 막혀 있던 첫 줄이 있으면 이어서
       var back = S.csEl; S.csEl = null;
       if (!coarse) setTimeout(function () { (back && R.contains(back) && back.offsetParent ? back : R.classList.contains('mailnew') ? ta2 : TA).focus(); }, 320);
@@ -613,7 +627,7 @@
     var k = S.key + ':' + seq, c = FILES[k];
     if (c) return c.p;
     c = FILES[k] = {};
-    c.p = read({ action: 'v_file', key: S.key, seq: seq }, 15000).then(function (r) {
+    c.p = read({ action: 'v_file', key: S.key, seq: seq }, 15000, FILE_MS).then(function (r) {
       if (!r || !r.ok || !r.b64) throw new Error((r && r.error) || 'nofile');
       c.t = r.t; c.n = r.n;
       if (r.t === 'application/pdf') {
@@ -859,7 +873,9 @@
     if (S.key) body.key = S.key;
     else { body.consent = { ver: CONSENT_VER, at: consentAt() }; if (job.phone || S.phonePending) body.phone = job.phone || S.phonePending; }
     var hp = $('.ti-hpx'); if (hp && hp.value) body.hp = hp.value;
-    var lim = DEMO ? { blank: 2, total: 20000 } : { blank: 12, total: 240000 };
+    var lim = DEMO ? { blank: 2, total: 20000, late: 3000 } : { blank: 12, total: 240000, late: 45000 };
+    var sendErr = '', quiet = 0, asking = false;   // sendErr = 보내기가 화면 쪽 오류로 끝남('html' 구글 HTML · 'net' 끊김, 시한) · quiet = 그 뒤 하는 중(run) 없이 지난 결과 묻기 수
+    if (!S.key) ss(K('tf_inq_pcid'), job.cid + '|' + t0);   // 첫 줄 = 보내기 **전에** 작업 번호를 적어 둔다(11-18 감사 F-03 — 보내는 1~5초에 새로고침, 페이지 이동이면 열쇠도 번호도 없었다). 성공, 거절이면 지움
     function finish(res, unknown) {
       if (done) return; done = true; clearInterval(timer); sending = null;
       if (unknown) {
@@ -874,20 +890,33 @@
         if (job.row) sentOk(job.row, res.seq, res.at);   // lastSeq는 안 올린다 — 그 사이 온 행정 줄을 묻기가 놓치지 않게(묻기·불러오기만 올림)
       } else {
         if (res && res.code === 'gone') { gone(); return; }
-        if (res && res.code === 'consent') ls(K('tf_inq_cs'), null);   // 동의 판이 바뀌었다 = 다시 받는다
+        if (res && res.code === 'consent') setConsent('');   // 동의 판이 바뀌었다 = 다시 받는다
+        ss(K('tf_inq_pcid'), null);   // 서버가 거절 = 그 번호로 찾을 방 없음
         failed(job, (res && res.error) || '', false);
       }
       pump(); schedule(true);
     }
-    once(body).then(function (r) { if (r && r.code === 'run') return; finish(r); }, function (x) { if (!transient(x)) finish({ ok: false }); });
+    // 보내기 = 한 번만. 화면 쪽 오류(끊김, 시한, 구글 HTML)로는 「못 보냈어요」라 하지 않는다 = 서버가 받았는지 모름 → 끝은 결과 묻기가 낸다(감사 F-04, F-05).
+    //   「못 보냈어요」(새 번호로 다시)는 서버가 낸 거절에서만 — 화면 쪽 오류는 「결과를 아직 못 받았어요」(같은 번호로 다시 = 두 번 안 감)
+    once(body).then(function (r) { if (r && r.code === 'run') return; finish(r); }, function (x) { sendErr = String(x && x.message) === 'BAD_REPLY' ? 'html' : 'net'; });
+    // 결과 묻기 = 5초마다 한 번에 하나. 전체 상한(4분)은 매 차례 맨 앞에서 = 묻기가 계속 실패해도(망 끊김) 끝난다(받은함 askJob과 같은 약속)
     timer = setInterval(function () {
+      if (done) return;
+      if (Date.now() - t0 > lim.total) return finish(null, true);
+      if (asking) return;
+      asking = true;
       once({ action: 'v_job', cid: job.cid }).then(function (r) {
-        if (done || !r) return;
+        asking = false; if (done || !r) return;
         if (r.state === 'done') return finish(r.result);
         blank = r.state === 'none' ? blank + 1 : 0;
-        if (blank >= lim.blank || Date.now() - t0 > lim.total) finish(null, true);
-      }, function () {});
+        quiet = r.state === 'run' ? 0 : quiet + 1;
+        if (blank >= lim.blank || gaveUp()) finish(null, true);
+      }, function () { asking = false; if (done) return; quiet++; if (gaveUp()) finish(null, true); });
     }, DEMO ? 1500 : 5000);
+    // 보내기가 화면 쪽 오류로 끝났고 서버에도 「하는 중」이 안 보인다 = 못 나갔을 가능성이 크다 → 1분(기록 없음 12번)을 다 기다리지 않는다.
+    //   구글 HTML = 그 요청은 구글에서 끝났다 → 기록 없음 두 번이면 / 끊김, 시한 = 아직 길 위일 수 있다(구글 응답 최대 43초 실측) → 보낸 지 45초 뒤.
+    //   같은 번호로 다시 보내도 두 번 안 가지만, 26 _job_은 번호 확인과 적기가 잠금 밖이라 원래 요청과 **같은 순간에** 시작하면 둘 다 돈다 → 45초는 그 틈을 피하는 값
+    function gaveUp() { return !!sendErr && quiet >= 2 && (sendErr === 'html' ? blank >= 2 : Date.now() - t0 >= lim.late); }
   }
   // 빨강 없이(§4.5 되돌릴 수 있는 실패). 두 갈래:
   //   unknown = 응답을 못 받음(서버가 받았는지 모름) → 「다시 보내기」는 **같은 작업 번호** = 이미 받았으면 그 결과만 온다(두 번 안 감)
@@ -973,8 +1002,9 @@
       if (typeof r.ev === 'string') S.ev = r.ev;
       if (+r.upto > S.lastSeq) S.lastSeq = +r.upto;
       if (typeof r.read === 'number' && r.read !== S.read) { S.read = r.read; markRead(); }
-    }, function () {}).then(function () { polling = false; schedule(); });
+    }).then(pollEnd, pollEnd);
   }
+  function pollEnd() { polling = false; schedule(); }   // 성공, 실패, 처리 중 예외 모두 = 끝에서 늘 풀고 다음을 건다(11-18 감사 F-05 — 전엔 처리기가 던지면 묻기가 영영 멈췄다)
   var resumeEl = null;
   function showResume() {
     if (resumeEl) return;
@@ -1003,15 +1033,19 @@
       });
     }
   }
-  function recover() {   // 첫 줄을 보냈는데 결과를 못 받고 창을 닫았다 = 그 작업 번호로 방 열쇠를 찾아 본다(서버가 10분 기억)
+  var recT = 0;
+  function recover() {   // 첫 줄을 보냈는데 결과를 못 받았다(창 닫기, 새로고침, 페이지 이동 — 번호는 보내기 전에 적힌다) = 그 작업 번호로 방 열쇠를 찾아 본다(서버가 10분 기억)
+    clearTimeout(recT);
     var pc = (ss(K('tf_inq_pcid')) || '').split('|');
     if (!pc[0] || !(Date.now() - +pc[1] < 600000)) { ss(K('tf_inq_pcid'), null); return; }
+    var again = function () { if (S.open && !S.key && !S.sentFresh) recT = setTimeout(recover, 5000); };   // 하는 중, 아직 길 위, 묻기 실패 = 창이 열려 있는 동안 5초 뒤 다시(10분이 지나면 위에서 끝)
     read({ action: 'v_job', cid: pc[0] }).then(function (r) {
-      if (!r || r.state === 'run') return;
+      if (S.key || S.sentFresh) return;   // 그 사이 새로 보냈거나 열쇠가 생겼다 = 옛 결과로 창을 바꾸지 않는다
+      if (!r || r.state === 'run' || (r.state === 'none' && Date.now() - +pc[1] < 60000)) return again();   // 기록 없음도 보낸 지 1분 안이면 버리지 않는다(요청이 아직 길 위일 수 있다 — 11-18 감사 F-03)
       ss(K('tf_inq_pcid'), null);
-      var x = r.result; if (r.state !== 'done' || !x || !x.ok || !x.key || S.key) return;
+      var x = r.result; if (r.state !== 'done' || !x || !x.ok || !x.key) return;
       setKey(x.key); S.loaded = ''; S.sentFresh = true; loadRoom();
-    }, function () {});
+    }, again);
   }
   function open(opts) {
     opts = opts || {};
@@ -1037,7 +1071,7 @@
   function requestClose() { if (!PAGE && history.state && history.state.tfinq) history.back(); else doClose(); }
   function doClose() {
     if (!S.open) return;
-    S.open = false; clearTimeout(pollT); hideResume();
+    S.open = false; clearTimeout(pollT); clearTimeout(recT); hideResume();
     if (viewerOpen()) { VW.classList.remove('on'); VW.querySelector('.ti-vb').innerHTML = ''; }
     R.classList.remove('on'); closeSheet();
     document.documentElement.classList.remove('tfinq-open'); vpCover(false);
@@ -1106,7 +1140,7 @@
     var mc = add('채팅 모드', function () { F.mode = 'chat'; mc.classList.add('on'); mm.classList.remove('on'); }), mm = add('메일 모드(퇴근)', function () { F.mode = 'mail'; mm.classList.add('on'); mc.classList.remove('on'); });
     mc.classList.add('on');
     add('처음부터', function () {
-      ls(K('tf_inq_key'), null); ls(K('tf_inq_cs'), null); ss(K('tf_inq_mode'), null); ss(K('tf_inq_pcid'), null);
+      ls(K('tf_inq_key'), null); setConsent(''); ss(K('tf_inq_mode'), null); ss(K('tf_inq_pcid'), null);
       queue = []; S.phonePending = ''; S.mailNc = false; S.loaded = ''; S.hasPhone = false; clearTimeout(pollT); hideResume();
       $('#tiTa2').value = ''; $('#tiPh2').value = ''; $('#tiMail').classList.add('gate'); fresh();
     });
