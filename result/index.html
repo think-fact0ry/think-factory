@@ -12,7 +12,7 @@
   화면은 22 메일 고치기 창(recommend/mail/index.html)의 토큰과 부품을 그대로 옮겼다(§4.1-10 이메일 콤보, §4.1-5 게이팅·바닥 CTA, §4.6 완료, §5.5 토스트, §4.4 확인 창).
   다른 점 = 주소 두 번(계획 3판 — 오타로 남의 주소에 결과지가 가지 않게), 생년월일만(번호 없음 — 열쇠가 집을 정함), 맨 위에 어느 결과지인지(이름, 주소 가림).
   보내기는 한 번만, 결과는 작업 번호로 묻는다(응답이 구글 HTML로 와도 「못 보냈다」로 단정하지 않음 — 메모리 gas-webapp-reply-can-be-google-html).
-  ?demo=1 = 서버 없이 화면만(&s=bounced|fixed|old|key, 주소 twice@naver.com = 같은 주소로 이미 두 번). ⚠️ 사용자 문구에 가운뎃점(U+00B7) 금지.
+  ?demo=1 = 서버 없이 화면만(&s=bounced|full|dormant|refused|fixed|old|key, 주소 twice@naver.com = 같은 주소로 이미 두 번, bad@ = 없는 주소 반송, full@ = 가득 참 반송). ⚠️ 사용자 문구에 가운뎃점(U+00B7) 금지.
 -->
 <meta name="robots" content="noindex">
 <script>
@@ -273,6 +273,10 @@ function endNote(msg, ok, again){
 }
 var CALL = '센터로 전화 주세요: ' + TEL;
 var CALL2 = '그래도 안 오면 센터로 전화 주세요: ' + TEL;
+// 반송 까닭 갈래(07 bwhy = 22 sdRecipReason_ 넷) — 가득 참, 휴면, 거절은 주소가 맞다 → 「주소를 확인」만 말하지 않음(11-24 제출표 5판)
+var BW = { full:'메일함이 가득 차서 돌아왔어요.', dormant:'오래 쓰지 않은 메일이라 돌아왔어요.', refused:'받는 메일 쪽에서 막았어요.' };
+function bounceSub(k){ return k==='full' ? BW.full + ' 메일함을 비운 뒤 같은 주소를 적거나 다른 주소를 적어주세요.' : BW[k] ? BW[k] + ' 다른 주소를 적어주세요.' : '보낸 메일이 돌아왔어요. 주소를 확인해서 다시 적어주세요.'; }
+function bounceToast(k){ return k==='full' ? BW.full + '\n메일함을 비우거나 다른 주소를 적어주세요.' : BW[k] ? BW[k] + '\n다른 주소를 적어주세요.' : '이 주소로 전달되지 않았어요.\n주소를 다시 확인해주세요.'; }
 
 /* ── 열기 — 어느 결과지인지 ── */
 var info = null;
@@ -281,7 +285,7 @@ function paintForm(r){
   var b=document.createElement('b'); b.textContent=r.name; w.appendChild(b);
   w.appendChild(document.createTextNode(' ' + r.what + ' 결과지'));
   var to=document.createElement('span'); to.className='to'; to.textContent='보낸 주소 ' + r.to; w.appendChild(to);
-  $('formSub').textContent = r.bounced ? '보낸 메일이 돌아왔어요. 주소를 확인해서 다시 적어주세요.' : '스팸함도 확인해주세요. 같은 주소를 적으면 한 번 더 보내드려요.';
+  $('formSub').textContent = r.bounced ? bounceSub(r.bwhy) : '스팸함도 확인해주세요. 같은 주소를 적으면 한 번 더 보내드려요.';
   show('scr-form'); gateUpdate();
 }
 function open(){
@@ -336,8 +340,9 @@ function send(force){
     if(w==='file' || w==='day'){ endNote('지금은 보내지 못했어요.\n확인해서 연락드릴게요.'); return; }   // 07이 대표님께 카톡을 보냄
     if(w==='b6'){ $('f-dob').classList.add('err'); toast('아이 생년월일이 맞지 않아요.' + (r.left>0 && r.left<=2 ? '\n' + r.left + '번 더 틀리면 1시간 동안 막혀요.' : ''), 3600); return; }
     if(w==='locked'){ $('f-dob').classList.add('err'); toast('생년월일을 여러 번 틀려서\n1시간 동안 막혔어요.', 4000); return; }
+    if(w==='same' && r.bounced){ endNote('이 주소로는 메일이 가지 않아요\n다른 주소를 적거나 센터로 전화 주세요: ' + TEL, false, true); return; }   // 그 주소로 간 두 줄이 다 반송 = 간 적이 없음(「스팸함 확인」은 틀린 말)
     if(w==='same'){ endNote('이 주소로 이미 다시 보내드렸어요\n메일함과 스팸함을 확인해주세요.\n' + CALL2, false, true); return; }   // 07 = 그 주소로 두 번 감(처음 + 한 번 더) — 세 번째는 안 보냄, 다른 주소는 됨
-    if(w==='bounce'){ $('f-email').classList.add('err'); $('f-again').classList.add('err'); toast('이 주소로 전달되지 않았어요.\n주소를 다시 확인해주세요.', 4000); return; }
+    if(w==='bounce'){ $('f-email').classList.add('err'); $('f-again').classList.add('err'); toast(bounceToast(r.bwhy), 4000); return; }
     if(w==='addr'){ $('f-email').classList.add('err'); toast('받을 메일 주소를 확인해주세요.'); return; }
     toast('지금은 보내지 못했어요.\n잠시 뒤 다시 해주세요.', 3600);   // busy(다른 창에서 보내는 중, 시간당 한도), error
   }
@@ -367,12 +372,13 @@ function demoPost(b){
     if(b.action==='rp_res') return res({ state:'none' });
     if(b.action==='rp_open'){
       if(s==='key') return res({ ok:false, why:'key' });
-      return res({ ok:true, name:'김○나', what:'오감쑥쑥 사전검사', to:'mom***@naver.com', bounced:s==='bounced', fixed:s==='fixed', old:s==='old' });
+      return res({ ok:true, name:'김○나', what:'오감쑥쑥 사전검사', to:'mom***@naver.com', bounced:/^(bounced|full|dormant|refused)$/.test(s), bwhy:s==='bounced' ? 'addr' : /^(full|dormant|refused)$/.test(s) ? s : '', fixed:s==='fixed', old:s==='old' });
     }
     if(b.b6!=='150315') return res({ ok:false, why:'b6', left:2 });
     if(/naver\.con$/.test(b.to) && !b.force) return res({ ok:false, why:'typo', typo:b.to.replace(/con$/,'com') });
     if(b.to==='twice@naver.com') return res({ ok:false, why:'same' });
-    if(/^bad@/.test(b.to)) return res({ ok:false, why:'bounce' });
+    if(/^bad@/.test(b.to)) return res({ ok:false, why:'bounce', bwhy:'addr' });
+    if(/^full@/.test(b.to)) return res({ ok:false, why:'bounce', bwhy:'full' });
     res({ ok:true });
   }, 700); });
 }
