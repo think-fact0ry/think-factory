@@ -19,6 +19,7 @@
   뼈대는 'moded'에서 걷는다(js/form-wait.js readyType) — ready에서 걷으면 옛 「바우처 신청」 첫 화면이 한순간 보인다.
   /contact와 다른 점: 메뉴, 자주 묻는 질문, 하단 정보, 떠 있는 버튼, 방문 통계, 문의 창 없음(보호자가 링크로만 들어와 한 가지 일만 하는 화면). 수정 찾기 화면은 등록 모드에서 안 열려 appmode도 없음.
   noindex = 검색에 안 나오게(링크로만 들어옴). ⚠️ 06 등록 모드 첫 화면 문구, 치수를 바꾸면 아래 뼈대도(0-9). ⚠️ 사용자 문구에 가운뎃점(U+00B7) 금지.
+  끝 화면 알림(2026-11-26) = 06 완료 화면이 {type:'endtoast', on, msg}로 켜고 끈다(#endToast) — 메시지 이름을 바꾸면 06 Apply.html `_endToast_`도. 옛 06은 안 보냄 = 알림 없음(그래서 이 페이지를 먼저 올린다).
 -->
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
@@ -46,6 +47,8 @@ body{ margin:0; }
 .apply-skel .sk-btn{ padding:17px; font-size:17px; font-weight:700; line-height:normal; text-align:center; border-radius:15px; background:var(--g100); }
 @media (max-width:380px){ .apply-skel{ padding:0 12px; } .apply-skel .sk-card{ padding:24px 18px; } }
 body.form-ready .apply-skel{ display:none; }
+/* 끝 화면 알림 = 06 완료 화면이 'endtoast'로 켜고 끈다(사라지지 않음, docs/1 §4.6 — 위에 홍보지나 큰 체크가 있어 「이제 창을 닫아도 돼요」를 제목 아래에 못 둠). 모양 = .form-toast(§5.5), 자리 = 아래 24px(kr /selected 끝 화면과 같음) */
+.end-toast{ bottom:calc(24px + env(safe-area-inset-bottom)); }
 body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk-card{ background:#22332a; }
 </style>
 </head>
@@ -66,6 +69,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
 
 <!-- 폼 안내 토스트(임베드 폼이 요청 시 화면 하단에 표시) / 종료 확인 안내 — /contact와 같은 것(site.css) -->
 <div class="form-toast" id="formToast"></div>
+<div class="form-toast end-toast" id="endToast" role="status"></div>
 <div class="exithint" id="exitHint"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>한 번 더 뒤로 가면 나가요.</div>
 
 <script>
@@ -102,6 +106,10 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     else if (d.type === 'toast') { showFormToast(d.msg, d.kind, d.above); }
     else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
     else if (d.type === 'exithint') { showExitBox(); }
+    else if (d.type === 'endtoast') {   // 06 완료 화면에 들어가면 on, 떠나면(← 뒤로) off — 시간으로 안 지운다
+      var et = document.getElementById('endToast');
+      if (et) { var on = !!(d.on && d.msg); if (on) et.textContent = String(d.msg); et.classList.toggle('show', on); }
+    }
   });
   // 대기 화면(문구, 연결 끊김, 다시 불러오기) = js/form-wait.js. readyType 'moded' = 등록 모드로 바뀐 뒤에 뼈대를 걷는다
   if (window.tfFormWait) window.tfFormWait({ frame: f, skel: document.getElementById('applySkel'), card: document.querySelector('#applySkel .sk-card'), obj: '등록 화면을', readyType: 'moded' });
