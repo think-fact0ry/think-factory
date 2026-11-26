@@ -79,7 +79,19 @@
   #scr-done.on{ display:flex; flex-direction:column; justify-content:center; min-height:calc(100svh - 68px); }
   .done-box{ display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 12px; }
   .done-title{ font-size:21px; font-weight:800; letter-spacing:-.4px; line-height:1.45; }
-  .done-sub{ font-size:14.5px; font-weight:500; color:var(--g700); margin-top:10px; word-break:break-all; }
+  .done-sub{ font-size:14.5px; font-weight:500; color:var(--g700); margin-top:16px; word-break:break-all; }   /* 16px = 유성 11-26 「이 사이 간격이 조금 좁아」(10 → 16, 끝 화면 다 같이) */
+  /* 여는 동안 = 생년 칸 화면 마크업 그대로 + 덩어리만(docs/1 §5.4, kr /selected .sk 복제 — 유성 11-26). 스피너 안 겹침 */
+  .sk{ pointer-events:none; }
+  .sk *{ animation:none!important; transition:none!important; visibility:hidden; }
+  .sk .app-h1, .sk .app-h1 *, .sk .which, .sk #viewBtn{ visibility:visible; }
+  .sk .which{ color:transparent!important; }
+  .sk .skt{ color:transparent!important; background-color:#e5e8eb; border-radius:6px; -webkit-box-decoration-break:clone; box-decoration-break:clone; background-image:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.7),rgba(255,255,255,0)); background-size:60% 100%; background-repeat:no-repeat; animation:sksh 1.5s ease-in-out infinite!important; }
+  @keyframes sksh{ 0%{ background-position:-150% 0; } 70%,100%{ background-position:250% 0; } }
+  .sk #viewBtn{ background:#e5e8eb!important; color:transparent!important; box-shadow:none!important; }
+  @media (prefers-reduced-motion:reduce){ .sk .skt{ animation:none!important; } }
+  .wpill{ position:fixed; left:50%; top:50%; z-index:5; transform:translate(-50%,-50%); width:max-content; max-width:calc(100% - 64px); background:#fff; border-radius:14px; padding:14px 22px; box-shadow:0 4px 18px rgba(25,31,40,.12); text-align:center; font-size:15px; font-weight:600; line-height:1.45; color:#333d4b; word-break:keep-all; animation:wpin .35s ease both; }
+  .wpill small{ display:block; margin-top:2px; font-size:13.5px; font-weight:500; color:#6b7684; }
+  @keyframes wpin{ from{ opacity:0; } to{ opacity:1; } }
   .done-sub a{ color:var(--green); font-weight:700; text-decoration:none; white-space:nowrap; }   /* 센터 번호 = 눌러서 전화 */
 
   /* 보기(12 pay #pDoc 복제) — 위 머리 + 스크롤 칸(회색 바탕 위 흰 종이) */
@@ -126,7 +138,7 @@
 <body>
 <div class="wrap">
   <section class="scr" id="scr-form">
-    <h1 class="app-h1">검사 결과지가<br>나왔어요</h1>
+    <h1 class="app-h1"><span class="skt">검사 결과지가<br>나왔어요</span></h1>
     <div class="which" id="which"></div>
     <div class="field uf" id="f-dob"><label for="dob">아이 생년월일</label><div class="inw"><input class="in" id="dob" type="tel" inputmode="numeric" placeholder="0000. 00. 00" readonly autocomplete="off"><button type="button" class="clr" tabindex="-1" aria-label="지우기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>
     <button class="btn gate" type="button" id="viewBtn">결과지 보기</button>
@@ -219,22 +231,51 @@ var CALL = '센터로 전화 주세요: ' + TEL;
 // 열 수 없는 까닭 → 끝 화면 글(07 why)
 var END = {
   key: '링크가 맞지 않아요.\n' + CALL,
-  off: '이 링크는 닫혔어요.\n' + CALL,
+  off: '이 링크는 닫혔어요.\n새 결과지를 보내드릴게요.\n감사합니다 ☺️',   // 잘못 보내 닫은 링크(유성 11-26 글 그대로, 번호 안 씀)
   old: '볼 수 있는 기간이 지났어요.\n' + CALL,
   locked: '생년월일을 여러 번 틀려서 이 링크가 잠겼어요.\n' + CALL,
   file: '결과지를 불러오지 못했어요.\n확인해서 연락드릴게요.'
 };
 
+// 다시 보내서 닫힌 옛 링크(07이 off에 now = 새로 보낸 날, 받은 길을 붙여 줌) — 유성 11-26 글 그대로(번호 안 씀). 대체문자로 받은 집은 「카톡을」 → 「문자를」(Claude 정함)
+//  이름은 안 보임(옛 링크를 가진 쪽이 다른 집일 수 있어서)
+function endOff(r){
+  var n = r && r.now;
+  if(n && n.at){ endNote('이 링크는 닫혔어요.\n새 결과지를 보내드렸어요.\n' + n.at + '에 보내드린\n' + (n.via === '문자' ? '문자를' : '카톡을') + ' 확인해 주세요.\n\n감사합니다 ☺️'); return; }
+  endNote(END.off);
+}
+function endWhy(r, fallback){
+  var w = r && r.why;
+  if(w === 'off'){ endOff(r); return true; }
+  if(END[w]){ endNote(END[w]); return true; }
+  if(fallback){ endNote(fallback); return true; }
+  return false;
+}
+
+/* ── 여는 동안 = 올 화면(생년 칸 화면) 그대로 덩어리만(docs/1 §5.4, kr /selected .sk 복제 — 유성 11-26 「로딩 스피너 넣지 말고, 스켈레톤」).
+   3초 「결과지를 불러오고 있어요」, 12초 「인터넷이 느리면 …」(js/form-wait.js 글 그대로) ── */
+var skT=[], pill=null;
+function skel(on){
+  skT.forEach(clearTimeout); skT=[]; if(pill){ pill.remove(); pill=null; }
+  $('scr-form').classList.toggle('sk', !!on);
+  if(!on) return;
+  $('which').textContent='김○나 오감쑥쑥 사전검사 결과지';   // 자리만(투명 — 뜬 화면과 같은 높이)
+  show('scr-form');
+  var say=function(h){ if(!pill){ pill=document.createElement('div'); pill.className='wpill'; pill.setAttribute('role','status'); document.body.appendChild(pill); } pill.innerHTML=h; };
+  skT.push(setTimeout(function(){ say('결과지를 불러오고 있어요'); }, 3000));
+  skT.push(setTimeout(function(){ say('인터넷이 느리면 조금 더 걸려요<small>조금만 더 기다려 주세요</small>'); }, 12000));
+}
+
 /* ── 열기 — 어느 결과지인지. 열리면 서버가 결과지를 미리 받아 두게(생년을 적는 동안) ── */
 function open(){
   if(!KEY && !DEMO){ endNote(END.key); return; }
-  loading(true);
+  skel(true);
   var tries = 0;
   (function go(){
     tries++;
     post({ action:'rp_open', k:KEY }, T.open).then(function(r){
-      loading(false);
-      if(!r || !r.ok){ endNote(END[r && r.why] || ('지금은 열 수 없어요.\n' + CALL)); return; }
+      skel(false);
+      if(!r || !r.ok){ endWhy(r, '지금은 열 수 없어요.\n' + CALL); return; }
       var w=$('which'); w.textContent='';
       var b=document.createElement('b'); b.textContent=r.name; w.appendChild(b);
       w.appendChild(document.createTextNode(' ' + r.what + ' 결과지'));
@@ -242,7 +283,7 @@ function open(){
       post({ action:'rp_warm', k:KEY }, 30000).catch(function(){});   // 답은 안 기다림(아무것도 안 돌려줌)
     }).catch(function(){
       if(tries < 3){ setTimeout(go, T.retry); return; }
-      loading(false); endNote('지금은 열 수 없어요.\n잠시 뒤 다시 열어 주세요.');
+      skel(false); endNote('지금은 열 수 없어요.\n잠시 뒤 다시 열어 주세요.');
     });
   })();
 }
@@ -265,7 +306,7 @@ $('viewBtn').onclick=function(){
     if(w==='b6'){ $('f-dob').classList.add('err'); toast('아이 생년월일이 맞지 않아요.' + (r.left>0 && r.left<=2 ? '\n' + r.left + '번 더 틀리면 이 링크가 잠겨요.' : ''), 3600); return; }
     if(w==='wait'){ $('f-dob').classList.add('err'); toast('여러 번 틀려서 잠시 쉬어요.\n1시간 뒤에 다시 해주세요.', 4000); return; }
     if(w==='busy'){ toast('지금은 열 수 없어요.\n잠시 뒤 다시 해주세요.', 3600); return; }
-    if(END[w]){ endNote(END[w]); return; }
+    if(endWhy(r)) return;
     toast('결과지를 아직 못 불러왔어요.\n잠시 뒤 다시 해주세요.', 3600);
   }).catch(function(){ busy=false; loading(false); toast('결과지를 아직 못 불러왔어요.\n잠시 뒤 다시 해주세요.', 3600); });
 };
@@ -408,11 +449,15 @@ function attachPinch(scroller, getTarget, opts){
   return { get z(){ return z; } };
 }
 
-/* ── 데모(?demo=1, 서버 없음) — 생년월일 2015.03.15만 맞음. 결과지 = demo/ 가짜 PDF 둘(김하나) ── */
+/* ── 데모(?demo=1, 서버 없음) — 생년월일 2015.03.15만 맞음. 결과지 = demo/ 가짜 PDF 둘(김하나)
+   s=new / newsms = 다시 보내서 닫힌 옛 링크(07 off + now), slow=N = 여는 데 N초(스켈레톤, 알약 보기) ── */
+var SLOW = +((/[?&]slow=([0-9]+)/.exec(location.search) || [])[1] || 0);
 function demoPost(b){
   return new Promise(function(res){ setTimeout(function(){
     if(b.action==='rp_warm') return res({ ok:true });
     if(b.action==='rp_open'){
+      if(SCENE==='new') return res({ ok:false, why:'off', now:{ at:'11월 26일', via:'카톡' } });
+      if(SCENE==='newsms') return res({ ok:false, why:'off', now:{ at:'11월 26일', via:'문자' } });
       if(/^(key|off|old|locked)$/.test(SCENE)) return res({ ok:false, why:SCENE });
       return res({ ok:true, name:'김○나', what:'오감쑥쑥 사전검사', n: SCENE==='one' ? 1 : 2 });
     }
@@ -424,7 +469,7 @@ function demoPost(b){
     Promise.all(list.map(function(n){ return fetch('demo/' + encodeURIComponent(n)).then(function(r){ return r.arrayBuffer(); }).then(function(ab){
       var u=new Uint8Array(ab), s=''; for(var i=0;i<u.length;i++) s+=String.fromCharCode(u[i]); return { name:n, b64:btoa(s) };
     }); })).then(function(files){ res({ ok:true, name:'김하나', what:'오감쑥쑥 사전검사', files:files }); });
-  }, 500); });
+  }, b.action==='rp_open' && SLOW ? SLOW*1000 : 500); });
 }
 open();
 </script>
