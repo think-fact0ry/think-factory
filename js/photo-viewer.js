@@ -10,7 +10,7 @@
 //
 // 시각·동작(전부 유성 픽, prototype/홈페이지_활동글_사진뷰어_프리뷰.html에서 렌더 비교 후 확정):
 //   검정 배경 / 페이드로 열림 / 좌상단 글 제목(앞줄, 잘림) / 위 가운데 카운터 / 우상단 공유+닫기
-//   / 하단 썸네일 줄 / 사진 탭 = 닫기 / 위·아래로 쓸어 닫기 / PC는 좌우 화살표·키보드
+//   / 하단 썸네일 줄(11-27부터 가운데) / 사진 탭 = 닫기 / 위·아래로 쓸어 닫기 / PC는 좌우 화살표·키보드
 //   🔴 §4.10 예외: 전면 닫기 ×는 원칙상 '좌상단'인데 여기만 **우상단**이다.
 //      이유 = 네이버 블로그 뷰어가 학부모에게 더 익숙하다(유성 2026-08-31). 이 화면 한정 일회 예외이지 원칙 갱신이 아니다.
 //
@@ -27,9 +27,10 @@
 //         / history: 'hash' = 활동 글(#p=N, 넘김 replaceState) · 'state' = 해시 없이 칸 하나(뒤로 = 닫기) · 'host' = 히스토리는 부른 화면이 맡음(닫기 요청 = onRequestClose, 그 화면 popstate에서 close())
 //         / root(붙일 곳, 기본 body — 폰 목업 화면은 그 화면 틀 안) / tag(방문 통계 이름 앞, 기본 photo — 홍보지 = flyer_open 등, RB-005 숫자와 안 섞임)
 //         / onOpen(i), onClose(i)(닫기 시작), onClosed(i)(사라진 뒤)
-//         / tapGuard(ms — 연 뒤 이 안의 사진, 배경 누름은 닫기 아님. 홍보지 350) / thumbsCenter(아래 미리보기 줄 가운데, 넘치면 스크롤. 홍보지 true — 유성 11-27 「중앙으로」)
-//   활동 글에서 바뀐 것 = 둘: 닫기 빨리 두 번 막기(옛 판은 뒤로가 두 번 돌아 글을 떠났다), 닫히는 사이 다시 누르면 안 뜨고 스크롤이 막히던 것
-//     — tools/06예약시험/viewer_posts_test.mjs(옛 판 = 그 항목 실패). tapGuard, thumbsCenter는 활동 글에 안 켠다(왼쪽 줄, 바로 닫힘 그대로).
+//         / tapGuard(ms — 연 뒤 이 안의 사진, 배경 누름은 닫기 아님. 홍보지 350)
+//   활동 글에서 바뀐 것 = 셋: 닫기 빨리 두 번 막기(옛 판은 뒤로가 두 번 돌아 글을 떠났다), 닫히는 사이 다시 누르면 안 뜨고 스크롤이 막히던 것,
+//     아래 미리보기 줄 가운데(11-27 홍보지 먼저 → 같은 날 유성 「응 그것도 그렇게 바꿔줘」로 활동 글도. 줄이 넘치는 글은 그대로 왼쪽부터 밀림)
+//     — tools/06예약시험/viewer_posts_test.mjs(옛 판 = 그 항목 실패). tapGuard는 활동 글에 안 켠다(사진 누름 = 바로 닫힘 그대로).
 //   ⚠ 활동 글 73쪽은 이 파일을 꼬리표 없이 싣는다 → 고치면 10분 안에 같이 바뀐다. 고치기 전후로 위 시험을 돌릴 것.
 //   ⚠ 이 파일을 싣는 다른 곳(꼬리표 ?v= — 고치면 올림): selected/index.html, register/index.html, contact.html, 06 Apply.html(옛 부모일 때 신청서 안에서 싣는 주소).
 
@@ -96,9 +97,9 @@
       //    / opacity만 빼면 140(그대로) ⇒ 범인은 outline-color 하나. 테두리는 즉시 켜지고 opacity만 부드럽게.
       'outline:2px solid transparent;outline-offset:-2px;cursor:pointer;transition:opacity .18s}',
     '.tfpv .pv-thumbs img.cur{opacity:1;outline-color:var(--ink-on-dark,#F9FBFA)}',   // ⛔ 솔리드 초록 선택 상태는 재제안 금지 목록
-    // 썸네일 줄 가운데(pv-tc = 홍보지만 — 유성 11-27 「미리보기 창이 좌측으로 되어있는데, 중앙으로」. 활동 글은 왼쪽 그대로).
+    // 썸네일 줄 가운데(유성 11-27 「미리보기 창이 좌측으로 되어있는데, 중앙으로」 = 홍보지 → 「응 그것도 그렇게 바꿔줘」 = 활동 글도).
     //   justify-content:center는 줄이 넘칠 때 왼쪽 끝을 스크롤로 못 닿게 자른다 → 양끝 auto 여백(넘치면 0으로 접혀 스크롤 그대로)
-    '.tfpv.pv-tc .pv-thumbs img:first-child{margin-left:auto}.tfpv.pv-tc .pv-thumbs img:last-child{margin-right:auto}',
+    '.tfpv .pv-thumbs img:first-child{margin-left:auto}.tfpv .pv-thumbs img:last-child{margin-right:auto}',
     // 로딩 = 출렁이는 점 3개(§5.2 — 정적 '…' 금지)
     '.tfpv .pv-load{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--ink-on-dark,#F9FBFA);' +
       'font-size:14px;font-weight:600;display:none;align-items:center}',
@@ -150,7 +151,7 @@
 
     // ── DOM ──────────────────────────────────────────────────────────────
     var pv = document.createElement('div');
-    pv.className = o.thumbsCenter ? 'tfpv pv-tc' : 'tfpv';   // thumbsCenter = 썸네일 줄 가운데(홍보지). 활동 글 = 없음(왼쪽 그대로)
+    pv.className = 'tfpv';
     pv.id = o.id || 'tfpv';
     pv.setAttribute('role', 'dialog');
     pv.setAttribute('aria-modal', 'true');
@@ -457,7 +458,6 @@
     for (k in o) x[k] = o[k];
     x.srcs = FLYER; x.tag = 'flyer';
     if (!('tapGuard' in o)) x.tapGuard = 350;   // 홍보지 = 두 번 톡(확대 습관)의 둘째 누름이 막 뜬 뷰어를 닫지 않게(옛 .zm은 사진 누름을 무시했다)
-    if (!('thumbsCenter' in o)) x.thumbsCenter = true;   // 홍보지 = 앞, 뒤 두 장이라 왼쪽에 몰리면 비어 보인다(유성 11-27 「중앙으로」)
     if (!('share' in o)) x.share = FLYER_SHARE;   // share:false = 공유 단추 없음(06 신청서 안 — 구글 iframe이라 공유, 복사가 막힌다)
     return create(x);
   };
