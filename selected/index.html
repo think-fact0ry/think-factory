@@ -9,6 +9,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
 <link rel="apple-touch-icon" href="/assets/android-icon-192x192.png">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="/js/photo-viewer.js?v=20261126" defer></script>
 <!--
   think-factory.kr/selected — 06 선정 소식 알림톡 버튼 뒤 화면(바우처 결과를 알려 주는 보호자).
   ?a=yes&k=<열쇠> = 「선정됐어요 →」 / ?a=no&k=<열쇠> = 「선정되지 못했어요」 / ?k=<열쇠> = 대체문자(결과 다시 고르기부터).
@@ -23,7 +24,9 @@
   설계 = 부모 레포 prototype/06_선정소식_제출화면_7차_프리뷰.html(3, 4, 5번, 확인 창, 완료 화면) + 06_선정소식_제출화면_8차_등급화면_프리뷰.html(등급 화면 = 나 + 글 1,
   서비스별 등급표) + 06_선정소식_원칙과다른곳_프리뷰.html(11-09 정함 12칸). CSS 값은 프리뷰 그대로 — ⚠️디자인을 고칠 땐 그 프리뷰와 같이.
   홍보지 = flyer-front.jpg, flyer-back.jpg(원본 1264x1772를 760 폭으로 줄인 판, 오감쑥쑥 집에만).
-  ⚠️ 06 신청 완료 화면(Apply.html `DONE_FL`, 2026-11-26)도 이 두 파일과 끝 화면 CSS(.fls .fl .ty .oka .dd .mv .zm)를 그대로 쓴다 — 파일 이름, 자리, 끝 화면 모양을 바꾸면 06도(0-9).
+  ⚠️ 06 신청 완료 화면(Apply.html `DONE_FL`, 2026-11-26)도 이 두 파일과 끝 화면 CSS(.fls .fl .ty .oka .dd .mv)를 그대로 쓴다 — 파일 이름, 자리, 끝 화면 모양을 바꾸면 06도(0-9).
+  홍보지 크게 보기(11-26 유성 「참고에서 그대로」) = 활동 글 사진 뷰어 /js/photo-viewer.js의 tfPhotoViewer.flyer(검정, 위 1/2, 오른쪽 위 공유와 ×, 아래 미리보기, 옆으로 넘기기).
+  폰 틀 안(root = #app), 뒤로가기 = 이 화면의 창 한 겹(layerIn, hLayer — history:'host'). 홍보지 파일, 공유 링크는 그 파일 한 곳(06 신청 완료 화면도 같은 것). 옛 어두운 판(.zm, 앞면/뒷면 단추)은 지움.
 -->
 <style>
 *{box-sizing:border-box}
@@ -219,13 +222,6 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
 .mv{margin-top:14px;display:inline-flex;align-items:center;gap:2px;border:0;background:none;color:#166841;font:600 15px 'Pretendard Variable',Pretendard,system-ui,sans-serif;min-height:44px;padding:0 8px;cursor:pointer;border-radius:10px;transition:transform .12s;text-decoration:none}
 .mv:active,.mv.press{transform:scale(.93)}
 .mv svg{width:17px;height:17px}
-.zm{position:absolute;inset:0;background:rgba(10,12,14,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;animation:fd .2s ease}
-.zm img{width:86%;max-width:330px;border-radius:8px;display:block}
-.zm .zx{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.zm .zx svg{width:24px;height:24px}
-.zm .zn{display:flex;gap:8px}
-.zm .zn button{border:0;border-radius:999px;min-height:44px;padding:0 18px;font:600 14px 'Pretendard Variable',Pretendard,system-ui,sans-serif;background:rgba(255,255,255,.14);color:#F9FBFA;cursor:pointer}
-.zm .zn button.on{background:#F9FBFA;color:#191f28}
 
 /* ===== 7차 더한 것 ===== */
 /* 지금 칸으로 들어오는 점선 = 위에서부터 초록으로 차오름, 반복 (유성 11-07). 점 굵기 = 옆 실선과 같은 2px */
@@ -313,11 +309,11 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
   .outdim.on{opacity:1}
   #app{max-width:min(var(--mock-w),calc(100% - 2*var(--mock-gap)));height:100%;border-radius:var(--mock-r) var(--mock-r) 0 0;corner-shape:superellipse(2.3);box-shadow:var(--mock-sh);transform:translateZ(0)}
   /* ⓑ 안쪽 층도 같은 모양 — 없으면 크림 바탕이 곡선 밖으로 1px 샌다(11-12 크롬 157 모서리 픽셀 실측, docs/1 §3.8) */
-  #app > .pg, #app > .ov{border-radius:var(--mock-r) var(--mock-r) 0 0;corner-shape:superellipse(2.3)}
+  #app > .pg, #app > .ov, #app > .tfpv{border-radius:var(--mock-r) var(--mock-r) 0 0;corner-shape:superellipse(2.3)}
   /* ⑦ 막이 뜨면 #app 바탕 = 미리 섞은 단일색(반투명이면 곡선 가장자리에 밝은 선 — 같은 실측). 막이나 #app 색을 바꾸면 같이:
-     .dim rgba(0,0,0,.42) × #f7f5f1 = rgb(143,142,140) / .zm rgba(10,12,14,.92) × #f7f5f1 = rgb(29,31,32) */
+     .dim rgba(0,0,0,.42) × #f7f5f1 = rgb(143,142,140) / 홍보지 크게 보기(.tfpv, 사진 뷰어) = 불투명 검정 #000 */
   #app:has(.dim.on){background-color:rgb(143,142,140)}
-  #app:has(.zm){background-color:rgb(29,31,32)}
+  #app:has(.tfpv.on){background-color:#000}
 }
 </style></head>
 <body>
@@ -553,7 +549,7 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
   // 파도 = 색은 늘, 굵기는 가변 글꼴을 받았을 때만(FONT.ok). 글꼴을 기다리는 동안엔 파도를 안 시작한다(시작한 뒤 굵기를 붙이면 색과 박자가 어긋난다)
   function waveOn(l) { l.classList.add('wave'); l.classList.toggle('wvw', FONT.ok); }
   function waveOff() { pg.querySelectorAll('.lst.wave').forEach(function (x) { x.classList.remove('wave', 'wvw'); }); }
-  function odSync() { outdim.classList.toggle('on', !!ov.querySelector('.dim.on, .zm')); }
+  function odSync() { outdim.classList.toggle('on', !!ov.querySelector('.dim.on') || !!(PV && PV.isOpen())); }
 
   // ── 뒤로(docs/1 §4.11): 창, 모달, 크게 보기 = 히스토리 1칸(뒤로 = 그것만 닫음) / 화면 넘김 = 1칸(뒤로 = 앞 화면)
   //    칸마다 { step, d }(d = 이 페이지 안에서 몇 칸째) — 새로고침하면 그 칸의 step으로 다시 그리고(boot), 「잘못 눌렀어요」는 d > 0이면 history.back()(§4.11-2 같은 길)
@@ -646,12 +642,18 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
     ov.innerHTML = '<div class="dim" data-act="close"></div><div class="bs" role="dialog" aria-modal="true" aria-label="바우처 없이 신청"><div class="hdl"></div><h4>선생님 일정부터<br>알아볼까요?</h4><div class="btns"><button type="button" class="cta" data-act="nvok">네, 알아봐주세요</button><button type="button" class="nob" data-act="close">조금 더 생각해 볼게요</button></div></div>';
     liftSheet();
   }
+  // 홍보지 크게 보기 = 활동 글 사진 뷰어(/js/photo-viewer.js tfPhotoViewer.flyer, 11-26 유성 「참고에서 그대로」). 폰 틀 안(#app), 뒤로가기 = 이 화면의 창 한 겹(history 'host':
+  //   ×, 사진 누름, Esc, 쓸어 닫기 = userClose → 뷰어 닫고 layerDrop / 브라우저 뒤로 = popstate hLayer → closeOv가 닫음)
+  var PV = null;
   function zoom(p) {
-    ov.innerHTML = '<div class="zm"><button type="button" class="zx" data-act="close" aria-label="닫기">' + SV.x + '</button><img src="' + IMG[p] + '" alt="홍보지 ' + (p === 'L' ? '앞면' : '뒷면') + '" draggable="false"><div class="zn"><button type="button" data-act="zoom" data-p="L" class="' + (p === 'L' ? 'on' : '') + '">앞면</button><button type="button" data-act="zoom" data-p="R" class="' + (p === 'R' ? 'on' : '') + '">뒷면</button></div></div>';
-    ov.classList.add('live'); layerIn(); odSync();
+    if (!PV && window.tfPhotoViewer) PV = window.tfPhotoViewer.flyer({ history: 'host', root: app, onRequestClose: userClose, onOpen: odSync, onClose: odSync });
+    if (!PV) { try { window.open(IMG[p], '_blank', 'noopener'); } catch (_) {} return; }   // 뷰어 파일을 못 받았으면(끊김) 사진만이라도 — 눌러도 무반응 = 데드클릭
+    if (PV.isOpen()) return;
+    PV.open(p === 'L' ? 0 : 1); layerIn(); odSync();
   }
   function closeOv(now) {
-    if (!ov.innerHTML) return;
+    if (PV && PV.isOpen()) PV.close();   // 홍보지 크게 보기도 이 화면의 창 한 겹
+    if (!ov.innerHTML) { odSync(); return; }
     if (now) { ov.innerHTML = ''; ov.classList.remove('live'); odSync(); return; }
     if (S.step === 'grade' && !RM) {
       var l = curScrn() && curScrn().querySelector('.lst');
@@ -660,7 +662,6 @@ body{margin:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direc
     var dim = ov.querySelector('.dim'), bs = ov.querySelector('.bs,.cmodal');
     if (dim) dim.classList.remove('on');
     if (bs) { bs.classList.remove('on', 'grab', 'press'); bs.style.transform = ''; }
-    if (ov.querySelector('.zm')) ov.innerHTML = '';
     ov.classList.remove('live'); odSync();
     setTimeout(function () { if (!ov.classList.contains('live')) ov.innerHTML = ''; }, 330);
   }

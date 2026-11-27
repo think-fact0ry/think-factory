@@ -20,6 +20,8 @@
   /contact와 다른 점: 메뉴, 자주 묻는 질문, 하단 정보, 떠 있는 버튼, 방문 통계, 문의 창 없음(보호자가 링크로만 들어와 한 가지 일만 하는 화면). 수정 찾기 화면은 등록 모드에서 안 열려 appmode도 없음.
   noindex = 검색에 안 나오게(링크로만 들어옴). ⚠️ 06 등록 모드 첫 화면 문구, 치수를 바꾸면 아래 뼈대도(0-9). ⚠️ 사용자 문구에 가운뎃점(U+00B7) 금지.
   끝 화면 알림(2026-11-26) = 06 완료 화면이 {type:'endtoast', on, msg}로 켜고 끈다(#endToast) — 메시지 이름을 바꾸면 06 Apply.html `_endToast_`도. 옛 06은 안 보냄 = 알림 없음(그래서 이 페이지를 먼저 올린다).
+  홍보지 크게 보기(2026-11-26 유성 「참고에서 그대로」) = 이 페이지가 활동 글 사진 뷰어(/js/photo-viewer.js tfPhotoViewer.flyer)로 그린다. 폼에 fv:1(그릴 수 있음)을 알리고,
+  폼이 {type:'flyer', i}(0 앞, 1 뒤)를 보내면 연다 / {type:'flyerwarm'} = 미리 받기. 신청서 iframe 안은 공유, 복사가 막혀서(allow 없음). 이름을 바꾸면 06 Apply.html dZoom, _flWarm_도.
 -->
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
@@ -30,6 +32,7 @@
 <link rel="apple-touch-icon" href="/assets/android-icon-192x192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="/css/site.css">
+<script src="/js/photo-viewer.js?v=20261126" defer></script>
 <style>
 html, body{ background:#f7f5f1; }   /* 폼 캔버스와 같은 색 — 폼 아래 남는 자리가 이어져 보이게 */
 body{ margin:0; }
@@ -81,7 +84,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
   var childWin = null, safetyT = 0;
   function vpH() { return window.visualViewport ? window.visualViewport.height : window.innerHeight; }
   // mode = 06 Apply.html 등록 모드 스위치. src = 시트 X열 'register'(07 월 안내 「짝 없는 등록」, 10 브리핑이 신규 신청과 가름) — 폼도 등록 모드면 스스로 'register'를 쓴다
-  function sendVH() { if (!childWin) return; try { childWin.postMessage({ tfParent: 1, vh: vpH(), src: 'register', mode: 'register' }, '*'); } catch (e) {} }
+  function sendVH() { if (!childWin) return; try { childWin.postMessage({ tfParent: 1, vh: vpH(), src: 'register', mode: 'register', fv: window.tfPhotoViewer ? 1 : 0 }, '*'); } catch (e) {} }   // fv = 홍보지 크게 보기를 이 페이지가 그림(머리 주석)
   function okGasOrigin(o) { try { var h = new URL(o).hostname; return h === 'script.google.com' || h.endsWith('.googleusercontent.com'); } catch (e) { return false; } }
   function formToastBottom(t, above) {
     if (typeof above !== 'number') return '';
@@ -110,7 +113,14 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
       var et = document.getElementById('endToast');
       if (et) { var on = !!(d.on && d.msg); if (on) et.textContent = String(d.msg); et.classList.toggle('show', on); }
     }
+    else if (d.type === 'flyer') { openFlyer(d.i); }   // 홍보지 크게 보기 — 뷰어(층 1200)가 끝 화면 알림(1000) 위를 덮어 알림은 그대로 둔다
+    else if (d.type === 'flyerwarm') { if (window.tfPhotoViewer) { window.tfPhotoViewer.flyerWarm(); sendVH(); } }   // sendVH = fv 다시 알림(뷰어 파일이 신청서 ready보다 늦게 실렸어도 완료 화면 전에 맞춤, 리뷰 11-26)
   });
+  var flyerV = null;
+  function openFlyer(i) {
+    if (!flyerV && window.tfPhotoViewer) flyerV = window.tfPhotoViewer.flyer({ history: 'state' });   // 뒤로가기 = 이 페이지 칸 하나(해시 없음)
+    if (flyerV && !flyerV.isOpen()) flyerV.open(i === 1 ? 1 : 0);
+  }
   // 대기 화면(문구, 연결 끊김, 다시 불러오기) = js/form-wait.js. readyType 'moded' = 등록 모드로 바뀐 뒤에 뼈대를 걷는다
   if (window.tfFormWait) window.tfFormWait({ frame: f, skel: document.getElementById('applySkel'), card: document.querySelector('#applySkel .sk-card'), obj: '등록 화면을', readyType: 'moded' });
   window.addEventListener('resize', sendVH);
