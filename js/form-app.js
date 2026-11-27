@@ -10,9 +10,11 @@
 //   짝 = 06 문자 끝 줄 「@think-factory.kr #번호」(06 문자인증.js) — 이 페이지 주소가 바뀌면 둘 다. 아이폰은 이 길이 없다(키보드 위 「메시지에서」)
 window.tfFormApp = function (f) {
   var ac = null, win = null;
+  function ours(src) { try { return !!src && src.top === window; } catch (e) { return false; } }   // 이 페이지 iframe 안쪽 칸만(남의 googleusercontent 창이 팝업으로 열어 6자리를 받아 가지 못하게 — 별도 리뷰 11-28 #8)
   function phone() { return !!(window.matchMedia && window.matchMedia('(max-width:760px)').matches); }
   function stop() { if (ac) { try { ac.abort(); } catch (e) {} ac = null; } }
   function listen(src) {
+    if (!ours(src)) return;
     win = src;
     if (ac || !('OTPCredential' in window) || !navigator.credentials || typeof AbortController !== 'function') return;
     var a = ac = new AbortController();
@@ -30,7 +32,7 @@ window.tfFormApp = function (f) {
     appmode: function (d, src) {
       var was = document.body.classList.contains('form-app');
       if (d.on) {
-        if (d.keep) {
+        if (d.keep && ours(src)) {
           if (!was && phone()) { try { src.postMessage({ tfParent: 1, appy: Math.max(0, Math.round(-f.getBoundingClientRect().top)) }, '*'); } catch (e) {} }
           listen(src);
         }
