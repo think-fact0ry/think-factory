@@ -27,7 +27,9 @@
 //         / history: 'hash' = 활동 글(#p=N, 넘김 replaceState) · 'state' = 해시 없이 칸 하나(뒤로 = 닫기) · 'host' = 히스토리는 부른 화면이 맡음(닫기 요청 = onRequestClose, 그 화면 popstate에서 close())
 //         / root(붙일 곳, 기본 body — 폰 목업 화면은 그 화면 틀 안) / tag(방문 통계 이름 앞, 기본 photo — 홍보지 = flyer_open 등, RB-005 숫자와 안 섞임)
 //         / onOpen(i), onClose(i)(닫기 시작), onClosed(i)(사라진 뒤)
-//   활동 글에서 바뀐 것 = 닫기 빨리 두 번 막기 하나(옛 판은 뒤로가 두 번 돌아 글을 떠났다 — tools/06예약시험/viewer_posts_test.mjs, 옛 판 3 실패 / 새 판 0).
+//         / tapGuard(ms — 연 뒤 이 안의 사진, 배경 누름은 닫기 아님. 홍보지 350) / thumbsCenter(아래 미리보기 줄 가운데, 넘치면 스크롤. 홍보지 true — 유성 11-27 「중앙으로」)
+//   활동 글에서 바뀐 것 = 둘: 닫기 빨리 두 번 막기(옛 판은 뒤로가 두 번 돌아 글을 떠났다), 닫히는 사이 다시 누르면 안 뜨고 스크롤이 막히던 것
+//     — tools/06예약시험/viewer_posts_test.mjs(옛 판 = 그 항목 실패). tapGuard, thumbsCenter는 활동 글에 안 켠다(왼쪽 줄, 바로 닫힘 그대로).
 //   ⚠ 활동 글 73쪽은 이 파일을 꼬리표 없이 싣는다 → 고치면 10분 안에 같이 바뀐다. 고치기 전후로 위 시험을 돌릴 것.
 //   ⚠ 이 파일을 싣는 다른 곳(꼬리표 ?v= — 고치면 올림): selected/index.html, register/index.html, contact.html, 06 Apply.html(옛 부모일 때 신청서 안에서 싣는 주소).
 
