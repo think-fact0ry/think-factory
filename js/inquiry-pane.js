@@ -509,11 +509,13 @@
     addEventListener('keydown', function (e) {
       if (!S.open) return;
       if (e.key === 'Escape' && viewerOpen()) { closeViewer(); return; }   // 크게 보기만 닫는다(한 단계)
+      if (e.key === 'Escape' && photoViewerOn()) return;   // Esc = 위에 뜬 사진 뷰어 몫(뷰어가 닫힘), 창은 그대로 — 안 막으면 이 캡처가 창부터 닫고 뷰어도 닫혀 뒤로가 두 번 돈다(11-27 유성 「권장대로」)
       if (e.key === 'Escape' && !PAGE) { requestClose(); return; }
       if (R.contains(document.activeElement) && /^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End|\s)$/.test(e.key)) e.stopPropagation();
     }, true);
-    // 뒤로 = 창만 닫힘(§4.11 한 단계)
-    addEventListener('popstate', function () { if (viewerOpen()) { closeViewer(true); return; } if (S.open && !PAGE) doClose(); });
+    // 뒤로 = 창만 닫힘(§4.11 한 단계). 사진 뷰어가 떠 있고 돌아온 칸이 이 창 칸이면 = 뷰어 칸이 빠진 것 = 창은 그대로(11-27 — 전엔 홍보지, 활동 글 사진을 닫으면 창도 닫히고 창 칸이 남아 다음 뒤로가 헛돌았다).
+    // 창 칸 조건 = 뷰어를 먼저 열고 창을 나중에 연 순서(키보드, 자동 열림)면 뒤로가 창 칸을 빼는 것이라 창을 닫아야 해서
+    addEventListener('popstate', function () { if (viewerOpen()) { closeViewer(true); return; } if (photoViewerOn() && history.state && history.state.tfinq) return; if (S.open && !PAGE) doClose(); });
     // 첨부 누르기(사진 = 크게, PDF = PC는 크게 / 폰은 받기, 못 받은 사진 = 다시 받기)
     TH.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('.ti-att'); if (a && TH.contains(a)) openFile(a); });
     // 폰 키보드: 보이는 높이에 창을 맞춘다(§4.2-2 — 메인 페이지는 키보드가 화면을 줄이는 설정이 없다)
@@ -675,6 +677,9 @@
     VW.querySelector('.ti-vx').focus();
   }
   function viewerOpen() { return !!(VW && VW.classList.contains('on')); }
+  // 홈페이지 사진 뷰어(js/photo-viewer.js — 홍보지 크게 보기, 활동 글 사진)가 이 창 위에 떠 있나. PC는 창이 옆에 떠 있어 창을 연 채 그 뷰어를 열 수 있다.
+  // 닫힐 때 .on이 0.28초 남아(사라지는 동안) popstate 리스너 순서와 상관없이 보인다 — .in은 뷰어 리스너가 먼저 돌면 이미 빠져 있어 안 씀(11-27)
+  function photoViewerOn() { return !!document.querySelector('.tfpv.on'); }
   function closeViewer(fromPop) {
     if (!viewerOpen()) return;
     if (!fromPop && history.state && history.state.tfv) { history.back(); return; }   // 뒤로가기와 같은 길로 닫는다(기록 한 칸이 안 남게)
