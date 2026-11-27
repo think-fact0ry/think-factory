@@ -53,6 +53,12 @@ body.form-ready .apply-skel{ display:none; }
 /* 끝 화면 알림 = 06 완료 화면이 'endtoast'로 켜고 끈다(사라지지 않음, docs/1 §4.6 — 위에 홍보지나 큰 체크가 있어 「이제 창을 닫아도 돼요」를 제목 아래에 못 둠). 모양 = .form-toast(§5.5), 자리 = 아래 24px(kr /selected 끝 화면과 같음) */
 .end-toast{ bottom:calc(24px + env(safe-area-inset-bottom)); }
 body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk-card{ background:#22332a; }
+/* 폼 앱 모드(폰) = 06 인증 시트, 수정 찾기 동안 폼이 화면 전체를 덮고 이 페이지 스크롤 잠금(폼의 appmode 메시지 → js/form-app.js). /contact와 같은 규칙 —
+   키보드가 뜨면 시트가 키보드 위에 붙는다(폼 안 position:fixed가 화면 바닥 = iframe 바닥이 되게). iframe은 top/bottom 0만으론 안 늘어난다(기본 150px) → 높이 100% */
+@media (max-width:760px){
+  html:has(body.form-app), body.form-app{ overflow:hidden; }
+  body.form-app .apply-frame{ position:fixed; top:0; left:0; width:100%; height:100% !important; min-height:0 !important; z-index:40; }
+}
 </style>
 </head>
 <body>
@@ -75,13 +81,14 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
 <div class="form-toast end-toast" id="endToast" role="status"></div>
 <div class="exithint" id="exitHint"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>한 번 더 뒤로 가면 나가요.</div>
 
+<script src="/js/form-app.js?v=20261128"></script>   <!-- 앱 모드 + 문자 자동 입력(아래 브릿지가 씀) — head에 두면 첫 그림을 막아 여기 -->
 <script>
 // ── 폼(iframe) ↔ 페이지 브릿지 = /contact 것에서 메뉴 높이(0), 유입버킷(늘 register), 등록 모드만 다르게 ──
 // GAS는 이중 iframe이라 contentWindow로 직접 못 보냄 → 폼이 window.top으로 보낸 메시지의 e.source로 회신.
 (function () {
   var f = document.querySelector('.apply-frame');
   if (!f) return;
-  var childWin = null, safetyT = 0;
+  var childWin = null, safetyT = 0, app = window.tfFormApp ? window.tfFormApp(f) : null;   // 앱 모드 + 문자 자동 입력 = js/form-app.js(/contact와 같이)
   function vpH() { return window.visualViewport ? window.visualViewport.height : window.innerHeight; }
   // mode = 06 Apply.html 등록 모드 스위치. src = 시트 X열 'register'(07 월 안내 「짝 없는 등록」, 10 브리핑이 신규 신청과 가름) — 폼도 등록 모드면 스스로 'register'를 쓴다
   function sendVH() { if (!childWin) return; try { childWin.postMessage({ tfParent: 1, vh: vpH(), src: 'register', mode: 'register', fv: window.tfPhotoViewer ? 1 : 0 }, '*'); } catch (e) {} }   // fv = 홍보지 크게 보기를 이 페이지가 그림(머리 주석)
@@ -109,6 +116,8 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     else if (d.type === 'toast') { showFormToast(d.msg, d.kind, d.above); }
     else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
     else if (d.type === 'exithint') { showExitBox(); }
+    else if (d.type === 'appmode') { if (app) app.appmode(d, e.source); }   // 06 인증 시트, 수정 찾기 동안 폰에서 폼 화면 전체 고정(위 style)
+    else if (d.type === 'step' && typeof d.id === 'string') { if (app) app.step(d.id, e.source); }   // 수정 찾기 인증 시트 = 문자 자동 입력 기다리기
     else if (d.type === 'endtoast') {   // 06 완료 화면에 들어가면 on, 떠나면(← 뒤로) off — 시간으로 안 지운다
       var et = document.getElementById('endToast');
       if (et) { var on = !!(d.on && d.msg); if (on) et.textContent = String(d.msg); et.classList.toggle('show', on); }

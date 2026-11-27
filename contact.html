@@ -249,6 +249,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
   </a>
 </div>
 
+<script src="/js/form-app.js?v=20261128"></script>   <!-- 앱 모드 + 문자 자동 입력(아래 브릿지가 씀) — head에 두면 첫 그림을 막아 여기 -->
 <script>
 // ── 모바일 드로어 메뉴 ──
 (function () {
@@ -281,7 +282,7 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
 (function () {
   var f = document.querySelector('.apply-frame');
   if (!f) return;
-  var childWin = null;
+  var childWin = null, app = window.tfFormApp ? window.tfFormApp(f) : null;   // 앱 모드 + 문자 자동 입력 = js/form-app.js(/register와 같이)
   // nav가 차지하는 실제 높이를 측정(하드코딩 60 폐기). 모바일은 nav가 숨김(흐름 밖)이라 0.
   function navOffset() { if (window.matchMedia('(max-width:760px)').matches) return 0; var n = document.querySelector('.nav'); return n ? n.offsetHeight : 60; }
   // 폼 세로중앙 = 전체 뷰포트 정중앙. nav(N)가 sticky로 위 N을 차지하고 iframe은 그 아래서 시작하므로,
@@ -326,12 +327,12 @@ body.form-dark .apply-skel{ background:#1c2a22; } body.form-dark .apply-skel .sk
     childWin = e.source;
     document.body.classList.add('bridged');           // 브릿지 성립 표식(실패 시 nav/리모콘 기본 노출 폴백)
     if (d.type === 'ready') { pushSrc(); }   // pushSrc가 첫 sendVH를 겸한다(vh 전달 동일) + 버킷이 늦게 오면 재시도. 뼈대 걷기(form-ready)는 form-wait.js
-    else if (d.type === 'step' && typeof d.id === 'string') { try { if (window.clarity) window.clarity('event', 'apply_' + d.id.replace(/[^A-Za-z0-9_]/g, '_').slice(0, 40)); } catch (e) {} }   // 폼 단계(화면 전환·제출 실패 지점) → Clarity 깔때기. 시트 정본은 06 '단계로그'
+    else if (d.type === 'step' && typeof d.id === 'string') { if (app) app.step(d.id, e.source); try { if (window.clarity) window.clarity('event', 'apply_' + d.id.replace(/[^A-Za-z0-9_]/g, '_').slice(0, 40)); } catch (e) {} }   // 폼 단계(화면 전환·제출 실패 지점) → Clarity 깔때기. 시트 정본은 06 '단계로그'
     else if (d.type === 'height' && d.height) { f.style.height = d.height + 'px'; }
     else if (d.type === 'theme') { document.body.classList.toggle('form-dark', !!d.dark); }
     else if (d.type === 'scrolltop') { var t = f.getBoundingClientRect().top + window.pageYOffset - navOffset(); window.scrollTo({ top: Math.max(0, t), behavior: 'auto' }); }
     else if (d.type === 'toast') { showFormToast(d.msg, d.kind, d.above); }
-    else if (d.type === 'appmode') { document.body.classList.toggle('form-app', !!d.on); }   // 06 수정 찾기 동안 폰에서 폼 화면 전체 고정(위 style 주석)
+    else if (d.type === 'appmode') { if (app) app.appmode(d, e.source); else document.body.classList.toggle('form-app', !!d.on); }   // 06 수정 찾기, 인증 시트 동안 폰에서 폼 화면 전체 고정(위 style 주석, 자리 지키기 = js/form-app.js)
     else if (d.type === 'scrollto' && typeof d.y === 'number') { var ty = f.getBoundingClientRect().top + window.pageYOffset + d.y - window.innerHeight * 0.42; window.scrollTo({ top: Math.max(0, ty), behavior: 'smooth' }); }
     else if (d.type === 'exithint') { showExitBox(); }
     // 홍보지 크게 보기(06 오감쑥쑥 신청 완료 화면, 11-26) = 이 페이지가 활동 글 사진 뷰어로 그린다 — 신청서 iframe 안은 공유, 복사가 막히고(allow 없음) 화면 전체를 못 덮어서.
